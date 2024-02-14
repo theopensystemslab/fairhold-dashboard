@@ -18,14 +18,12 @@ export async function GET(request: Request) {
     const connection = await mysql.createConnection(connectionParams);
 
     // 3. create a query to fetch data
+    const test_postcode = "SE17 1PE";
     let get_exp_query = "";
-    get_exp_query = "SELECT * FROM fairhold.pricesPaid LIMIT 6";
-
-    // we can use this array to pass parameters to the SQL query
-    let values: any[] = [];
+    get_exp_query = `SELECT * FROM fairhold.pricesPaid WHERE postcode = '${test_postcode}'`;
 
     // 4. exec the query and retrieve the results
-    const [results] = await connection.execute(get_exp_query, values);
+    const [results] = await connection.execute(get_exp_query);
 
     // 5. close the connection when done
     connection.end();
