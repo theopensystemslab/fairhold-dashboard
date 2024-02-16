@@ -27,23 +27,6 @@ const CalculatorInput = () => {
       body: formData,
     });
     console.log(response);
-    /*     fetch("/api") // Replace 'your-api-route' with the actual path to your API route
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        // Handle the response data here
-        console.log(data);
-      })
-      .catch((error) => {
-        // Handle any errors here
-        console.error("Error:", error);
-      }); */
-
-    //console.log(housePostcode);
   }
 
   return (
