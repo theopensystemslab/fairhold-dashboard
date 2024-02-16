@@ -1,6 +1,27 @@
 // import the Request and Response classes
 import { NextResponse, NextRequest } from "next/server";
 
+// define and export the GET handler function
+export async function POST(request: Request) {
+  const formData = await request.formData(); // get the data submitted in the form
+  const data = {
+    housePostcode: formData.get("housePostcode"), // get the housePostcode variable
+    houseSize: formData.get("houseSize"), // get the houseSize variable
+    houseAge: formData.get("houseAge"), // get the houseAge variable
+    houseBedrooms: formData.get("houseBedrooms"), // get the houseBedrooms variable
+    houseType: formData.get("houseType"), // get the houseType variable
+  };
+
+  const response = {
+    returnedStatus: 200,
+    data: data,
+  };
+  return NextResponse.json(response, { status: 200 });
+}
+
+/* // import the Request and Response classes
+import { NextResponse, NextRequest } from "next/server";
+
 // import mysql2/promise for mysql connectivity
 import mysql from "mysql2/promise";
 
@@ -40,4 +61,4 @@ export async function GET(request: Request) {
 
     return NextResponse.json(response, { status: 200 });
   }
-}
+} */
