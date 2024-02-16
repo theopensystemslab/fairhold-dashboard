@@ -31,9 +31,9 @@ export async function POST(request: Request) {
 
     // create the progressive queries
     const minimumNumberEntries = 30; // minimum number of entries to create the average
-    const getPricesLvl3Query = `SELECT COUNT(*) FROM fairhold.pricesPaid WHERE propertyType = '${data.houseType}' AND postcode LIKE '${postcodeLvl3}%'`; // create the sql query and count how many items meet the criteria
-    const [numberPricesPaidLvl3] = await connection.execute(getPricesLvl3Query); // execute the query and retrieve the results
-    console.log(NextResponse.json(numberPricesPaidLvl3));
+    const getPricesLvl3Query = `SELECT * FROM fairhold.pricesPaid WHERE propertyType = '${data.houseType}' AND postcode LIKE '${postcodeLvl3}%'`; // create the sql query and count how many items meet the criteria
+    const [PricesPaidLvl3] = await connection.execute(getPricesLvl3Query); // execute the query and retrieve the results
+    const numberOfPricesPaidLvl3 = Object.keys(PricesPaidLvl3).length;
 
     const getBuildPriceQuery = `SELECT * FROM fairhold.buildPrices WHERE houseType = '${data.houseType}'`; // create the sql query
 
@@ -42,7 +42,8 @@ export async function POST(request: Request) {
 
     connection.end(); // close the connection
     return NextResponse.json({
-      //pricesPaid: pricesPaid,
+      numberPricesPaidLvl3: PricesPaidLvl3,
+      numberOfPricesPaidLvl3: numberOfPricesPaidLvl3,
       buildPrice: buildPrice,
     }); // return the results
   } catch (err) {
