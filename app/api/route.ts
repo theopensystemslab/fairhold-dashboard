@@ -8,6 +8,16 @@ import mysql from "mysql2/promise";
 import { GetDBSettings, IDBSettings } from "@/sharedCode/common";
 const connectionParams = GetDBSettings();
 
+// define the function fo create the sql query: it takes the houtype and the postcode, and it retutns the response of the SQL server
+/* async function sqlQuery(connection: any, houseType: string, postcode: string) {
+  const postdoceSearch = postcode.concat("%"); // append the % character for SQL command
+  const getPricesQuery = `SELECT * FROM fairhold.pricesPaid WHERE propertyType = '${houseType}' AND postcode LIKE '${postdoceSearch}'`; // create the sql query and count how many items meet the criteria
+  const [pricesPaid] = await connection.execute(getPricesQuery); // execute the query and retrieve the results
+
+  //return pricesPaid;
+  return getPricesQuery;
+} */
+
 // define and export the GET handler function
 export async function POST(request: Request) {
   const formData = await request.formData(); // get the data submitted in the form
@@ -30,10 +40,46 @@ export async function POST(request: Request) {
     const postcodeLvl3 = postcodeParts[0] + " " + postcodeParts[1][0]; // extract the first part and add the secon, e.g., SE17 1
 
     // create the progressive queries
-    const minimumNumberEntries = 30; // minimum number of entries to create the average
-    const getPricesLvl3Query = `SELECT * FROM fairhold.pricesPaid WHERE propertyType = '${data.houseType}' AND postcode LIKE '${postcodeLvl3}%'`; // create the sql query and count how many items meet the criteria
-    const [PricesPaidLvl3] = await connection.execute(getPricesLvl3Query); // execute the query and retrieve the results
-    const numberOfPricesPaidLvl3 = Object.keys(PricesPaidLvl3).length;
+    const minimumNumberPostcodes = 30; // minimum number of entries to create the average
+    let pricesPaid; // declare the variable for prices paid
+    let numberOfPricesPaid; // declare the variable for numbers of transactions retrieved
+    let granularityPostcode; // declare the granularity of the postcode
+
+    const postdoceSearch3 = postcodeLvl3 + "%"; // add the % for SQL query
+    const getPricesLvl3Query = `SELECT * FROM fairhold.pricesPaid WHERE propertyType = '${data.houseType}' AND postcode LIKE '${postdoceSearch3}'`; // create the sql query and count how many items meet the criteria
+    const [pricesPaidLvl3] = await connection.execute(getPricesLvl3Query); // execute the query and retrieve the results
+    const numberOfPricesPaidLvl3 = Object.keys(pricesPaidLvl3).length; // extract the number of entries
+
+    if (
+      pricesPaidLvl3 !== null &&
+      numberOfPricesPaidLvl3 >= minimumNumberPostcodes
+    ) {
+      pricesPaid = pricesPaidLvl3; // if condtion is met, the granularity is appropriate
+      numberOfPricesPaid = numberOfPricesPaidLvl3; // check the granularity
+      granularityPostcode = postcodeLvl3; // granularity of the postcode
+    } else {
+      const postdoceSearch2 = postcodeLvl2 + "%"; // add the % for SQL query
+      const getPricesLvl2Query = `SELECT * FROM fairhold.pricesPaid WHERE propertyType = '${data.houseType}' AND postcode LIKE '${postdoceSearch2}'`; // create the sql query and count how many items meet the criteria
+      const [pricesPaidLvl2] = await connection.execute(getPricesLvl2Query); // execute the query and retrieve the results
+      const numberOfPricesPaidLvl2 = Object.keys(pricesPaidLvl2).length; // extract the number of entries
+
+      if (
+        pricesPaidLvl2 !== null &&
+        numberOfPricesPaidLvl2 >= minimumNumberPostcodes
+      ) {
+        pricesPaid = pricesPaidLvl2; // if condtion is met, the granularity is appropriate
+        numberOfPricesPaid = numberOfPricesPaidLvl2; // check the granularity
+        granularityPostcode = postcodeLvl2; // granularity of the postcode
+      } else {
+        const postdoceSearch1 = postcodeLvl1 + "%"; // add the % for SQL query
+        const getPricesLvl1Query = `SELECT * FROM fairhold.pricesPaid WHERE propertyType = '${data.houseType}' AND postcode LIKE '${postdoceSearch1}'`; // create the sql query and count how many items meet the criteria
+        const [pricesPaidLvl1] = await connection.execute(getPricesLvl1Query); // execute the query and retrieve the results
+        const numberOfPricesPaidLvl1 = Object.keys(pricesPaidLvl1).length; // extract the number of entries
+        pricesPaid = pricesPaidLvl1; // if condtion is met, the granularity is appropriate
+        numberOfPricesPaid = numberOfPricesPaidLvl1; // check the granularity
+        granularityPostcode = postcodeLvl1; // granularity of the postcode
+      }
+    }
 
     const getBuildPriceQuery = `SELECT * FROM fairhold.buildPrices WHERE houseType = '${data.houseType}'`; // create the sql query
 
@@ -42,9 +88,10 @@ export async function POST(request: Request) {
 
     connection.end(); // close the connection
     return NextResponse.json({
-      numberPricesPaidLvl3: PricesPaidLvl3,
-      numberOfPricesPaidLvl3: numberOfPricesPaidLvl3,
+      numberOfPricesPaid: numberOfPricesPaid,
+      pricesPaid: pricesPaid,
       buildPrice: buildPrice,
+      granularityPostcode: granularityPostcode,
     }); // return the results
   } catch (err) {
     console.log("ERROR: API - ", (err as Error).message);
