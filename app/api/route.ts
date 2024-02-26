@@ -81,6 +81,16 @@ export async function POST(request: Request) {
       }
     }
 
+    // Calculate the total price
+
+    const totalPrice = pricesPaid.reduce(
+      (total: number, item: any) => total + item.price,
+      0
+    );
+
+    // Calculate the average price
+    const averagePrice = totalPrice / pricesPaid.length;
+
     const getBuildPriceQuery = `SELECT * FROM fairhold.buildPrices WHERE houseType = '${data.houseType}'`; // create the sql query
 
     //const [pricesPaid] = await connection.execute(getPricesPaidQuery); // execute the query and retrieve the results
@@ -89,6 +99,7 @@ export async function POST(request: Request) {
     connection.end(); // close the connection
     return NextResponse.json({
       numberOfPricesPaid: numberOfPricesPaid,
+      averagePrice: averagePrice,
       pricesPaid: pricesPaid,
       buildPrice: buildPrice,
       granularityPostcode: granularityPostcode,
