@@ -2,6 +2,11 @@
 import { trueDependencies } from "mathjs";
 import React, { useState } from "react";
 
+import { Mortgage, House, Fairhold } from "@/sharedCode/classes";
+const fairhold = new Fairhold(); // set the fairhold
+const mortgage = new Mortgage(200000); // set the new mortgage
+const house = new House("STE13", "D", 3, 4, 5, 400);
+
 const CalculatorInput = () => {
   const [housePostcode, sethousePostcode] = useState(""); // variable associated to the postcode
   const houseTypes = {
@@ -24,9 +29,13 @@ const CalculatorInput = () => {
     //fetch the data: call the api and attach the form data
     const response = await fetch("/api", {
       method: "POST",
-      body: formData,
-    });
-    console.log(response);
+      body: formData, // pass the form data to the API
+    }).then((response) => response.json());
+
+    console.log(response.averagePrice);
+    console.log(fairhold);
+    console.log(mortgage);
+    console.log(house);
   }
 
   return (
