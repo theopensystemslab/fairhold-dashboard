@@ -23,53 +23,106 @@ export class Fairhold {
   }
 }
 
-// define the house class
-export class House {
-  postcode; // postcode of the house
+// define the property class
+export class Property {
+  postcode; // postcode of the property
   hType; // type of the house: D--> detached, S--> semidetached, T--> Terrace, F--> Flats
   numberOfBedrooms; // number of bedrooms in the house
   age; // age of the house
   size; // size of the house in meter squares
-  buildPricePerMetre: number; // average build price per meter of a new property
+  newBuildPricePerMetre: number; // average build price per meter of a new house
+  averagePrice: number; // average market price
   newBuildPrice?: number; // price of the house if it was new
   depreciatedBuildPrice?: number; // price of the house according to the depreciation regression
+  bedWeightedAveragePrice?: number; // price of the house weigheted by the number of bedrooms
+  landPrice?: number; // price of the land
+
   constructor(
     postcode: string,
     hType: string,
     numberOfBedrooms: number,
     age: number,
     size: number,
-    buildPricePerMetre: number
+    newBuildPricePerMetre: number,
+    averagePrice: number
   ) {
     this.postcode = postcode;
     this.hType = hType;
     this.numberOfBedrooms = numberOfBedrooms;
     this.age = age;
     this.size = size;
-    this.buildPricePerMetre = buildPricePerMetre;
-    this.getNewBuildPriceAndDepreciatedBuildPrice(); // calculate new building price and teh depraciated building price
+    this.newBuildPricePerMetre = newBuildPricePerMetre;
+    this.averagePrice = averagePrice;
+    this.calculateNewBuildPrice(); // calculate new building price
+    this.calculateDepreciatedBuildPrice(); // calculated the depreciated building price
+    this.calculateBedWeightedAveragePrice(); // calculate the bed weighted building price
+    this.calculateLandPrice(); // calculate the price of the land
   }
 
-  // calculate new building price and teh depraciated building price
-  getNewBuildPriceAndDepreciatedBuildPrice(
+  // calculate new building price
+  calculateNewBuildPrice(precisionRounding: number = 2) {
+    if (this.newBuildPricePerMetre) {
+      const newBuildPrice = this.newBuildPricePerMetre * this.size; // calculate the price of the new build
+      this.newBuildPrice = parseFloat(newBuildPrice.toFixed(precisionRounding)); // round the number
+
+      return this.newBuildPrice;
+    } else {
+      throw new Error(
+        "The Build Price cannot be calculated because pricePerMeter has not been set"
+      );
+    }
+  }
+
+  // calculate nthe depraciated building price
+  calculateDepreciatedBuildPrice(
     depreciationFactor: number = -32938,
     precisionRounding: number = 2
   ) {
-    if (this.buildPricePerMetre) {
-      const newBuildPrice = this.buildPricePerMetre * this.size; // caclualte the price of the new build
-      this.newBuildPrice = parseFloat(newBuildPrice.toFixed(precisionRounding)); // round the number
+    if (this.newBuildPrice) {
       const depreciatedBuildPrice =
         this.newBuildPrice + depreciationFactor + math.log(this.age); // depreciated building price
       this.depreciatedBuildPrice = parseFloat(
         depreciatedBuildPrice.toFixed(precisionRounding)
       ); // round the number
 
-      return [this.newBuildPrice, this.depreciatedBuildPrice];
+      return this.depreciatedBuildPrice;
     } else {
       throw new Error(
-        "The house prices cannot be calculated because pricePerMeter has not been set"
+        "The Depreciated Price cannot be calculated because newBuildPrice has not been set"
       );
     }
+  }
+
+  // calculate the average property price based on the  number of bedrooms
+  calculateBedWeightedAveragePrice(
+    numberOfBeds: number = this.numberOfBedrooms,
+    beds: any = [0, 1, 2, 3, 4, 5, 6],
+    bedWeigths: any = [0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4],
+    precisionRounding: number = 2
+  ) {
+    let bedWeigth; // initialize the variable
+
+    if (numberOfBeds < beds[beds.length - 1]) {
+      bedWeigth = bedWeigths[numberOfBeds]; // assign the weight based on the number of beds
+    } else {
+      bedWeigth = bedWeigths[bedWeigths.length - 1]; // assign the last value if out of scale
+    }
+
+    if (bedWeigth !== undefined) {
+      return (this.bedWeightedAveragePrice = parseFloat(
+        (bedWeigth * this.averagePrice).toFixed(precisionRounding)
+      )); // calculate the bed weighted average price
+    } else {
+      throw new Error(
+        "The bed weigthed average price cannot be calculated. Check the calculateBedWeightedAveragePrice mehtod."
+      );
+    }
+  }
+  calculateLandPrice(
+    propertyPrice: number = this.bedWeightedAveragePrice,
+    housePrice: number = this.depreciatedBuildPrice
+  ) {
+    return (this.landPrice = propertyPrice - housePrice); // calculate the price of the land
   }
 }
 
