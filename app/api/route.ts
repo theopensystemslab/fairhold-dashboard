@@ -98,11 +98,15 @@ export async function POST(request: Request) {
 
     connection.end(); // close the connection
     return NextResponse.json({
-      numberOfPricesPaid: numberOfPricesPaid,
-      averagePrice: averagePrice,
-      pricesPaid: pricesPaid,
-      buildPrice: buildPrice,
       granularityPostcode: granularityPostcode,
+      houseType: data.houseType,
+      houseAge: parseFloat(data.houseAge),
+      houseBedrooms: parseFloat(data.houseBedrooms),
+      houseSize: parseFloat(data.houseSize),
+      averagePrice: averagePrice,
+      buildPrice: buildPrice,
+      numberOfPricesPaid: numberOfPricesPaid,
+      pricesPaid: pricesPaid,
     }); // return the results
   } catch (err) {
     console.log("ERROR: API - ", (err as Error).message);
