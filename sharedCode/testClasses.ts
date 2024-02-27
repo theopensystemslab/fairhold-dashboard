@@ -1,19 +1,19 @@
-import { Mortgage, House, Fairhold } from "./classes";
+import { Mortgage, Property, Fairhold } from "./classes";
 
 const fairhold = new Fairhold(); // set the fairhold
 const mortgage = new Mortgage(200000); // set the new mortgage
 
 function calculateFairhold(houseData: any) {
-  console.log(houseData.buildPrice.priceMid);
-  const house = new House(
-    houseData.granularityPostcode,
+  const property = new Property(
+    houseData.postcode,
     houseData.houseType,
     houseData.houseBedrooms,
     houseData.houseAge,
     houseData.houseSize,
-    houseData.buildPrice[0].priceMid
+    houseData.buildPrice,
+    houseData.averagePrice
   );
-  return console.log(house);
+  return console.log(property);
 }
 
 export default calculateFairhold;
