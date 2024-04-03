@@ -8,16 +8,6 @@ import mysql from "mysql2/promise";
 import { GetDBSettings, IDBSettings } from "@/sharedCode/common";
 const connectionParams = GetDBSettings();
 
-// define the function fo create the sql query: it takes the houtype and the postcode, and it retutns the response of the SQL server
-/* async function sqlQuery(connection: any, houseType: string, postcode: string) {
-  const postdoceSearch = postcode.concat("%"); // append the % character for SQL command
-  const getPricesQuery = `SELECT * FROM fairhold.pricesPaid WHERE propertyType = '${houseType}' AND postcode LIKE '${postdoceSearch}'`; // create the sql query and count how many items meet the criteria
-  const [pricesPaid] = await connection.execute(getPricesQuery); // execute the query and retrieve the results
-
-  //return pricesPaid;
-  return getPricesQuery;
-} */
-
 // define and export the GET handler function
 export async function POST(request: Request) {
   const formData = await request.formData(); // get the data submitted in the form
@@ -93,19 +83,54 @@ export async function POST(request: Request) {
     const [buildPrice] = await connection.execute(getBuildPriceQuery); // execute the query and retrieve the results
 
     // get the ITL3 value
-    const getITL3Query = `SELECT ITL3 FROM fairhold.itl3 WHERE postcode = '${data.housePostcode}'`; // create the sql query
+    const getITL3Query = `SELECT itl3 FROM fairhold.itl3 WHERE postcode = '${data.housePostcode}'`; // create the sql query
     const [itl3] = await connection.execute(getITL3Query); // execute the query and retrieve the results
+
+    // get the gdhi value --> Note: this need to change to accommodate future data
+    const getGDHIQuery = `SELECT gdhi_2020 FROM fairhold.gdhi JOIN fairhold.itl3 ON fairhold.gdhi.itl3 = fairhold.itl3.itl3 WHERE postcode = '${data.housePostcode}'`; // create the sql query
+    const [gdhi] = await connection.execute(getGDHIQuery); // execute the query and retrieve the results
+
+    // get the rent value --> Note: this need to change to accommodate future data
+    const getRentQuery = `SELECT monthlyMeanRent FROM fairhold.rent JOIN fairhold.itl3 ON fairhold.rent.itl3 = fairhold.itl3.itl3 WHERE postcode = '${data.housePostcode}'`; // create the sql query
+    const [rent] = await connection.execute(getRentQuery); // execute the query and retrieve the results
+    const totalRent = rent.reduce(
+      (total: number, item: any) => total + item.monthlyMeanRent,
+      0
+    );
+    const averageRent = totalRent / rent.length;
+
+    // get the rent value --> Note: this need to change to accommodate future data
+    const getSocialRentQuery = `SELECT earningsPerWeek FROM fairhold.socialRent JOIN fairhold.itl3 ON fairhold.socialRent.itl3 = fairhold.itl3.itl3 WHERE postcode = '${data.housePostcode}'`; // create the sql query
+    const [Socialrent] = await connection.execute(getSocialRentQuery); // execute the query and retrieve the results
+    const totalSocialRent = rent.reduce(
+      (total: number, item: any) => total + item.earningsPerWeek,
+      0
+    );
+    const averageSocialRent = totalSocialRent / Socialrent.length;
+
+    // get the hpi value --> Note: this need to change to accommodate future data
+    const getHPIQuery = `SELECT hpi_2020 FROM fairhold.hpi JOIN fairhold.itl3 ON fairhold.hpi.itl3 = fairhold.itl3.itl3 WHERE postcode = '${data.housePostcode}'`; // create the sql query
+    const [hpi] = await connection.execute(getHPIQuery); // execute the query and retrieve the results
+    const totalHpi = hpi.reduce(
+      (total: number, item: any) => total + item.hpi_2020,
+      0
+    );
+    const averageHpi = totalHpi / hpi.length;
 
     connection.end(); // close the connection
     return NextResponse.json({
       postcode: data.housePostcode,
-      itl3: itl3[0].ITL3,
       houseType: data.houseType,
       houseAge: parseFloat(data.houseAge),
       houseBedrooms: parseFloat(data.houseBedrooms),
       houseSize: parseFloat(data.houseSize),
       averagePrice: parseFloat(averagePrice.toFixed(2)),
-      buildPrice: buildPrice[0].priceMid,
+      itl3: itl3,
+      gdhi: gdhi,
+      hpi: averageHpi,
+      buildPrice: buildPrice,
+      averageRent: averageRent,
+      averageSocialRent: averageSocialRent,
       numberOfTransactions: numberOfTransactions,
       granularityPostcode: granularityPostcode,
       pricesPaid: pricesPaid,

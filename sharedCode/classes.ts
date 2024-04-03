@@ -22,7 +22,24 @@ export class Fairhold {
     this.threshold = threshold; // thersold in the fairhold formula
   }
 }
-
+export class Household {
+  incomePerPerson; // income per person
+  averageRent; // average rent
+  averageSocialRent; // average social rent
+  househousePriceIndex; // house price index
+  income?: number; // income per household
+  constructor(
+    incomePerPerson: number,
+    averageRent: number,
+    averageSocialRent: number,
+    housePriceIndex: number
+  ) {
+    this.incomePerPerson = incomePerPerson;
+    this.averageRent = averageRent;
+    this.averageSocialRent = averageSocialRent;
+    this.househousePriceIndex = housePriceIndex;
+  }
+}
 // define the property class
 export class Property {
   postcode; // postcode of the property
@@ -32,6 +49,7 @@ export class Property {
   size; // size of the house in meter squares
   newBuildPricePerMetre: number; // average build price per meter of a new house
   averagePrice: number; // average market price
+  itl3: string; // ITL code
   newBuildPrice?: number; // price of the house if it was new
   depreciatedBuildPrice?: number; // price of the house according to the depreciation regression
   bedWeightedAveragePrice?: number; // price of the house weigheted by the number of bedrooms
@@ -44,7 +62,12 @@ export class Property {
     age: number,
     size: number,
     newBuildPricePerMetre: number,
-    averagePrice: number
+    averagePrice: number,
+    itl3: string,
+    gdhi: string,
+    hpi: string,
+    averageRent: number,
+    averageSocialRent: number
   ) {
     this.postcode = postcode;
     this.hType = hType;
@@ -53,6 +76,8 @@ export class Property {
     this.size = size;
     this.newBuildPricePerMetre = newBuildPricePerMetre;
     this.averagePrice = averagePrice;
+    this.itl3 = itl3;
+
     this.calculateNewBuildPrice(); // calculate new building price
     this.calculateDepreciatedBuildPrice(); // calculated the depreciated building price
     this.calculateBedWeightedAveragePrice(); // calculate the bed weighted building price
@@ -119,8 +144,8 @@ export class Property {
     }
   }
   calculateLandPrice(
-    propertyPrice: number = this.bedWeightedAveragePrice,
-    housePrice: number = this.depreciatedBuildPrice
+    propertyPrice: any = this.bedWeightedAveragePrice,
+    housePrice: any = this.depreciatedBuildPrice
   ) {
     return (this.landPrice = propertyPrice - housePrice); // calculate the price of the land
   }
