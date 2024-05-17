@@ -1,12 +1,14 @@
 // import the Request and Response classes
 import { NextResponse, NextRequest } from "next/server";
 
-// import mysql2/promise for mysql connectivity
-import mysql from "mysql2/promise";
+// import from pg for Postgres connectivity
+import { Pool } from "pg";
 
 // import GetDBSettings to retrieve the database connection environment parameters, and the IDBSettings object interface
 import { GetDBSettings, IDBSettings } from "@/sharedCode/common";
+
 const connectionParams = GetDBSettings();
+const pool = new Pool(connectionParams);
 
 // define and export the GET handler function
 export async function POST(request: Request) {
@@ -21,7 +23,7 @@ export async function POST(request: Request) {
   };
 
   try {
-    const connection = await mysql.createConnection(connectionParams); // create the connection to the database
+    const client = await pool.connect();
 
     // data are going to be queried at different levels of granularity based on the postcode
     const postcodeParts = data.housePostcode.split(/\s+/); // split the postcode based on the white space, for example SE17 1PE into SE17 and 1PE
@@ -36,9 +38,10 @@ export async function POST(request: Request) {
     let granularityPostcode; // declare the granularity of the postcode
 
     const postdoceSearch3 = postcodeLvl3 + "%"; // add the % for SQL query
-    const getPricesLvl3Query = `SELECT id,postcode,price FROM fairhold.pricesPaid WHERE propertyType = '${data.houseType}' AND postcode LIKE '${postdoceSearch3}'`; // create the sql query and count how many items meet the criteria
-    const [pricesPaidLvl3] = await connection.execute(getPricesLvl3Query); // execute the query and retrieve the results
-    const numberOfPricesPaidLvl3 = Object.keys(pricesPaidLvl3).length; // extract the number of entries
+    const getPricesLvl3Query = `SELECT id, postcode, price FROM fairhold.pricesPaid WHERE propertyType = $1 AND postcode LIKE $2`;
+    const resLvl3 = await client.query(getPricesLvl3Query, [data.houseType, postdoceSearch3]); // execute query and extract results
+    const pricesPaidLvl3 = resLvl3.rows;
+    const numberOfPricesPaidLvl3 = pricesPaidLvl3.length; // extract the number of entries
 
     if (
       pricesPaidLvl3 !== null &&
@@ -49,9 +52,10 @@ export async function POST(request: Request) {
       granularityPostcode = postcodeLvl3; // granularity of the postcode
     } else {
       const postdoceSearch2 = postcodeLvl2 + "%"; // add the % for SQL query
-      const getPricesLvl2Query = `SELECT id,postcode,price FROM fairhold.pricesPaid WHERE propertyType = '${data.houseType}' AND postcode LIKE '${postdoceSearch2}'`; // create the sql query and count how many items meet the criteria
-      const [pricesPaidLvl2] = await connection.execute(getPricesLvl2Query); // execute the query and retrieve the results
-      const numberOfPricesPaidLvl2 = Object.keys(pricesPaidLvl2).length; // extract the number of entries
+      const getPricesLvl2Query = `SELECT id, postcode, price FROM fairhold.pricesPaid WHERE propertyType = $1 AND postcode LIKE $2`;
+      const resLvl2 = await client.query(getPricesLvl2Query, [data.houseType, postdoceSearch2]); // execute query and extract results
+      const pricesPaidLvl2 = resLvl2.rows;
+      const numberOfPricesPaidLvl2 = pricesPaidLvl2.length; // extract the number of entries
 
       if (
         pricesPaidLvl2 !== null &&
@@ -62,12 +66,13 @@ export async function POST(request: Request) {
         granularityPostcode = postcodeLvl2; // granularity of the postcode
       } else {
         const postdoceSearch1 = postcodeLvl1 + "%"; // add the % for SQL query
-        const getPricesLvl1Query = `SELECT id,postcode,price FROM fairhold.pricesPaid WHERE propertyType = '${data.houseType}' AND postcode LIKE '${postdoceSearch1}'`; // create the sql query and count how many items meet the criteria
-        const [pricesPaidLvl1] = await connection.execute(getPricesLvl1Query); // execute the query and retrieve the results
-        const numberOfPricesPaidLvl1 = Object.keys(pricesPaidLvl1).length; // extract the number of entries
-        pricesPaid = pricesPaidLvl1; // if condtion is met, the granularity is appropriate
-        numberOfTransactions = numberOfPricesPaidLvl1; // check the granularity
-        granularityPostcode = postcodeLvl1; // granularity of the postcode when performing the average price search
+        const getPricesLvl1Query = `SELECT id, postcode, price FROM fairhold.pricesPaid WHERE propertyType = $1 AND postcode LIKE $2`;
+        const resLvl1 = await client.query(getPricesLvl1Query, [data.houseType, postdoceSearch1]);
+        const pricesPaidLvl1 = resLvl1.rows;
+        const numberOfPricesPaidLvl1 = pricesPaidLvl1.length;
+        pricesPaid = pricesPaidLvl1;
+        numberOfTransactions = numberOfPricesPaidLvl1;
+        granularityPostcode = postcodeLvl1;
       }
     }
 
@@ -79,45 +84,43 @@ export async function POST(request: Request) {
 
     // Calculate the average price
     const averagePrice = totalPrice / pricesPaid.length;
-    const getBuildPriceQuery = `SELECT * FROM fairhold.buildPrices WHERE houseType = '${data.houseType}'`; // create the sql query
-    const [buildPrice] = await connection.execute(getBuildPriceQuery); // execute the query and retrieve the results
+    const getBuildPriceQuery = `SELECT * FROM fairhold.buildPrices WHERE houseType = $1`;
+    const buildPriceRes = await client.query(getBuildPriceQuery, [data.houseType]);
+    const buildPrice = buildPriceRes.rows;
 
     // get the ITL3 value
-    const getITL3Query = `SELECT itl3 FROM fairhold.itl3 WHERE postcode = '${data.housePostcode}'`; // create the sql query
-    const [itl3] = await connection.execute(getITL3Query); // execute the query and retrieve the results
+    const getITL3Query = `SELECT itl3 FROM fairhold.itl3 WHERE postcode = $1`;
+    const itl3Res = await client.query(getITL3Query, [data.housePostcode]);
+    const itl3 = itl3Res.rows;
 
     // get the gdhi value --> Note: this need to change to accommodate future data
-    const getGDHIQuery = `SELECT gdhi_2020 FROM fairhold.gdhi JOIN fairhold.itl3 ON fairhold.gdhi.itl3 = fairhold.itl3.itl3 WHERE postcode = '${data.housePostcode}'`; // create the sql query
-    const [gdhi] = await connection.execute(getGDHIQuery); // execute the query and retrieve the results
+    const getGDHIQuery = `SELECT gdhi_2020 FROM fairhold.gdhi JOIN fairhold.itl3 ON fairhold.gdhi.itl3 = fairhold.itl3.itl3 WHERE postcode = $1`;
+    const gdhiRes = await client.query(getGDHIQuery, [data.housePostcode]);
+    const gdhi = gdhiRes.rows;
 
     // get the rent value --> Note: this need to change to accommodate future data
-    const getRentQuery = `SELECT monthlyMeanRent FROM fairhold.rent JOIN fairhold.itl3 ON fairhold.rent.itl3 = fairhold.itl3.itl3 WHERE postcode = '${data.housePostcode}'`; // create the sql query
-    const [rent] = await connection.execute(getRentQuery); // execute the query and retrieve the results
-    const totalRent = rent.reduce(
-      (total: number, item: any) => total + item.monthlyMeanRent,
-      0
-    );
+    const getRentQuery = `SELECT monthlyMeanRent FROM fairhold.rent JOIN fairhold.itl3 ON fairhold.rent.itl3 = fairhold.itl3.itl3 WHERE postcode = $1`;
+    const rentRes = await client.query(getRentQuery, [data.housePostcode]);
+    const rent = rentRes.rows;
+    const totalRent = rent.reduce((total: number, item: any) => total + item.monthlyMeanRent, 0);
     const averageRent = totalRent / rent.length;
 
     // get the rent value --> Note: this need to change to accommodate future data
-    const getSocialRentQuery = `SELECT earningsPerWeek FROM fairhold.socialRent JOIN fairhold.itl3 ON fairhold.socialRent.itl3 = fairhold.itl3.itl3 WHERE postcode = '${data.housePostcode}'`; // create the sql query
-    const [Socialrent] = await connection.execute(getSocialRentQuery); // execute the query and retrieve the results
-    const totalSocialRent = rent.reduce(
-      (total: number, item: any) => total + item.earningsPerWeek,
-      0
-    );
-    const averageSocialRent = totalSocialRent / Socialrent.length;
+    const getSocialRentQuery = `SELECT earningsPerWeek FROM fairhold.socialRent JOIN fairhold.itl3 ON fairhold.socialRent.itl3 = fairhold.itl3.itl3 WHERE postcode = $1`;
+    const socialRentRes = await client.query(getSocialRentQuery, [data.housePostcode]);
+    const socialRent = socialRentRes.rows;
+    const totalSocialRent = socialRent.reduce((total: number, item: any) => total + item.earningsPerWeek, 0);
+    const averageSocialRent = totalSocialRent / socialRent.length;
 
     // get the hpi value --> Note: this need to change to accommodate future data
-    const getHPIQuery = `SELECT hpi_2020 FROM fairhold.hpi JOIN fairhold.itl3 ON fairhold.hpi.itl3 = fairhold.itl3.itl3 WHERE postcode = '${data.housePostcode}'`; // create the sql query
-    const [hpi] = await connection.execute(getHPIQuery); // execute the query and retrieve the results
-    const totalHpi = hpi.reduce(
-      (total: number, item: any) => total + item.hpi_2020,
-      0
-    );
+    const getHPIQuery = `SELECT hpi_2020 FROM fairhold.hpi JOIN fairhold.itl3 ON fairhold.hpi.itl3 = fairhold.itl3.itl3 WHERE postcode = $1`;
+    const hpiRes = await client.query(getHPIQuery, [data.housePostcode]);
+    const hpi = hpiRes.rows;
+    const totalHpi = hpi.reduce((total: number, item: any) => total + item.hpi_2020, 0);
     const averageHpi = totalHpi / hpi.length;
-
-    connection.end(); // close the connection
+    
+    client.release(); // close the connection
+    
     return NextResponse.json({
       postcode: data.housePostcode,
       houseType: data.houseType,
@@ -134,7 +137,9 @@ export async function POST(request: Request) {
       numberOfTransactions: numberOfTransactions,
       granularityPostcode: granularityPostcode,
       pricesPaid: pricesPaid,
-    }); // return the results
+    }); 
+  
+    // return the results
   } catch (err) {
     console.log("ERROR: API - ", (err as Error).message);
 
