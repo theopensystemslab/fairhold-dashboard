@@ -22,24 +22,7 @@ export class Fairhold {
     this.threshold = threshold; // thersold in the fairhold formula
   }
 }
-export class Household {
-  incomePerPerson; // income per person
-  averageRent; // average rent
-  averageSocialRent; // average social rent
-  househousePriceIndex; // house price index
-  income?: number; // income per household
-  constructor(
-    incomePerPerson: number,
-    averageRent: number,
-    averageSocialRent: number,
-    housePriceIndex: number
-  ) {
-    this.incomePerPerson = incomePerPerson;
-    this.averageRent = averageRent;
-    this.averageSocialRent = averageSocialRent;
-    this.househousePriceIndex = housePriceIndex;
-  }
-}
+
 // define the property class
 export class Property {
   postcode; // postcode of the property
@@ -54,6 +37,7 @@ export class Property {
   depreciatedBuildPrice?: number; // price of the house according to the depreciation regression
   bedWeightedAveragePrice?: number; // price of the house weigheted by the number of bedrooms
   landPrice?: number; // price of the land
+  landToTotalRatio?: number; // ratio of the land price over the total
 
   constructor(
     postcode: string,
@@ -63,11 +47,7 @@ export class Property {
     size: number,
     newBuildPricePerMetre: number,
     averagePrice: number,
-    itl3: string,
-    gdhi: string,
-    hpi: string,
-    averageRent: number,
-    averageSocialRent: number
+    itl3: string
   ) {
     this.postcode = postcode;
     this.hType = hType;
@@ -82,6 +62,12 @@ export class Property {
     this.calculateDepreciatedBuildPrice(); // calculated the depreciated building price
     this.calculateBedWeightedAveragePrice(); // calculate the bed weighted building price
     this.calculateLandPrice(); // calculate the price of the land
+    if (
+      this.landPrice !== undefined &&
+      this.bedWeightedAveragePrice !== undefined
+    ) {
+      this.landToTotalRatio = this.landPrice / this.bedWeightedAveragePrice; // define the land to total ratio
+    }
   }
 
   // calculate new building price
@@ -121,8 +107,8 @@ export class Property {
   // calculate the average property price based on the  number of bedrooms
   calculateBedWeightedAveragePrice(
     numberOfBeds: number = this.numberOfBedrooms,
-    beds: any = [0, 1, 2, 3, 4, 5, 6],
-    bedWeigths: any = [0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4],
+    beds: number[] = [0, 1, 2, 3, 4, 5, 6],
+    bedWeigths: number[] = [0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4],
     precisionRounding: number = 2
   ) {
     let bedWeigth; // initialize the variable
@@ -153,19 +139,19 @@ export class Property {
 
 // define the mortgage class
 export class Mortgage {
-  houseValue: number; //value of the house
+  propertyValue: number; //value of the property for the mortgage
   interestRate: number; // interest rate of the mortgage in percentage e.r, 0.05=5%
   termOfTheMortgage: number; // number of years of the mortgage
   initialDeposit: number; // initial deposit of the value of the mortgage in percentage e.g. 0.15 =15% deposit
   amountOfTheMortgage?: number; // amount of the morgage requested
   monthlyPayment?: number; // monthly rate of the mortgage
   constructor(
-    houseValue: number,
+    propertyValue: number,
     interestRate: number = 0.06,
     termOfTheMortgage: number = 30,
     initialDeposit: number = 0.15
   ) {
-    this.houseValue = houseValue;
+    this.propertyValue = propertyValue;
     this.initialDeposit = initialDeposit;
     this.interestRate = interestRate;
     this.termOfTheMortgage = termOfTheMortgage;
@@ -174,7 +160,7 @@ export class Mortgage {
   }
 
   calculateamountOfTheMortgage() {
-    this.amountOfTheMortgage = this.houseValue * (1 - this.initialDeposit); // calculate the amount of the mortgage by removing the deposit
+    this.amountOfTheMortgage = this.propertyValue * (1 - this.initialDeposit); // calculate the amount of the mortgage by removing the deposit
     return this.amountOfTheMortgage;
   }
 
@@ -192,6 +178,94 @@ export class Mortgage {
     } else {
       throw new Error("amountOfTheMortgage is undefined");
     }
+  }
+}
+
+export class Household {
+  incomePerPerson; // income per person
+  averageRent; // average rent
+  averageSocialRent; // average social rent
+  rentAdjustements; //rent adjustment values
+  housePriceIndex; // house price index
+  property; // property object
+  mortgage; // mortgage object
+  fairhold; // fairhold object
+  income?: number; // income per household
+  socialRent?: number; // social rent
+  adjustedSocialRentMonthly?: number; //adjusted social rent monthly
+
+  mortgageAffordability?: number; // affordability of the mortgage
+  constructor(
+    incomePerPerson: number,
+    averageRent: number,
+    averageSocialRent: number,
+    rentAdjustements: any,
+    housePriceIndex: number,
+    property: Property,
+    mortgage: Mortgage,
+    fairhold: Fairhold
+  ) {
+    this.incomePerPerson = incomePerPerson;
+    this.averageRent = averageRent;
+    this.averageSocialRent = averageSocialRent;
+    this.rentAdjustements = rentAdjustements;
+    this.housePriceIndex = housePriceIndex;
+    this.property = property;
+    this.mortgage = mortgage;
+    this.fairhold = fairhold;
+  }
+
+  calculateSocialRent(
+    numberOfBeds: number = this.property.numberOfBedrooms,
+    beds: number[] = [0, 1, 2, 3, 4, 5, 6],
+    bedWeigths: number[] = [0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4],
+    rentCapValues: number[] = [
+      155.73, 155.73, 164.87, 174.03, 183.18, 192.35, 201.5,
+    ],
+    precisionRounding: number = 2,
+    nationalAverageRent: number = 54.62, // national average rent :check with Ollie
+    nationalAverageProperty: number = 49750, // national average property value: check with Ollie
+    nationalaverageEarnings: number = 316.4, // check with Ollie
+    adjustementPercentage: number = 11.1 // check with Ollie
+  ) {
+    let bedWeigth; // initialize the bedWeigth variable
+    let rentCapWeekly; // initiliaze the rent Cap values
+    if (numberOfBeds < beds[beds.length - 1]) {
+      bedWeigth = bedWeigths[numberOfBeds]; // assign the weight based on the number of beds
+      rentCapWeekly = rentCapValues[numberOfBeds]; // assign the rent cap value based on the number of beds
+    } else {
+      bedWeigth = bedWeigths[bedWeigths.length - 1]; // assign the last value if out of scale
+      rentCapWeekly = rentCapValues[bedWeigths.length - 1]; // assign the last value if out of scale
+    }
+
+    const relativeLocalEarning = this.averageSocialRent / nationalAverageRent; // realtivve local earnings
+    const relativePropertyValue =
+      this.property.averagePrice / nationalAverageProperty; // realtive property value
+    const formulaRentWeekly =
+      0.7 * nationalAverageRent * relativeLocalEarning * bedWeigth +
+      0.3 * nationalAverageRent * relativePropertyValue;
+
+    let adjustedRentWeekly = formulaRentWeekly; // Initialize the adjusted rent weekly
+    // Loop through each rent adjustment
+    for (let i = 0; i < this.rentAdjustements.length; i++) {
+      const adjustment = this.rentAdjustements[i]; // Get the current adjustment
+      const adjustmentFactor = adjustment.total / 100 + 1; // Calculate the adjustment factor
+      adjustedRentWeekly *= adjustmentFactor; // Apply the adjustment
+    }
+
+    let socialRentWeekly; // initialize the variable
+    if (adjustedRentWeekly < rentCapWeekly) {
+      socialRentWeekly = adjustedRentWeekly;
+    } else {
+      socialRentWeekly = rentCapWeekly;
+    }
+
+    const adjustedSocialRentMonthly = socialRentWeekly * 4.2; // define the monthly social rent
+    this.adjustedSocialRentMonthly = adjustedSocialRentMonthly; // set the value
+  }
+  calculateHouseholdIncome() {
+    const houseMultiplier = 2.4; // house multiplier to convert from gdhi to income
+    this.income = houseMultiplier * this.incomePerPerson; // calculate the income for house hold
   }
 }
 
