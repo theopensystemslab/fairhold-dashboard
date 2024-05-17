@@ -3,24 +3,28 @@ import { Mortgage, Property, Fairhold, Household } from "./classes";
 const fairhold = new Fairhold(); // set the fairhold
 const mortgage = new Mortgage(200000); // set the new mortgage
 
-function calculateFairhold(houseData: any) {
+function calculateFairhold(responseData: any) {
   const property = new Property(
-    houseData.postcode,
-    houseData.houseType,
-    houseData.houseBedrooms,
-    houseData.houseAge,
-    houseData.houseSize,
-    houseData.buildPrice[0].priceMid,
-    houseData.averagePrice,
-    houseData.itl3[0].itl3
+    responseData.postcode,
+    responseData.houseType,
+    responseData.houseBedrooms,
+    responseData.houseAge,
+    responseData.houseSize,
+    responseData.buildPrice[0].priceMid,
+    responseData.averagePrice,
+    responseData.itl3[0].itl3
   );
   const household = new Household(
-    houseData.gdhi[0].gdhi_2020,
-    houseData.averageRent,
-    houseData.averageSocialRent,
-    houseData.hpi
+    responseData.gdhi[0].gdhi_2020,
+    responseData.averageRent,
+    responseData.averageSocialRent,
+    responseData.rentAdjustements,
+    responseData.hpi,
+    property,
+    mortgage,
+    fairhold
   );
-  return console.log(property, household);
+  return console.log(household);
 }
 
 export default calculateFairhold;
