@@ -4,6 +4,13 @@ const fairhold = new Fairhold(); // set the fairhold
 const mortgage = new Mortgage(200000); // set the new mortgage
 
 function calculateFairhold(houseData: any) {
+  if (!houseData.buildPrice || houseData.buildPrice.length === 0) {
+    throw new Error("buildPrice data is missing or empty");
+  }
+  if (!houseData.itl3 || houseData.itl3.length === 0) {
+    throw new Error("itl3 data is missing or empty");
+  }
+  
   const property = new Property(
     houseData.postcode,
     houseData.houseType,
