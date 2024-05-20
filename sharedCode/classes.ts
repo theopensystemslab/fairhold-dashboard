@@ -188,22 +188,24 @@ export class Household {
   rentAdjustements; //rent adjustment values
   housePriceIndex; // house price index
   property; // property object
-  mortgage; // mortgage object
-  fairhold; // fairhold object
   income?: number; // income per household
   socialRent?: number; // social rent
   adjustedSocialRentMonthly?: number; //adjusted social rent monthly
-
   mortgageAffordability?: number; // affordability of the mortgage
+  socialRentMonthlyLand?: number; // social rent to pay the land
+  socialRentMonthlyHouse?: number; // social rent monthly House
+  mortgageMarket?: Mortgage;
+  mortgageHouse?: Mortgage;
+  mortgageDepreciatedHouse?: Mortgage;
+  mortgageLand?: Mortgage;
+
   constructor(
     incomePerPerson: number,
     averageRent: number,
     averageSocialRent: number,
     rentAdjustements: any,
     housePriceIndex: number,
-    property: Property,
-    mortgage: Mortgage,
-    fairhold: Fairhold
+    property: Property
   ) {
     this.incomePerPerson = incomePerPerson;
     this.averageRent = averageRent;
@@ -211,8 +213,6 @@ export class Household {
     this.rentAdjustements = rentAdjustements;
     this.housePriceIndex = housePriceIndex;
     this.property = property;
-    this.mortgage = mortgage;
-    this.fairhold = fairhold;
   }
 
   calculateSocialRent(
@@ -261,11 +261,33 @@ export class Household {
     }
 
     const adjustedSocialRentMonthly = socialRentWeekly * 4.2; // define the monthly social rent
-    this.adjustedSocialRentMonthly = adjustedSocialRentMonthly; // set the value
+    this.adjustedSocialRentMonthly = adjustedSocialRentMonthly; // set the value of adjusted social rent monthly
+    if (this.property.landToTotalRatio !== undefined) {
+      this.socialRentMonthlyLand =
+        adjustedSocialRentMonthly * this.property.landToTotalRatio; // set the rent value paid for the land
+      this.socialRentMonthlyHouse =
+        adjustedSocialRentMonthly - this.socialRentMonthlyLand; // set the rent value paid or the house
+    }
   }
   calculateHouseholdIncome() {
     const houseMultiplier = 2.4; // house multiplier to convert from gdhi to income
     this.income = houseMultiplier * this.incomePerPerson; // calculate the income for house hold
+  }
+
+  calculateMortgageValues() {
+    this.mortgageMarket = new Mortgage(this.property.averagePrice); // create the mortgage object for the market value
+    if (
+      this.property.newBuildPrice !== undefined &&
+      this.property.depreciatedBuildPrice !== undefined
+    ) {
+      this.mortgageHouse = new Mortgage(this.property.newBuildPrice); // create the mortgage object for the new build price
+      this.mortgageDepreciatedHouse = new Mortgage(
+        this.property.depreciatedBuildPrice
+      ); // create the mortgage object for the depraciated build price
+      this.mortgageLand = new Mortgage(
+        this.property.averagePrice - this.property.newBuildPrice
+      ); // create the mortgage object for the land. Check with Ollie, shouldn't it be depreciated house?
+    }
   }
 }
 
