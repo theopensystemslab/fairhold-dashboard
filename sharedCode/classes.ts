@@ -3,23 +3,53 @@ import * as math from "mathjs";
 
 //define the fairhold object
 export class Fairhold {
+  affordability;
+  originalPrice;
   amplitude;
   length;
   position;
   plateau;
   threshold;
+  discount?: number;
+  discountedPrince?: number;
   constructor(
+    affordability: number,
+    originalPrice: number,
     amplitude: number = 0.25,
     length: number = 1,
     position: number = 0.45,
     plateau: number = 0.15,
     threshold: number = 0.5
   ) {
+    this.affordability = affordability; // affordability index
+    this.originalPrice = originalPrice; // price before the discount
     this.amplitude = amplitude; // Amplitude in the fairhold formula
     this.length = length; // length in the fairhold formula
     this.position = position; // position in the fairhold formula
     this.plateau = plateau; // plateau in the fairhold formula
     this.threshold = threshold; // thersold in the fairhold formula
+    this.calculateFairholdDiscount(); // calculate the fairhold values
+  }
+
+  calculateFairholdDiscount() {
+    if (this.affordability < this.threshold) {
+      this.discount =
+        this.amplitude *
+          math.cos((2 * math.pi * this.affordability) / this.length) +
+        this.position; // fairhold formula
+    } else {
+      this.discount = this.plateau; // fairhold formula
+    }
+  }
+
+  calculateDiscountedPrice() {
+    if (this.discount != undefined) {
+      if (this.originalPrice < 0) {
+        this.discountedPrince = 1; // set a nominal value : check with Ollie
+      } else {
+        this.discountedPrince = this.discount * this.originalPrice;
+      }
+    }
   }
 }
 
@@ -198,6 +228,10 @@ export class Household {
   mortgageHouse?: Mortgage;
   mortgageDepreciatedHouse?: Mortgage;
   mortgageLand?: Mortgage;
+  mortgageMarketAffordability?: number;
+  rentAffordability?: number;
+  fairholdPurchase?: Fairhold;
+  fairholdRent?: Fairhold;
 
   constructor(
     incomePerPerson: number,
@@ -213,6 +247,10 @@ export class Household {
     this.rentAdjustements = rentAdjustements;
     this.housePriceIndex = housePriceIndex;
     this.property = property;
+    this.calculateSocialRent();
+    this.calculateHouseholdIncome();
+    this.calculateMortgageValues();
+    this.calculateFairholdValues();
   }
 
   calculateSocialRent(
@@ -272,6 +310,7 @@ export class Household {
   calculateHouseholdIncome() {
     const houseMultiplier = 2.4; // house multiplier to convert from gdhi to income
     this.income = houseMultiplier * this.incomePerPerson; // calculate the income for house hold
+    this.rentAffordability = this.averageRent / this.income; // calculate the rent affordability
   }
 
   calculateMortgageValues() {
@@ -287,6 +326,29 @@ export class Household {
       this.mortgageLand = new Mortgage(
         this.property.averagePrice - this.property.newBuildPrice
       ); // create the mortgage object for the land. Check with Ollie, shouldn't it be depreciated house?
+    }
+    if (
+      this.mortgageMarket.monthlyPayment !== undefined &&
+      this.income !== undefined
+    ) {
+      this.mortgageMarketAffordability =
+        this.mortgageMarket.monthlyPayment / (this.income * 12); // calculate the mortage market affordability
+    }
+  }
+  calculateFairholdValues() {
+    if (
+      this.mortgageMarketAffordability !== undefined &&
+      this.rentAffordability !== undefined &&
+      this.property.landPrice !== undefined
+    ) {
+      this.fairholdPurchase = new Fairhold(
+        this.mortgageMarketAffordability,
+        this.property.landPrice
+      ); // create the fairhold object for purchase
+      this.fairholdRent = new Fairhold(
+        this.rentAffordability,
+        this.averageRent
+      ); // create the fairhold object for rent
     }
   }
 }
