@@ -12,7 +12,6 @@ function calculateFairhold(responseData: any) {
     responseData.averagePrice,
     responseData.itl3[0].itl3
   );
-  const fairhold = new Fairhold(); // define the fairhold object
 
   // define the household object
   const household = new Household(
