@@ -105,8 +105,14 @@ export async function POST(request: Request) {
     const totalRent = rent.reduce((total: number, item: any) => total + item.monthlyMeanRent, 0);
     const averageRent = totalRent / rent.length;
 
+    // get the rent adjustements --> Note: this need to change to accommodate future data
+    const getRentAdjustementQuery = `SELECT * FROM fairhold.socialRentAdjustments`; // create the sql query
+    const [rentAdjustements] = await connection.execute(
+      getRentAdjustementQuery
+    ); // execute the query and retrieve the results
+
     // get the rent value --> Note: this need to change to accommodate future data
-    const getSocialRentQuery = `SELECT earningsPerWeek FROM fairhold.socialRent JOIN fairhold.itl3 ON fairhold.socialRent.itl3 = fairhold.itl3.itl3 WHERE postcode = $1`;
+    const getSocialRentQuery = `SELECT earningsPerWeek FROM fairhold.socialRent JOIN fairhold.itl3 ON fairhold.itl3.itl3 LIKE CONCAT(fairhold.socialRent.itl3,'%') WHERE postcode =$1`;
     const socialRentRes = await client.query(getSocialRentQuery, [data.housePostcode]);
     const socialRent = socialRentRes.rows;
     const totalSocialRent = socialRent.reduce((total: number, item: any) => total + item.earningsPerWeek, 0);
@@ -133,6 +139,7 @@ export async function POST(request: Request) {
       hpi: averageHpi,
       buildPrice: buildPrice,
       averageRent: averageRent,
+      rentAdjustements: rentAdjustements,
       averageSocialRent: averageSocialRent,
       numberOfTransactions: numberOfTransactions,
       granularityPostcode: granularityPostcode,

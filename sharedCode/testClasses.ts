@@ -1,33 +1,37 @@
 import { Mortgage, Property, Fairhold, Household } from "./classes";
 
-const fairhold = new Fairhold(); // set the fairhold
-const mortgage = new Mortgage(200000); // set the new mortgage
+// ADDED ERROR HANDLING BEFORE ---------------------------------------------------------------------------------------
+// if (!houseData.buildPrice || houseData.buildPrice.length === 0) {
+//   throw new Error("buildPrice data is missing or empty");
+// }
+// if (!houseData.itl3 || houseData.itl3.length === 0) {
+//   throw new Error("itl3 data is missing or empty");
+// }
 
-function calculateFairhold(houseData: any) {
-  if (!houseData.buildPrice || houseData.buildPrice.length === 0) {
-    throw new Error("buildPrice data is missing or empty");
-  }
-  if (!houseData.itl3 || houseData.itl3.length === 0) {
-    throw new Error("itl3 data is missing or empty");
-  }
-  
+function calculateFairhold(responseData: any) {
+
+  // define the property object
   const property = new Property(
-    houseData.postcode,
-    houseData.houseType,
-    houseData.houseBedrooms,
-    houseData.houseAge,
-    houseData.houseSize,
-    houseData.buildPrice[0].priceMid,
-    houseData.averagePrice,
-    houseData.itl3[0].itl3
+    responseData.postcode,
+    responseData.houseType,
+    responseData.houseBedrooms,
+    responseData.houseAge,
+    responseData.houseSize,
+    responseData.buildPrice[0].priceMid,
+    responseData.averagePrice,
+    responseData.itl3[0].itl3
   );
+
+  // define the household object
   const household = new Household(
-    houseData.gdhi[0].gdhi_2020,
-    houseData.averageRent,
-    houseData.averageSocialRent,
-    houseData.hpi
+    responseData.gdhi[0].gdhi_2020,
+    responseData.averageRent,
+    responseData.averageSocialRent,
+    responseData.rentAdjustements,
+    responseData.hpi,
+    property
   );
-  return console.log(property, household);
+  return console.log(household);
 }
 
 export default calculateFairhold;
