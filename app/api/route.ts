@@ -27,10 +27,11 @@ export async function POST(request: Request) {
     const connection = await mysql.createConnection(connectionParams); // create the connection to the database
 
     // data are going to be queried at different levels of granularity based on the postcode
-    if (data.housePostcode != null) {
-      const postcode = parse(fix(data.housePostcode.toString())); // define the postcode object. fix any issues with spacing
+if (data.housePostcode == null) throw Error("Missing postcode")
+    
+const postcode = parse(fix(data.housePostcode.toString())); // define the postcode object. fix any issues with spacing
 
-      if (postcode.valid) {
+if (!postcode.valid) throw Error("Invalid postcode")
         const postcodeArea = postcode.area; // extract only the characters for the area, e.g SE
         const postcodeDistrict = postcode.district; // extract only characters for the district, SE17
         const postcodeSector = postcode.sector; // extract only the characters for the sector, SE17 1
