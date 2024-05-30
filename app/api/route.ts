@@ -55,7 +55,7 @@ export async function POST(request: Request) {
       if (
         numberOfPricesPaidLvl2 >= minimumNumberPostcodes
       ) {
-        pricesPaid = pricesPaidLvl2; // if condtion is met, the granularity is appropriate
+        pricesPaid = resLvl2; // if condtion is met, the granularity is appropriate
         numberOfTransactions = numberOfPricesPaidLvl2; // check the granularity
         granularityPostcode = postcodeLvl2; // granularity of the postcode
       } else {
@@ -67,7 +67,7 @@ export async function POST(request: Request) {
         `;      
         console.log("resLvl1: ", resLvl1);  
         const numberOfPricesPaidLvl1 = resLvl1.length;
-        pricesPaid = pricesPaidLvl1;
+        pricesPaid = resLvl1;
         numberOfTransactions = numberOfPricesPaidLvl1;
         granularityPostcode = postcodeLvl1;
       }
@@ -78,6 +78,7 @@ export async function POST(request: Request) {
       (total: number, item: any) => total + item.price,
       0
     );
+    console.log("totalPrice:", totalPrice)
 
     // Calculate the average price
     const averagePrice = totalPrice / pricesPaid.length;
@@ -85,62 +86,87 @@ export async function POST(request: Request) {
       SELECT * FROM "public"."buildprices" 
       WHERE "housetype" = ${data.houseType}
     `;
-    const buildPrice = buildPriceRes.rows;
+    console.log("buildPriceRes:", buildPriceRes);
+    const buildPrice = buildPriceRes[0]['pricemid'];
+    console.log("buildPrice:", buildPrice);
 
     // get the ITL3 value
     const itl3Res = await prisma.$queryRaw`
-      SELECT itl3 
-      FROM "public"."itl3" 
-      WHERE "postcode" = ${data.housePostcode}
+      SELECT "itl_lookup"::text AS "itl_lookup" 
+      FROM "public"."itl_lookup"  
+      WHERE "postcode" = ${postcodeParts[0]}
     `;
-    const itl3 = itl3Res.rows;
+    const itlLookupValue = itl3Res[0].itl_lookup;
+    const itlLookupParts = itlLookupValue.split(',');
+    const itl3 = itlLookupParts[3]; // Extract the 3rd value (index 3)
+    console.log("itl3: ", itl3);
+    console.log("itl3Res: ", itl3Res);
 
     // get the gdhi value --> Note: this need to change to accommodate future data
     const gdhiRes = await prisma.$queryRaw`
       SELECT gdhi_2020 
       FROM "public"."gdhi" 
-      JOIN "public"."itl3" ON "public"."gdhi"."itl3" = "public"."itl3"."itl3" 
-      WHERE "postcode" = ${data.housePostcode}
+      WHERE "itl3" = ${itl3}
     `;
-    const gdhi = gdhiRes.rows;
+    const gdhi = gdhiRes[0]['gdhi_2020'];
+    console.log("gdhiRes: ", gdhiRes)
+    console.log("gdhi: ", gdhi)
 
     // get the rent value --> Note: this need to change to accommodate future data
     const rentRes = await prisma.$queryRaw`
-      SELECT monthlyMeanRent 
+      SELECT monthlymeanrent 
       FROM "public"."rent" 
-      JOIN "public"."itl3" ON "public"."rent"."itl3" = "public"."itl3"."itl3" 
-      WHERE postcode = ${data.housePostcode}
+      WHERE itl3 = ${itl3}
     `;
-    const rent = rentRes.rows;
-    const totalRent = rent.reduce((total: number, item: any) => total + item.monthlyMeanRent, 0);
-    const averageRent = totalRent / rent.length;
+    console.log("rentRes: ", rentRes)
+    let averageRent;
+        if (rentRes.length === 1) {
+          averageRent = rentRes[0].monthlymeanrent;
+        } else if (rentRes.length > 1) {
+          const totalRent = rentRes.reduce((sum, item) => sum + item.monthlymeanrent, 0);
+          averageRent = totalRent / rentRes.length;
+    console.log(averageRent);
 
     // get the rent adjustements --> Note: this need to change to accommodate future data
     const rentAdjustements = await prisma.$queryRaw`
       SELECT * 
-      FROM "public"."socialRentAdjustments"
+      FROM "public"."soc_rent_adjustments"
     `;// execute the query and retrieve the results
-
+    console.log("rentAdjustements: ", rentAdjustements);
+    
     // get the rent value --> Note: this need to change to accommodate future data
-    const socialRentRes = await prisma.$queryRaw`
-      SELECT earningsPerWeek 
-      FROM "public"."socialRent" 
-      JOIN "public"."itl3" ON "public"."socialRent"."itl3" = "public"."itl3"."itl3" 
-      WHERE postcode = ${data.housePostcode}
-    `;
-    const socialRent = socialRentRes.rows;
-    const totalSocialRent = socialRent.reduce((total: number, item: any) => total + item.earningsPerWeek, 0);
-    const averageSocialRent = totalSocialRent / socialRent.length;
+    const socialRentEarningRes = await prisma.$queryRaw`
+      SELECT earningsperweek 
+      FROM "public"."socialrent" 
+      WHERE SUBSTRING(itl3 FROM 1 FOR 4) = ${itl3.substring(0, 4)}
+      `;
+    console.log("socialRentEarningRes: ", socialRentEarningRes)
+    let socialRentAveEarning;
+        if (socialRentEarningRes.length === 1) {
+          socialRentAveEarning = socialRentEarningRes[0].earningsperweek;
+        } else if (socialRentEarningRes.length > 1) {
+          const socialRentTotalEarning = socialRentAveEarning.reduce((sum, item) => sum + item.earningsperweek, 0);
+          socialRentAveEarning = totalRent / socialRentEarningRes.length;
+        }
+    console.log("socialRentAveEarning: ", socialRentAveEarning);
+
+    const averageSocialRent = 100 // PLACEHOLDER--NEED TO DO THE SOCIAL RENT FORMULA HERE
+    console.log("averageSocialRent: ", averageSocialRent);
 
     // get the hpi value --> Note: this need to change to accommodate future data
     const hpiRes = await prisma.$queryRaw`
       SELECT hpi_2020 FROM "public"."hpi" 
-      JOIN "public"."itl3" ON "public"."hpi"."itl3" = "public"."itl3"."itl3" 
-      WHERE postcode = ${data.housePostcode}
+      WHERE itl3 = ${itl3}
     `;
-    const hpi = hpiRes.rows;
-    const totalHpi = hpi.reduce((total: number, item: any) => total + item.hpi_2020, 0);
-    const averageHpi = totalHpi / hpi.length;
+    console.log("hpiRes: ", hpiRes);
+    let averageHpi;
+        if (hpiRes.length === 1) {
+          averageHpi = hpiRes[0].hpi_2020;
+        } else {
+          const hpiTotal = hpiRes.reduce((sum, item) => sum + item.hpi_2020, 0);
+          averageHpi = hpiTotal / hpiRes.length;
+        }
+    console.log("averageHpi: ", averageHpi)
         
     return NextResponse.json({
       postcode: data.housePostcode,
@@ -159,6 +185,7 @@ export async function POST(request: Request) {
       granularityPostcode: granularityPostcode,
       pricesPaid: pricesPaid,
     }); 
+  };
   
     // return the results
   } catch (err) {
@@ -172,5 +199,5 @@ export async function POST(request: Request) {
     return NextResponse.json(response, { status: 200 });
   } finally {
     await prisma.$disconnect();
-  }
-}
+  };
+};
