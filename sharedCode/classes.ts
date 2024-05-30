@@ -12,15 +12,23 @@ export class Fairhold {
   threshold;
   discount?: number;
   discountedPrince?: number;
-  constructor(
-    affordability: number,
-    originalPrice: number,
-    amplitude: number = 0.25,
-    length: number = 1,
-    position: number = 0.45,
-    plateau: number = 0.15,
-    threshold: number = 0.5
-  ) {
+  constructor({
+    affordability,
+    originalPrice,
+    amplitude = 0.25,
+    length = 1,
+    position = 0.45,
+    plateau = 0.15,
+    threshold = 0.5,
+  }: {
+    affordability: number;
+    originalPrice: number;
+    amplitude?: number;
+    length?: number;
+    position?: number;
+    plateau?: number;
+    threshold?: number;
+  }) {
     this.affordability = affordability; // affordability index
     this.originalPrice = originalPrice; // price before the discount
     this.amplitude = amplitude; // Amplitude in the fairhold formula
@@ -28,7 +36,8 @@ export class Fairhold {
     this.position = position; // position in the fairhold formula
     this.plateau = plateau; // plateau in the fairhold formula
     this.threshold = threshold; // thersold in the fairhold formula
-    this.calculateFairholdDiscount(); // calculate the fairhold values
+    this.calculateFairholdDiscount(); // calculate the fairhold discount
+    this.calculateDiscountedPrice(); // calculate discounted price
   }
 
   calculateFairholdDiscount() {
@@ -43,12 +52,14 @@ export class Fairhold {
   }
 
   calculateDiscountedPrice() {
-    if (this.discount != undefined) {
-      if (this.originalPrice < 0) {
-        this.discountedPrince = 1; // set a nominal value : check with Ollie
-      } else {
-        this.discountedPrince = this.discount * this.originalPrice;
-      }
+    if (this.discount == undefined) {
+      throw new Error("discount is not defined");
+    }
+
+    if (this.originalPrice < 0) {
+      this.discountedPrince = 1; // set a nominal value : check with Ollie
+    } else {
+      this.discountedPrince = this.discount * this.originalPrice;
     }
   }
 }
@@ -56,7 +67,7 @@ export class Fairhold {
 // define the property class
 export class Property {
   postcode; // postcode of the property
-  hType; // type of the house: D--> detached, S--> semidetached, T--> Terrace, F--> Flats
+  houseType; // type of the house: D--> detached, S--> semidetached, T--> Terrace, F--> Flats
   numberOfBedrooms; // number of bedrooms in the house
   age; // age of the house
   size; // size of the house in meter squares
@@ -69,18 +80,27 @@ export class Property {
   landPrice?: number; // price of the land
   landToTotalRatio?: number; // ratio of the land price over the total
 
-  constructor(
-    postcode: string,
-    hType: string,
-    numberOfBedrooms: number,
-    age: number,
-    size: number,
-    newBuildPricePerMetre: number,
-    averagePrice: number,
-    itl3: string
-  ) {
+  constructor({
+    postcode,
+    houseType,
+    numberOfBedrooms,
+    age,
+    size,
+    newBuildPricePerMetre,
+    averagePrice,
+    itl3,
+  }: {
+    postcode: any;
+    houseType: string;
+    numberOfBedrooms: number;
+    age: number;
+    size: number;
+    newBuildPricePerMetre: number;
+    averagePrice: number;
+    itl3: string;
+  }) {
     this.postcode = postcode;
-    this.hType = hType;
+    this.houseType = houseType;
     this.numberOfBedrooms = numberOfBedrooms;
     this.age = age;
     this.size = size;
@@ -102,16 +122,15 @@ export class Property {
 
   // calculate new building price
   calculateNewBuildPrice(precisionRounding: number = 2) {
-    if (this.newBuildPricePerMetre) {
-      const newBuildPrice = this.newBuildPricePerMetre * this.size; // calculate the price of the new build
-      this.newBuildPrice = parseFloat(newBuildPrice.toFixed(precisionRounding)); // round the number
-
-      return this.newBuildPrice;
-    } else {
+    if (!this.newBuildPricePerMetre) {
       throw new Error(
         "The Build Price cannot be calculated because pricePerMeter has not been set"
       );
     }
+    const newBuildPrice = this.newBuildPricePerMetre * this.size; // calculate the price of the new build
+    this.newBuildPrice = parseFloat(newBuildPrice.toFixed(precisionRounding)); // round the number
+
+    return this.newBuildPrice;
   }
 
   // calculate nthe depraciated building price
@@ -119,19 +138,19 @@ export class Property {
     depreciationFactor: number = -32938,
     precisionRounding: number = 2
   ) {
-    if (this.newBuildPrice) {
-      const depreciatedBuildPrice =
-        this.newBuildPrice + depreciationFactor + math.log(this.age); // depreciated building price
-      this.depreciatedBuildPrice = parseFloat(
-        depreciatedBuildPrice.toFixed(precisionRounding)
-      ); // round the number
-
-      return this.depreciatedBuildPrice;
-    } else {
+    if (!this.newBuildPrice) {
       throw new Error(
         "The Depreciated Price cannot be calculated because newBuildPrice has not been set"
       );
     }
+
+    const depreciatedBuildPrice =
+      this.newBuildPrice + depreciationFactor + math.log(this.age); // depreciated building price
+    this.depreciatedBuildPrice = parseFloat(
+      depreciatedBuildPrice.toFixed(precisionRounding)
+    ); // round the number
+
+    return this.depreciatedBuildPrice;
   }
 
   // calculate the average property price based on the  number of bedrooms
@@ -149,15 +168,13 @@ export class Property {
       bedWeigth = bedWeigths[bedWeigths.length - 1]; // assign the last value if out of scale
     }
 
-    if (bedWeigth !== undefined) {
-      return (this.bedWeightedAveragePrice = parseFloat(
-        (bedWeigth * this.averagePrice).toFixed(precisionRounding)
-      )); // calculate the bed weighted average price
-    } else {
-      throw new Error(
-        "The bed weigthed average price cannot be calculated. Check the calculateBedWeightedAveragePrice mehtod."
-      );
+    if (bedWeigth == undefined) {
+      throw new Error("bedWigth is undefined.");
     }
+
+    return (this.bedWeightedAveragePrice = parseFloat(
+      (bedWeigth * this.averagePrice).toFixed(precisionRounding)
+    )); // calculate the bed weighted average price
   }
   calculateLandPrice(
     propertyPrice: any = this.bedWeightedAveragePrice,
@@ -175,12 +192,17 @@ export class Mortgage {
   initialDeposit: number; // initial deposit of the value of the mortgage in percentage e.g. 0.15 =15% deposit
   amountOfTheMortgage?: number; // amount of the morgage requested
   monthlyPayment?: number; // monthly rate of the mortgage
-  constructor(
-    propertyValue: number,
-    interestRate: number = 0.06,
-    termOfTheMortgage: number = 30,
-    initialDeposit: number = 0.15
-  ) {
+  constructor({
+    propertyValue,
+    interestRate = 0.06,
+    termOfTheMortgage = 30,
+    initialDeposit = 0.15,
+  }: {
+    propertyValue: number;
+    interestRate?: number;
+    termOfTheMortgage?: number;
+    initialDeposit?: number;
+  }) {
     this.propertyValue = propertyValue;
     this.initialDeposit = initialDeposit;
     this.interestRate = interestRate;
@@ -233,14 +255,21 @@ export class Household {
   fairholdPurchase?: Fairhold;
   fairholdRent?: Fairhold;
 
-  constructor(
-    incomePerPerson: number,
-    averageRent: number,
-    averageSocialRent: number,
-    rentAdjustements: any,
-    housePriceIndex: number,
-    property: Property
-  ) {
+  constructor({
+    incomePerPerson,
+    averageRent,
+    averageSocialRent,
+    rentAdjustements,
+    housePriceIndex,
+    property,
+  }: {
+    incomePerPerson: number;
+    averageRent: number;
+    averageSocialRent: number;
+    rentAdjustements: any;
+    housePriceIndex: number;
+    property: Property;
+  }) {
     this.incomePerPerson = incomePerPerson;
     this.averageRent = averageRent;
     this.averageSocialRent = averageSocialRent;
@@ -307,50 +336,59 @@ export class Household {
         adjustedSocialRentMonthly - this.socialRentMonthlyLand; // set the rent value paid or the house
     }
   }
-  calculateHouseholdIncome() {
-    const houseMultiplier = 2.4; // house multiplier to convert from gdhi to income
+  calculateHouseholdIncome(houseMultiplier: number = 2.4) {
     this.income = houseMultiplier * this.incomePerPerson; // calculate the income for house hold
     this.rentAffordability = this.averageRent / this.income; // calculate the rent affordability
   }
 
   calculateMortgageValues() {
-    this.mortgageMarket = new Mortgage(this.property.averagePrice); // create the mortgage object for the market value
+    this.mortgageMarket = new Mortgage({
+      propertyValue: this.property.averagePrice,
+    }); // create the mortgage object for the market value
     if (
-      this.property.newBuildPrice !== undefined &&
-      this.property.depreciatedBuildPrice !== undefined
-    ) {
-      this.mortgageHouse = new Mortgage(this.property.newBuildPrice); // create the mortgage object for the new build price
-      this.mortgageDepreciatedHouse = new Mortgage(
-        this.property.depreciatedBuildPrice
-      ); // create the mortgage object for the depraciated build price
-      this.mortgageLand = new Mortgage(
-        this.property.averagePrice - this.property.newBuildPrice
-      ); // create the mortgage object for the land. Check with Ollie, shouldn't it be depreciated house?
-    }
+      this.property.newBuildPrice == undefined ||
+      this.property.depreciatedBuildPrice == undefined
+    )
+      throw new Error(
+        "either newBuildPrice or depreciatedBuildPrice are undefined"
+      );
+
+    this.mortgageHouse = new Mortgage({
+      propertyValue: this.property.newBuildPrice,
+    }); // create the mortgage object for the new build price
+    this.mortgageDepreciatedHouse = new Mortgage({
+      propertyValue: this.property.depreciatedBuildPrice,
+    }); // create the mortgage object for the depraciated build price
+    this.mortgageLand = new Mortgage({
+      propertyValue: this.property.averagePrice - this.property.newBuildPrice,
+    }); // create the mortgage object for the land. Check with Ollie, shouldn't it be depreciated house?
+
     if (
-      this.mortgageMarket.monthlyPayment !== undefined &&
-      this.income !== undefined
-    ) {
-      this.mortgageMarketAffordability =
-        this.mortgageMarket.monthlyPayment / (this.income * 12); // calculate the mortage market affordability
-    }
+      this.mortgageMarket.monthlyPayment == undefined ||
+      this.income == undefined
+    )
+      throw new Error("either monthlyPayment or income undefined");
+
+    this.mortgageMarketAffordability =
+      this.mortgageMarket.monthlyPayment / (this.income * 12); // calculate the mortage market affordability
   }
   calculateFairholdValues() {
     if (
-      this.mortgageMarketAffordability !== undefined &&
-      this.rentAffordability !== undefined &&
-      this.property.landPrice !== undefined
-    ) {
-      this.fairholdPurchase = new Fairhold(
-        this.mortgageMarketAffordability,
-        this.property.landPrice
-      ); // create the fairhold object for purchase
-      this.fairholdRent = new Fairhold(
-        this.rentAffordability,
-        this.averageRent
-      ); // create the fairhold object for rent
-    }
+      this.mortgageMarketAffordability == undefined ||
+      this.rentAffordability == undefined ||
+      this.property.landPrice == undefined
+    )
+      throw new Error(
+        "either mortgageMarketAffordability or rentAffordability or property.landPrice are undefined"
+      );
+
+    this.fairholdPurchase = new Fairhold({
+      affordability: this.mortgageMarketAffordability,
+      originalPrice: this.property.landPrice,
+    }); // create the fairhold object for purchase
+    this.fairholdRent = new Fairhold({
+      affordability: this.rentAffordability,
+      originalPrice: this.averageRent,
+    }); // create the fairhold object for rent
   }
 }
-
-// set the weights for the bedroom
