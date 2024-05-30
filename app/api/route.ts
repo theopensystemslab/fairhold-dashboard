@@ -1,14 +1,6 @@
-// import the Request and Response classes
 import { NextResponse, NextRequest } from "next/server";
-
-// import from pg for Postgres connectivity
-import { Pool } from "pg";
-
-// import GetDBSettings to retrieve the database connection environment parameters, and the IDBSettings object interface
-import { GetDBSettings, IDBSettings } from "@/sharedCode/common";
-
-const connectionParams = GetDBSettings();
-const pool = new Pool(connectionParams);
+import { PrismaClient } from "@prisma/client";
+const prisma = new PrismaClient();
 
 // define and export the GET handler function
 export async function POST(request: Request) {
@@ -23,8 +15,6 @@ export async function POST(request: Request) {
   };
 
   try {
-    const client = await pool.connect();
-
     // data are going to be queried at different levels of granularity based on the postcode
     const postcodeParts = data.housePostcode.split(/\s+/); // split the postcode based on the white space, for example SE17 1PE into SE17 and 1PE
     const postcodeLvl1 = postcodeParts[0].replace(/[^a-zA-Z]/g, ""); // extract only the characters of the first part, e.g SE
@@ -38,8 +28,12 @@ export async function POST(request: Request) {
     let granularityPostcode; // declare the granularity of the postcode
 
     const postdoceSearch3 = postcodeLvl3 + "%"; // add the % for SQL query
-    const getPricesLvl3Query = `SELECT id, postcode, price FROM fairhold.pricesPaid WHERE propertyType = $1 AND postcode LIKE $2`;
-    const resLvl3 = await client.query(getPricesLvl3Query, [data.houseType, postdoceSearch3]); // execute query and extract results
+    const getPricesLvl3Query = `
+      SELECT id, postcode, price 
+      FROM "public"."pricespaid" 
+      WHERE propertyType = ${data.houseType} AND postcode LIKE ${postdoceSearch3}
+    `;
+    const resLvl3 = await prisma.$queryRaw(getPricesLvl3Query); // execute query and extract results
     const pricesPaidLvl3 = resLvl3.rows;
     const numberOfPricesPaidLvl3 = pricesPaidLvl3.length; // extract the number of entries
 
@@ -52,8 +46,12 @@ export async function POST(request: Request) {
       granularityPostcode = postcodeLvl3; // granularity of the postcode
     } else {
       const postdoceSearch2 = postcodeLvl2 + "%"; // add the % for SQL query
-      const getPricesLvl2Query = `SELECT id, postcode, price FROM fairhold.pricesPaid WHERE propertyType = $1 AND postcode LIKE $2`;
-      const resLvl2 = await client.query(getPricesLvl2Query, [data.houseType, postdoceSearch2]); // execute query and extract results
+      const getPricesLvl2Query = `
+        SELECT id, postcode, price 
+        FROM "public"."pricespaid" 
+        WHERE propertyType = ${data.houseType} AND postcode LIKE ${postdoceSearch2}
+      `;      
+      const resLvl2 = await prisma.$queryRaw(getPricesLvl2Query);
       const pricesPaidLvl2 = resLvl2.rows;
       const numberOfPricesPaidLvl2 = pricesPaidLvl2.length; // extract the number of entries
 
@@ -66,8 +64,12 @@ export async function POST(request: Request) {
         granularityPostcode = postcodeLvl2; // granularity of the postcode
       } else {
         const postdoceSearch1 = postcodeLvl1 + "%"; // add the % for SQL query
-        const getPricesLvl1Query = `SELECT id, postcode, price FROM fairhold.pricesPaid WHERE propertyType = $1 AND postcode LIKE $2`;
-        const resLvl1 = await client.query(getPricesLvl1Query, [data.houseType, postdoceSearch1]);
+        const getPricesLvl1Query = `
+          SELECT id, postcode, price 
+          FROM "public"."pricespaid" 
+          WHERE propertyType = ${data.houseType} AND postcode LIKE ${postdoceSearch1}
+        `;        
+        const resLvl1 = await prisma.$queryRaw(getPricesLvl1Query);
         const pricesPaidLvl1 = resLvl1.rows;
         const numberOfPricesPaidLvl1 = pricesPaidLvl1.length;
         pricesPaid = pricesPaidLvl1;
@@ -84,49 +86,45 @@ export async function POST(request: Request) {
 
     // Calculate the average price
     const averagePrice = totalPrice / pricesPaid.length;
-    const getBuildPriceQuery = `SELECT * FROM fairhold.buildPrices WHERE houseType = $1`;
-    const buildPriceRes = await client.query(getBuildPriceQuery, [data.houseType]);
+    const getBuildPriceQuery = `SELECT * FROM "public"."buildprices" WHERE "housetype" = ${data.houseType}`;
+    const buildPriceRes = await prisma.$queryRaw(getBuildPriceQuery);
     const buildPrice = buildPriceRes.rows;
 
     // get the ITL3 value
-    const getITL3Query = `SELECT itl3 FROM fairhold.itl3 WHERE postcode = $1`;
-    const itl3Res = await client.query(getITL3Query, [data.housePostcode]);
+    const getITL3Query = `SELECT itl3 FROM "public"."itl3" WHERE "postcode" = ${data.housePostcode}`;
+    const itl3Res = await prisma.$queryRaw(getITL3Query);
     const itl3 = itl3Res.rows;
 
     // get the gdhi value --> Note: this need to change to accommodate future data
-    const getGDHIQuery = `SELECT gdhi_2020 FROM fairhold.gdhi JOIN fairhold.itl3 ON fairhold.gdhi.itl3 = fairhold.itl3.itl3 WHERE postcode = $1`;
-    const gdhiRes = await client.query(getGDHIQuery, [data.housePostcode]);
+    const getGDHIQuery = `SELECT gdhi_2020 FROM "public"."gdhi" JOIN "public"."itl3" ON "public"."gdhi"."itl3" = "public"."itl3"."itl3" WHERE "postcode" = ${data.housePostcode}`;
+    const gdhiRes = await prisma.$queryRaw(getGDHIQuery);
     const gdhi = gdhiRes.rows;
 
     // get the rent value --> Note: this need to change to accommodate future data
-    const getRentQuery = `SELECT monthlyMeanRent FROM fairhold.rent JOIN fairhold.itl3 ON fairhold.rent.itl3 = fairhold.itl3.itl3 WHERE postcode = $1`;
-    const rentRes = await client.query(getRentQuery, [data.housePostcode]);
+    const getRentQuery = `SELECT monthlyMeanRent FROM "public"."rent" JOIN "public"."itl3" ON "public"."rent"."itl3" = "public"."itl3"."itl3" WHERE postcode = ${data.housePostcode}`;
+    const rentRes = await prisma.$queryRaw(getRentQuery);
     const rent = rentRes.rows;
     const totalRent = rent.reduce((total: number, item: any) => total + item.monthlyMeanRent, 0);
     const averageRent = totalRent / rent.length;
 
     // get the rent adjustements --> Note: this need to change to accommodate future data
-    const getRentAdjustementQuery = `SELECT * FROM fairhold.socialRentAdjustments`; // create the sql query
-    const [rentAdjustements] = await connection.execute(
-      getRentAdjustementQuery
-    ); // execute the query and retrieve the results
+    const getRentAdjustementQuery = `SELECT * FROM "public"."socialRentAdjustments"`;
+    const rentAdjustements = await prisma.$queryRaw(getRentAdjustementQuery); // execute the query and retrieve the results
 
     // get the rent value --> Note: this need to change to accommodate future data
-    const getSocialRentQuery = `SELECT earningsPerWeek FROM fairhold.socialRent JOIN fairhold.itl3 ON fairhold.itl3.itl3 LIKE CONCAT(fairhold.socialRent.itl3,'%') WHERE postcode =$1`;
-    const socialRentRes = await client.query(getSocialRentQuery, [data.housePostcode]);
+    const getSocialRentQuery = `SELECT earningsPerWeek FROM "public"."socialRent" JOIN "public"."itl3" ON "public"."socialRent"."itl3" = "public"."itl3"."itl3" WHERE postcode = ${data.housePostcode}`;
+    const socialRentRes = await prisma.$queryRaw(getSocialRentQuery);
     const socialRent = socialRentRes.rows;
     const totalSocialRent = socialRent.reduce((total: number, item: any) => total + item.earningsPerWeek, 0);
     const averageSocialRent = totalSocialRent / socialRent.length;
 
     // get the hpi value --> Note: this need to change to accommodate future data
-    const getHPIQuery = `SELECT hpi_2020 FROM fairhold.hpi JOIN fairhold.itl3 ON fairhold.hpi.itl3 = fairhold.itl3.itl3 WHERE postcode = $1`;
-    const hpiRes = await client.query(getHPIQuery, [data.housePostcode]);
+    const getHPIQuery = `SELECT hpi_2020 FROM "public"."hpi" JOIN "public"."itl3" ON "public"."hpi"."itl3" = "public"."itl3"."itl3" WHERE postcode = ${data.housePostcode}`;
+    const hpiRes = await prisma.$queryRaw(getHPIQuery);
     const hpi = hpiRes.rows;
     const totalHpi = hpi.reduce((total: number, item: any) => total + item.hpi_2020, 0);
     const averageHpi = totalHpi / hpi.length;
-    
-    client.release(); // close the connection
-    
+        
     return NextResponse.json({
       postcode: data.housePostcode,
       houseType: data.houseType,
@@ -139,7 +137,6 @@ export async function POST(request: Request) {
       hpi: averageHpi,
       buildPrice: buildPrice,
       averageRent: averageRent,
-      rentAdjustements: rentAdjustements,
       averageSocialRent: averageSocialRent,
       numberOfTransactions: numberOfTransactions,
       granularityPostcode: granularityPostcode,
@@ -156,40 +153,7 @@ export async function POST(request: Request) {
     };
 
     return NextResponse.json(response, { status: 200 });
+  } finally {
+    await prisma.$disconnect();
   }
 }
-
-/* // import the Request and Response classes
-import { NextResponse, NextRequest } from "next/server";
-
-// 1. populate the connection parameters
-let connectionParams = GetDBSettings();
-
-// define and export the GET handler function
-export async function GET(request: Request) {
-  
-
-    // 3. create a query to fetch data
-    const test_postcode = "SE17 1PE";
-    let get_exp_query = "";
-    
-
-    // 4. exec the query and retrieve the results
-   
-
-    // 5. close the connection when done
-    
-
-    // return the results as a JSON API response
-    
-  } catch (err) {
-    console.log("ERROR: API - ", (err as Error).message);
-
-    const response = {
-      error: (err as Error).message,
-      returnedStatus: 200,
-    };
-
-    return NextResponse.json(response, { status: 200 });
-  }
-} */
