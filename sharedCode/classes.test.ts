@@ -1,4 +1,4 @@
-import { Mortgage, Fairhold } from "./classes";
+import { Mortgage, Fairhold, Property } from "./classes";
 
 // Unit test for the mortgage class
 describe("Mortgage class", () => {
@@ -49,7 +49,6 @@ describe("Fairhold class", () => {
       affordability: 0.1,
       originalPrice: 100,
     });
-    const discount = fairhold.calculateFairholdDiscount();
     expect(fairhold.discount).toBeCloseTo(0.65);
   });
 
@@ -59,7 +58,92 @@ describe("Fairhold class", () => {
       originalPrice: 100,
       plateau: 3,
     });
-    const discount = fairhold.calculateFairholdDiscount();
     expect(fairhold.discount).toBeCloseTo(3);
+  });
+});
+
+// unit test for the Property class
+describe("Property class", () => {
+  it("can be instantiated", () => {
+    const property = new Property({
+      postcode: "SPE A11",
+      houseType: "D",
+      numberOfBedrooms: 3,
+      age: 2,
+      size: 90,
+      newBuildPricePerMetre: 1,
+      averagePrice: 120,
+      itl3: "TLI44",
+    });
+  });
+
+  it("correctly calculates the newBuildPrice", () => {
+    const property = new Property({
+      postcode: "SPE A11",
+      houseType: "D",
+      numberOfBedrooms: 3,
+      age: 2,
+      size: 90,
+      newBuildPricePerMetre: 2,
+      averagePrice: 120,
+      itl3: "TLI44",
+    });
+    expect(property.newBuildPrice).toBeCloseTo(180);
+  });
+
+  it("correctly calculates the depreciatedBuildPrice", () => {
+    const property = new Property({
+      postcode: "SPE A11",
+      houseType: "D",
+      numberOfBedrooms: 3,
+      age: 2,
+      size: 100,
+      newBuildPricePerMetre: 1000,
+      averagePrice: 100000,
+      itl3: "TLI44",
+    });
+    expect(property.depreciatedBuildPrice).toBeCloseTo(67062.69);
+  });
+
+  it("correctly calculates the bedWeightedAveragePrice", () => {
+    const property = new Property({
+      postcode: "SPE A11",
+      houseType: "D",
+      numberOfBedrooms: 3,
+      age: 2,
+      size: 90,
+      newBuildPricePerMetre: 2,
+      averagePrice: 120,
+      itl3: "TLI44",
+    });
+    expect(property.bedWeightedAveragePrice).toBeCloseTo(132);
+  });
+
+  it("correctly calculates the landPrice", () => {
+    const property = new Property({
+      postcode: "SPE A11",
+      houseType: "D",
+      numberOfBedrooms: 2,
+      age: 2,
+      size: 90,
+      newBuildPricePerMetre: 100,
+      averagePrice: 100000,
+      itl3: "TLI44",
+    });
+    expect(property.landPrice).toBeCloseTo(123937.31);
+  });
+
+  it("correctly calculates the landToTotalRatio", () => {
+    const property = new Property({
+      postcode: "SPE A11",
+      houseType: "D",
+      numberOfBedrooms: 3,
+      age: 2,
+      size: 90,
+      newBuildPricePerMetre: 2,
+      averagePrice: 120,
+      itl3: "TLI44",
+    });
+    expect(property.landToTotalRatio).toBeCloseTo(249.16);
   });
 });
