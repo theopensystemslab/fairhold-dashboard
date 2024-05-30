@@ -52,8 +52,8 @@ export async function POST(request: Request) {
       pricesPaidSector == null ||
       numberOfpricesPaidSector <= minimumNumberPostcodes
     ) {
-      const postdoceSearchDistrict = postcodeDistrict + "%"; // add the % for SQL query
-      const getPricesDistrictQuery = `SELECT id,postcode,price FROM fairhold.pricesPaid WHERE propertyType = '${data.houseType}' AND postcode LIKE '${postdoceSearchDistrict}'`; // create the sql query and count how many items meet the criteria
+      const postcodeSearchDistrict = postcodeDistrict + "%"; // add the % for SQL query
+      const getPricesDistrictQuery = `SELECT id,postcode,price FROM fairhold.pricesPaid WHERE propertyType = '${data.houseType}' AND postcode LIKE '${postcodeSearchDistrict}'`; // create the sql query and count how many items meet the criteria
       const [pricesPaidDistrict] = await connection.execute<RowDataPacket[]>(
         getPricesDistrictQuery
       ); // execute the query and retrieve the results
@@ -62,8 +62,8 @@ export async function POST(request: Request) {
         pricesPaidDistrict == null ||
         numberOfpricesPaidDistrict <= minimumNumberPostcodes
       ) {
-        const postdoceSearchArea = postcodeArea + "%"; // add the % for SQL query
-        const getPricesAreaQuery = `SELECT id,postcode,price FROM fairhold.pricesPaid WHERE propertyType = '${data.houseType}' AND postcode LIKE '${postdoceSearchArea}'`; // create the sql query and count how many items meet the criteria
+        const postcodeSearchArea = postcodeArea + "%"; // add the % for SQL query
+        const getPricesAreaQuery = `SELECT id,postcode,price FROM fairhold.pricesPaid WHERE propertyType = '${data.houseType}' AND postcode LIKE '${postcodeSearchArea}'`; // create the sql query and count how many items meet the criteria
         const [pricesPaidArea] = await connection.execute<RowDataPacket[]>(
           getPricesAreaQuery
         ); // execute the query and retrieve the results
