@@ -2,6 +2,9 @@ import { NextResponse, NextRequest } from "next/server";
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
+// import the postcode library
+import { parse, fix } from "postcode";
+
 // define and export the GET handler function
 export async function POST(request: Request) {
   const formData = await request.formData(); // get the data submitted in the form
@@ -16,10 +19,13 @@ export async function POST(request: Request) {
 
   try {
     // data are going to be queried at different levels of granularity based on the postcode
-    const postcodeParts = data.housePostcode.split(/\s+/); // split the postcode based on the white space, for example SE17 1PE into SE17 and 1PE
-    const postcodeLvl1 = postcodeParts[0].replace(/[^a-zA-Z]/g, ""); // extract only the characters of the first part, e.g SE
-    const postcodeLvl2 = postcodeParts[0]; //  exctract the first part in total , e.g., SE17
-    const postcodeLvl3 = postcodeParts[0] + " " + postcodeParts[1][0]; // extract the first part and add the secon, e.g., SE17 1
+    if (!data.housePostcode) throw Error("Invalid postcode");
+    const postcode = parse(fix(data.housePostcode.toString())); // define the postcode object. fix any issues with spacing
+
+    if (!postcode.valid) throw Error("Invalid postcode");
+    const postcodeArea = postcode.area; // extract only the characters for the area, e.g SE
+    const postcodeDistrict = postcode.district; // extract only characters for the district, SE17
+    const postcodeSector = postcode.sector; // extract only the characters for the sector, SE17 1
 
     // create the progressive queries
     const minimumNumberPostcodes = 30; // minimum number of entries to create the average
@@ -27,53 +33,54 @@ export async function POST(request: Request) {
     let numberOfTransactions; // declare the variable for numbers of transactions retrieved
     let granularityPostcode; // declare the granularity of the postcode
 
-    const postdoceSearch3 = postcodeLvl3 + "%"; // add the % for SQL query
-    const resLvl3 = await prisma.$queryRaw`
+    const postcodeSearchSector = postcodeSector + "%"; // add the % for SQL query
+
+    const pricesPaidSector = await prisma.$queryRaw`
       SELECT id, postcode, price 
       FROM "public"."pricespaid" 
-      WHERE propertyType = ${data.houseType} AND postcode LIKE ${postdoceSearch3}
+      WHERE propertyType = ${data.houseType} AND postcode LIKE ${postcodeSearchSector}
     `; // execute query and extract results
-    console.log("resLvl3: ", resLvl3);
-    const numberOfPricesPaidLvl3 = resLvl3.length; // extract the number of entries
+    console.log("pricesPaidSector: ", pricesPaidSector);
+    const numberOfpricesPaidSector = Object.keys(pricesPaidSector).length; // extract the number of entries
 
     if (
-      numberOfPricesPaidLvl3 >= minimumNumberPostcodes
+      pricesPaidSector == null ||
+      numberOfpricesPaidSector <= minimumNumberPostcodes
     ) {
-      pricesPaid = pricesPaidLvl3; // if condtion is met, the granularity is appropriate
-      numberOfTransactions = numberOfPricesPaidLvl3; // check the granularity
-      granularityPostcode = postcodeLvl3; // granularity of the postcode
-    } else {
-      const postdoceSearch2 = postcodeLvl2 + "%"; // add the % for SQL query
-      const resLvl2 = await prisma.$queryRaw`
-        SELECT id, postcode, price 
+      const postcodeSearchDistrict = postcodeDistrict + "%"; // add the % for SQL query
+      const pricesPaidDistrict = await prisma.$queryRaw`
+        SELECT id,postcode,price 
         FROM "public"."pricespaid" 
-        WHERE propertyType = ${data.houseType} AND postcode LIKE ${postdoceSearch2}
-      `;      
-      console.log("resLvl2: ", resLvl2);
-      const numberOfPricesPaidLvl2 = resLvl2.length; // extract the number of entries
-
+        WHERE propertyType = '${data.houseType}' 
+        AND postcode LIKE '${postcodeSearchDistrict}'
+      `; // create the sql query and count how many items meet the criteria; execute the query and retrieve the results
+      const numberOfpricesPaidDistrict = Object.keys(pricesPaidDistrict).length; // extract the number of entries
       if (
-        numberOfPricesPaidLvl2 >= minimumNumberPostcodes
+        pricesPaidDistrict == null ||
+        numberOfpricesPaidDistrict <= minimumNumberPostcodes
       ) {
-        pricesPaid = resLvl2; // if condtion is met, the granularity is appropriate
-        numberOfTransactions = numberOfPricesPaidLvl2; // check the granularity
-        granularityPostcode = postcodeLvl2; // granularity of the postcode
-      } else {
-        const postdoceSearch1 = postcodeLvl1 + "%"; // add the % for SQL query
-        const resLvl1 = await prisma.$queryRaw`
-          SELECT id, postcode, price 
+        const postcodeSearchArea = postcodeArea + "%"; // add the % for SQL query
+        const pricesPaidArea = await prisma.$queryRaw`
+          SELECT id,postcode,price 
           FROM "public"."pricespaid" 
-          WHERE propertyType = ${data.houseType} AND postcode LIKE ${postdoceSearch1}
-        `;      
-        console.log("resLvl1: ", resLvl1);  
-        const numberOfPricesPaidLvl1 = resLvl1.length;
-        pricesPaid = resLvl1;
-        numberOfTransactions = numberOfPricesPaidLvl1;
-        granularityPostcode = postcodeLvl1;
+          WHERE propertyType = '${data.houseType}' AND postcode LIKE '${postcodeSearchArea}'`; // create the sql query and count how many items meet the criteria; execute the query and retrieve the results
+        const numberOfpricesPaidArea = Object.keys(pricesPaidArea).length; // extract the number of entries
+        pricesPaid = pricesPaidArea; // if condtion is met, the granularity is appropriate
+        numberOfTransactions = numberOfpricesPaidArea; // check the granularity
+        granularityPostcode = postcodeArea; // granularity of the postcode when performing the average price search
+      } else {
+        pricesPaid = pricesPaidDistrict; // if condtion is met, the granularity is appropriate
+        numberOfTransactions = numberOfpricesPaidDistrict; // check the granularity
+        granularityPostcode = postcodeDistrict; // granularity of the postcode}
       }
+    } else {
+      pricesPaid = pricesPaidSector; // if condtion is met, the granularity is appropriate
+      numberOfTransactions = numberOfpricesPaidSector; // check the granularity
+      granularityPostcode = postcodeSector; // granularity of the postcode}
     }
 
     // Calculate the total price
+    if (!pricesPaid) throw Error("Prices fetching failed");
     const totalPrice = pricesPaid.reduce(
       (total: number, item: any) => total + item.price,
       0
@@ -169,11 +176,13 @@ export async function POST(request: Request) {
     console.log("averageHpi: ", averageHpi)
         
     return NextResponse.json({
-      postcode: data.housePostcode,
+      postcode: postcode,
       houseType: data.houseType,
-      houseAge: parseFloat(data.houseAge),
-      houseBedrooms: parseFloat(data.houseBedrooms),
-      houseSize: parseFloat(data.houseSize),
+      houseAge: data.houseAge ? parseFloat(data.houseAge.toString()) : null,
+      houseBedrooms: data.houseBedrooms
+        ? parseFloat(data.houseBedrooms.toString())
+        : null,
+      houseSize: data.houseSize ? parseFloat(data.houseSize.toString()) : null,
       averagePrice: parseFloat(averagePrice.toFixed(2)),
       itl3: itl3,
       gdhi: gdhi,
