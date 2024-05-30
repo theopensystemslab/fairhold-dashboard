@@ -1,4 +1,4 @@
-import { Mortgage, Fairhold, Property } from "./classes";
+import { Mortgage, Fairhold, Property, Household } from "./classes";
 
 // Unit test for the mortgage class
 describe("Mortgage class", () => {
@@ -145,5 +145,197 @@ describe("Property class", () => {
       itl3: "TLI44",
     });
     expect(property.landToTotalRatio).toBeCloseTo(249.16);
+  });
+});
+
+// Unit test for the Household class
+describe("Household class", () => {
+  it("can be instantiated", () => {
+    const property = new Property({
+      postcode: "SPE A11",
+      houseType: "D",
+      numberOfBedrooms: 2,
+      age: 2,
+      size: 90,
+      newBuildPricePerMetre: 100,
+      averagePrice: 100000,
+      itl3: "TLI44",
+    });
+
+    const rentAdjustements = [
+      { id: 1, inflation: 2, total: 3, year: "2001-02" },
+      { id: 2, inflation: 3, total: 4, year: "2002-03" },
+    ];
+    const household = new Household({
+      incomePerPerson: 100,
+      averageRent: 300,
+      averageSocialRent: 200,
+      rentAdjustements: rentAdjustements,
+      housePriceIndex: 1,
+      property: property,
+    });
+    expect(household).toBeDefined();
+  });
+
+  it("correctly calculates the income per household", () => {
+    const property = new Property({
+      postcode: "SPE A11",
+      houseType: "D",
+      numberOfBedrooms: 2,
+      age: 2,
+      size: 90,
+      newBuildPricePerMetre: 100,
+      averagePrice: 100000,
+      itl3: "TLI44",
+    });
+
+    const rentAdjustements = [
+      { id: 1, inflation: 2, total: 3, year: "2001-02" },
+      { id: 2, inflation: 3, total: 4, year: "2002-03" },
+    ];
+    const household = new Household({
+      incomePerPerson: 100,
+      averageRent: 300,
+      averageSocialRent: 200,
+      rentAdjustements: rentAdjustements,
+      housePriceIndex: 1,
+      property: property,
+    });
+    expect(household.income).toBeCloseTo(240);
+  });
+
+  it("correctly calculates the socialRent", () => {
+    const property = new Property({
+      postcode: "SPE A11",
+      houseType: "D",
+      numberOfBedrooms: 2,
+      age: 2,
+      size: 90,
+      newBuildPricePerMetre: 100,
+      averagePrice: 100000,
+      itl3: "TLI44",
+    });
+
+    const rentAdjustements = [
+      { id: 1, inflation: 2, total: 3, year: "2001-02" },
+      { id: 2, inflation: 3, total: 4, year: "2002-03" },
+    ];
+    const household = new Household({
+      incomePerPerson: 100,
+      averageRent: 300,
+      averageSocialRent: 200,
+      rentAdjustements: rentAdjustements,
+      housePriceIndex: 1,
+      property: property,
+    });
+    expect(household.socialRent).toBeCloseTo(240);
+  });
+
+  it("correctly calculates the mortgageAffordability", () => {
+    const property = new Property({
+      postcode: "SPE A11",
+      houseType: "D",
+      numberOfBedrooms: 2,
+      age: 2,
+      size: 90,
+      newBuildPricePerMetre: 100,
+      averagePrice: 100000,
+      itl3: "TLI44",
+    });
+
+    const rentAdjustements = [
+      { id: 1, inflation: 2, total: 3, year: "2001-02" },
+      { id: 2, inflation: 3, total: 4, year: "2002-03" },
+    ];
+    const household = new Household({
+      incomePerPerson: 100,
+      averageRent: 300,
+      averageSocialRent: 200,
+      rentAdjustements: rentAdjustements,
+      housePriceIndex: 1,
+      property: property,
+    });
+    expect(household.mortgageAffordability).toBeCloseTo(100);
+  });
+
+  it("correctly calculates the socialRentMonthlyHouse", () => {
+    const property = new Property({
+      postcode: "SPE A11",
+      houseType: "D",
+      numberOfBedrooms: 2,
+      age: 2,
+      size: 90,
+      newBuildPricePerMetre: 100,
+      averagePrice: 100000,
+      itl3: "TLI44",
+    });
+
+    const rentAdjustements = [
+      { id: 1, inflation: 2, total: 3, year: "2001-02" },
+      { id: 2, inflation: 3, total: 4, year: "2002-03" },
+    ];
+    const household = new Household({
+      incomePerPerson: 100,
+      averageRent: 300,
+      averageSocialRent: 200,
+      rentAdjustements: rentAdjustements,
+      housePriceIndex: 1,
+      property: property,
+    });
+    expect(household.socialRentMonthlyHouse).toBeCloseTo(100);
+  });
+
+  it("correctly calculates the socialRentMonthlyLand", () => {
+    const property = new Property({
+      postcode: "SPE A11",
+      houseType: "D",
+      numberOfBedrooms: 2,
+      age: 2,
+      size: 90,
+      newBuildPricePerMetre: 100,
+      averagePrice: 100000,
+      itl3: "TLI44",
+    });
+
+    const rentAdjustements = [
+      { id: 1, inflation: 2, total: 3, year: "2001-02" },
+      { id: 2, inflation: 3, total: 4, year: "2002-03" },
+    ];
+    const household = new Household({
+      incomePerPerson: 100,
+      averageRent: 300,
+      averageSocialRent: 200,
+      rentAdjustements: rentAdjustements,
+      housePriceIndex: 1,
+      property: property,
+    });
+    expect(household.socialRentMonthlyLand).toBeCloseTo(100);
+  });
+
+  it("correctly calculates the rentAffordability", () => {
+    const property = new Property({
+      postcode: "SPE A11",
+      houseType: "D",
+      numberOfBedrooms: 2,
+      age: 2,
+      size: 90,
+      newBuildPricePerMetre: 100,
+      averagePrice: 100000,
+      itl3: "TLI44",
+    });
+
+    const rentAdjustements = [
+      { id: 1, inflation: 2, total: 3, year: "2001-02" },
+      { id: 2, inflation: 3, total: 4, year: "2002-03" },
+    ];
+    const household = new Household({
+      incomePerPerson: 100,
+      averageRent: 300,
+      averageSocialRent: 200,
+      rentAdjustements: rentAdjustements,
+      housePriceIndex: 1,
+      property: property,
+    });
+    expect(household.rentAffordability).toBeCloseTo(100);
   });
 });
