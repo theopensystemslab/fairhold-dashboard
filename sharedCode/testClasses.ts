@@ -17,7 +17,7 @@ function calculateFairhold(responseData: any) {
   const household = new Household({
     incomePerPerson: responseData.gdhi[0].gdhi_2020,
     averageRent: responseData.averageRent,
-    averageSocialRent: responseData.averageSocialRent,
+    socialRentAveEarning: responseData.averageSocialRent,
     rentAdjustements: responseData.rentAdjustements,
     housePriceIndex: responseData.hpi,
     property: property,

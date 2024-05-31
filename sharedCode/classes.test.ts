@@ -149,7 +149,7 @@ describe("Household class", () => {
     household = new Household({
       incomePerPerson: 19090.0,
       averageRent: 773.875,
-      averageSocialRent: 295.4,
+      socialRentAveEarning: 295.4,
       rentAdjustements: rentAdjustements,
       housePriceIndex: 75434.35,
       property: property,
@@ -198,5 +198,9 @@ describe("Household class", () => {
 
   it("correctly calculates the rentAffordability", () => {
     expect(household.rentAffordability).toBeCloseTo(0.2);
+  });
+
+  it("correctly calculates the fairholdPurchase.discount", () => {
+    expect(household.fairholdPurchase?.discount).toBeCloseTo(0.386);
   });
 });

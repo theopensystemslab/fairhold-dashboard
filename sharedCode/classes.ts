@@ -11,7 +11,7 @@ export class Fairhold {
   plateau;
   threshold;
   discount?: number;
-  discountedPrince?: number;
+  discountedPrice?: number;
   constructor({
     affordability,
     originalPrice,
@@ -57,9 +57,9 @@ export class Fairhold {
     }
 
     if (this.originalPrice < 0) {
-      this.discountedPrince = 1; // set a nominal value : check with Ollie
+      this.discountedPrice = 1; // set a nominal value : check with Ollie
     } else {
-      this.discountedPrince = this.discount * this.originalPrice;
+      this.discountedPrice = this.discount * this.originalPrice;
     }
   }
 }
@@ -235,7 +235,7 @@ export class Mortgage {
 export class Household {
   incomePerPerson; // income per person
   averageRent; // average rent
-  averageSocialRent; // average social rent
+  socialRentAveEarning; // average social rent
   rentAdjustements; //rent adjustment values
   housePriceIndex; // house price index
   property; // property object
@@ -258,21 +258,21 @@ export class Household {
   constructor({
     incomePerPerson,
     averageRent,
-    averageSocialRent,
+    socialRentAveEarning,
     rentAdjustements,
     housePriceIndex,
     property,
   }: {
     incomePerPerson: number;
     averageRent: number;
-    averageSocialRent: number;
+    socialRentAveEarning: number;
     rentAdjustements: any;
     housePriceIndex: number;
     property: Property;
   }) {
     this.incomePerPerson = incomePerPerson;
     this.averageRent = averageRent;
-    this.averageSocialRent = averageSocialRent;
+    this.socialRentAveEarning = socialRentAveEarning;
     this.rentAdjustements = rentAdjustements;
     this.housePriceIndex = housePriceIndex;
     this.property = property;
@@ -305,7 +305,7 @@ export class Household {
     }
 
     const relativeLocalEarning =
-      this.averageSocialRent / nationalaverageEarnings; // realtivve local earnings
+      this.socialRentAveEarning / nationalaverageEarnings; // realtivve local earnings
     this.relativeLocalEarning = relativeLocalEarning;
     const relativePropertyValue =
       this.housePriceIndex / nationalAverageProperty; // realtive property value
