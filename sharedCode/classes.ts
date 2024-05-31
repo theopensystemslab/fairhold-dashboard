@@ -145,7 +145,7 @@ export class Property {
     }
 
     const depreciatedBuildPrice =
-      this.newBuildPrice + depreciationFactor + math.log(this.age); // depreciated building price
+      this.newBuildPrice + depreciationFactor * math.log(this.age); // depreciated building price
     this.depreciatedBuildPrice = parseFloat(
       depreciatedBuildPrice.toFixed(precisionRounding)
     ); // round the number
@@ -329,12 +329,12 @@ export class Household {
 
     const adjustedSocialRentMonthly = socialRentWeekly * 4.2; // define the monthly social rent
     this.adjustedSocialRentMonthly = adjustedSocialRentMonthly; // set the value of adjusted social rent monthly
-    if (this.property.landToTotalRatio !== undefined) {
-      this.socialRentMonthlyLand =
-        adjustedSocialRentMonthly * this.property.landToTotalRatio; // set the rent value paid for the land
-      this.socialRentMonthlyHouse =
-        adjustedSocialRentMonthly - this.socialRentMonthlyLand; // set the rent value paid or the house
-    }
+    if (this.property.landToTotalRatio == undefined)
+      throw new Error("landToTotalRatio is undefined");
+    this.socialRentMonthlyLand =
+      adjustedSocialRentMonthly * this.property.landToTotalRatio; // set the rent value paid for the land
+    this.socialRentMonthlyHouse =
+      adjustedSocialRentMonthly - this.socialRentMonthlyLand; // set the rent value paid or the house
   }
   calculateHouseholdIncome(houseMultiplier: number = 2.4) {
     this.income = houseMultiplier * this.incomePerPerson; // calculate the income for house hold

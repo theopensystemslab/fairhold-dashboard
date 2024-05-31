@@ -66,85 +66,85 @@ describe("Fairhold class", () => {
 describe("Property class", () => {
   it("can be instantiated", () => {
     const property = new Property({
-      postcode: "SPE A11",
-      houseType: "D",
-      numberOfBedrooms: 3,
-      age: 2,
-      size: 90,
+      postcode: "WV8 1HG",
+      houseType: "T",
+      numberOfBedrooms: 2,
+      age: 10,
+      size: 88,
       newBuildPricePerMetre: 1,
       averagePrice: 120,
-      itl3: "TLI44",
+      itl3: "TLG24",
     });
   });
 
   it("correctly calculates the newBuildPrice", () => {
     const property = new Property({
-      postcode: "SPE A11",
-      houseType: "D",
-      numberOfBedrooms: 3,
-      age: 2,
-      size: 90,
-      newBuildPricePerMetre: 2,
-      averagePrice: 120,
-      itl3: "TLI44",
+      postcode: "WV8 1HG",
+      houseType: "T",
+      numberOfBedrooms: 2,
+      age: 10,
+      size: 88,
+      newBuildPricePerMetre: 2120,
+      averagePrice: 218091.58,
+      itl3: "TLG24",
     });
-    expect(property.newBuildPrice).toBeCloseTo(180);
+    expect(property.newBuildPrice).toBeCloseTo(186560);
   });
 
   it("correctly calculates the depreciatedBuildPrice", () => {
     const property = new Property({
-      postcode: "SPE A11",
-      houseType: "D",
-      numberOfBedrooms: 3,
-      age: 2,
-      size: 100,
-      newBuildPricePerMetre: 1000,
-      averagePrice: 100000,
-      itl3: "TLI44",
+      postcode: "WV8 1HG",
+      houseType: "T",
+      numberOfBedrooms: 2,
+      age: 10,
+      size: 88,
+      newBuildPricePerMetre: 2120,
+      averagePrice: 218091.58,
+      itl3: "TLG24",
     });
-    expect(property.depreciatedBuildPrice).toBeCloseTo(67062.69);
+    expect(property.depreciatedBuildPrice).toBeCloseTo(110717.45);
   });
 
   it("correctly calculates the bedWeightedAveragePrice", () => {
     const property = new Property({
-      postcode: "SPE A11",
-      houseType: "D",
-      numberOfBedrooms: 3,
-      age: 2,
-      size: 90,
-      newBuildPricePerMetre: 2,
-      averagePrice: 120,
-      itl3: "TLI44",
+      postcode: "WV8 1HG",
+      houseType: "T",
+      numberOfBedrooms: 2,
+      age: 10,
+      size: 88,
+      newBuildPricePerMetre: 2120,
+      averagePrice: 218091.58,
+      itl3: "TLG24",
     });
-    expect(property.bedWeightedAveragePrice).toBeCloseTo(132);
+    expect(property.bedWeightedAveragePrice).toBeCloseTo(218091.58);
   });
 
   it("correctly calculates the landPrice", () => {
     const property = new Property({
-      postcode: "SPE A11",
-      houseType: "D",
+      postcode: "WV8 1HG",
+      houseType: "T",
       numberOfBedrooms: 2,
-      age: 2,
-      size: 90,
-      newBuildPricePerMetre: 100,
-      averagePrice: 100000,
-      itl3: "TLI44",
+      age: 10,
+      size: 88,
+      newBuildPricePerMetre: 2120,
+      averagePrice: 218091.58,
+      itl3: "TLG24",
     });
-    expect(property.landPrice).toBeCloseTo(123937.31);
+    expect(property.landPrice).toBeCloseTo(31531.579);
   });
 
   it("correctly calculates the landToTotalRatio", () => {
     const property = new Property({
-      postcode: "SPE A11",
-      houseType: "D",
-      numberOfBedrooms: 3,
-      age: 2,
-      size: 90,
-      newBuildPricePerMetre: 2,
-      averagePrice: 120,
-      itl3: "TLI44",
+      postcode: "WV8 1HG",
+      houseType: "T",
+      numberOfBedrooms: 2,
+      age: 10,
+      size: 88,
+      newBuildPricePerMetre: 2120,
+      averagePrice: 218091.58,
+      itl3: "TLG24",
     });
-    expect(property.landToTotalRatio).toBeCloseTo(249.16);
+    expect(property.landToTotalRatio).toBeCloseTo(0.14);
   });
 });
 
