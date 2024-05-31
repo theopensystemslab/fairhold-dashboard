@@ -35,36 +35,46 @@ export async function POST(request: Request) {
 
     const postcodeSearchSector = postcodeSector + "%"; // add the % for SQL query
 
-    const pricesPaidSector = await prisma.$queryRaw`
+    // define a type for PricePaid so that it is treated as an array
+    type PricePaid = {
+      id: number;
+      postcode: string;
+      price: number;
+    }; 
+
+    const pricesPaidSector = await prisma.$queryRaw<PricePaid[]>`
       SELECT id, postcode, price 
       FROM "public"."pricespaid" 
       WHERE propertyType = ${data.houseType} AND postcode LIKE ${postcodeSearchSector}
     `; // execute query and extract results
-    console.log("pricesPaidSector: ", pricesPaidSector);
-    const numberOfpricesPaidSector = Object.keys(pricesPaidSector).length; // extract the number of entries
+    console.log("pricesPaidSector: ", pricesPaidSector, "postcodeSearchSector: ", postcodeSearchSector);
+    const numberOfpricesPaidSector = Array.isArray(pricesPaidSector) ? pricesPaidSector.length : 0; // extract the number of entries
 
     if (
       pricesPaidSector == null ||
       numberOfpricesPaidSector <= minimumNumberPostcodes
     ) {
       const postcodeSearchDistrict = postcodeDistrict + "%"; // add the % for SQL query
-      const pricesPaidDistrict = await prisma.$queryRaw`
+      const pricesPaidDistrict = await prisma.$queryRaw<PricePaid[]>`
         SELECT id,postcode,price 
         FROM "public"."pricespaid" 
-        WHERE propertyType = '${data.houseType}' 
-        AND postcode LIKE '${postcodeSearchDistrict}'
+        WHERE propertyType = ${data.houseType} AND postcode LIKE ${postcodeSearchDistrict}
       `; // create the sql query and count how many items meet the criteria; execute the query and retrieve the results
-      const numberOfpricesPaidDistrict = Object.keys(pricesPaidDistrict).length; // extract the number of entries
+      console.log("pricesPaidDistrict: ", pricesPaidDistrict, "postcodeSearchDistrict: ", postcodeSearchDistrict);
+      const numberOfpricesPaidDistrict = Array.isArray(pricesPaidDistrict) ? pricesPaidDistrict.length : 0; // extract the number of entries
       if (
         pricesPaidDistrict == null ||
         numberOfpricesPaidDistrict <= minimumNumberPostcodes
       ) {
         const postcodeSearchArea = postcodeArea + "%"; // add the % for SQL query
-        const pricesPaidArea = await prisma.$queryRaw`
+        const pricesPaidArea = await prisma.$queryRaw<PricePaid[]>`
           SELECT id,postcode,price 
           FROM "public"."pricespaid" 
-          WHERE propertyType = '${data.houseType}' AND postcode LIKE '${postcodeSearchArea}'`; // create the sql query and count how many items meet the criteria; execute the query and retrieve the results
-        const numberOfpricesPaidArea = Object.keys(pricesPaidArea).length; // extract the number of entries
+          WHERE propertytype = ${data.houseType} AND postcode LIKE ${postcodeSearchArea}
+        `; // create the sql query and count how many items meet the criteria; execute the query and retrieve the results
+        console.log("pricesPaidArea: ", pricesPaidArea, "postcodeSearchArea: ", postcodeSearchArea);
+
+        const numberOfpricesPaidArea = Array.isArray(pricesPaidArea) ? pricesPaidArea.length : 0; // extract the number of entries
         pricesPaid = pricesPaidArea; // if condtion is met, the granularity is appropriate
         numberOfTransactions = numberOfpricesPaidArea; // check the granularity
         granularityPostcode = postcodeArea; // granularity of the postcode when performing the average price search
@@ -78,9 +88,9 @@ export async function POST(request: Request) {
       numberOfTransactions = numberOfpricesPaidSector; // check the granularity
       granularityPostcode = postcodeSector; // granularity of the postcode}
     }
+    console.log("pricesPaid: ",pricesPaid)
 
-    // Calculate the total price
-    if (!pricesPaid) throw Error("Prices fetching failed");
+    // Calculate the total price    if (!pricesPaid) throw Error("Prices fetching failed");
     const totalPrice = pricesPaid.reduce(
       (total: number, item: any) => total + item.price,
       0
@@ -89,7 +99,15 @@ export async function POST(request: Request) {
 
     // Calculate the average price
     const averagePrice = totalPrice / pricesPaid.length;
-    const buildPriceRes = await prisma.$queryRaw`
+
+    // create type for buildPrice query
+    type BuildPrice = {
+      id: number;
+      housetype: string;
+      pricemid: number;
+    };
+
+    const buildPriceRes = await prisma.$queryRaw<BuildPrice[]>`
       SELECT * FROM "public"."buildprices" 
       WHERE "housetype" = ${data.houseType}
     `;
@@ -98,7 +116,12 @@ export async function POST(request: Request) {
     console.log("buildPrice:", buildPrice);
 
     // get the ITL3 value
-    const itl3Res = await prisma.$queryRaw`
+    // create type for itl3Res query
+    type ItlLookup = {
+      itl_lookup: string;
+    };
+    
+    const itl3Res = await prisma.$queryRaw<ItlLookup[]>`
       SELECT "itl_lookup"::text AS "itl_lookup" 
       FROM "public"."itl_lookup"  
       WHERE "postcode" = ${postcodeDistrict}
@@ -109,8 +132,13 @@ export async function POST(request: Request) {
     console.log("itl3: ", itl3);
     console.log("itl3Res: ", itl3Res);
 
+    // create type for itl3Res query
+    type gdhiRes = {
+      gdhi_2020: number;
+    };
+
     // get the gdhi value --> Note: this need to change to accommodate future data
-    const gdhiRes = await prisma.$queryRaw`
+    const gdhiRes = await prisma.$queryRaw<gdhiRes[]>`
       SELECT gdhi_2020 
       FROM "public"."gdhi" 
       WHERE "itl3" = ${itl3}
@@ -119,8 +147,13 @@ export async function POST(request: Request) {
     console.log("gdhiRes: ", gdhiRes)
     console.log("gdhi: ", gdhi)
 
+    // create type for itl3Res query
+    type rentRes = {
+      monthlymeanrent: number;
+    };
+
     // get the rent value --> Note: this need to change to accommodate future data
-    const rentRes = await prisma.$queryRaw`
+    const rentRes = await prisma.$queryRaw<rentRes[]>`
       SELECT monthlymeanrent 
       FROM "public"."rent" 
       WHERE itl3 = ${itl3}
@@ -134,31 +167,50 @@ export async function POST(request: Request) {
           averageRent = totalRent / rentRes.length;
     console.log(averageRent);
 
+    // create type for rentAdjustment query
+    type rentAdjustment = {
+      year: string;
+      inflation: string;
+      additional: string;
+      total: string;
+    };
+
     // get the rent adjustements --> Note: this need to change to accommodate future data
-    const rentAdjustements = await prisma.$queryRaw`
+    const rentAdjustements = await prisma.$queryRaw<rentAdjustment[]>`
       SELECT * 
       FROM "public"."soc_rent_adjustments"
     `;// execute the query and retrieve the results
-    console.log("rentAdjustements: ", rentAdjustements);
+    console.log("rentAdjustements[0]: ", rentAdjustements[0]);
     
+    // create type for socialRentEarningRes query
+    type socialRentEarningRes = {
+      earningsperweek: number;
+    };
+
     // get the rent value --> Note: this need to change to accommodate future data
-    const socialRentEarningRes = await prisma.$queryRaw`
+    const socialRentEarningRes = await prisma.$queryRaw<socialRentEarningRes[]>`
       SELECT earningsperweek 
       FROM "public"."socialrent" 
       WHERE SUBSTRING(itl3 FROM 1 FOR 4) = ${itl3.substring(0, 4)}
       `;
+
     console.log("socialRentEarningRes: ", socialRentEarningRes)
     let socialRentAveEarning;
         if (socialRentEarningRes.length === 1) {
           socialRentAveEarning = socialRentEarningRes[0].earningsperweek;
         } else if (socialRentEarningRes.length > 1) {
-          const socialRentTotalEarning = socialRentAveEarning.reduce((sum, item) => sum + item.earningsperweek, 0);
+          const socialRentTotalEarning = socialRentEarningRes.reduce((sum, item) => sum + item.earningsperweek, 0);
           socialRentAveEarning = totalRent / socialRentEarningRes.length;
         }
     console.log("socialRentAveEarning: ", socialRentAveEarning);
 
+    // create type for hpiRes query
+    type hpiRes = {
+      hpi_2020: number;
+    };
+    
     // get the hpi value --> Note: this need to change to accommodate future data
-    const hpiRes = await prisma.$queryRaw`
+    const hpiRes = await prisma.$queryRaw<hpiRes[]>`
       SELECT hpi_2020 FROM "public"."hpi" 
       WHERE itl3 = ${itl3}
     `;
