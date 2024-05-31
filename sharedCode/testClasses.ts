@@ -1,6 +1,13 @@
 import { Mortgage, Property, Fairhold, Household } from "./classes";
 
 function calculateFairhold(responseData: any) {
+if (!responseData.buildPrice || responseData.buildPrice.length === 0) {
+  throw new Error("buildPrice data is missing or empty");
+}
+if (!responseData.itl3 || responseData.itl3.length === 0) {
+  throw new Error("itl3 data is missing or empty");
+}
+
   // define the property object
   const property = new Property(
     responseData.postcode,
@@ -8,21 +15,19 @@ function calculateFairhold(responseData: any) {
     responseData.houseBedrooms,
     responseData.houseAge,
     responseData.houseSize,
-    responseData.buildPrice[0].priceMid,
+    responseData.buildPrice,
     responseData.averagePrice,
-    responseData.itl3[0].itl3
+    responseData.itl3
   );
-
-  // define the household object
   const household = new Household(
-    responseData.gdhi[0].gdhi_2020,
+    responseData.gdhi,
     responseData.averageRent,
     responseData.averageSocialRent,
-    responseData.rentAdjustements,
     responseData.hpi,
+    responseData.averagePrice,
     property
   );
-  return console.log(household);
+  return console.log(property, household);
 }
 
 export default calculateFairhold;
