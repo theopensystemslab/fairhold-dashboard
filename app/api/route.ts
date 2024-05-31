@@ -238,6 +238,7 @@ export async function POST(request: Request) {
       hpi: averageHpi,
       buildPrice: buildPrice,
       averageRent: averageRent,
+      rentAdjustments: rentAdjustments,
       socialRentAveEarning: socialRentAveEarning,
       numberOfTransactions: numberOfTransactions,
       granularityPostcode: granularityPostcode,
