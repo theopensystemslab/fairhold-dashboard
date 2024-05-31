@@ -23,7 +23,9 @@ if (!responseData.itl3 || responseData.itl3.length === 0) {
     responseData.gdhi,
     responseData.averageRent,
     responseData.averageSocialRent,
-    responseData.hpi
+    responseData.hpi,
+    responseData.averagePrice,
+    property
   );
   return console.log(property, household);
 }
