@@ -214,8 +214,8 @@ export class Mortgage {
 export class Household {
   incomePerPerson; // income per person
   averageRent; // average rent
-  averageSocialRent; // average social rent
-  rentAdjustements; //rent adjustment values
+  socialRentAveEarning; // average social rent
+  rentAdjustments; //rent adjustment values
   housePriceIndex; // house price index
   property; // property object
   income?: number; // income per household
@@ -236,15 +236,15 @@ export class Household {
   constructor(
     incomePerPerson: number,
     averageRent: number,
-    averageSocialRent: number,
-    rentAdjustements: any,
+    socialRentAveEarning: number,
+    rentAdjustments: any,
     housePriceIndex: number,
     property: Property
   ) {
     this.incomePerPerson = incomePerPerson;
     this.averageRent = averageRent;
-    this.averageSocialRent = averageSocialRent;
-    this.rentAdjustements = rentAdjustements;
+    this.socialRentAveEarning = socialRentAveEarning;
+    this.rentAdjustments = rentAdjustments;
     this.housePriceIndex = housePriceIndex;
     this.property = property;
     this.calculateSocialRent();
@@ -276,7 +276,7 @@ export class Household {
       rentCapWeekly = rentCapValues[bedWeigths.length - 1]; // assign the last value if out of scale
     }
 
-    const relativeLocalEarning = this.averageSocialRent / nationalAverageRent; // realtivve local earnings
+    const relativeLocalEarning = this.socialRentAveEarning / nationalAverageRent; // realtivve local earnings
     const relativePropertyValue =
       this.property.averagePrice / nationalAverageProperty; // realtive property value
     const formulaRentWeekly =
@@ -285,8 +285,8 @@ export class Household {
 
     let adjustedRentWeekly = formulaRentWeekly; // Initialize the adjusted rent weekly
     // Loop through each rent adjustment
-    for (let i = 0; i < this.rentAdjustements.length; i++) {
-      const adjustment = this.rentAdjustements[i]; // Get the current adjustment
+    for (let i = 0; i < this.rentAdjustments.length; i++) {
+      const adjustment = this.rentAdjustments[i]; // Get the current adjustment
       const adjustmentFactor = adjustment.total / 100 + 1; // Calculate the adjustment factor
       adjustedRentWeekly *= adjustmentFactor; // Apply the adjustment
     }
