@@ -176,11 +176,11 @@ export async function POST(request: Request) {
     };
 
     // get the rent adjustements --> Note: this need to change to accommodate future data
-    const rentAdjustements = await prisma.$queryRaw<rentAdjustment[]>`
+    const rentAdjustments = await prisma.$queryRaw<rentAdjustment[]>`
       SELECT * 
       FROM "public"."soc_rent_adjustments"
     `;// execute the query and retrieve the results
-    console.log("rentAdjustements[0]: ", rentAdjustements[0]);
+    console.log("rentAdjustments[0]: ", rentAdjustments[0]);
     
     // create type for socialRentEarningRes query
     type socialRentEarningRes = {
