@@ -101,7 +101,7 @@ export async function POST(request: Request) {
     const itl3Res = await prisma.$queryRaw`
       SELECT "itl_lookup"::text AS "itl_lookup" 
       FROM "public"."itl_lookup"  
-      WHERE "postcode" = ${postcodeParts[0]}
+      WHERE "postcode" = ${postcodeDistrict}
     `;
     const itlLookupValue = itl3Res[0].itl_lookup;
     const itlLookupParts = itlLookupValue.split(',');
@@ -157,9 +157,6 @@ export async function POST(request: Request) {
         }
     console.log("socialRentAveEarning: ", socialRentAveEarning);
 
-    const averageSocialRent = 100 // PLACEHOLDER--NEED TO DO THE SOCIAL RENT FORMULA HERE
-    console.log("averageSocialRent: ", averageSocialRent);
-
     // get the hpi value --> Note: this need to change to accommodate future data
     const hpiRes = await prisma.$queryRaw`
       SELECT hpi_2020 FROM "public"."hpi" 
@@ -189,7 +186,7 @@ export async function POST(request: Request) {
       hpi: averageHpi,
       buildPrice: buildPrice,
       averageRent: averageRent,
-      averageSocialRent: averageSocialRent,
+      socialRentAveEarning: socialRentAveEarning,
       numberOfTransactions: numberOfTransactions,
       granularityPostcode: granularityPostcode,
       pricesPaid: pricesPaid,
