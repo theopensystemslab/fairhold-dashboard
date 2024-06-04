@@ -108,7 +108,7 @@ describe("Property class", () => {
 describe("Household class", () => {
   let property: Property;
   let household: Household;
-  const rentAdjustements = [
+  const rentAdjustments = [
     { id: 1, inflation: 3.3, total: 4.3, year: "2001-02" },
     { id: 2, inflation: 1.7, total: 2.2, year: "2002-03" },
     { id: 3, inflation: 1.7, total: 2.2, year: "2003-04" },
