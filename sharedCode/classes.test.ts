@@ -150,7 +150,7 @@ describe("Household class", () => {
       incomePerPerson: 19090.0,
       averageRent: 773.875,
       socialRentAveEarning: 295.4,
-      rentAdjustements: rentAdjustements,
+      rentAdjustments: rentAdjustments,
       housePriceIndex: 75434.35,
       property: property,
     });
