@@ -1,0 +1,75 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
+}
+
+model buildprices {
+  id                   Int     @id @default(autoincrement())
+  housetypedescription String? @db.VarChar(250)
+  housetype            String? @db.VarChar(1)
+  pricerange           String? @db.VarChar(50)
+  pricemid             Float?
+}
+
+model gdhi {
+  id        Int     @id @default(autoincrement())
+  itllevel  String? @db.VarChar(250)
+  itl3      String? @db.VarChar(250)
+  region    String? @db.VarChar(250)
+  gdhi_2020 Float?
+}
+
+model hpi {
+  id       Int     @id @default(autoincrement())
+  region   String? @db.VarChar(250)
+  itl3     String? @db.VarChar(250)
+  ladcode  String? @db.VarChar(250)
+  hpi_2020 Float?
+}
+
+model itl_lookup {
+  postcode String?
+  district String?
+  areacode String?
+  itl3     String?
+  id       Int     @id @default(autoincrement())
+}
+
+model pricespaid {
+  id                    Int     @id @default(autoincrement())
+  transactionidentifier String? @db.VarChar(250)
+  price                 Float?
+  postcode              String? @db.VarChar(250)
+  propertytype          String? @db.VarChar(250)
+  newbuild              String? @db.VarChar(250)
+}
+
+model rent {
+  id              Int     @id @default(autoincrement())
+  itl3            String? @db.VarChar(250)
+  ladcode         String? @db.VarChar(250)
+  region          String? @db.VarChar(250)
+  monthlymeanrent Float?
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model soc_rent_adjustments {
+  year       String? @db.VarChar(10)
+  inflation  String? @db.VarChar(10)
+  additional String? @db.VarChar(10)
+  total      String? @db.VarChar(10)
+
+  @@ignore
+}
+
+model socialrent {
+  id              Int     @id @default(autoincrement())
+  county          String? @db.VarChar(250)
+  itl3            String? @db.VarChar(250)
+  earningsperweek Float?
+}

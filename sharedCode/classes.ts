@@ -317,6 +317,7 @@ export class Household {
     let adjustedRentWeekly = formulaRentWeekly; // Initialize the adjusted rent weekly
     // Loop through each rent adjustment up to the second to last year
     for (let i = 0; i < this.rentAdjustments.length - 2; i++) {
+
       const adjustment = this.rentAdjustments[i]; // Get the current adjustment
       const adjustmentFactor = adjustment.total / 100 + 1; // Calculate the adjustment factor
       adjustedRentWeekly *= adjustmentFactor; // Apply the adjustment
