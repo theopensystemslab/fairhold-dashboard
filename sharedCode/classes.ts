@@ -236,7 +236,7 @@ export class Household {
   incomePerPerson; // income per person
   averageRent; // average rent
   socialRentAveEarning; // average social rent
-  rentAdjustments; //rent adjustment values
+  socialRentAdjustments; //rent adjustment values
   housePriceIndex; // house price index
   property; // property object
   income?: number; // income per household
@@ -259,21 +259,21 @@ export class Household {
     incomePerPerson,
     averageRent,
     socialRentAveEarning,
-    rentAdjustments,
+    socialRentAdjustments,
     housePriceIndex,
     property,
   }: {
     incomePerPerson: number;
     averageRent: number;
     socialRentAveEarning: number;
-    rentAdjustments: any;
+    socialRentAdjustments: any;
     housePriceIndex: number;
     property: Property;
   }) {
     this.incomePerPerson = incomePerPerson;
     this.averageRent = averageRent;
     this.socialRentAveEarning = socialRentAveEarning;
-    this.rentAdjustments = rentAdjustments;
+    this.socialRentAdjustments = socialRentAdjustments;
     this.housePriceIndex = housePriceIndex;
     this.property = property;
     this.calculateSocialRent();
@@ -316,8 +316,8 @@ export class Household {
     this.formulaRentWeekly = formulaRentWeekly;
     let adjustedRentWeekly = formulaRentWeekly; // Initialize the adjusted rent weekly
     // Loop through each rent adjustment up to the second to last year
-    for (let i = 0; i < this.rentAdjustments.length - 2; i++) {
-      const adjustment = this.rentAdjustments[i]; // Get the current adjustment
+    for (let i = 0; i < this.socialRentAdjustments.length - 2; i++) {
+      const adjustment = this.socialRentAdjustments[i]; // Get the current adjustment
       const adjustmentFactor = adjustment.total / 100 + 1; // Calculate the adjustment factor
       adjustedRentWeekly *= adjustmentFactor; // Apply the adjustment
     }
