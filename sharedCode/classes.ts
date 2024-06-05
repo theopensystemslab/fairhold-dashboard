@@ -70,8 +70,8 @@ export class Property {
   houseType; // type of the house: D--> detached, S--> semidetached, T--> Terrace, F--> Flats
   numberOfBedrooms; // number of bedrooms in the house
   age; // age of the house
-  size; // size of the house in meter squares
-  newBuildPricePerMetre: number; // average build price per meter of a new house
+  size; // size of the house in metre squares
+  newBuildPricePerMetre: number; // average build price per metre of a new house
   averagePrice: number; // average market price
   itl3: string; // ITL code
   newBuildPrice?: number; // price of the house if it was new
@@ -124,7 +124,7 @@ export class Property {
   calculateNewBuildPrice(precisionRounding: number = 2) {
     if (!this.newBuildPricePerMetre) {
       throw new Error(
-        "The Build Price cannot be calculated because pricePerMeter has not been set"
+        "The Build Price cannot be calculated because pricePerMetre has not been set"
       );
     }
     const newBuildPrice = this.newBuildPricePerMetre * this.size; // calculate the price of the new build
@@ -206,11 +206,11 @@ export class Mortgage {
     this.initialDeposit = initialDeposit;
     this.interestRate = interestRate;
     this.termOfTheMortgage = termOfTheMortgage;
-    this.calculateamountOfTheMortgage(); // calculate the amount of the mortgage
+    this.calculateAmountOfTheMortgage(); // calculate the amount of the mortgage
     this.calculateMonthlyMortgagePayment(); // calculate the montly payment
   }
 
-  calculateamountOfTheMortgage() {
+  calculateAmountOfTheMortgage() {
     this.amountOfTheMortgage = this.propertyValue * (1 - this.initialDeposit); // calculate the amount of the mortgage by removing the deposit
     return this.amountOfTheMortgage;
   }
@@ -292,7 +292,7 @@ export class Household {
     precisionRounding: number = 2,
     nationalAverageRent: number = 54.62, // national average rent :check with Ollie
     nationalAverageProperty: number = 49750, // national average property value: check with Ollie
-    nationalaverageEarnings: number = 316.4 // check with Ollie
+    nationalAverageEarnings: number = 316.4 // check with Ollie
   ) {
     let bedWeight; // initialize the bedWeight variable
     //let rentCapWeekly; // initiliaze the rent Cap values
@@ -305,10 +305,10 @@ export class Household {
     }
 
     const relativeLocalEarning =
-      this.socialRentAveEarning / nationalaverageEarnings; // realtivve local earnings
+      this.socialRentAveEarning / nationalAverageEarnings; // realtive local earnings
     this.relativeLocalEarning = relativeLocalEarning;
     const relativePropertyValue =
-      this.housePriceIndex / nationalAverageProperty; // realtive property value
+      this.housePriceIndex / nationalAverageProperty; // relative property value
     this.relativePropertyValue = relativePropertyValue;
     const formulaRentWeekly =
       0.7 * nationalAverageRent * relativeLocalEarning * bedWeight +
