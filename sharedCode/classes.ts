@@ -295,7 +295,7 @@ export class Household {
     nationalAverageEarnings: number = 316.4 // check with Ollie
   ) {
     let bedWeight; // initialize the bedWeight variable
-    //let rentCapWeekly; // initiliaze the rent Cap values
+    //let rentCapWeekly; // initialize the rent Cap values
     if (numberOfBeds < beds[beds.length - 1]) {
       bedWeight = bedWeights[numberOfBeds]; // assign the weight based on the number of beds
       //rentCapWeekly = rentCapValues[numberOfBeds]; // assign the rent cap value based on the number of beds
@@ -305,7 +305,7 @@ export class Household {
     }
 
     const relativeLocalEarning =
-      this.socialRentAveEarning / nationalAverageEarnings; // realtive local earnings
+      this.socialRentAveEarning / nationalAverageEarnings; // relative local earnings
     this.relativeLocalEarning = relativeLocalEarning;
     const relativePropertyValue =
       this.housePriceIndex / nationalAverageProperty; // relative property value
@@ -360,7 +360,7 @@ export class Household {
     }); // create the mortgage object for the new build price
     this.mortgageDepreciatedHouse = new Mortgage({
       propertyValue: this.property.depreciatedBuildPrice,
-    }); // create the mortgage object for the depraciated build price
+    }); // create the mortgage object for the depreciated build price
     this.mortgageLand = new Mortgage({
       propertyValue: this.property.averagePrice - this.property.newBuildPrice,
     }); // create the mortgage object for the land. Check with Ollie, shouldn't it be depreciated house?
