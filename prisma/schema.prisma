@@ -57,14 +57,12 @@ model rent {
   monthlymeanrent Float?
 }
 
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model soc_rent_adjustments {
   year       String? @db.VarChar(10)
   inflation  String? @db.VarChar(10)
   additional String? @db.VarChar(10)
-  total      String? @db.VarChar(10)
-
-  @@ignore
+  total      Float?
+  id         Int     @id @default(autoincrement())
 }
 
 model socialrent {
