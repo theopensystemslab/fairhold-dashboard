@@ -200,7 +200,7 @@ describe("Household class", () => {
     expect(household.rentAffordability).toBeCloseTo(0.2);
   });
 
-  it("correctly calculates the fairholdPurchase.discount", () => {
-    expect(household.fairholdPurchase?.discount).toBeCloseTo(0.386);
+  it("correctly calculates the fairholdLandPurchase.discount", () => {
+    expect(household.fairholdLandPurchase?.discount).toBeCloseTo(0.386);
   });
 });
