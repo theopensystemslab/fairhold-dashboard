@@ -286,7 +286,7 @@ export class Household {
     numberOfBeds: number = this.property.numberOfBedrooms,
     beds: number[] = [0, 1, 2, 3, 4, 5, 6],
     bedWeights: number[] = [0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4],
-    /*     rentCapValues: number[] = [
+    /*     socialRentCapValues: number[] = [
       155.73, 155.73, 164.87, 174.03, 183.18, 192.35, 201.5,
     ], */
     precisionRounding: number = 2,
@@ -298,10 +298,10 @@ export class Household {
     //let rentCapWeekly; // initialize the rent Cap values
     if (numberOfBeds < beds[beds.length - 1]) {
       bedWeight = bedWeights[numberOfBeds]; // assign the weight based on the number of beds
-      //rentCapWeekly = rentCapValues[numberOfBeds]; // assign the rent cap value based on the number of beds
+      //rentCapWeekly = socialRentCapValues[numberOfBeds]; // assign the rent cap value based on the number of beds
     } else {
       bedWeight = bedWeights[bedWeights.length - 1]; // assign the last value if out of scale
-      //rentCapWeekly = rentCapValues[bedWeights.length - 1]; // assign the last value if out of scale
+      //rentCapWeekly = socialRentCapValues[bedWeights.length - 1]; // assign the last value if out of scale
     }
 
     const relativeLocalEarning =
