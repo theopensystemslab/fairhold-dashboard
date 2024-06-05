@@ -35,7 +35,7 @@ export class Fairhold {
     this.length = length; // length in the fairhold formula
     this.position = position; // position in the fairhold formula
     this.plateau = plateau; // plateau in the fairhold formula
-    this.threshold = threshold; // thersold in the fairhold formula
+    this.threshold = threshold; // threshold in the fairhold formula
     this.calculateFairholdDiscount(); // calculate the fairhold discount
     this.calculateDiscountedPrice(); // calculate discounted price
   }
@@ -251,8 +251,8 @@ export class Household {
   mortgageLand?: Mortgage;
   mortgageMarketAffordability?: number;
   rentAffordability?: number;
-  fairholdPurchase?: Fairhold;
-  fairholdRent?: Fairhold;
+  fairholdLandPurchase?: Fairhold;
+  fairholdLandRent?: Fairhold;
   relativePropertyValue?: number;
 
   constructor({
@@ -384,11 +384,11 @@ export class Household {
         "either mortgageMarketAffordability or rentAffordability or property.landPrice are undefined"
       );
 
-    this.fairholdPurchase = new Fairhold({
+    this.fairholdLandPurchase = new Fairhold({
       affordability: this.mortgageMarketAffordability,
       originalPrice: this.property.landPrice,
     }); // create the fairhold object for purchase
-    this.fairholdRent = new Fairhold({
+    this.fairholdLandRent = new Fairhold({
       affordability: this.rentAffordability,
       originalPrice: this.averageRent,
     }); // create the fairhold object for rent
