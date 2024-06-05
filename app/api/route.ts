@@ -199,7 +199,7 @@ export async function POST(request: Request) {
         total: string;
       };
 
-      // get the rent adjustements --> Note: this need to change to accommodate future data
+      // get the rent adjustments --> Note: this need to change to accommodate future data
       const socialRentAdjustments = await prisma.$queryRaw<rentAdjustment[]>`
       SELECT * 
       FROM "public"."soc_rent_adjustments"
