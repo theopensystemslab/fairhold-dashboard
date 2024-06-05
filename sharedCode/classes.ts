@@ -157,23 +157,23 @@ export class Property {
   calculateBedWeightedAveragePrice(
     numberOfBeds: number = this.numberOfBedrooms,
     beds: number[] = [0, 1, 2, 3, 4, 5, 6],
-    bedWeigths: number[] = [0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4],
+    bedWeights: number[] = [0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4],
     precisionRounding: number = 2
   ) {
-    let bedWeigth; // initialize the variable
+    let bedWeight; // initialize the variable
 
     if (numberOfBeds < beds[beds.length - 1]) {
-      bedWeigth = bedWeigths[numberOfBeds]; // assign the weight based on the number of beds
+      bedWeight = bedWeights[numberOfBeds]; // assign the weight based on the number of beds
     } else {
-      bedWeigth = bedWeigths[bedWeigths.length - 1]; // assign the last value if out of scale
+      bedWeight = bedWeights[bedWeights.length - 1]; // assign the last value if out of scale
     }
 
-    if (bedWeigth == undefined) {
-      throw new Error("bedWigth is undefined.");
+    if (bedWeight == undefined) {
+      throw new Error("bedWeight is undefined.");
     }
 
     return (this.bedWeightedAveragePrice = parseFloat(
-      (bedWeigth * this.averagePrice).toFixed(precisionRounding)
+      (bedWeight * this.averagePrice).toFixed(precisionRounding)
     )); // calculate the bed weighted average price
   }
   calculateLandPrice() {
@@ -285,7 +285,7 @@ export class Household {
   calculateSocialRent(
     numberOfBeds: number = this.property.numberOfBedrooms,
     beds: number[] = [0, 1, 2, 3, 4, 5, 6],
-    bedWeigths: number[] = [0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4],
+    bedWeights: number[] = [0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4],
     /*     rentCapValues: number[] = [
       155.73, 155.73, 164.87, 174.03, 183.18, 192.35, 201.5,
     ], */
@@ -294,14 +294,14 @@ export class Household {
     nationalAverageProperty: number = 49750, // national average property value: check with Ollie
     nationalaverageEarnings: number = 316.4 // check with Ollie
   ) {
-    let bedWeigth; // initialize the bedWeigth variable
+    let bedWeight; // initialize the bedWeight variable
     //let rentCapWeekly; // initiliaze the rent Cap values
     if (numberOfBeds < beds[beds.length - 1]) {
-      bedWeigth = bedWeigths[numberOfBeds]; // assign the weight based on the number of beds
+      bedWeight = bedWeights[numberOfBeds]; // assign the weight based on the number of beds
       //rentCapWeekly = rentCapValues[numberOfBeds]; // assign the rent cap value based on the number of beds
     } else {
-      bedWeigth = bedWeigths[bedWeigths.length - 1]; // assign the last value if out of scale
-      //rentCapWeekly = rentCapValues[bedWeigths.length - 1]; // assign the last value if out of scale
+      bedWeight = bedWeights[bedWeights.length - 1]; // assign the last value if out of scale
+      //rentCapWeekly = rentCapValues[bedWeights.length - 1]; // assign the last value if out of scale
     }
 
     const relativeLocalEarning =
@@ -311,13 +311,12 @@ export class Household {
       this.housePriceIndex / nationalAverageProperty; // realtive property value
     this.relativePropertyValue = relativePropertyValue;
     const formulaRentWeekly =
-      0.7 * nationalAverageRent * relativeLocalEarning * bedWeigth +
+      0.7 * nationalAverageRent * relativeLocalEarning * bedWeight +
       0.3 * nationalAverageRent * relativePropertyValue;
     this.formulaRentWeekly = formulaRentWeekly;
     let adjustedRentWeekly = formulaRentWeekly; // Initialize the adjusted rent weekly
     // Loop through each rent adjustment up to the second to last year
     for (let i = 0; i < this.rentAdjustments.length - 2; i++) {
-
       const adjustment = this.rentAdjustments[i]; // Get the current adjustment
       const adjustmentFactor = adjustment.total / 100 + 1; // Calculate the adjustment factor
       adjustedRentWeekly *= adjustmentFactor; // Apply the adjustment
