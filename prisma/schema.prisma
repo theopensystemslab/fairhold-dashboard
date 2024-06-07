@@ -59,8 +59,8 @@ model rent {
 
 model soc_rent_adjustments {
   year       String? @db.VarChar(10)
-  inflation  String? @db.VarChar(10)
-  additional String? @db.VarChar(10)
+  inflation  Float?
+  additional Float?
   total      Float?
   id         Int     @id @default(autoincrement())
 }
