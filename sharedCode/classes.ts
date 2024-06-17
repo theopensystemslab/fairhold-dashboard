@@ -236,9 +236,11 @@ export class Household {
   incomePerPerson; // income per person
   averageRent; // average rent
   socialRentAveEarning; // average social rent
-  rentAdjustments; //rent adjustment values
+  socialRentAdjustments; //rent adjustment values
   housePriceIndex; // house price index
   property; // property object
+  averageRentLand?: number; // average rent for the land
+  averageRentHouse?: number; // aveage rent for the house
   income?: number; // income per household
   adjustedSocialRentMonthly?: number; //adjusted social rent monthly
   socialRentMonthlyLand?: number; // social rent to pay the land
@@ -259,29 +261,36 @@ export class Household {
     incomePerPerson,
     averageRent,
     socialRentAveEarning,
-    rentAdjustments,
+    socialRentAdjustments,
     housePriceIndex,
     property,
   }: {
     incomePerPerson: number;
     averageRent: number;
     socialRentAveEarning: number;
-    rentAdjustments: any;
+    socialRentAdjustments: any;
     housePriceIndex: number;
     property: Property;
   }) {
     this.incomePerPerson = incomePerPerson;
     this.averageRent = averageRent;
     this.socialRentAveEarning = socialRentAveEarning;
-    this.rentAdjustments = rentAdjustments;
+    this.socialRentAdjustments = socialRentAdjustments;
     this.housePriceIndex = housePriceIndex;
     this.property = property;
+    this.calculateAverageRentLandAndHouse();
     this.calculateSocialRent();
     this.calculateHouseholdIncome();
     this.calculateMortgageValues();
     this.calculateFairholdValues();
   }
 
+  calculateAverageRentLandAndHouse() {
+    if (this.property.landToTotalRatio == undefined)
+      throw new Error("landToTotalRatio is undefined");
+    this.averageRentLand = this.averageRent * this.property.landToTotalRatio; // set the avearage rent for the land
+    this.averageRentHouse = this.averageRent - this.averageRentLand; // set the avearage rent for the house
+  }
   calculateSocialRent(
     numberOfBeds: number = this.property.numberOfBedrooms,
     beds: number[] = [0, 1, 2, 3, 4, 5, 6],
@@ -316,8 +325,8 @@ export class Household {
     this.formulaRentWeekly = formulaRentWeekly;
     let adjustedRentWeekly = formulaRentWeekly; // Initialize the adjusted rent weekly
     // Loop through each rent adjustment up to the second to last year
-    for (let i = 0; i < this.rentAdjustments.length - 2; i++) {
-      const adjustment = this.rentAdjustments[i]; // Get the current adjustment
+    for (let i = 0; i < this.socialRentAdjustments.length - 2; i++) {
+      const adjustment = this.socialRentAdjustments[i]; // Get the current adjustment
       const adjustmentFactor = adjustment.total / 100 + 1; // Calculate the adjustment factor
       adjustedRentWeekly *= adjustmentFactor; // Apply the adjustment
     }
@@ -378,10 +387,11 @@ export class Household {
     if (
       this.mortgageMarketAffordability == undefined ||
       this.rentAffordability == undefined ||
-      this.property.landPrice == undefined
+      this.property.landPrice == undefined ||
+      this.averageRentLand == undefined
     )
       throw new Error(
-        "either mortgageMarketAffordability or rentAffordability or property.landPrice are undefined"
+        "either mortgageMarketAffordability or rentAffordability or property.landPrice or averageRentLand are undefined"
       );
 
     this.fairholdPurchase = new Fairhold({
@@ -390,7 +400,7 @@ export class Household {
     }); // create the fairhold object for purchase
     this.fairholdRent = new Fairhold({
       affordability: this.rentAffordability,
-      originalPrice: this.averageRent,
+      originalPrice: this.averageRentLand,
     }); // create the fairhold object for rent
   }
 }
