@@ -254,6 +254,7 @@ export class Household {
   mortgageMarketAffordability?: number;
   rentAffordability?: number;
   fairholdPurchase?: Fairhold;
+  mortgageFairholdPurchase?: Mortgage;
   fairholdRent?: Fairhold;
   relativePropertyValue?: number;
 
@@ -398,6 +399,11 @@ export class Household {
       affordability: this.mortgageMarketAffordability,
       originalPrice: this.property.landPrice,
     }); // create the fairhold object for purchase
+    if (this.fairholdPurchase.discountedPrice == undefined)
+      throw new Error("fairholdPurchase.discountedPrice is undefined");
+    this.mortgageFairholdPurchase = new Mortgage({
+      propertyValue: this.fairholdPurchase.discountedPrice,
+    });
     this.fairholdRent = new Fairhold({
       affordability: this.rentAffordability,
       originalPrice: this.averageRentLand,
