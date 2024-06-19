@@ -199,12 +199,12 @@ export async function POST(request: Request) {
         total: string;
       };
 
-      // get the rent adjustements --> Note: this need to change to accommodate future data
-      const rentAdjustments = await prisma.$queryRaw<rentAdjustment[]>`
+      // get the rent adjustments --> Note: this need to change to accommodate future data
+      const socialRentAdjustments = await prisma.$queryRaw<rentAdjustment[]>`
       SELECT * 
       FROM "public"."soc_rent_adjustments"
     `; // execute the query and retrieve the results
-      console.log("rentAdjustments[0]: ", rentAdjustments[0]);
+      console.log("socialRentAdjustments[0]: ", socialRentAdjustments[0]);
 
       // create type for socialRentEarningRes query
       type socialRentEarningRes = {
@@ -269,7 +269,7 @@ export async function POST(request: Request) {
         hpi: averageHpi,
         buildPrice: buildPrice,
         averageRent: averageRent,
-        rentAdjustments: rentAdjustments,
+        socialRentAdjustments: socialRentAdjustments,
         socialRentAveEarning: socialRentAveEarning,
         numberOfTransactions: numberOfTransactions,
         granularityPostcode: granularityPostcode,

@@ -25,7 +25,7 @@ function calculateFairhold(responseData: any) {
     incomePerPerson: responseData.gdhi,
     averageRent: responseData.averageRent,
     socialRentAveEarning: responseData.averageSocialRent,
-    rentAdjustments: responseData.rentAdjustments,
+    socialRentAdjustments: responseData.socialRentAdjustments,
     housePriceIndex: responseData.hpi,
     property: property,
   });
