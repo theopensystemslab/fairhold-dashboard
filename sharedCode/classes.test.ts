@@ -205,5 +205,6 @@ describe("Household class", () => {
 
   it("correctly calculates the fairholdPurchase.discountLand", () => {
     expect(household.fairholdPurchase?.discountLand).toBeCloseTo(0.386);
+
   });
 });

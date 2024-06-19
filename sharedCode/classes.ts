@@ -42,6 +42,7 @@ export class Fairhold {
     this.plateau = plateau; // plateau in the fairhold formula
     this.threshold = threshold; // thersold in the fairhold formula
     this.calculateFairholdDiscount(); // calculate the fairhold discountLand
+
     this.calculateDiscountedPrice(); // calculate discounted price
   }
 
@@ -76,8 +77,8 @@ export class Property {
   houseType; // type of the house: D--> detached, S--> semidetached, T--> Terrace, F--> Flats
   numberOfBedrooms; // number of bedrooms in the house
   age; // age of the house
-  size; // size of the house in meter squares
-  newBuildPricePerMetre: number; // average build price per meter of a new house
+  size; // size of the house in metre squares
+  newBuildPricePerMetre: number; // average build price per metre of a new house
   averagePrice: number; // average market price
   itl3: string; // ITL code
   newBuildPrice?: number; // price of the house if it was new
@@ -130,7 +131,7 @@ export class Property {
   calculateNewBuildPrice(precisionRounding: number = 2) {
     if (!this.newBuildPricePerMetre) {
       throw new Error(
-        "The Build Price cannot be calculated because pricePerMeter has not been set"
+        "The Build Price cannot be calculated because pricePerMetre has not been set"
       );
     }
     const newBuildPrice = this.newBuildPricePerMetre * this.size; // calculate the price of the new build
@@ -216,11 +217,11 @@ export class Mortgage {
     this.initialDeposit = initialDeposit;
     this.interestRate = interestRate;
     this.termOfTheMortgage = termOfTheMortgage;
-    this.calculateamountOfTheMortgage(); // calculate the amount of the mortgage
+    this.calculateAmountOfTheMortgage(); // calculate the amount of the mortgage
     this.calculateMonthlyMortgagePayment(); // calculate the montly payment
   }
 
-  calculateamountOfTheMortgage() {
+  calculateAmountOfTheMortgage() {
     this.amountOfTheMortgage = this.propertyValue * (1 - this.initialDeposit); // calculate the amount of the mortgage by removing the deposit
     return this.amountOfTheMortgage;
   }
@@ -266,6 +267,7 @@ export class Household {
   fairholdPurchase?: Fairhold;
   mortgageFairholdPurchase?: Mortgage;
   fairholdRent?: Fairhold;
+
   relativePropertyValue?: number;
 
   constructor({
@@ -306,29 +308,29 @@ export class Household {
     numberOfBeds: number = this.property.numberOfBedrooms,
     beds: number[] = [0, 1, 2, 3, 4, 5, 6],
     bedWeights: number[] = [0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4],
-    /*     rentCapValues: number[] = [
+    /*     socialRentCapValues: number[] = [
       155.73, 155.73, 164.87, 174.03, 183.18, 192.35, 201.5,
     ], */
     precisionRounding: number = 2,
     nationalAverageRent: number = 54.62, // national average rent :check with Ollie
     nationalAverageProperty: number = 49750, // national average property value: check with Ollie
-    nationalaverageEarnings: number = 316.4 // check with Ollie
+    nationalAverageEarnings: number = 316.4 // check with Ollie
   ) {
     let bedWeight; // initialize the bedWeight variable
-    //let rentCapWeekly; // initiliaze the rent Cap values
+    //let rentCapWeekly; // initialize the rent Cap values
     if (numberOfBeds < beds[beds.length - 1]) {
       bedWeight = bedWeights[numberOfBeds]; // assign the weight based on the number of beds
-      //rentCapWeekly = rentCapValues[numberOfBeds]; // assign the rent cap value based on the number of beds
+      //rentCapWeekly = socialRentCapValues[numberOfBeds]; // assign the rent cap value based on the number of beds
     } else {
       bedWeight = bedWeights[bedWeights.length - 1]; // assign the last value if out of scale
-      //rentCapWeekly = rentCapValues[bedWeights.length - 1]; // assign the last value if out of scale
+      //rentCapWeekly = socialRentCapValues[bedWeights.length - 1]; // assign the last value if out of scale
     }
 
     const relativeLocalEarning =
-      this.socialRentAveEarning / nationalaverageEarnings; // realtivve local earnings
+      this.socialRentAveEarning / nationalAverageEarnings; // relative local earnings
     this.relativeLocalEarning = relativeLocalEarning;
     const relativePropertyValue =
-      this.housePriceIndex / nationalAverageProperty; // realtive property value
+      this.housePriceIndex / nationalAverageProperty; // relative property value
     this.relativePropertyValue = relativePropertyValue;
     const formulaRentWeekly =
       0.7 * nationalAverageRent * relativeLocalEarning * bedWeight +
@@ -338,6 +340,7 @@ export class Household {
     // Loop through each rent adjustment up to the second to last year
     if (this.socialRentAdjustments == undefined)
       throw new Error("socialRentAdjustments is undefined");
+
     for (let i = 0; i < this.socialRentAdjustments.length - 2; i++) {
       const adjustment = this.socialRentAdjustments[i]; // Get the current adjustment
       const adjustmentFactor = adjustment.total / 100 + 1; // Calculate the adjustment factor
@@ -382,7 +385,7 @@ export class Household {
     }); // create the mortgage object for the new build price
     this.mortgageDepreciatedHouse = new Mortgage({
       propertyValue: this.property.depreciatedBuildPrice,
-    }); // create the mortgage object for the depraciated build price
+    }); // create the mortgage object for the depreciated build price
     this.mortgageLand = new Mortgage({
       propertyValue: this.property.averagePrice - this.property.newBuildPrice,
     }); // create the mortgage object for the land. Check with Ollie, shouldn't it be depreciated house?
@@ -407,9 +410,11 @@ export class Household {
         "either mortgageMarketAffordability or rentAffordability or property.landPrice or averageRentLand are undefined"
       );
 
+
     if (this.property.depreciatedBuildPrice == undefined)
       throw new Error("depreciatedBuildPrice is undefined");
     this.fairholdPurchase = new Fairhold({
+
       affordability: this.mortgageMarketAffordability,
       originalLandPrice: this.property.landPrice,
       housePrice: this.property.depreciatedBuildPrice,
@@ -428,6 +433,7 @@ export class Household {
     if (this.mortgageDepreciatedHouse.monthlyPayment == undefined)
       throw new Error("mortgageDepreciatedHouse.monthlyPayment is undefined");
     this.fairholdRent = new Fairhold({
+
       affordability: this.rentAffordability,
       originalLandPrice: this.averageRentLand,
       housePrice: this.mortgageDepreciatedHouse.monthlyPayment,
