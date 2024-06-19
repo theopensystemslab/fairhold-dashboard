@@ -4,17 +4,20 @@ import * as math from "mathjs";
 //define the fairhold object
 export class Fairhold {
   affordability;
-  originalPrice;
+  originalLandPrice;
+  housePrice;
   amplitude;
   length;
   position;
   plateau;
   threshold;
-  discount?: number;
-  discountedPrice?: number;
+  discountLand?: number;
+  discountedLandPrice?: number;
+  totalHouseAndLandPrice?: number;
   constructor({
     affordability,
-    originalPrice,
+    originalLandPrice,
+    housePrice,
     amplitude = 0.25,
     length = 1,
     position = 0.45,
@@ -22,7 +25,8 @@ export class Fairhold {
     threshold = 0.5,
   }: {
     affordability: number;
-    originalPrice: number;
+    originalLandPrice: number;
+    housePrice: number;
     amplitude?: number;
     length?: number;
     position?: number;
@@ -30,37 +34,39 @@ export class Fairhold {
     threshold?: number;
   }) {
     this.affordability = affordability; // affordability index
-    this.originalPrice = originalPrice; // price before the discount
+    this.originalLandPrice = originalLandPrice; // price before the discountLand
+    this.housePrice = housePrice; // House price
     this.amplitude = amplitude; // Amplitude in the fairhold formula
     this.length = length; // length in the fairhold formula
     this.position = position; // position in the fairhold formula
     this.plateau = plateau; // plateau in the fairhold formula
     this.threshold = threshold; // thersold in the fairhold formula
-    this.calculateFairholdDiscount(); // calculate the fairhold discount
+    this.calculateFairholdDiscount(); // calculate the fairhold discountLand
     this.calculateDiscountedPrice(); // calculate discounted price
   }
 
   calculateFairholdDiscount() {
     if (this.affordability < this.threshold) {
-      this.discount =
+      this.discountLand =
         this.amplitude *
           math.cos((2 * math.pi * this.affordability) / this.length) +
         this.position; // fairhold formula
     } else {
-      this.discount = this.plateau; // fairhold formula
+      this.discountLand = this.plateau; // fairhold formula
     }
   }
 
   calculateDiscountedPrice() {
-    if (this.discount == undefined) {
-      throw new Error("discount is not defined");
+    if (this.discountLand == undefined) {
+      throw new Error("discountLand is not defined");
     }
 
-    if (this.originalPrice < 0) {
-      this.discountedPrice = 1; // set a nominal value : check with Ollie
+    if (this.originalLandPrice < 0) {
+      this.discountedLandPrice = 1; // set a nominal value : check with Ollie
     } else {
-      this.discountedPrice = this.discount * this.originalPrice;
+      this.discountedLandPrice = this.discountLand * this.originalLandPrice;
     }
+    this.totalHouseAndLandPrice = this.discountedLandPrice + this.housePrice; // set the total price
   }
 }
 
@@ -149,6 +155,10 @@ export class Property {
     this.depreciatedBuildPrice = parseFloat(
       depreciatedBuildPrice.toFixed(precisionRounding)
     ); // round the number
+
+    if (this.depreciatedBuildPrice == undefined) {
+      throw new Error("depreciatedBuildPrice is undefined");
+    }
 
     return this.depreciatedBuildPrice;
   }
@@ -326,6 +336,8 @@ export class Household {
     this.formulaRentWeekly = formulaRentWeekly;
     let adjustedRentWeekly = formulaRentWeekly; // Initialize the adjusted rent weekly
     // Loop through each rent adjustment up to the second to last year
+    if (this.socialRentAdjustments == undefined)
+      throw new Error("socialRentAdjustments is undefined");
     for (let i = 0; i < this.socialRentAdjustments.length - 2; i++) {
       const adjustment = this.socialRentAdjustments[i]; // Get the current adjustment
       const adjustmentFactor = adjustment.total / 100 + 1; // Calculate the adjustment factor
@@ -395,18 +407,30 @@ export class Household {
         "either mortgageMarketAffordability or rentAffordability or property.landPrice or averageRentLand are undefined"
       );
 
+    if (this.property.depreciatedBuildPrice == undefined)
+      throw new Error("depreciatedBuildPrice is undefined");
     this.fairholdPurchase = new Fairhold({
       affordability: this.mortgageMarketAffordability,
-      originalPrice: this.property.landPrice,
+      originalLandPrice: this.property.landPrice,
+      housePrice: this.property.depreciatedBuildPrice,
     }); // create the fairhold object for purchase
-    if (this.fairholdPurchase.discountedPrice == undefined)
-      throw new Error("fairholdPurchase.discountedPrice is undefined");
+
+    if (this.fairholdPurchase.totalHouseAndLandPrice == undefined)
+      throw new Error("fairholdPurchase.discountedLandPrice is undefined");
     this.mortgageFairholdPurchase = new Mortgage({
-      propertyValue: this.fairholdPurchase.discountedPrice,
+      propertyValue: this.fairholdPurchase.totalHouseAndLandPrice,
     });
+
+    this.mortgageDepreciatedHouse = new Mortgage({
+      propertyValue: this.property.depreciatedBuildPrice,
+    }); // mortgage calculated on the depreciated house price
+
+    if (this.mortgageDepreciatedHouse.monthlyPayment == undefined)
+      throw new Error("mortgageDepreciatedHouse.monthlyPayment is undefined");
     this.fairholdRent = new Fairhold({
       affordability: this.rentAffordability,
-      originalPrice: this.averageRentLand,
+      originalLandPrice: this.averageRentLand,
+      housePrice: this.mortgageDepreciatedHouse.monthlyPayment,
     }); // create the fairhold object for rent
   }
 }
