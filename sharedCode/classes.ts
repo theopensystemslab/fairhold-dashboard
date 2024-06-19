@@ -264,9 +264,9 @@ export class Household {
   mortgageLand?: Mortgage;
   mortgageMarketAffordability?: number;
   rentAffordability?: number;
-  fairholdPurchase?: Fairhold;
+  fairholdLandPurchase?: Fairhold;
   mortgageFairholdPurchase?: Mortgage;
-  fairholdRent?: Fairhold;
+  fairholdLandRent?: Fairhold;
 
   relativePropertyValue?: number;
 
@@ -410,20 +410,18 @@ export class Household {
         "either mortgageMarketAffordability or rentAffordability or property.landPrice or averageRentLand are undefined"
       );
 
-
     if (this.property.depreciatedBuildPrice == undefined)
       throw new Error("depreciatedBuildPrice is undefined");
-    this.fairholdPurchase = new Fairhold({
-
+    this.fairholdLandPurchase = new Fairhold({
       affordability: this.mortgageMarketAffordability,
       originalLandPrice: this.property.landPrice,
       housePrice: this.property.depreciatedBuildPrice,
     }); // create the fairhold object for purchase
 
-    if (this.fairholdPurchase.totalHouseAndLandPrice == undefined)
-      throw new Error("fairholdPurchase.discountedLandPrice is undefined");
+    if (this.fairholdLandPurchase.totalHouseAndLandPrice == undefined)
+      throw new Error("fairholdLandPurchase.discountedLandPrice is undefined");
     this.mortgageFairholdPurchase = new Mortgage({
-      propertyValue: this.fairholdPurchase.totalHouseAndLandPrice,
+      propertyValue: this.fairholdLandPurchase.totalHouseAndLandPrice,
     });
 
     this.mortgageDepreciatedHouse = new Mortgage({
@@ -432,8 +430,7 @@ export class Household {
 
     if (this.mortgageDepreciatedHouse.monthlyPayment == undefined)
       throw new Error("mortgageDepreciatedHouse.monthlyPayment is undefined");
-    this.fairholdRent = new Fairhold({
-
+    this.fairholdLandRent = new Fairhold({
       affordability: this.rentAffordability,
       originalLandPrice: this.averageRentLand,
       housePrice: this.mortgageDepreciatedHouse.monthlyPayment,
