@@ -320,7 +320,7 @@ export class Household {
   housePriceIndex; // house price index
   property; // property object
   averageRentLand?: number; // average rent for the land
-  averageRentHouse?: number; // aveage rent for the house
+  averageRentHouse?: number; // average rent for the house
   income?: number; // income per household
   adjustedSocialRentMonthly?: number; //adjusted social rent monthly
   socialRentMonthlyLand?: number; // social rent to pay the land
@@ -371,7 +371,7 @@ export class Household {
     if (this.property.landToTotalRatio == undefined)
       throw new Error("landToTotalRatio is undefined");
     this.averageRentLand = this.averageRent * this.property.landToTotalRatio; // set the avearage rent for the land
-    this.averageRentHouse = this.averageRent - this.averageRentLand; // set the avearage rent for the house
+    this.averageRentHouse = this.averageRent - this.averageRentLand; // set the average rent for the house
   }
   calculateSocialRent(
     numberOfBeds: number = this.property.numberOfBedrooms,
