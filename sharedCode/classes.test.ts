@@ -1,4 +1,4 @@
-import { Mortgage, Fairhold, Property, Household } from "./classes";
+import { Mortgage, FairholdLandPurchase, Property, Household } from "./classes";
 
 // Unit test for the mortgage class
 describe("Mortgage class", () => {
@@ -37,28 +37,31 @@ describe("Mortgage class", () => {
 // Unit test for the Fairhold class
 describe("Fairhold class", () => {
   it("can be instantiated", () => {
-    const fairhold = new Fairhold({
+    const fairhold = new FairholdLandPurchase({
       affordability: 0.05,
-      originalPrice: 100,
+      originalLandPrice: 100,
+      housePrice: 200,
     });
     expect(fairhold).toBeDefined();
   });
 
   it("correctly calculates the fairhold formula below the threshold", () => {
-    const fairhold = new Fairhold({
+    const fairhold = new FairholdLandPurchase({
       affordability: 0.1,
-      originalPrice: 100,
+      originalLandPrice: 100,
+      housePrice: 200,
     });
-    expect(fairhold.discount).toBeCloseTo(0.65);
+    expect(fairhold.discountLand).toBeCloseTo(0.65);
   });
 
   it("correctly calculates the fairhold formula above the threshold", () => {
-    const fairhold = new Fairhold({
+    const fairhold = new FairholdLandPurchase({
       affordability: 0.9,
-      originalPrice: 100,
+      originalLandPrice: 100,
+      housePrice: 200,
       plateau: 3,
     });
-    expect(fairhold.discount).toBeCloseTo(3);
+    expect(fairhold.discountLand).toBeCloseTo(3);
   });
 });
 
@@ -200,7 +203,7 @@ describe("Household class", () => {
     expect(household.rentAffordability).toBeCloseTo(0.2);
   });
 
-  it("correctly calculates the fairholdLandPurchase.discount", () => {
-    expect(household.fairholdLandPurchase?.discount).toBeCloseTo(0.386);
+  it("correctly calculates the fairholdLandPurchase.discountLand", () => {
+    expect(household.fairholdLandPurchase?.discountLand).toBeCloseTo(0.386);
   });
 });

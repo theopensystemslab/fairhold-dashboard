@@ -1,4 +1,4 @@
-import { Mortgage, Property, Fairhold, Household } from "./classes";
+import { Mortgage, Property, FairholdLandPurchase, Household } from "./classes";
 
 function calculateFairhold(responseData: any) {
   if (!responseData.buildPrice || responseData.buildPrice.length === 0) {
