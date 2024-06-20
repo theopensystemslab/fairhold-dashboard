@@ -1,8 +1,8 @@
 // import useful libraries
 import * as math from "mathjs";
 
-//define the fairhold object
-export class Fairhold {
+//define the fairhold object for Land Purchase
+export class FairholdLandPurchase {
   affordability;
   originalLandPrice;
   housePrice;
@@ -13,7 +13,7 @@ export class Fairhold {
   threshold;
   discountLand?: number;
   discountedLandPrice?: number;
-  totalHouseAndLandPrice?: number;
+  combinedHouseAndLandPrice?: number;
   constructor({
     affordability,
     originalLandPrice,
@@ -67,10 +67,79 @@ export class Fairhold {
     } else {
       this.discountedLandPrice = this.discountLand * this.originalLandPrice;
     }
-    this.totalHouseAndLandPrice = this.discountedLandPrice + this.housePrice; // set the total price
+    this.combinedHouseAndLandPrice = this.discountedLandPrice + this.housePrice; // set the total price
   }
 }
 
+//define the fairhold object for Land Purchase
+export class FairholdLandRent {
+  affordability;
+  originalLandRent;
+  housePrice;
+  amplitude;
+  length;
+  position;
+  plateau;
+  threshold;
+  discountLand?: number;
+  discountedLandRent?: number;
+  combinedHouseAndLandPrice?: number;
+  constructor({
+    affordability,
+    originalLandRent,
+    housePrice,
+    amplitude = 0.25,
+    length = 1,
+    position = 0.45,
+    plateau = 0.15,
+    threshold = 0.5,
+  }: {
+    affordability: number;
+    originalLandRent: number;
+    housePrice: number;
+    amplitude?: number;
+    length?: number;
+    position?: number;
+    plateau?: number;
+    threshold?: number;
+  }) {
+    this.affordability = affordability; // affordability index
+    this.originalLandRent = originalLandRent; // price before the discountLand
+    this.housePrice = housePrice; // House price
+    this.amplitude = amplitude; // Amplitude in the fairhold formula
+    this.length = length; // length in the fairhold formula
+    this.position = position; // position in the fairhold formula
+    this.plateau = plateau; // plateau in the fairhold formula
+    this.threshold = threshold; // thersold in the fairhold formula
+    this.calculateFairholdDiscount(); // calculate the fairhold discountLand
+
+    this.calculateDiscountedPrice(); // calculate discounted price
+  }
+
+  calculateFairholdDiscount() {
+    if (this.affordability < this.threshold) {
+      this.discountLand =
+        this.amplitude *
+          math.cos((2 * math.pi * this.affordability) / this.length) +
+        this.position; // fairhold formula
+    } else {
+      this.discountLand = this.plateau; // fairhold formula
+    }
+  }
+
+  calculateDiscountedPrice() {
+    if (this.discountLand == undefined) {
+      throw new Error("discountLand is not defined");
+    }
+
+    if (this.originalLandRent < 0) {
+      this.discountedLandRent = 1; // set a nominal value : check with Ollie
+    } else {
+      this.discountedLandRent = this.discountLand * this.originalLandRent;
+    }
+    this.combinedHouseAndLandPrice = this.discountedLandRent + this.housePrice; // set the total price
+  }
+}
 // define the property class
 export class Property {
   postcode; // postcode of the property
@@ -264,9 +333,9 @@ export class Household {
   mortgageLand?: Mortgage;
   mortgageMarketAffordability?: number;
   rentAffordability?: number;
-  fairholdLandPurchase?: Fairhold;
-  mortgageFairholdPurchase?: Mortgage;
-  fairholdLandRent?: Fairhold;
+  fairholdLandPurchase?: FairholdLandPurchase;
+  mortgageFairholdLandPurchase?: Mortgage;
+  fairholdLandRent?: FairholdLandRent;
 
   relativePropertyValue?: number;
 
@@ -412,16 +481,16 @@ export class Household {
 
     if (this.property.depreciatedBuildPrice == undefined)
       throw new Error("depreciatedBuildPrice is undefined");
-    this.fairholdLandPurchase = new Fairhold({
+    this.fairholdLandPurchase = new FairholdLandPurchase({
       affordability: this.mortgageMarketAffordability,
       originalLandPrice: this.property.landPrice,
       housePrice: this.property.depreciatedBuildPrice,
     }); // create the fairhold object for purchase
 
-    if (this.fairholdLandPurchase.totalHouseAndLandPrice == undefined)
+    if (this.fairholdLandPurchase.combinedHouseAndLandPrice == undefined)
       throw new Error("fairholdLandPurchase.discountedLandPrice is undefined");
-    this.mortgageFairholdPurchase = new Mortgage({
-      propertyValue: this.fairholdLandPurchase.totalHouseAndLandPrice,
+    this.mortgageFairholdLandPurchase = new Mortgage({
+      propertyValue: this.fairholdLandPurchase.combinedHouseAndLandPrice,
     });
 
     this.mortgageDepreciatedHouse = new Mortgage({
@@ -430,9 +499,9 @@ export class Household {
 
     if (this.mortgageDepreciatedHouse.monthlyPayment == undefined)
       throw new Error("mortgageDepreciatedHouse.monthlyPayment is undefined");
-    this.fairholdLandRent = new Fairhold({
+    this.fairholdLandRent = new FairholdLandRent({
       affordability: this.rentAffordability,
-      originalLandPrice: this.averageRentLand,
+      originalLandRent: this.averageRentLand,
       housePrice: this.mortgageDepreciatedHouse.monthlyPayment,
     }); // create the fairhold object for rent
   }
