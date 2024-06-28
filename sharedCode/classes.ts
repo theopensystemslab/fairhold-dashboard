@@ -195,6 +195,7 @@ export class Property {
     ) {
       this.landToTotalRatio = this.landPrice / this.bedWeightedAveragePrice; // define the land to total ratio
     }
+    this.calculatepropertyForecast();
   }
 
   // calculate new building price
@@ -275,6 +276,7 @@ export class Property {
     // initiliaze the variables at year 0
     let currentAveragePrice = this.averagePrice; // set the current price to the average price
     let currentNewBuildPrice = this.newBuildPrice; // set the current price to the new build price
+    let currentlandPrice = this.landPrice; // set the current price to the land price
     let currentMaintenanceCost = this.newBuildPrice * maintenanceCostPercentage; // set the current maintenance cost
 
     let propertyForecast = [
@@ -283,6 +285,7 @@ export class Property {
         averagePrice: currentAveragePrice,
         newBuildPrice: currentNewBuildPrice,
         maintenanceCost: currentMaintenanceCost,
+        landPrice: currentlandPrice,
       },
     ]; // initialize the property forecast
 
@@ -292,6 +295,8 @@ export class Property {
 
       currentNewBuildPrice =
         currentNewBuildPrice * (1 + constructionPriceGrouthPerYear); // calculate the current price
+
+      currentlandPrice = currentAveragePrice - currentNewBuildPrice; // calculate the current land price
       currentMaintenanceCost = currentNewBuildPrice * maintenanceCostPercentage; // set the current maintenance cost
 
       propertyForecast.push({
@@ -299,6 +304,7 @@ export class Property {
         averagePrice: currentAveragePrice,
         newBuildPrice: currentNewBuildPrice,
         maintenanceCost: currentMaintenanceCost,
+        landPrice: currentlandPrice,
       }); // add the current price to the new build price forecast
     }
     this.propertyForecast = propertyForecast; // save the object
@@ -379,6 +385,7 @@ export class Household {
   mortgageFairholdLandPurchase?: Mortgage;
   fairholdLandRent?: FairholdLandRent;
   relativePropertyValue?: number;
+  householdForecast?: object;
 
   constructor({
     incomePerPerson,
@@ -406,6 +413,7 @@ export class Household {
     this.calculateHouseholdIncome();
     this.calculateMortgageValues();
     this.calculateFairholdValues();
+    this.calculateHouseholdForecast();
   }
 
   calculateAverageRentLandAndHouse() {
@@ -545,5 +553,30 @@ export class Household {
       originalLandRent: this.averageRentLand,
       housePrice: this.mortgageDepreciatedHouse.monthlyPayment,
     }); // create the fairhold object for rent
+  }
+
+  calculateHouseholdForecast(
+    incomeGrowthPerYear: number = 0.04, // 4% per year
+    cpiGrowthPerYear: number = 0.03, // 3% per year
+    yearsForecast: number = 40 // 3 years
+  ) {
+    if (this.income == undefined) throw new Error("income is undefined");
+    let currentIncome = this.income; // set the current income
+
+    let householdForecast = [
+      {
+        year: 0,
+        income: currentIncome,
+      },
+    ]; // initialize the property forecast
+
+    for (let i = 0; i < yearsForecast; i++) {
+      currentIncome = currentIncome * (1 + incomeGrowthPerYear); // calculate the current income
+      householdForecast.push({
+        year: i + 1,
+        income: currentIncome,
+      }); // add the current price to the new build price forecast
+    }
+    this.householdForecast = householdForecast; // set the property forecast
   }
 }
