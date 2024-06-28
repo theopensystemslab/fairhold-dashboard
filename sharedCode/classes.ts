@@ -155,6 +155,7 @@ export class Property {
   bedWeightedAveragePrice?: number; // price of the house weigheted by the number of bedrooms
   landPrice?: number; // price of the land
   landToTotalRatio?: number; // ratio of the land price over the total
+  propertyForecast?: object; // forecast of the main vlaues over time
 
   constructor({
     postcode,
@@ -261,6 +262,47 @@ export class Property {
       throw new Error("newBuildPrice is undefined");
     return (this.landPrice = this.averagePrice - this.newBuildPrice); // calculate the price of the land
   }
+
+  calculatepropertyForecast(
+    propertyPriceGrowthPerYear: number = 0.05, // 5% per year
+    constructionPriceGrouthPerYear: number = 0.025, // 2.5% per year
+    yearsForecast: number = 40, // 3 years
+    maintenanceCostPercentage = 0.015 // 1.5% percentage maintenance cost
+  ) {
+    if (this.newBuildPrice == undefined) {
+      throw new Error("newBuildPrice is undefined.");
+    }
+    // initiliaze the variables at year 0
+    let currentAveragePrice = this.averagePrice; // set the current price to the average price
+    let currentNewBuildPrice = this.newBuildPrice; // set the current price to the new build price
+    let currentMaintenanceCost = this.newBuildPrice * maintenanceCostPercentage; // set the current maintenance cost
+
+    let propertyForecast = [
+      {
+        year: 0,
+        averagePrice: currentAveragePrice,
+        newBuildPrice: currentNewBuildPrice,
+        maintenanceCost: currentMaintenanceCost,
+      },
+    ]; // initialize the property forecast
+
+    for (let i = 0; i < yearsForecast; i++) {
+      currentAveragePrice =
+        currentAveragePrice * (1 + propertyPriceGrowthPerYear); // calculate the current price
+
+      currentNewBuildPrice =
+        currentNewBuildPrice * (1 + constructionPriceGrouthPerYear); // calculate the current price
+      currentMaintenanceCost = currentNewBuildPrice * maintenanceCostPercentage; // set the current maintenance cost
+
+      propertyForecast.push({
+        year: i + 1,
+        averagePrice: currentAveragePrice,
+        newBuildPrice: currentNewBuildPrice,
+        maintenanceCost: currentMaintenanceCost,
+      }); // add the current price to the new build price forecast
+    }
+    this.propertyForecast = propertyForecast; // save the object
+  }
 }
 
 // define the mortgage class
@@ -336,7 +378,6 @@ export class Household {
   fairholdLandPurchase?: FairholdLandPurchase;
   mortgageFairholdLandPurchase?: Mortgage;
   fairholdLandRent?: FairholdLandRent;
-
   relativePropertyValue?: number;
 
   constructor({
