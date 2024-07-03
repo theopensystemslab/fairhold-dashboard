@@ -32,6 +32,7 @@
   "devDependencies": {
     "@testing-library/jest-dom": "^6.4.5",
     "@testing-library/react": "^15.0.7",
+    "@types/d3": "^7.4.3",
     "@types/jest": "^29.5.12",
     "@types/node": "^20.11.17",
     "@types/pg": "^8.11.6",
