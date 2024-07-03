@@ -214,14 +214,17 @@ export class Forecast {
     let newBuildPriceByYear = this.currentNewBuildPrice;
     let landPriceByYear = this.currentlandPrice;
     let maintenanceCostByYear = this.currentMaintenanceCost;
+    let landToTotalRatioByYear =
+      this.currentlandPrice / this.currentAveragePrice;
 
     let propertyForecast = [
       {
         year: 0,
-        averagePrice: this.currentAveragePrice,
-        newBuildPrice: this.currentNewBuildPrice,
-        maintenanceCost: this.currentMaintenanceCost,
-        landPrice: this.currentlandPrice,
+        averagePrice: averagePriceByYear,
+        newBuildPrice: newBuildPriceByYear,
+        maintenanceCost: maintenanceCostByYear,
+        landPrice: landPriceByYear,
+        landToTotalRatio: landToTotalRatioByYear,
       },
     ]; // initialize the property forecast
 
@@ -236,12 +239,15 @@ export class Forecast {
       maintenanceCostByYear =
         newBuildPriceByYear * this.maintenanceCostPercentage; // set the current maintenance cost
 
+      landToTotalRatioByYear = landPriceByYear / averagePriceByYear; // calculate the land to total ratio
+
       propertyForecast.push({
         year: i + 1,
         averagePrice: averagePriceByYear,
         newBuildPrice: newBuildPriceByYear,
         maintenanceCost: maintenanceCostByYear,
         landPrice: landPriceByYear,
+        landToTotalRatio: landToTotalRatioByYear,
       }); // add the current price to the new build price forecast
     }
     this.propertyForecast = propertyForecast; // save the object
