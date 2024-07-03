@@ -201,7 +201,6 @@ export async function POST(request: Request) {
 
       // get the rent adjustements --> Note: this need to change to accommodate future data
 
-
       const socialRentAdjustments = await prisma.$queryRaw<rentAdjustment[]>`
       SELECT * 
       FROM "public"."soc_rent_adjustments"
@@ -255,6 +254,20 @@ export async function POST(request: Request) {
       }
       console.log("averageHpi: ", averageHpi);
 
+      // create type for gas bill query
+      type gasBillYearlyRes = {
+        bill: number;
+      };
+
+      // get the gas bill value --> Note: this need to change to accommodate future data
+      const gasBillYearlyRes = await prisma.$queryRaw<gasBillYearlyRes[]>`
+            SELECT bill FROM "public"."gas_bills" 
+            WHERE SUBSTRING(itl FROM 1 FOR 3) = ${itl3.substring(0, 3)}
+          `;
+      console.log("gasBillYearlyRes: ", gasBillYearlyRes);
+      const gasBillYearly = gasBillYearlyRes[0].bill; // get the gas bill
+      console.log("gasBillYearly: ", gasBillYearly);
+
       return NextResponse.json({
         postcode: postcode,
         houseType: data.houseType,
@@ -276,6 +289,7 @@ export async function POST(request: Request) {
         numberOfTransactions: numberOfTransactions,
         granularityPostcode: granularityPostcode,
         pricesPaid: pricesPaid,
+        gasBillYearly: gasBillYearly,
       });
     }
 

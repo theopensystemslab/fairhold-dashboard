@@ -27,6 +27,7 @@ function calculateFairhold(responseData: any) {
     socialRentAveEarning: responseData.averageSocialRent,
     socialRentAdjustments: responseData.socialRentAdjustments,
     housePriceIndex: responseData.hpi,
+    gasBillYearly: responseData.gasBillYearly,
     property: property,
   });
   return console.log(household);
