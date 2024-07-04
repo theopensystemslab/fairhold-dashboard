@@ -9,9 +9,9 @@ interface StackedBarChartProps {
     category: string;
     marketPurchase: number;
     marketRent: number;
+    socialRent: number;
     fairholdPurchase: number;
     fairholdRent: number;
-    socialRent: number;
   }[];
 }
 
@@ -37,7 +37,7 @@ const TenureComparison: React.FC<StackedBarChartProps> = ({ data }) => {
       .attr("transform", `translate(${margin.left},${margin.top})`);
 
     // Data transformation
-    const categories = ["marketPurchase", "marketRent", "fairholdPurchase", "fairholdRent", "socialRent"];
+    const categories = ["marketPurchase", "marketRent", "socialRent", "fairholdPurchase", "fairholdRent"];
     const processedData = categories.map(category => {
       return {
         key: category,
@@ -61,12 +61,18 @@ const TenureComparison: React.FC<StackedBarChartProps> = ({ data }) => {
     svg.append("g")
       .attr("class", "x-axis")
       .attr("transform", `translate(0,${height})`)
-      .call(d3.axisBottom(x));
+      .call(d3.axisBottom(x))
+      .selectAll("text") // Select all text elements in the x-axis
+      .style("fill", "black") // Set text color
+      .style("font", "12px Inter"); // Set font
 
     // Y Axis
     svg.append("g")
       .attr("class", "y-axis")
-      .call(d3.axisLeft(y));
+      .call(d3.axisLeft(y))
+      .selectAll("text") // Select all text elements in the x-axis
+      .style("fill", "black") // Set text color
+      .style("font", "12px Inter"); // Set font
 
     // Colors for each layer
     const colors = { land: "#1f77b4", house: "#ff7f0e" };
