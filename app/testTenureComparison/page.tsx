@@ -1,32 +1,33 @@
 "use client";
 import React from 'react';
-import TenureComparison from '../components/TenureComparison';
+import TenureComparison from '../components/ui/TenureComparison';
 
 const TestTenureComparison = () => {
-    // Sample data to test the chart
-    const sampleData = [
+  const formattedData = (calculatorResult) => {
+    return [
       {
         category: 'Monthly Costs Land',
-        marketPurchase: 1200,
-        marketRent: 1000,
-        socialRent: 200,
-        fairholdPurchase: 800,
-        fairholdRent: 700,
+        marketPurchase: calculatorResult.mortgageLand?.monthlyPayment || 0,
+        marketRent: calculatorResult.originalLandRent || 0,
+        socialRent: calculatorResult.adjustedSocialRentMonthly || 0,
+        fairholdLandPurchase: calculatorResult.mortgageFairholdLandPurchase?.monthlyPayment || 0,
+        fairholdLandRent: calculatorResult.fairholdLandRent || 0,
       },
       {
         category: 'Monthly Costs House',
-        marketPurchase: 500,
-        marketRent: 400,
-        socialRent: 100,
-        fairholdPurchase: 500,
-        fairholdRent: 500,
-      },
+        marketPurchase: calculatorResult.mortgageHouse?.monthlyPayment || 0,
+        marketRent: calculatorResult.averageRentHouse || 0,
+        socialRent: calculatorResult.socialRentMonthlyHouse || 0,
+        fairholdLandPurchase: calculatorResult.mortgageFairholdLandPurchase?.monthlyPayment || 0,
+        fairholdLandRent: calculatorResult.fairholdLandRent || 0,
+      }
     ];
+  };
   
     return (
       <div>
         <h1>Test Stacked Bar Chart</h1>
-        <TenureComparison data={sampleData} />
+        <TenureComparison data={formattedData} />
       </div>
     );
   };
