@@ -1,12 +1,16 @@
 import React from 'react';
-import TenureComparison from './TenureComparison'; 
+import TenureComparisonWrapper from '../graphs/TenureComparisonWrapper'; 
 
-const Dashboard = ({ data }) => {
-  return (
+interface DashboardProps {
+    data: CalculatorResult; 
+  }
+
+const Dashboard: React.FC<DashboardProps> = ({ data }) => {
+    return (
     <div>
       <h1>Dashboard</h1>
       {/* Render multiple graph components here */}
-      <TenureComparison data={data} />
+      <TenureComparisonWrapper calculatorResult={data} />
       {/* Add other graphs as needed */}
     </div>
   );
