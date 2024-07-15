@@ -30,7 +30,8 @@ function calculateFairhold(responseData: any) {
     gasBillYearly: responseData.gasBillYearly,
     property: property,
   });
-  return console.log(household);
+  console.log(household);
+  return household;
 }
 
 export default calculateFairhold;
