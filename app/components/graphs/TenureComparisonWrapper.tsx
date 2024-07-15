@@ -29,18 +29,18 @@ const TenureComparisonWrapper: React.FC<TenureComparisonWrapperProps> = ({ calcu
       {
         category: 'Monthly Costs Land',
         marketPurchase: result.mortgageLand?.monthlyPayment || 0,
-        marketRent: result.originalLandRent || 0,
+        marketRent: result.averageRentLand || 0,
         socialRent: result.socialRentMonthlyLand || 0,
         fairholdLandPurchase: result.mortgageFairholdLandPurchase?.monthlyPayment || 0,
-        fairholdLandRent: result.fairholdLandRent || 0,
+        fairholdLandRent: result.fairholdLandRent?.discountedLandRent || 0,
       },
       {
         category: 'Monthly Costs House',
         marketPurchase: result.mortgageHouse?.monthlyPayment || 0,
         marketRent: result.averageRentHouse || 0,
         socialRent: result.socialRentMonthlyHouse || 0,
-        fairholdLandPurchase: result.mortgageFairholdLandPurchase?.monthlyPayment || 0,
-        fairholdLandRent: result.fairholdLandRent || 0,
+        fairholdLandPurchase: result.mortgageDepreciatedHouse?.monthlyPayment || 0,
+        fairholdLandRent: result.mortgageDepreciatedHouse?.monthlyPayment || 0,
       }
     ];
   };
