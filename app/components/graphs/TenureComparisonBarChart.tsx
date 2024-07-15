@@ -71,14 +71,14 @@ const TenureComparisonBarChart: React.FC<StackedBarChartProps> = ({ data }) => {
             stacked: true,
             title: {
               display: true,
-              text: 'Category',
+              text: 'Tenure type',
             },
           },
           y: {
             stacked: true,
             title: {
               display: true,
-              text: 'Value',
+              text: 'Monthly payments',
             },
           },
         },
