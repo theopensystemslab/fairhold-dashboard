@@ -2,7 +2,6 @@
 import { trueDependencies } from "mathjs";
 import React, { useState } from "react";
 import calculateFairhold from "@/sharedCode/testClasses";
-import TenureComparisonBarChart from '../graphs/TenureComparisonBarChart';
 import Dashboard from './Dashboard';
 
 const CalculatorInput = () => {
