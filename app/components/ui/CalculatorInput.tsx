@@ -2,12 +2,13 @@
 import { trueDependencies } from "mathjs";
 import React, { useState } from "react";
 import calculateFairhold from "@/sharedCode/testClasses";
+import { Household } from "@/sharedCode/classes";
 import Dashboard from './Dashboard';
 
 const CalculatorInput = () => {
   // create different view states: one for form and one for graph dashboard
   const [view, setView] = useState('form'); 
-  const [data, setData] = useState(null); 
+  const [data, setData] = useState<Household | null>(null);
   const [housePostcode, sethousePostcode] = useState(""); // variable associated to the postcode
   const houseTypes = {
     Detached: "D",
@@ -19,7 +20,7 @@ const CalculatorInput = () => {
   const [houseBedrooms, setHouseBedrooms] = useState(""); // variables associated to the number of bedrooms in the house
   const [howSize, setHouseSize] = useState(""); // variables associated to the house size
   const [houseAge, setHouseAge] = useState(""); // variables associated to the house age
-
+  
   // fucntion that defines what happens after submitting the form
   async function handleSubmit(e: any) {
     e.preventDefault(); // pr event the default of the form
@@ -157,7 +158,7 @@ const CalculatorInput = () => {
       </div>
     </div>
     ) : (
-      <Dashboard data={data} />
+      <Dashboard data={data as Household} />
     )
   );
 };
