@@ -1,8 +1,9 @@
 import React from 'react';
 import TenureComparisonWrapper from '../graphs/TenureComparisonWrapper'; 
+import { Household } from '@/sharedCode/classes';
 
 interface DashboardProps {
-    data: CalculatorResult; 
+    data: Household; 
   }
 
 const Dashboard: React.FC<DashboardProps> = ({ data }) => {
@@ -10,7 +11,7 @@ const Dashboard: React.FC<DashboardProps> = ({ data }) => {
     <div>
       <h1>Dashboard</h1>
       {/* Render multiple graph components here */}
-      <TenureComparisonWrapper calculatorResult={data} />
+      <TenureComparisonWrapper household={data} />
       {/* Add other graphs as needed */}
     </div>
   );
