@@ -1,52 +1,69 @@
 "use client";
 import React from 'react';
+import { Household } from '@/sharedCode/classes';
 import TenureComparisonBarChart from './TenureComparisonBarChart';
 
-interface CalculatorResult {
+interface TenureComparisonWrapperProps {  
+  household?: Household;
   mortgageLand?: { monthlyPayment: number };
-  originalLandRent?: number;
+  averageRentLand?: number;
   socialRentMonthlyLand?: number; 
   mortgageFairholdLandPurchase?: { monthlyPayment: number };
-  fairholdLandRent?: number;
+  fairholdLandRent?: { discountedLandRent: number };
   mortgageHouse?: { monthlyPayment: number };
+  mortgageDepreciatedHouse?: { monthlyPayment: number };
   averageRentHouse?: number;
   socialRentMonthlyHouse?: number;
 }
 
-interface TenureComparisonWrapperProps {
-  calculatorResult: CalculatorResult;
-}
-
-const TenureComparisonWrapper: React.FC<TenureComparisonWrapperProps> = ({ calculatorResult }) => {
-  console.log('TenureComparisonWrapper calculatorResult:', calculatorResult);
+const TenureComparisonWrapper: React.FC<TenureComparisonWrapperProps> = ({ household }) => {
+  console.log('TenureComparisonWrapper household:', household);
   
-  if (!calculatorResult) {
-    return <div>No calculator result available</div>;
+  if (!household) {
+    return <div>No household data available</div>;
   }
+
   
-  const formatData = (result: CalculatorResult) => {
+  const transformHouseholdToProps = (household: Household): TenureComparisonWrapperProps => {
+    return {
+      household,
+      mortgageLand: household.mortgageLand ? { monthlyPayment: household.mortgageLand.monthlyPayment || 0 } : undefined,
+      averageRentLand: household.averageRentLand,
+      socialRentMonthlyLand: household.socialRentMonthlyLand,
+      mortgageFairholdLandPurchase: household.mortgageFairholdLandPurchase ? { monthlyPayment: household.mortgageFairholdLandPurchase.monthlyPayment || 0 } : undefined,
+      fairholdLandRent: household.fairholdLandRent ? { discountedLandRent: household.fairholdLandRent.discountedLandRent || 0 } : undefined,
+      mortgageHouse: household.mortgageHouse ? { monthlyPayment: household.mortgageHouse.monthlyPayment || 0 } : undefined,
+      mortgageDepreciatedHouse: household.mortgageDepreciatedHouse ? { monthlyPayment: household.mortgageDepreciatedHouse.monthlyPayment || 0 } : undefined,
+      averageRentHouse: household.averageRentHouse,
+      socialRentMonthlyHouse: household.socialRentMonthlyHouse,
+    };
+  };
+
+  
+  const formatData = (household: TenureComparisonWrapperProps) => {
     return [
       {
         category: 'Monthly Costs Land',
-        marketPurchase: result.mortgageLand?.monthlyPayment || 0,
-        marketRent: result.averageRentLand || 0,
-        socialRent: result.socialRentMonthlyLand || 0,
-        fairholdLandPurchase: result.mortgageFairholdLandPurchase?.monthlyPayment || 0,
-        fairholdLandRent: result.fairholdLandRent?.discountedLandRent || 0,
+        marketPurchase: household.mortgageLand?.monthlyPayment || 0,
+        marketRent: household.averageRentLand || 0,
+        socialRent: household.socialRentMonthlyLand || 0,
+        fairholdLandPurchase: household.mortgageFairholdLandPurchase?.monthlyPayment || 0,
+        fairholdLandRent: household.fairholdLandRent?.discountedLandRent || 0,
       },
       {
         category: 'Monthly Costs House',
-        marketPurchase: result.mortgageHouse?.monthlyPayment || 0,
-        marketRent: result.averageRentHouse || 0,
-        socialRent: result.socialRentMonthlyHouse || 0,
-        fairholdLandPurchase: result.mortgageDepreciatedHouse?.monthlyPayment || 0,
-        fairholdLandRent: result.mortgageDepreciatedHouse?.monthlyPayment || 0,
+        marketPurchase: household.mortgageHouse?.monthlyPayment || 0,
+        marketRent: household.averageRentHouse || 0,
+        socialRent: household.socialRentMonthlyHouse || 0,
+        fairholdLandPurchase: household.mortgageDepreciatedHouse?.monthlyPayment || 0,
+        fairholdLandRent: household.mortgageDepreciatedHouse?.monthlyPayment || 0,
       }
     ];
   };
   
-  const formattedData = formatData(calculatorResult);
-
+  const formattedProps = transformHouseholdToProps(household);
+  const formattedData = formatData(formattedProps);
+  
   return (
     <div>
       <h2>Tenure Comparison Chart</h2>
