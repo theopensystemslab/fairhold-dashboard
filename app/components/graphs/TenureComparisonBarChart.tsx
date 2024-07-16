@@ -13,16 +13,21 @@ import {
 
 Chart.register(BarElement, BarController, CategoryScale, LinearScale, Tooltip, Legend);
 
+// Define type for DataInput
+type DataInput = {
+  category: string;
+  marketPurchase: number;
+  marketRent: number;
+  socialRent: number;
+  fairholdLandPurchase: number;
+  fairholdLandRent: number;
+  [key: string]: string | number;
+};
+
+
 // Define the props type for StackedBarChart
 interface StackedBarChartProps {
-  data: {
-    category: string;
-    marketPurchase: number;
-    marketRent: number;
-    socialRent: number;
-    fairholdLandPurchase: number;
-    fairholdLandRent: number;
-  }[];
+  data: DataInput[];
 }
 
 // Implementation of the Chart.js Stacked Bar Chart
@@ -30,6 +35,7 @@ const TenureComparisonBarChart: React.FC<StackedBarChartProps> = ({ data }) => {
   console.log('TenureComparisonBarChart data: ', data);
   
   const ref = useRef<HTMLCanvasElement>(null);
+  const chartRef = useRef<Chart | null>(null);
 
   useEffect(() => {
     if (!ref.current) return;
@@ -37,8 +43,8 @@ const TenureComparisonBarChart: React.FC<StackedBarChartProps> = ({ data }) => {
     // Transform the data into a format suitable for Chart.js
     const categories = ["marketPurchase", "marketRent", "socialRent", "fairholdLandPurchase", "fairholdLandRent"];
     const labels = categories;
-    const landData = categories.map(category => data[0][category]);
-    const houseData = categories.map(category => data[1][category]);
+    const landData = categories.map(category => (data[0] as DataInput)[category] as number);
+    const houseData = categories.map(category => (data[1] as DataInput)[category] as number);
 
     const chartData = {
       labels: labels,
@@ -57,11 +63,11 @@ const TenureComparisonBarChart: React.FC<StackedBarChartProps> = ({ data }) => {
     };
 
     // Clear the canvas before re-drawing
-    if (ref.current.chartInstance) {
-      ref.current.chartInstance.destroy();
+    if (chartRef.current) {
+      chartRef.current.destroy();
     }
 
-    const chartInstance = new Chart(ref.current, {
+    const newChartInstance = new Chart(ref.current, {
       type: 'bar',
       data: chartData,
       options: {
@@ -85,12 +91,12 @@ const TenureComparisonBarChart: React.FC<StackedBarChartProps> = ({ data }) => {
       },
     });
 
-    ref.current.chartInstance = chartInstance;
+    chartRef.current = newChartInstance;
 
     // Cleanup function to destroy the chart instance when the component unmounts
     return () => {
-      if (chartInstance) {
-        chartInstance.destroy();
+      if (chartRef.current) {
+        chartRef.current.destroy();
       }
     };
   }, [data]);
