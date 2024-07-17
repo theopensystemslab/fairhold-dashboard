@@ -149,6 +149,7 @@ export class Forecast {
   currentIncome; // current house hold income
   currentGasBillYearly; // current gas bill
   currentRentYearly; // current rent
+  currentFairholdRentYearly; // current fairhold rent
   propertyPriceGrowthPerYear; // property price growth per year
   constructionPriceGrowthPerYear; // construction price growth per year
   yearsForecast; // years forecast
@@ -166,6 +167,7 @@ export class Forecast {
     currentIncome,
     currentGasBillYearly,
     currentRentYearly,
+    currentFairholdRentYearly,
     propertyPriceGrowthPerYear = 0.05, // 5% per year
     constructionPriceGrowthPerYear = 0.025, // 2.5% per year
     rentGrowthPerYear = 0.025, //2.5% per year
@@ -180,6 +182,7 @@ export class Forecast {
     currentIncome: number;
     currentGasBillYearly: number;
     currentRentYearly: number;
+    currentFairholdRentYearly: number;
     propertyPriceGrowthPerYear?: number;
     constructionPriceGrowthPerYear?: number;
     rentGrowthPerYear?: number;
@@ -194,6 +197,7 @@ export class Forecast {
     this.currentIncome = currentIncome;
     this.currentGasBillYearly = currentGasBillYearly;
     this.currentRentYearly = currentRentYearly;
+    this.currentFairholdRentYearly = currentFairholdRentYearly;
     this.propertyPriceGrowthPerYear = propertyPriceGrowthPerYear;
     this.constructionPriceGrowthPerYear = constructionPriceGrowthPerYear;
     this.rentGrowthPerYear = rentGrowthPerYear;
@@ -221,6 +225,7 @@ export class Forecast {
       rentYearly: number;
       rentYearlyLand: number;
       rentYearlyHouse: number;
+      rentFairholdYearly: number;
     }
 
     // initialize the variables
@@ -239,6 +244,7 @@ export class Forecast {
     let rentYearlyByYear = this.currentRentYearly; // set the current rent
     let rentYearlyLandByYear = this.currentRentYearly * landToTotalRatioByYear; // rent value for the land
     let rentYearlyHouseByYear = this.currentRentYearly - rentYearlyLandByYear; // rent value for the house
+    let rentFairholdYearlyByYear = this.currentFairholdRentYearly; // rent value for the fairhold land
 
     let forecastMarket: forecastTypes[] = [
       {
@@ -253,6 +259,7 @@ export class Forecast {
         rentYearly: rentYearlyByYear,
         rentYearlyLand: rentYearlyLandByYear,
         rentYearlyHouse: rentYearlyHouseByYear,
+        rentFairholdYearly: rentFairholdYearlyByYear,
       },
     ]; // initialize the forecast
 
@@ -272,8 +279,9 @@ export class Forecast {
       incomeByYear = incomeByYear * (1 + this.incomeGrowthPerYear); // calculate the current income
       gasBillYearlyByYear = gasBillYearlyByYear * (1 + this.cpiGrowthPerYear); // calculate the current gas bill
       rentYearlyByYear = rentYearlyByYear * (1 + this.rentGrowthPerYear); // calculate the current rent
+      rentFairholdYearlyByYear =
+        rentFairholdYearlyByYear * (1 + this.rentGrowthPerYear); // calculate the current fairhold rent
       rentYearlyLandByYear = rentYearlyByYear * landToTotalRatioByYear; // calculate the portion of rent for the land
-
       rentYearlyHouseByYear = rentYearlyByYear - rentYearlyLandByYear; // calculate the portion of rent for the house
 
       forecastMarket.push({
@@ -288,6 +296,7 @@ export class Forecast {
         rentYearly: rentYearlyByYear,
         rentYearlyLand: rentYearlyLandByYear,
         rentYearlyHouse: rentYearlyHouseByYear,
+        rentFairholdYearly: rentFairholdYearlyByYear,
       }); // add the current price to the new build price forecast
     }
     this.forecastMarket = forecastMarket; // save the object
@@ -523,14 +532,14 @@ export class Household {
   socialRentMonthlyHouse?: number; // social rent monthly House
   relativeLocalEarning?: number;
   formulaRentWeekly?: number; // weekly rent
-  mortgageMarket?: Mortgage;
-  mortgageHouse?: Mortgage;
-  mortgageDepreciatedHouse?: Mortgage;
-  mortgageLand?: Mortgage;
+  mortgageMarket?: Mortgage; // mortgage on the whole property value
+  mortgageHouse?: Mortgage; // mortgage on the house
+  mortgageDepreciatedHouse?: Mortgage; // mortgage on the depreciated house
+  mortgageLand?: Mortgage; // mortgage on the land
   mortgageMarketAffordability?: number;
   rentAffordability?: number;
   fairholdLandPurchase?: FairholdLandPurchase;
-  mortgageFairholdLandPurchase?: Mortgage;
+  mortgageFairholdLandPurchase?: Mortgage; // mortgage on the land purchased with fairhold
   fairholdLandRent?: FairholdLandRent;
   relativePropertyValue?: number;
   forecast?: Forecast;
@@ -713,10 +722,11 @@ export class Household {
       this.property.landPrice == undefined ||
       this.gasBillYearly == undefined ||
       this.averageRentLand == undefined ||
-      this.averageRentHouse == undefined
+      this.averageRentHouse == undefined ||
+      this.fairholdLandRent?.discountedLandRent == undefined
     )
       throw new Error(
-        "Either property.averagePrice or property.newBuildPrice or property.landPrice or income or gasBillYearly or averageRentLand or averageRentHouseis undefined"
+        "Either property.averagePrice or property.newBuildPrice or property.landPrice or income or gasBillYearly or averageRentLand or averageRentHouseis or fairholdLandRent?.discountedLandRent undefined"
       );
 
     this.forecast = new Forecast({
@@ -726,6 +736,7 @@ export class Household {
       currentIncome: this.income,
       currentGasBillYearly: this.gasBillYearly,
       currentRentYearly: this.averageRent * 12,
+      currentFairholdRentYearly: this.fairholdLandRent.discountedLandRent * 12,
     });
   }
 }
