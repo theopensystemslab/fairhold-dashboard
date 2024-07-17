@@ -150,6 +150,7 @@ export class Forecast {
   currentGasBillYearly; // current gas bill
   currentRentYearly; // current rent
   currentFairholdRentYearly; // current fairhold rent
+  affordabilityThresholdPercentage; //  affordability threshold percentage
   propertyPriceGrowthPerYear; // property price growth per year
   constructionPriceGrowthPerYear; // construction price growth per year
   yearsForecast; // years forecast
@@ -168,6 +169,7 @@ export class Forecast {
     currentGasBillYearly,
     currentRentYearly,
     currentFairholdRentYearly,
+    affordabilityThresholdPercentage = 0.35, // percentage of income that makes a property afforadable
     propertyPriceGrowthPerYear = 0.05, // 5% per year
     constructionPriceGrowthPerYear = 0.025, // 2.5% per year
     rentGrowthPerYear = 0.025, //2.5% per year
@@ -183,6 +185,7 @@ export class Forecast {
     currentGasBillYearly: number;
     currentRentYearly: number;
     currentFairholdRentYearly: number;
+    affordabilityThresholdPercentage?: number;
     propertyPriceGrowthPerYear?: number;
     constructionPriceGrowthPerYear?: number;
     rentGrowthPerYear?: number;
@@ -198,6 +201,7 @@ export class Forecast {
     this.currentGasBillYearly = currentGasBillYearly;
     this.currentRentYearly = currentRentYearly;
     this.currentFairholdRentYearly = currentFairholdRentYearly;
+    this.affordabilityThresholdPercentage = affordabilityThresholdPercentage;
     this.propertyPriceGrowthPerYear = propertyPriceGrowthPerYear;
     this.constructionPriceGrowthPerYear = constructionPriceGrowthPerYear;
     this.rentGrowthPerYear = rentGrowthPerYear;
@@ -226,6 +230,7 @@ export class Forecast {
       rentYearlyLand: number;
       rentYearlyHouse: number;
       rentFairholdYearly: number;
+      affordableIncomeYearly: number;
     }
 
     // initialize the variables
@@ -245,6 +250,8 @@ export class Forecast {
     let rentYearlyLandByYear = this.currentRentYearly * landToTotalRatioByYear; // rent value for the land
     let rentYearlyHouseByYear = this.currentRentYearly - rentYearlyLandByYear; // rent value for the house
     let rentFairholdYearlyByYear = this.currentFairholdRentYearly; // rent value for the fairhold land
+    let affordableIncomeYearlyByYear =
+      incomeByYear * this.affordabilityThresholdPercentage; // affordable income
 
     let forecastMarket: forecastTypes[] = [
       {
@@ -260,6 +267,7 @@ export class Forecast {
         rentYearlyLand: rentYearlyLandByYear,
         rentYearlyHouse: rentYearlyHouseByYear,
         rentFairholdYearly: rentFairholdYearlyByYear,
+        affordableIncomeYearly: affordableIncomeYearlyByYear,
       },
     ]; // initialize the forecast
 
@@ -283,6 +291,8 @@ export class Forecast {
         rentFairholdYearlyByYear * (1 + this.rentGrowthPerYear); // calculate the current fairhold rent
       rentYearlyLandByYear = rentYearlyByYear * landToTotalRatioByYear; // calculate the portion of rent for the land
       rentYearlyHouseByYear = rentYearlyByYear - rentYearlyLandByYear; // calculate the portion of rent for the house
+      affordableIncomeYearlyByYear =
+        incomeByYear * this.affordabilityThresholdPercentage; // affordable income
 
       forecastMarket.push({
         year: i + 1,
@@ -297,6 +307,7 @@ export class Forecast {
         rentYearlyLand: rentYearlyLandByYear,
         rentYearlyHouse: rentYearlyHouseByYear,
         rentFairholdYearly: rentFairholdYearlyByYear,
+        affordableIncomeYearly: affordableIncomeYearlyByYear,
       }); // add the current price to the new build price forecast
     }
     this.forecastMarket = forecastMarket; // save the object
