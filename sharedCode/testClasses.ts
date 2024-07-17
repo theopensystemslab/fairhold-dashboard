@@ -24,12 +24,14 @@ function calculateFairhold(responseData: any) {
   const household = new Household({
     incomePerPerson: responseData.gdhi,
     averageRent: responseData.averageRent,
-    socialRentAveEarning: responseData.averageSocialRent,
+    socialRentAveEarning: responseData.socialRentAveEarning,
     socialRentAdjustments: responseData.socialRentAdjustments,
     housePriceIndex: responseData.hpi,
+    gasBillYearly: responseData.gasBillYearly,
     property: property,
   });
-  return console.log(household);
+  console.log(household);
+  return household;
 }
 
 export default calculateFairhold;

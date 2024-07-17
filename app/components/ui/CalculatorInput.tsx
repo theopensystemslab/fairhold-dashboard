@@ -2,8 +2,13 @@
 import { trueDependencies } from "mathjs";
 import React, { useState } from "react";
 import calculateFairhold from "@/sharedCode/testClasses";
+import { Household } from "@/sharedCode/classes";
+import Dashboard from './Dashboard';
 
 const CalculatorInput = () => {
+  // create different view states: one for form and one for graph dashboard
+  const [view, setView] = useState('form'); 
+  const [data, setData] = useState<Household | null>(null);
   const [housePostcode, sethousePostcode] = useState(""); // variable associated to the postcode
   const houseTypes = {
     Detached: "D",
@@ -12,11 +17,10 @@ const CalculatorInput = () => {
     Flat: "F",
   }; // variables associated to the house types
   const [houseType, setHouseType] = useState(houseTypes.Detached); // variables associated to the house type
-
   const [houseBedrooms, setHouseBedrooms] = useState(""); // variables associated to the number of bedrooms in the house
   const [howSize, setHouseSize] = useState(""); // variables associated to the house size
   const [houseAge, setHouseAge] = useState(""); // variables associated to the house age
-
+  
   // fucntion that defines what happens after submitting the form
   async function handleSubmit(e: any) {
     e.preventDefault(); // pr event the default of the form
@@ -26,12 +30,19 @@ const CalculatorInput = () => {
     const response = await fetch("/api", {
       method: "POST",
       body: formData, // pass the form data to the API
-    }).then((response) => response.json());
-
-    calculateFairhold(response);
+    });
+    const jsonData = await response.json();
+    console.log('handleSubmit jsonData: ', jsonData);
+    const processedData = calculateFairhold(jsonData);
+    console.log('handleSubmit processedData: ', processedData);
+    
+    // saved processedData & switch to dashboard view
+    setData(processedData);
+    setView('dashboard');
   }
 
   return (
+    view === 'form' ? (
     <div className="flex -centeitemsr justify-center text-black mt-5">
       <div className=" w-1/2  border-black border-2 rounded-lg ">
         <div className="bg-black text-white h-48 flex items-center justify-center">
@@ -146,6 +157,9 @@ const CalculatorInput = () => {
         </form>
       </div>
     </div>
+    ) : (
+      <Dashboard data={data as Household} />
+    )
   );
 };
 
