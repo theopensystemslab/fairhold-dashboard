@@ -287,12 +287,22 @@ export class Forecast {
       incomeByYear = incomeByYear * (1 + this.incomeGrowthPerYear); // calculate the current income
       gasBillYearlyByYear = gasBillYearlyByYear * (1 + this.cpiGrowthPerYear); // calculate the current gas bill
       rentYearlyByYear = rentYearlyByYear * (1 + this.rentGrowthPerYear); // calculate the current rent
-      rentFairholdYearlyByYear =
-        rentFairholdYearlyByYear * (1 + this.rentGrowthPerYear); // calculate the current fairhold rent
+
       rentYearlyLandByYear = rentYearlyByYear * landToTotalRatioByYear; // calculate the portion of rent for the land
       rentYearlyHouseByYear = rentYearlyByYear - rentYearlyLandByYear; // calculate the portion of rent for the house
       affordableIncomeYearlyByYear =
         incomeByYear * this.affordabilityThresholdPercentage; // affordable income
+
+      // calculate fairhold every year
+      let rentAffordabilityByYear = rentYearlyByYear / incomeByYear; // calculate the affordability at a given year
+      let fairholdLandRent = new FairholdLandRent({
+        affordability: rentAffordabilityByYear,
+        originalLandRent: rentYearlyLandByYear,
+        housePrice: 0,
+      }); // create the fairhold object for rent. The house price is set to 0 since only the mohtly rent is needed
+      if (fairholdLandRent.discountedLandRent == undefined)
+        throw new Error("fairholdLandRent.discountedLandRent is not defined");
+      rentFairholdYearlyByYear = fairholdLandRent.discountedLandRent;
 
       forecastMarket.push({
         year: i + 1,
@@ -622,7 +632,7 @@ export class Household {
     const relativePropertyValue =
       this.housePriceIndex / nationalAverageProperty; // relative property value
     this.relativePropertyValue = relativePropertyValue;
-    
+
     const formulaRentWeekly =
       0.7 * nationalAverageRent * relativeLocalEarning * bedWeight +
       0.3 * nationalAverageRent * relativePropertyValue;
@@ -638,7 +648,7 @@ export class Household {
       const adjustmentFactor = adjustment.total / 100 + 1; // Calculate the adjustment factor
       adjustedRentWeekly *= adjustmentFactor; // Apply the adjustment
     }
-   
+
     let socialRentWeekly; // initialize the variable
     if (adjustedRentWeekly < rentCapWeekly) {
       socialRentWeekly = adjustedRentWeekly;
@@ -647,7 +657,7 @@ export class Household {
     }
 
     const adjustedSocialRentMonthly = socialRentWeekly * 4.2; // define the monthly social rent
-    
+
     this.adjustedSocialRentMonthly = adjustedSocialRentMonthly; // set the value of adjusted social rent monthly
     if (this.property.landToTotalRatio == undefined)
       throw new Error("landToTotalRatio is undefined");
