@@ -3,28 +3,49 @@ import React from 'react';
 import { Household } from '@/sharedCode/classes';
 import LifetimeCombinedChart from './LifetimeCombinedChart';
 
-interface Forecast {
-    forecastMarket: {
-      year: number;
-      landPrice: number;
-      newBuildPrice: number;
-      maintenanceCost: number;
-      gasBillYearly: number;
-      affordableIncomeYearly: number;
-    };
-  }
-  interface LifetimeCombinedWrapperProps {
-    forecast: Forecast;
-    colorScheme: {
-      land: string;
-      house: string;
-      maintenance: string;
-      bills: string;
-      incomeThreshold: string;
-    };
+// Create colour scheme types
+type SchemeType = 'default' | 'alternative' | 'monochrome';
+
+interface LifetimeCombinedWrapperProps {
+    household: Household;
+    schemeType: SchemeType;
   }
 
-  const LifetimeCombinedWrapper: React.FC<LifetimeCombinedWrapperProps> = ({ forecast, colorScheme }) => {
+interface LifetimeCombinedWrapperProps {
+    household: Household;
+}
+
+const LifetimeCombinedWrapper: React.FC<LifetimeCombinedWrapperProps> = ({ household, schemeType  }) => {
+    // Create color schemes for different versions of the graph
+    const colorSchemes = {
+        default: {
+          land: '#FF0000',
+          house: '#00FF00',
+          maintenance: '#0000FF',
+          bills: '#FFFF00',
+          incomeThreshold: '#FF00FF',
+        },
+        alternative: {
+          land: '#800000',
+          house: '#008000',
+          maintenance: '#000080',
+          bills: '#808000',
+          incomeThreshold: '#800080',
+        },
+        monochrome: {
+          land: '#000000',
+          house: '#333333',
+          maintenance: '#666666',
+          bills: '#999999',
+          incomeThreshold: '#CCCCCC',
+        },
+      };
+
+    const colorScheme = colorSchemes[schemeType];
+    
+    // Extract the forecast from the household
+    const { forecast } = household;
+
     // Process and format the data for the chart
     const chartData = forecast.forecastMarket.map(item => ({
       year: item.year.toString(),
@@ -33,7 +54,7 @@ interface Forecast {
       maintenanceCost: item.maintenanceCost,
       billsCost: item.gasBillYearly,
       incomeThreshold: item.affordableIncomeYearly,
-    }));
+    })); 
 
     return (
       <div>
@@ -41,6 +62,6 @@ interface Forecast {
         <LifetimeCombinedChart data={chartData} colorScheme={colorScheme} />
       </div>
     );
-  };
+};
   
-  export default LifetimeCombinedWrapper;
+export default LifetimeCombinedWrapper;
