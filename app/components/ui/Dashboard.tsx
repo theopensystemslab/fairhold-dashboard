@@ -12,7 +12,7 @@ const Dashboard: React.FC<DashboardProps> = ({ data }) => {
       <h1>Dashboard</h1>
       {/* Render multiple graph components here */}
       <TenureComparisonWrapper household={data} />
-      {/* Add other graphs as needed */}
+      <LifetimeCombinedWrapper household={data} schemeType="default" />
     </div>
   );
 };
