@@ -475,7 +475,7 @@ export class Mortgage {
     this.termOfTheMortgage = termOfTheMortgage;
     this.calculateAmountOfTheMortgage(); // calculate the amount of the mortgage
     this.calculateMonthlyMortgagePayment(); // calculate the montly payment
-    this.calculateYealyPaymentBreakdown(); // calculate the yearly breakdown
+    this.calculateYearlyPaymentBreakdown(); // calculate the yearly breakdown
   }
 
   calculateAmountOfTheMortgage() {
@@ -499,7 +499,7 @@ export class Mortgage {
       throw new Error("amountOfTheMortgage is undefined");
     }
   }
-  calculateYealyPaymentBreakdown() {
+  calculateYearlyPaymentBreakdown() {
     if (this.monthlyPayment == undefined || this.totalMortgageCost == undefined)
       throw new Error("monthlyPayment or totalMortgageCost is undefined");
 
@@ -512,7 +512,7 @@ export class Mortgage {
     let yearlyPaymentBreakdown = [
       {
         year: 0,
-        yealyPayment: yearlyPayment,
+        yearlyPayment: yearlyPayment,
         cumulativePaid: cumulativePaid,
         remainingBalance: remainingBalance,
       },
@@ -529,7 +529,7 @@ export class Mortgage {
       remainingBalance = remainingBalance - yearlyPayment; // calculate the updated remaining balance
       yearlyPaymentBreakdown.push({
         year: i + 1,
-        yealyPayment: yearlyPayment,
+        yearlyPayment: yearlyPayment,
         cumulativePaid: cumulativePaid,
         remainingBalance: remainingBalance,
       }); // add the current yearly payment to the yearlyPaymentBreakdown
