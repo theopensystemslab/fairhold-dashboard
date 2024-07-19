@@ -54,7 +54,7 @@ const LifetimeCombinedWrapper: React.FC<LifetimeCombinedWrapperProps> = ({ house
       maintenanceCost: item.maintenanceCost,
       billsCost: item.gasBillYearly,
       incomeThreshold: item.affordableIncomeYearly,
-    })); 
+    })) || []; 
 
     return (
       <div>

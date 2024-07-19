@@ -6,8 +6,10 @@ import {
     ChartData,
     ChartOptions,
     ChartTypeRegistry,
+    PointElement,
     BarElement,
     BarController,
+    LineController, 
     LineElement,
     CategoryScale,
     LinearScale,
@@ -15,10 +17,10 @@ import {
     Legend
 } from 'chart.js';
 
-Chart.register(BarElement, BarController, LineElement, CategoryScale, LinearScale, Tooltip, Legend);
+Chart.register(PointElement, BarElement, BarController, LineController, LineElement, CategoryScale, LinearScale, Tooltip, Legend);
 
 // Define type for DataInput
-type DataInput = { // Does this need to be renamed if already used in TenureComparisonBarChart? (or is it fine since it's not being exported?) 
+type DataInput = {
     year: string;
     landCost: number;
     houseCost: number;
@@ -42,7 +44,7 @@ interface LifetimeChartProps {
 
 // Implementation of combination bar and line chart
 const LifetimeCombinedChart: React.FC<LifetimeChartProps> = ({ data, colorScheme }) => {
-    console.log('LifetimeCombinedChart data: ', data);
+    // console.log('LifetimeCombinedChart data: ', data);
 
     const ref = useRef<HTMLCanvasElement>(null);
     const chartRef = useRef<Chart | null>(null);
@@ -139,7 +141,7 @@ const LifetimeCombinedChart: React.FC<LifetimeChartProps> = ({ data, colorScheme
     };
     }, [data, colorScheme]);
 
-  return <canvas ref={ref}></canvas>;
+  return <canvas id={`chart-${colorScheme}`} ref={ref}></canvas>;
 };
 
 export default LifetimeCombinedChart;

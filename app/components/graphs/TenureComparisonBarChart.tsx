@@ -101,7 +101,7 @@ const TenureComparisonBarChart: React.FC<StackedBarChartProps> = ({ data }) => {
     };
   }, [data]);
 
-  return <canvas ref={ref}></canvas>;
+  return <canvas id={`chart-tenure-compare`} ref={ref}></canvas>;
 };
 
 export default TenureComparisonBarChart;
