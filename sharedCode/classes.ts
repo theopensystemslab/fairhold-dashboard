@@ -1168,3 +1168,20 @@ export class Household {
     this.lifetime = lifetime;
   }
 }
+
+// create the interface
+export interface forecastTypes {
+  year: number;
+  averagePrice: number;
+  newBuildPrice: number;
+  landPrice: number;
+  maintenanceCost: number;
+  landToTotalRatio: number;
+  income: number;
+  gasBillYearly: number;
+  rentYearly: number;
+  rentYearlyLand: number;
+  rentYearlyHouse: number;
+  rentFairholdYearly: number;
+  affordableIncomeYearly: number;
+}
