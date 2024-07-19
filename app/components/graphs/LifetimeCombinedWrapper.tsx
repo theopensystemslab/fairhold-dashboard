@@ -45,11 +45,11 @@ const LifetimeCombinedWrapper: React.FC<LifetimeCombinedWrapperProps> = ({ house
 
     const colorScheme = colorSchemes[schemeType];
 
-    console.log('household.forecast?.forecastMarket', household.forecast?.forecastMarket)
+    console.log('household.lifetime?.lifetimeMarket', household.lifetime?.lifetimeMarket)
 
     // Process and format the data for the chart
-    const chartData = household.forecast?.forecastMarket
-    ? household.forecast.forecastMarket.map(item => ({
+    const chartData = household.lifetime?.lifetimeMarket
+    ? household.lifetime.lifetimeMarket.map(item => ({
         year: item.year.toString(),
         landCost: item.landPrice,
         houseCost: item.newBuildPrice,
