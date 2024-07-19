@@ -159,7 +159,7 @@ export class Lifetime {
   cpiGrowthPerYear; // cpi gowth per year
   rentGrowthPerYear; // rent growth per year
   currentMaintenanceCost?: number; // current maintenance cost
-  lifetimeMarket?: object; // forecast of the property values
+  lifetimeMarket?: lifetimeTypes[]; // forecast of the property values
 
   constructor({
     currentAveragePrice,
@@ -317,7 +317,7 @@ export class Lifetime {
         rentYearly: rentYearlyByYear,
         rentYearlyLand: rentYearlyLandByYear,
         rentYearlyHouse: rentYearlyHouseByYear,
-        rentLandFairholdYearly: rentLandFairholdYearlyByYear,
+        rentLandFairholdYearly: rentLandFairholdYearlyByYear, 
         affordabilityThresholdIncome: affordabilityThresholdIncomeByYear,
       }); // add the current price to the new build price forecast
     }
@@ -781,6 +781,6 @@ export interface lifetimeTypes {
   rentYearly: number;
   rentYearlyLand: number;
   rentYearlyHouse: number;
-  rentFairholdYearly: number;
-  affordableIncomeYearly: number;
+  rentLandFairholdYearly: number, 
+  affordabilityThresholdIncome: number,
 }
