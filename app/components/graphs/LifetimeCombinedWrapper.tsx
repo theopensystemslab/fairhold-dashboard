@@ -16,7 +16,9 @@ interface LifetimeCombinedWrapperProps {
 }
 
 const LifetimeCombinedWrapper: React.FC<LifetimeCombinedWrapperProps> = ({ household, schemeType  }) => {
-    // Create color schemes for different versions of the graph
+  console.log('LifetimeCombinedWrapper household: ', household)
+
+  // Create color schemes for different versions of the graph
     const colorSchemes = {
         default: {
           land: '#FF0000',
@@ -42,19 +44,22 @@ const LifetimeCombinedWrapper: React.FC<LifetimeCombinedWrapperProps> = ({ house
       };
 
     const colorScheme = colorSchemes[schemeType];
-    
-    // Extract the forecast from the household
-    const { forecast } = household;
+
+    console.log('household.forecast?.forecastMarket', household.forecast?.forecastMarket)
 
     // Process and format the data for the chart
-    const chartData = forecast.forecastMarket.map(item => ({
-      year: item.year.toString(),
-      landCost: item.landPrice,
-      houseCost: item.newBuildPrice,
-      maintenanceCost: item.maintenanceCost,
-      billsCost: item.gasBillYearly,
-      incomeThreshold: item.affordableIncomeYearly,
-    })) || []; 
+    const chartData = household.forecast?.forecastMarket
+    ? household.forecast.forecastMarket.map(item => ({
+        year: item.year.toString(),
+        landCost: item.landPrice,
+        houseCost: item.newBuildPrice,
+        maintenanceCost: item.maintenanceCost,
+        billsCost: item.gasBillYearly,
+        incomeThreshold: item.affordableIncomeYearly,
+      }))
+    : [];
+
+    console.log('LifetimeCombinedWrapper.tsx chartData: ', chartData)
 
     return (
       <div>
