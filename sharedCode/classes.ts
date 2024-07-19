@@ -508,6 +508,7 @@ export class Mortgage {
     let remainingBalance = this.totalMortgageCost - this.monthlyPayment * 12;
 
     interface mortgageBreakdownTypes {
+      year: number;
       yearlyPayment: number;
       cumulativePaid: number;
       remainingBalance: number;
@@ -539,57 +540,77 @@ export class Mortgage {
   }
 }
 
-export class MarketPurchase {
+export class tenureMarketPurchase {
+  averagePrice; // average price of the property
+  newBuildPrice; // new build price of the property
+  depreciatedBuildPrice; // depreciated building price
+  landPrice; // land price
+  incomeYearly; // income Yearly
+  affordabilityThresholdIncomePercentage; //  affordability threshold percentage
+  propertyPriceGrowthPerYear; // property price growth per year
+  constructionPriceGrowthPerYear; // construction price growth per year
+  yearsForecast; // years forecast
+  maintenanceCostPercentage; // maintenance cost percentage
+  incomeGrowthPerYear; // income growth per year
   affordability?: number; // affordability fo the market
   houseMortgage?: Mortgage; // mortgage object on the new house
   landMortgage?: Mortgage; // mortgage on the land
-  lifetime?: {
-    maintenanceCost: number;
-    landMortgagePaymentYearly: number;
-    houseMortgagePaymentYearly: number;
-  }[]; // lifetime object with projections
+  lifetime?: object; // lifetime object with projections
 
   constructor({
-    newBuildPrice, // new build price of the property
-    landPrice, // land price
-    incomeYearly, // income Yearly per household
+    averagePrice,
+    newBuildPrice,
+    depreciatedBuildPrice,
+    landPrice,
+    incomeYearly,
+    affordabilityThresholdIncomePercentage, // percentage of income that makes a property afforadable
+    propertyPriceGrowthPerYear, // 5% per year
     constructionPriceGrowthPerYear, // 2.5% per year
     yearsForecast, // 40 years
     maintenanceCostPercentage, // 1.5% percentage maintenance cost
+    incomeGrowthPerYear, // 4% per year income growth
   }: {
     averagePrice: number;
     newBuildPrice: number;
     depreciatedBuildPrice: number;
     landPrice: number;
     incomeYearly: number;
+    affordabilityThresholdIncomePercentage: number;
     propertyPriceGrowthPerYear: number;
     constructionPriceGrowthPerYear: number;
     yearsForecast: number;
     maintenanceCostPercentage: number;
+    incomeGrowthPerYear: number;
   }) {
-    this.calculateHouseMortgage(newBuildPrice);
-    this.calculateLandMortgage(landPrice);
-    this.calculateAffordability(incomeYearly);
-    this.calculateLifetime(
-      newBuildPrice,
-      maintenanceCostPercentage,
-      yearsForecast,
-      constructionPriceGrowthPerYear
-    );
+    this.averagePrice = averagePrice;
+    this.newBuildPrice = newBuildPrice;
+    this.depreciatedBuildPrice = depreciatedBuildPrice;
+    this.landPrice = landPrice;
+    this.incomeYearly = incomeYearly;
+    this.affordabilityThresholdIncomePercentage =
+      affordabilityThresholdIncomePercentage;
+    this.propertyPriceGrowthPerYear = propertyPriceGrowthPerYear;
+    this.constructionPriceGrowthPerYear = constructionPriceGrowthPerYear;
+    this.yearsForecast = yearsForecast;
+    this.maintenanceCostPercentage = maintenanceCostPercentage;
+    this.incomeGrowthPerYear = incomeGrowthPerYear;
+    this.calculateHouseMortgage();
+    this.calculateLandMortgage();
+    this.calculateLifetime();
   }
 
-  calculateHouseMortgage(newBuildPrice: number) {
+  calculateHouseMortgage() {
     this.houseMortgage = new Mortgage({
-      propertyValue: newBuildPrice,
+      propertyValue: this.depreciatedBuildPrice,
     });
   }
-  calculateLandMortgage(landPrice: number) {
+  calculateLandMortgage() {
     this.landMortgage = new Mortgage({
-      propertyValue: landPrice,
+      propertyValue: this.landPrice,
     });
   }
 
-  calculateAffordability(incomeYearly: number) {
+  calculateAfffordability() {
     if (
       this.landMortgage === undefined ||
       this.houseMortgage === undefined ||
@@ -598,21 +619,23 @@ export class MarketPurchase {
     ) {
       throw new Error("landMortgage or houseMortgage is undefined");
     }
-    let affordability =
+    this.affordability =
       (this.landMortgage?.monthlyPayment * 12 +
         this.houseMortgage?.monthlyPayment * 12) /
-      incomeYearly;
-    this.affordability = affordability;
+      this.incomeYearly;
   }
 
-  calculateLifetime(
-    newBuildPrice: number,
-    maintenanceCostPercentage: number,
-    yearsForecast: number,
-    constructionPriceGrowthPerYear: number
-  ) {
-    let newBuildPriceIterative = newBuildPrice;
-    let maintenanceCostIterative = maintenanceCostPercentage * newBuildPrice;
+  calculateLifetime() {
+    // initialize the variables that are going to be iterated
+    let averagePriceIterative = this.averagePrice;
+    let newBuildPriceIterative = this.newBuildPrice;
+    let landPriceIterative = this.landPrice;
+    let maintenanceCostIterative =
+      this.maintenanceCostPercentage * this.newBuildPrice;
+    let landToTotalRatioIterative = this.landPrice / this.averagePrice;
+    let incomeYearlyIterative = this.incomeYearly; // set the current income
+    let affordabilityThresholdIncomeIterative =
+      incomeYearlyIterative * this.affordabilityThresholdIncomePercentage; // affordable income
 
     // retrieve the mortgage payments for the first year
     if (
@@ -629,6 +652,7 @@ export class MarketPurchase {
       throw new Error("landMortgage is undefined");
     }
     interface mortgageBreakdownTypes {
+      year: number;
       yearlyPayment: number;
       cumulativePaid: number;
       remainingBalance: number;
@@ -637,43 +661,71 @@ export class MarketPurchase {
       .yearlyPaymentBreakdown as mortgageBreakdownTypes[];
     const landMortgagePaymentYearly = this.landMortgage
       .yearlyPaymentBreakdown as mortgageBreakdownTypes[];
-    let houseMortgagePaymentYearlyIterative =
-      houseMortgagePaymentYearly[0].yearlyPayment; // find the first year
-    let landMortgagePaymentYearlyIterative =
-      landMortgagePaymentYearly[0].yearlyPayment; // find the first year
+    let houseMortgagePaymentYearlyIterative = houseMortgagePaymentYearly.find(
+      (breakdown) => breakdown.year === 0
+    )?.yearlyPayment; // find the first year
+    let landMortgagePaymentYearlyIterative = landMortgagePaymentYearly.find(
+      (breakdown) => breakdown.year === 0
+    )?.yearlyPayment; // find the first year
 
     interface lifetimeTypes {
+      year: number;
+      averagePrice: number;
+      newBuildPrice: number;
       maintenanceCost: number;
-      landMortgagePaymentYearly: number;
-      houseMortgagePaymentYearly: number;
+      landPrice: number;
+      landToTotalRatio: number;
+      incomeYearly: number;
+      affordabilityThresholdIncome: number;
+      landMortgagePaymentYearly: number | undefined;
+      houseMortgagePaymentYearly: number | undefined;
     }
 
     let lifetime: lifetimeTypes[] = [
       {
+        year: 0,
+        averagePrice: averagePriceIterative,
+        newBuildPrice: newBuildPriceIterative,
         maintenanceCost: maintenanceCostIterative,
+        landPrice: landPriceIterative,
+        landToTotalRatio: landToTotalRatioIterative,
+        incomeYearly: incomeYearlyIterative,
+        affordabilityThresholdIncome: affordabilityThresholdIncomeIterative,
         landMortgagePaymentYearly: landMortgagePaymentYearlyIterative,
         houseMortgagePaymentYearly: houseMortgagePaymentYearlyIterative,
       },
     ]; // initialize the forecast
 
-    for (let i = 0; i < yearsForecast - 1; i++) {
+    for (let i = 0; i < this.yearsForecast; i++) {
+      averagePriceIterative =
+        averagePriceIterative * (1 + this.propertyPriceGrowthPerYear); // calculate the average price at a given year
       newBuildPriceIterative =
-        newBuildPriceIterative * (1 + constructionPriceGrowthPerYear); // calculate the new build price at a given year
+        newBuildPriceIterative * (1 + this.constructionPriceGrowthPerYear); // calculate the new build price at a given year
+      landPriceIterative = averagePriceIterative - newBuildPriceIterative; // calculate the land price at agiven year
       maintenanceCostIterative =
-        newBuildPriceIterative * maintenanceCostPercentage; // set the current maintenance cost
+        newBuildPriceIterative * this.maintenanceCostPercentage; // set the current maintenance cost
+      landToTotalRatioIterative = landPriceIterative / averagePriceIterative; // calculate the land to total ratio
+      incomeYearlyIterative =
+        incomeYearlyIterative * (1 + this.incomeGrowthPerYear); // calculate the current income
+      affordabilityThresholdIncomeIterative =
+        incomeYearlyIterative * this.affordabilityThresholdIncomePercentage; // affordable income
 
-      if (i < houseMortgagePaymentYearly.length - 1) {
-        houseMortgagePaymentYearlyIterative =
-          houseMortgagePaymentYearly[i + 1].yearlyPayment; // find the first year
-        landMortgagePaymentYearlyIterative =
-          landMortgagePaymentYearly[i + 1].yearlyPayment; // find the first year
-      } else {
-        houseMortgagePaymentYearlyIterative = 0;
-        landMortgagePaymentYearlyIterative = 0;
-      }
+      houseMortgagePaymentYearlyIterative = houseMortgagePaymentYearly.find(
+        (breakdown) => breakdown.year === i + 1
+      )?.yearlyPayment; // find the first year
+      landMortgagePaymentYearlyIterative = landMortgagePaymentYearly.find(
+        (breakdown) => breakdown.year === i + 1
+      )?.yearlyPayment; // find the first year
 
       lifetime.push({
+        year: i + 1,
+        averagePrice: averagePriceIterative,
+        newBuildPrice: newBuildPriceIterative,
         maintenanceCost: maintenanceCostIterative,
+        landPrice: landPriceIterative,
+        landToTotalRatio: landToTotalRatioIterative,
+        incomeYearly: incomeYearlyIterative,
+        affordabilityThresholdIncome: affordabilityThresholdIncomeIterative,
         landMortgagePaymentYearly: landMortgagePaymentYearlyIterative,
         houseMortgagePaymentYearly: houseMortgagePaymentYearlyIterative,
       }); // add the current price to the new build price forecast
@@ -682,121 +734,127 @@ export class MarketPurchase {
   }
 }
 
-export class MarketRent {
-  affordability?: number; // afforadability
-  averageRentMonthly?: number; // average rent per year
-  averageRentLandMonthly?: number; // mortgage object on the depreciated house
-  averageRentHouseMonthly?: number; // mortgage on the land
-  lifetime?: {
-    averageRentLandYearly: number;
-    averageRentHouseYearly: number;
-  }[]; // lifetime object with projections
+export class tenureMarketRent {
+  averageRentYearly; // average rent per year
+  averagePrice; // average price of the property
+  newBuildPrice; // new build price of the property
+  depreciatedBuildPrice; // depreciated building price
+  landPrice; // land price
+  income; // income
+  affordabilityThresholdIncomePercentage; //  affordability threshold percentage
+  propertyPriceGrowthPerYear; // property price growth per year
+  constructionPriceGrowthPerYear; // construction price growth per year
+  yearsForecast; // years forecast
+  maintenanceCostPercentage; // maintenance cost percentage
+  incomeGrowthPerYear; // income growth per year
+  rentGrowthPerYear; // rent growth per year
+  averageRentLandYearly?: number; // mortgage object on the depreciated house
+  averageRentHouseYearly?: number; // mortgage on the land
+  lifetime?: object; // lifetime object with projections
   constructor({
-    averageRentYearly, // average rent per year
-    averagePrice, // average price of the property
-    newBuildPrice, // average price of the property
-    landPrice, // land price
-    incomeYearly, // income yearly per household
+    averageRentYearly,
+    averagePrice,
+    newBuildPrice,
+    depreciatedBuildPrice,
+    landPrice,
+    income,
+    affordabilityThresholdIncomePercentage, // percentage of income that makes a property afforadable
     propertyPriceGrowthPerYear, // 5% per year
     constructionPriceGrowthPerYear, // 2.5% per year
     yearsForecast, // 40 years
-    rentGrowthPerYear, // rent growth per year
+    maintenanceCostPercentage, // 1.5% percentage maintenance cost
+    incomeGrowthPerYear, // 4% per year income growth
+    rentGrowthPerYear,
   }: {
     averageRentYearly: number;
     averagePrice: number;
     newBuildPrice: number;
     depreciatedBuildPrice: number;
     landPrice: number;
-    incomeYearly: number;
+    income: number;
+    affordabilityThresholdIncomePercentage: number;
     propertyPriceGrowthPerYear: number;
     constructionPriceGrowthPerYear: number;
     yearsForecast: number;
     maintenanceCostPercentage: number;
+    incomeGrowthPerYear: number;
     rentGrowthPerYear: number;
   }) {
-    this.calculateAverageRentLandAndHouse(
-      landPrice,
-      averagePrice,
-      incomeYearly,
-      averageRentYearly
-    );
-    this.calculateLifetime(
-      averagePrice,
-      newBuildPrice,
-      landPrice,
-      averageRentYearly,
-      yearsForecast,
-      propertyPriceGrowthPerYear,
-      constructionPriceGrowthPerYear,
-      rentGrowthPerYear
-    );
+    this.averageRentYearly = averageRentYearly;
+    this.averagePrice = averagePrice;
+    this.newBuildPrice = newBuildPrice;
+    this.depreciatedBuildPrice = depreciatedBuildPrice;
+    this.landPrice = landPrice;
+    this.income = income;
+    this.affordabilityThresholdIncomePercentage =
+      affordabilityThresholdIncomePercentage;
+    this.propertyPriceGrowthPerYear = propertyPriceGrowthPerYear;
+    this.constructionPriceGrowthPerYear = constructionPriceGrowthPerYear;
+    this.yearsForecast = yearsForecast;
+    this.maintenanceCostPercentage = maintenanceCostPercentage;
+    this.incomeGrowthPerYear = incomeGrowthPerYear;
+    this.rentGrowthPerYear = rentGrowthPerYear;
+    this.calculateAverageRentLandAndHouse();
+    this.calculateLifetime();
   }
 
-  calculateAverageRentLandAndHouse(
-    landPrice: number,
-    averagePrice: number,
-    incomeYearly: number,
-    averageRentYearly: number
-  ) {
-    this.averageRentMonthly = averageRentYearly / 12; // set the average rent per month
-    const landToTotalRatio = landPrice / averagePrice;
-    this.averageRentLandMonthly = this.averageRentMonthly * landToTotalRatio; // set the avearage rent for the land
-    this.averageRentHouseMonthly =
-      this.averageRentMonthly - this.averageRentLandMonthly; // set the average rent for the house
-    const affordability = averageRentYearly / incomeYearly; // calculate the affordability
-    this.affordability = affordability;
+  calculateAverageRentLandAndHouse() {
+    const landToTotalRatio = this.landPrice / this.averagePrice;
+    this.averageRentLandYearly = this.averageRentYearly * landToTotalRatio; // set the avearage rent for the land
+    this.averageRentHouseYearly =
+      this.averageRentLandYearly - this.averageRentLandYearly; // set the average rent for the house
   }
 
-  calculateLifetime(
-    averagePrice: number,
-    newBuildPrice: number,
-    landPrice: number,
-    averageRentYearly: number,
-    yearsForecast: number,
-    propertyPriceGrowthPerYear: number,
-    constructionPriceGrowthPerYear: number,
-    rentGrowthPerYear: number
-  ) {
+  calculateLifetime() {
     // initialize the variables that are going to be iterated
-    let averagePriceIterative = averagePrice;
-    let newBuildPriceIterative = newBuildPrice;
-    let landPriceIterative = landPrice;
-    let landToTotalRatioIterative = landPrice / averagePrice;
-    let averageRentYearlyIterative = averageRentYearly; // yearly rent
+    let averagePriceIterative = this.averagePrice;
+    let newBuildPriceIterative = this.newBuildPrice;
+    let landPriceIterative = this.landPrice;
+    let landToTotalRatioIterative = this.landPrice / this.averagePrice;
+    let incomeIterative = this.income; // set the current income
+    let affordabilityThresholdIncomeIterative =
+      incomeIterative * this.affordabilityThresholdIncomePercentage; // affordable income
+    let averageRentYearlyIterative = this.averageRentYearly; // yearly rent
     let averageRentLandYearlyIterative =
       averageRentYearlyIterative * landToTotalRatioIterative; // yearly rent for land
     let averageRentHouseYearlyIterative =
       averageRentYearlyIterative - averageRentLandYearlyIterative; // yearly rent for the house
 
     interface lifetimeTypes {
+      year: number;
       averageRentLandYearly: number;
       averageRentHouseYearly: number;
     }
 
     let lifetime: lifetimeTypes[] = [
       {
+        year: 0,
         averageRentLandYearly: averageRentLandYearlyIterative,
         averageRentHouseYearly: averageRentHouseYearlyIterative,
       },
     ]; // initialize the forecast
 
-    for (let i = 0; i < yearsForecast - 1; i++) {
+    for (let i = 0; i < this.yearsForecast; i++) {
       averagePriceIterative =
-        averagePriceIterative * (1 + propertyPriceGrowthPerYear); // calculate the average price at a given year
+        averagePriceIterative * (1 + this.propertyPriceGrowthPerYear); // calculate the average price at a given year
       newBuildPriceIterative =
-        newBuildPriceIterative * (1 + constructionPriceGrowthPerYear); // calculate the new build price at a given year
+        newBuildPriceIterative * (1 + this.constructionPriceGrowthPerYear); // calculate the new build price at a given year
       landPriceIterative = averagePriceIterative - newBuildPriceIterative; // calculate the land price at agiven year
       landToTotalRatioIterative = landPriceIterative / averagePriceIterative; // calculate the land to total ratio
+      incomeIterative = incomeIterative * (1 + this.incomeGrowthPerYear); // calculate the current income
+      affordabilityThresholdIncomeIterative =
+        incomeIterative * this.affordabilityThresholdIncomePercentage; // affordable income
+
       averageRentYearlyIterative =
-        averageRentYearlyIterative * (1 + rentGrowthPerYear); // calculate the current rent
+        averageRentYearlyIterative * (1 + this.rentGrowthPerYear); // calculate the current rent
+
       averageRentLandYearlyIterative =
         averageRentYearlyIterative * landToTotalRatioIterative; // yearly rent for land
       averageRentHouseYearlyIterative =
         averageRentYearlyIterative - averageRentLandYearlyIterative; // yearly rent for the house
 
-      //affordabilityThresholdIncomeIterative =incomeYearlyIterative * affordabilityThresholdIncomePercentage; // affordable income
-
       lifetime.push({
+        year: i + 1,
         averageRentLandYearly: averageRentLandYearlyIterative,
         averageRentHouseYearly: averageRentHouseYearlyIterative,
       }); // add the current price to the new build price forecast
@@ -805,161 +863,49 @@ export class MarketRent {
   }
 }
 
-export class FairholdLandPurchase {
+export class tenureFairholdLandPurchase {
+  averagePrice: number; // average price of the property
+  newBuildPrice; // new build price of the property
+  depreciatedBuildPrice; // depreciated building price
+  landPrice; // land price
+  incomeYearly; // income Yearly
+  affordabilityThresholdIncomePercentage; //  affordability threshold percentage
+  propertyPriceGrowthPerYear; // property price growth per year
+  constructionPriceGrowthPerYear; // construction price growth per year
+  yearsForecast; // years forecast
+  maintenanceCostPercentage; // maintenance cost percentage
+  incomeGrowthPerYear; // income growth per year
+  affordability;
+  amplitude;
+  length;
+  position;
+  plateau;
+  threshold;
+  discountLand?: number;
   discountedLandPrice?: number;
   discountedLandMortgage?: Mortgage;
   depreciatedHouseMortgage?: Mortgage;
-  lifetime?: {
-    maintenanceCost: number;
-    landMortgagePaymentYearly: number;
-    houseMortgagePaymentYearly: number;
-  }[];
+  lifetime?: object;
   constructor({
-    newBuildPrice, // new build price of the property
-    depreciatedBuildPrice, // depreciated building price
-    constructionPriceGrowthPerYear, // construction price growth per year
-    yearsForecast, // years forecast
-    maintenanceCostPercentage, // maintenance cost percentage
-    fairhold,
-  }: {
-    newBuildPrice: number;
-    depreciatedBuildPrice: number;
-    constructionPriceGrowthPerYear: number;
-    yearsForecast: number;
-    maintenanceCostPercentage: number;
-    incomeGrowthPerYear: number;
-    affordability: number;
-    fairhold: Fairhold;
-  }) {
-    this.calculateFairholdDiscount(fairhold); // calculate the fairhold discountLand
-    this.calculateMortgage(depreciatedBuildPrice); // calculate the mortgage
-    this.calculateLifetime(
-      newBuildPrice,
-      maintenanceCostPercentage,
-      yearsForecast,
-      constructionPriceGrowthPerYear
-    ); // calculate the lifetime
-  }
-
-  calculateFairholdDiscount(fairhold: Fairhold) {
-    let discountedLandPrice = fairhold.calculateDiscountedPriceOrRent(); // calculate the discounted land price
-    this.discountedLandPrice = discountedLandPrice; // discounted land price
-  }
-
-  calculateMortgage(depreciatedBuildPrice: number) {
-    if (this.discountedLandPrice == undefined) {
-      throw new Error("discountedLandPrice is not defined");
-    }
-    this.discountedLandMortgage = new Mortgage({
-      propertyValue: this.discountedLandPrice,
-    });
-
-    this.depreciatedHouseMortgage = new Mortgage({
-      propertyValue: depreciatedBuildPrice,
-    });
-  }
-
-  calculateLifetime(
-    newBuildPrice: number,
-    maintenanceCostPercentage: number,
-    yearsForecast: number,
-    constructionPriceGrowthPerYear: number
-  ) {
-    let newBuildPriceIterative = newBuildPrice;
-    let maintenanceCostIterative = maintenanceCostPercentage * newBuildPrice;
-    // retrieve the mortgage payments for the first year
-    if (
-      this.depreciatedHouseMortgage === undefined ||
-      this.depreciatedHouseMortgage.yearlyPaymentBreakdown === undefined
-    ) {
-      throw new Error("depreciatedHouseMortgage is undefined");
-    }
-
-    interface mortgageBreakdownTypes {
-      yearlyPayment: number;
-      cumulativePaid: number;
-      remainingBalance: number;
-    }
-    const houseMortgagePaymentYearly = this.depreciatedHouseMortgage
-      .yearlyPaymentBreakdown as mortgageBreakdownTypes[];
-    let houseMortgagePaymentYearlyIterative =
-      houseMortgagePaymentYearly[0].yearlyPayment; // find the first year
-
-    if (
-      this.discountedLandMortgage === undefined ||
-      this.discountedLandMortgage.yearlyPaymentBreakdown === undefined
-    ) {
-      throw new Error("depreciatedHouseMortgage is undefined");
-    }
-
-    const landMortgagePaymentYearly = this.discountedLandMortgage
-      .yearlyPaymentBreakdown as mortgageBreakdownTypes[];
-
-    let landMortgagePaymentYearlyIterative =
-      landMortgagePaymentYearly[0].yearlyPayment; // find the first year
-
-    interface lifetimeTypes {
-      maintenanceCost: number;
-      landMortgagePaymentYearly: number;
-      houseMortgagePaymentYearly: number;
-    }
-
-    let lifetime: lifetimeTypes[] = [
-      {
-        maintenanceCost: maintenanceCostIterative,
-        landMortgagePaymentYearly: landMortgagePaymentYearlyIterative,
-        houseMortgagePaymentYearly: houseMortgagePaymentYearlyIterative,
-      },
-    ]; // initialize the forecast
-    for (let i = 0; i < yearsForecast - 1; i++) {
-      newBuildPriceIterative =
-        newBuildPriceIterative * (1 + constructionPriceGrowthPerYear); // calculate the new build price at a given year
-      maintenanceCostIterative =
-        newBuildPriceIterative * maintenanceCostPercentage; // set the current maintenance cost
-
-      if (i < houseMortgagePaymentYearly.length - 1) {
-        houseMortgagePaymentYearlyIterative =
-          houseMortgagePaymentYearly[i + 1].yearlyPayment; // find the first year
-        landMortgagePaymentYearlyIterative =
-          landMortgagePaymentYearly[i + 1].yearlyPayment; // find the first year
-      } else {
-        houseMortgagePaymentYearlyIterative = 0;
-        landMortgagePaymentYearlyIterative = 0;
-      }
-
-      lifetime.push({
-        maintenanceCost: maintenanceCostIterative,
-        landMortgagePaymentYearly: landMortgagePaymentYearlyIterative,
-        houseMortgagePaymentYearly: houseMortgagePaymentYearlyIterative,
-      }); // add the current price to the new build price forecast
-    }
-    this.lifetime = lifetime; // save the object
-  }
-}
-
-export class FairholdLandRent {
-  depreciatedHouseMortgage?: Mortgage; // mortgage on the depreciated house
-  discountedLandRentMonthly?: number; // discounted land rent
-  lifetime?: {
-    maintenanceCost: number;
-    fairholdRentLand: number;
-    houseMortgagePaymentYearly: number;
-  }[]; // lifetime object with projections
-  constructor({
-    averageRentYearly, // average rent per year
     averagePrice, // average price of the property
     newBuildPrice, // new build price of the property
     depreciatedBuildPrice, // depreciated building price
     landPrice, // land price
-    incomeYearly, // yearly income per household
-    propertyPriceGrowthPerYear, // 5% per year
-    constructionPriceGrowthPerYear, // 2.5% per year
-    yearsForecast, // 40 years
-    maintenanceCostPercentage,
-    incomeGrowthPerYear, // 4% per year income growth
-    rentGrowthPerYear, // rent growth per year
+    incomeYearly, // income Yearly
+    affordabilityThresholdIncomePercentage, //  affordability threshold percentage
+    propertyPriceGrowthPerYear, // property price growth per year
+    constructionPriceGrowthPerYear, // construction price growth per year
+    yearsForecast, // years forecast
+    maintenanceCostPercentage, // maintenance cost percentage
+    incomeGrowthPerYear, // income growth per year
+    affordability,
+    originalLandPrice,
+    amplitude,
+    length,
+    position,
+    plateau,
+    threshold,
   }: {
-    averageRentYearly: number;
     averagePrice: number;
     newBuildPrice: number;
     depreciatedBuildPrice: number;
@@ -971,69 +917,89 @@ export class FairholdLandRent {
     yearsForecast: number;
     maintenanceCostPercentage: number;
     incomeGrowthPerYear: number;
-    rentGrowthPerYear: number;
-    fairhold: Fairhold;
+    affordability: number;
+    originalLandPrice: number;
+    amplitude: number;
+    length: number;
+    position: number;
+    plateau: number;
+    threshold: number;
   }) {
-    this.calculateMortgage(depreciatedBuildPrice);
-    this.calculateLifetime(
-      averagePrice,
-      newBuildPrice,
-      landPrice,
-      incomeYearly,
-      averageRentYearly,
-      yearsForecast,
-      propertyPriceGrowthPerYear,
-      constructionPriceGrowthPerYear,
-      incomeGrowthPerYear,
-      rentGrowthPerYear,
-      maintenanceCostPercentage
-    );
+    this.averagePrice = averagePrice; // average price of the property
+    this.newBuildPrice = newBuildPrice; // new build price of the property
+    this.depreciatedBuildPrice = depreciatedBuildPrice; // depreciated building price
+    this.landPrice = landPrice; // land price
+    this.incomeYearly = incomeYearly; // income Yearly
+    this.affordabilityThresholdIncomePercentage =
+      affordabilityThresholdIncomePercentage; //  affordability threshold percentage
+    this.propertyPriceGrowthPerYear = propertyPriceGrowthPerYear; // property price growth per year
+    this.constructionPriceGrowthPerYear = constructionPriceGrowthPerYear; // construction price growth per year
+    this.yearsForecast = yearsForecast; // years forecast
+    this.maintenanceCostPercentage = maintenanceCostPercentage; // maintenance cost percentage
+    this.incomeGrowthPerYear = incomeGrowthPerYear; // income growth per year
+    this.affordability = affordability; // affordability index
+    this.landPrice = landPrice; // price before the discountLand
+    this.depreciatedBuildPrice = depreciatedBuildPrice; // House price
+    this.amplitude = amplitude; // Amplitude in the fairhold formula
+    this.length = length; // length in the fairhold formula
+    this.position = position; // position in the fairhold formula
+    this.plateau = plateau; // plateau in the fairhold formula
+    this.threshold = threshold; // thersold in the fairhold formula
+    this.calculateFairholdDiscount(); // calculate the fairhold discountLand
+    this.calculateDiscountedPrice(); // calculate discounted price
+    this.calculateMortgage(); // calculate the mortgage
+    this.calculateLifetime(); // calculate the lifetime
   }
 
-  calculateMortgage(depreciatedBuildPrice: number) {
+  calculateFairholdDiscount() {
+    if (this.affordability < this.threshold) {
+      this.discountLand =
+        this.amplitude *
+          math.cos((2 * math.pi * this.affordability) / this.length) +
+        this.position; // fairhold formula
+    } else {
+      this.discountLand = this.plateau; // fairhold formula
+    }
+  }
+
+  calculateMortgage() {
+    if (this.discountedLandPrice == undefined) {
+      throw new Error("discountedLandPrice is not defined");
+    }
+    this.discountedLandMortgage = new Mortgage({
+      propertyValue: this.discountedLandPrice,
+    });
+
     this.depreciatedHouseMortgage = new Mortgage({
-      propertyValue: depreciatedBuildPrice,
+      propertyValue: this.depreciatedBuildPrice,
     });
   }
 
-  calculateLifetime(
-    averagePrice: number,
-    newBuildPrice: number,
-    landPrice: number,
-    incomeYearly: number,
-    averageRentYearly: number,
-    yearsForecast: number,
-    propertyPriceGrowthPerYear: number,
-    constructionPriceGrowthPerYear: number,
-    incomeGrowthPerYear: number,
-    rentGrowthPerYear: number,
-    maintenanceCostPercentage: number
-  ) {
-    // initialize the variables that are going to be iterated
-    let averagePriceIterative = averagePrice;
-    let newBuildPriceIterative = newBuildPrice;
-    let landPriceIterative = landPrice;
-    let landToTotalRatioIterative = landPrice / averagePrice;
-    let incomeIterative = incomeYearly; // set the current income
-    let averageRentYearlyIterative = averageRentYearly; // yearly rent
-    let averageRentLandYearlyIterative =
-      averageRentYearlyIterative * landToTotalRatioIterative; // yearly rent for land
-    let affordabilityIterative = averageRentYearlyIterative / incomeIterative; // affordability
-    let maintenanceCostIterative =
-      maintenanceCostPercentage * newBuildPriceIterative;
-
-    let fairholdRentLandIterative = new Fairhold({
-      affordability: affordabilityIterative,
-      landPriceOrRent: averageRentLandYearlyIterative / 12,
-    }).calculateDiscountedPriceOrRent(); // calculate the discounted land rent
-    this.discountedLandRentMonthly = fairholdRentLandIterative;
-
-    interface mortgageBreakdownTypes {
-      yearlyPayment: number;
-      cumulativePaid: number;
-      remainingBalance: number;
+  calculateDiscountedPrice() {
+    if (this.discountLand == undefined) {
+      throw new Error("discountLand is not defined");
     }
 
+    if (this.landPrice < 0) {
+      this.discountedLandPrice = 1; // set a nominal value : check with Ollie
+    } else {
+      this.discountedLandPrice = this.discountLand * this.landPrice;
+    }
+  }
+
+  calculateLifetime() {
+    // initialize the variables that are going to be iterated
+    let averagePriceIterative = this.averagePrice;
+    let newBuildPriceIterative = this.newBuildPrice;
+    let landPriceIterative = this.landPrice;
+    let maintenanceCostIterative =
+      this.maintenanceCostPercentage * this.newBuildPrice;
+    let landToTotalRatioIterative = this.landPrice / this.averagePrice;
+    let incomeYearlyIterative = this.incomeYearly; // set the current income
+    let affordabilityThresholdIncomeIterative =
+      incomeYearlyIterative * this.affordabilityThresholdIncomePercentage; // affordable income
+
+    // retrieve the mortgage payments for the first year
     if (
       this.depreciatedHouseMortgage === undefined ||
       this.depreciatedHouseMortgage.yearlyPaymentBreakdown === undefined
@@ -1041,59 +1007,82 @@ export class FairholdLandRent {
       throw new Error("depreciatedHouseMortgage is undefined");
     }
 
+    interface mortgageBreakdownTypes {
+      year: number;
+      yearlyPayment: number;
+      cumulativePaid: number;
+      remainingBalance: number;
+    }
     const houseMortgagePaymentYearly = this.depreciatedHouseMortgage
       .yearlyPaymentBreakdown as mortgageBreakdownTypes[];
-    let houseMortgagePaymentYearlyIterative =
-      houseMortgagePaymentYearly[0].yearlyPayment; // find the first year
+    const landMortgagePaymentYearly = this.landMortgage
+      .yearlyPaymentBreakdown as mortgageBreakdownTypes[];
+    let houseMortgagePaymentYearlyIterative = houseMortgagePaymentYearly.find(
+      (breakdown) => breakdown.year === 0
+    )?.yearlyPayment; // find the first year
+    let landMortgagePaymentYearlyIterative = landMortgagePaymentYearly.find(
+      (breakdown) => breakdown.year === 0
+    )?.yearlyPayment; // find the first year
 
     interface lifetimeTypes {
+      year: number;
+      averagePrice: number;
+      newBuildPrice: number;
       maintenanceCost: number;
-      fairholdRentLand: number;
-      houseMortgagePaymentYearly: number;
+      landPrice: number;
+      landToTotalRatio: number;
+      incomeYearly: number;
+      affordabilityThresholdIncome: number;
+      landMortgagePaymentYearly: number | undefined;
+      houseMortgagePaymentYearly: number | undefined;
     }
 
     let lifetime: lifetimeTypes[] = [
       {
+        year: 0,
+        averagePrice: averagePriceIterative,
+        newBuildPrice: newBuildPriceIterative,
         maintenanceCost: maintenanceCostIterative,
-        fairholdRentLand: fairholdRentLandIterative,
+        landPrice: landPriceIterative,
+        landToTotalRatio: landToTotalRatioIterative,
+        incomeYearly: incomeYearlyIterative,
+        affordabilityThresholdIncome: affordabilityThresholdIncomeIterative,
+        landMortgagePaymentYearly: landMortgagePaymentYearlyIterative,
         houseMortgagePaymentYearly: houseMortgagePaymentYearlyIterative,
       },
     ]; // initialize the forecast
 
-    for (let i = 0; i < yearsForecast - 1; i++) {
+    for (let i = 0; i < this.yearsForecast; i++) {
       averagePriceIterative =
-        averagePriceIterative * (1 + propertyPriceGrowthPerYear); // calculate the average price at a given year
+        averagePriceIterative * (1 + this.propertyPriceGrowthPerYear); // calculate the average price at a given year
       newBuildPriceIterative =
-        newBuildPriceIterative * (1 + constructionPriceGrowthPerYear); // calculate the new build price at a given year
+        newBuildPriceIterative * (1 + this.constructionPriceGrowthPerYear); // calculate the new build price at a given year
       landPriceIterative = averagePriceIterative - newBuildPriceIterative; // calculate the land price at agiven year
-      landToTotalRatioIterative = landPriceIterative / averagePriceIterative; // calculate the land to total ratio
-      incomeIterative = incomeIterative * (1 + incomeGrowthPerYear); // calculate the current income
       maintenanceCostIterative =
-        maintenanceCostPercentage * newBuildPriceIterative; // calculate the curretn maintenance cost
+        newBuildPriceIterative * this.maintenanceCostPercentage; // set the current maintenance cost
+      landToTotalRatioIterative = landPriceIterative / averagePriceIterative; // calculate the land to total ratio
+      incomeYearlyIterative =
+        incomeYearlyIterative * (1 + this.incomeGrowthPerYear); // calculate the current income
+      affordabilityThresholdIncomeIterative =
+        incomeYearlyIterative * this.affordabilityThresholdIncomePercentage; // affordable income
 
-      averageRentYearlyIterative =
-        averageRentYearlyIterative * (1 + rentGrowthPerYear); // calculate the current rent
-
-      averageRentLandYearlyIterative =
-        averageRentYearlyIterative * landToTotalRatioIterative; // yearly rent for land
-
-      let affordabilityIterative = averageRentYearlyIterative / incomeIterative; // affordability
-
-      let fairholdRentLandIterative = new Fairhold({
-        affordability: affordabilityIterative,
-        landPriceOrRent: averageRentLandYearlyIterative,
-      }).calculateDiscountedPriceOrRent(); // calculate the discounted land rent
-
-      if (i < houseMortgagePaymentYearly.length - 1) {
-        houseMortgagePaymentYearlyIterative =
-          houseMortgagePaymentYearly[i + 1].yearlyPayment; // find the first year
-      } else {
-        houseMortgagePaymentYearlyIterative = 0;
-      }
+      houseMortgagePaymentYearlyIterative = houseMortgagePaymentYearly.find(
+        (breakdown) => breakdown.year === i + 1
+      )?.yearlyPayment; // find the first year
+      landMortgagePaymentYearlyIterative = landMortgagePaymentYearly.find(
+        (breakdown) => breakdown.year === i + 1
+      )?.yearlyPayment; // find the first year
 
       lifetime.push({
+        year: i + 1,
+        averagePrice: averagePriceIterative,
+        newBuildPrice: newBuildPriceIterative,
         maintenanceCost: maintenanceCostIterative,
-        fairholdRentLand: fairholdRentLandIterative,
+        landPrice: landPriceIterative,
+        landToTotalRatio: landToTotalRatioIterative,
+        incomeYearly: incomeYearlyIterative,
+        affordabilityThresholdIncome: affordabilityThresholdIncomeIterative,
+        landMortgagePaymentYearly: landMortgagePaymentYearlyIterative,
         houseMortgagePaymentYearly: houseMortgagePaymentYearlyIterative,
       }); // add the current price to the new build price forecast
     }
@@ -1101,37 +1090,38 @@ export class FairholdLandRent {
   }
 }
 
-export class SocialRent {
-  socialRentAverageEarning; // average social rent
+export class tenureFairholdLandRent {}
+
+export class tenureSocialRent {
+  socialRentAveEarning; // average social rent
   socialRentAdjustments; //rent adjustment values
   housePriceIndex; // house price index
-  //property; // preoperty information
+  property; // preoperty information
   adjustedSocialRentMonthly?: number; //adjusted social rent monthly
   socialRentMonthlyLand?: number; // social rent to pay the land
   socialRentMonthlyHouse?: number; // social rent monthly House
   relativeLocalEarning?: number; // relative local earnings
   formulaRentWeekly?: number; // weekly rent
   constructor({
-    socialRentAverageEarning,
+    socialRentAveEarning,
     socialRentAdjustments,
     housePriceIndex,
     property,
   }: {
-    socialRentAverageEarning: number;
+    socialRentAveEarning: number;
     socialRentAdjustments: any;
     housePriceIndex: number;
     property: Property;
   }) {
-    this.socialRentAverageEarning = socialRentAverageEarning;
+    this.socialRentAveEarning = socialRentAveEarning;
     this.socialRentAdjustments = socialRentAdjustments;
     this.housePriceIndex = housePriceIndex;
-    //this.property = property;
-    this.calculateSocialRent(property);
+    this.property = property;
+    this.calculateSocialRent();
   }
 
   calculateSocialRent(
-    property: any,
-    numberOfBeds: number = property.numberOfBedrooms,
+    numberOfBeds: number = this.property.numberOfBedrooms,
     beds: number[] = [0, 1, 2, 3, 4, 5, 6],
     bedWeights: number[] = [0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4],
     socialRentCapValues: number[] = [
@@ -1153,7 +1143,7 @@ export class SocialRent {
     }
 
     const relativeLocalEarning =
-      this.socialRentAverageEarning / nationalAverageEarnings; // relative local earnings
+      this.socialRentAveEarning / nationalAverageEarnings; // relative local earnings
     this.relativeLocalEarning = relativeLocalEarning;
 
     const relativePropertyValue =
@@ -1185,104 +1175,176 @@ export class SocialRent {
     const adjustedSocialRentMonthly = socialRentWeekly * 4.2; // define the monthly social rent
 
     this.adjustedSocialRentMonthly = adjustedSocialRentMonthly; // set the value of adjusted social rent monthly
-    if (property.landToTotalRatio == undefined)
+    if (this.property.landToTotalRatio == undefined)
       throw new Error("landToTotalRatio is undefined");
     this.socialRentMonthlyLand =
-      adjustedSocialRentMonthly * property.landToTotalRatio; // set the rent value paid for the land
+      adjustedSocialRentMonthly * this.property.landToTotalRatio; // set the rent value paid for the land
     this.socialRentMonthlyHouse =
       adjustedSocialRentMonthly - this.socialRentMonthlyLand; // set the rent value paid or the house
   }
 }
 
-// interface for managing the forecastParameters types
-interface forecastParameters {
-  maintenanceCostPercentage: number;
-  incomeGrowthPerYear: number;
-  rentGrowthPerYear: number;
-  constructionPriceGrowthPerYear: number;
-  propertyPriceGrowthPerYear: number;
-  yearsForecast: number;
-  affordabilityThresholdIncomePercentage: number;
-}
 export class Household {
-  incomePerPersonYearly; // income per person
+  incomePerPerson; // income per person
+  averageRent; // average rent
+  socialRentAveEarning; // average social rent
+  socialRentAdjustments; //rent adjustment values
+  housePriceIndex; // house price index
   gasBillYearly; // gas bill monthly
   property; // property object
-  forecastParameters; // forecast parameters
-  incomeYearly!: number; // income per household
-  tenure: {
-    marketPurchase?: MarketPurchase;
-    marketRent?: MarketRent;
-    socialRent?: SocialRent;
-    fairholdLandPurchase?: FairholdLandPurchase;
-    fairholdLandRent?: FairholdLandRent;
-  }; // grouped tenure field
-
-  lifetime?: {
-    affordabilityThresholdIncome: number;
-    incomeYearly: number;
-  }[];
-
+  averageRentLand?: number; // average rent for the land
+  averageRentHouse?: number; // average rent for the house
+  income?: number; // income per household
+  adjustedSocialRentMonthly?: number; //adjusted social rent monthly
+  socialRentMonthlyLand?: number; // social rent to pay the land
+  socialRentMonthlyHouse?: number; // social rent monthly House
+  relativeLocalEarning?: number; // relative local earnings
+  formulaRentWeekly?: number; // weekly rent
   constructor({
-    incomePerPersonYearly,
-    averageRentYearly,
-    socialRentAverageEarning,
+    incomePerPerson,
+    averageRent,
+    socialRentAveEarning,
     socialRentAdjustments,
     housePriceIndex,
-    gasBillYearly,
     property,
-    forecastParameters = {
-      maintenanceCostPercentage: 0.0125, // percentage maintenance cost
-      incomeGrowthPerYear: 0.04, // 4% income growth per year
-      constructionPriceGrowthPerYear: 0.025, // 2.5%
-      rentGrowthPerYear: 0.03, // 3%
-      propertyPriceGrowthPerYear: 0.05, // 5%
-      yearsForecast: 40, // 40 years
-      affordabilityThresholdIncomePercentage: 0.35, // percentage of imcome to afford rent or purchase
-    },
   }: {
-    incomePerPersonYearly: number;
-    averageRentYearly: number;
-    socialRentAverageEarning: number;
+    incomePerPerson: number;
+    averageRent: number;
+    socialRentAveEarning: number;
     socialRentAdjustments: any;
     housePriceIndex: number;
-    gasBillYearly: number;
     property: Property;
-    forecastParameters: forecastParameters;
   }) {
-    this.incomePerPersonYearly = incomePerPersonYearly;
+    this.incomePerPerson = incomePerPerson;
+    this.averageRent = averageRent;
+    this.socialRentAveEarning = socialRentAveEarning;
+    this.socialRentAdjustments = socialRentAdjustments;
+    this.housePriceIndex = housePriceIndex;
     this.gasBillYearly = gasBillYearly;
     this.property = property;
-    this.forecastParameters = forecastParameters;
-    this.tenure = {}; // Initialize the tenure object
+    this.calculateAverageRentLandAndHouse();
+    this.calculateSocialRent();
     this.calculateHouseholdIncome();
-    this.calculateTenures(
-      averageRentYearly,
-      socialRentAverageEarning,
-      socialRentAdjustments,
-      housePriceIndex
-    );
-    this.calculateLifetime(
-      this.incomeYearly,
-      forecastParameters.incomeGrowthPerYear,
-      forecastParameters.affordabilityThresholdIncomePercentage,
-      forecastParameters.yearsForecast
-    );
+    this.calculateMortgageValues();
+    this.calculateFairholdValues();
+    this.calculateForecast();
   }
 
-  calculateHouseholdIncome(houseMultiplier: number = 2.4) {
-    this.incomeYearly = houseMultiplier * this.incomePerPersonYearly; // calculate the income for house hold
+  calculateAverageRentLandAndHouse() {
+    if (this.property.landToTotalRatio == undefined)
+      throw new Error("landToTotalRatio is undefined");
+    this.averageRentLand = this.averageRent * this.property.landToTotalRatio; // set the avearage rent for the land
+    this.averageRentHouse = this.averageRent - this.averageRentLand; // set the average rent for the house
   }
-
-  calculateTenures(
-    averageRentYearly: number,
-    socialRentAverageEarning: number,
-    socialRentAdjustments: any,
-    housePriceIndex: number
+  calculateSocialRent(
+    numberOfBeds: number = this.property.numberOfBedrooms,
+    beds: number[] = [0, 1, 2, 3, 4, 5, 6],
+    bedWeights: number[] = [0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4],
+    socialRentCapValues: number[] = [
+      155.73, 155.73, 164.87, 174.03, 183.18, 192.35, 201.5,
+    ],
+    precisionRounding: number = 2,
+    nationalAverageRent: number = 54.62, // national average rent :check with Ollie
+    nationalAverageProperty: number = 49750, // national average property value: check with Ollie
+    nationalAverageEarnings: number = 316.4 // check with Ollie
   ) {
-    if (this.incomeYearly == undefined) throw new Error("income is undefined");
-    if (this.property.newBuildPrice == undefined)
-      throw new Error("newBuildPrice is undefined");
+    let bedWeight; // initialize the bedWeight variable
+    let rentCapWeekly; // initialize the rent Cap values
+    if (numberOfBeds < beds[beds.length - 1]) {
+      bedWeight = bedWeights[numberOfBeds]; // assign the weight based on the number of beds
+      rentCapWeekly = socialRentCapValues[numberOfBeds]; // assign the rent cap value based on the number of beds
+    } else {
+      bedWeight = bedWeights[bedWeights.length - 1]; // assign the last value if out of scale
+      rentCapWeekly = socialRentCapValues[bedWeights.length - 1]; // assign the last value if out of scale
+    }
+
+    const relativeLocalEarning =
+      this.socialRentAveEarning / nationalAverageEarnings; // relative local earnings
+    this.relativeLocalEarning = relativeLocalEarning;
+
+    const relativePropertyValue =
+      this.housePriceIndex / nationalAverageProperty; // relative property value
+
+    const formulaRentWeekly =
+      0.7 * nationalAverageRent * relativeLocalEarning * bedWeight +
+      0.3 * nationalAverageRent * relativePropertyValue;
+    this.formulaRentWeekly = formulaRentWeekly;
+
+    let adjustedRentWeekly = formulaRentWeekly; // Initialize the adjusted rent weekly
+    // Loop through each rent adjustment up to the second to last year
+    if (this.socialRentAdjustments == undefined)
+      throw new Error("socialRentAdjustments is undefined");
+
+    for (let i = 0; i < this.socialRentAdjustments.length - 2; i++) {
+      const adjustment = this.socialRentAdjustments[i]; // Get the current adjustment
+      const adjustmentFactor = adjustment.total / 100 + 1; // Calculate the adjustment factor
+      adjustedRentWeekly *= adjustmentFactor; // Apply the adjustment
+    }
+
+    let socialRentWeekly; // initialize the variable
+    if (adjustedRentWeekly < rentCapWeekly) {
+      socialRentWeekly = adjustedRentWeekly;
+    } else {
+      socialRentWeekly = rentCapWeekly;
+    }
+
+    const adjustedSocialRentMonthly = socialRentWeekly * 4.2; // define the monthly social rent
+
+    this.adjustedSocialRentMonthly = adjustedSocialRentMonthly; // set the value of adjusted social rent monthly
+    if (this.property.landToTotalRatio == undefined)
+      throw new Error("landToTotalRatio is undefined");
+    this.socialRentMonthlyLand =
+      adjustedSocialRentMonthly * this.property.landToTotalRatio; // set the rent value paid for the land
+    this.socialRentMonthlyHouse =
+      adjustedSocialRentMonthly - this.socialRentMonthlyLand; // set the rent value paid or the house
+  }
+  calculateHouseholdIncome(houseMultiplier: number = 2.4) {
+    this.income = houseMultiplier * this.incomePerPerson; // calculate the income for house hold
+    this.rentAffordability = this.averageRent / (this.income / 12); // calculate the rent affordability
+  }
+
+  calculateMortgageValues() {
+    this.mortgageMarket = new Mortgage({
+      propertyValue: this.property.averagePrice,
+    }); // create the mortgage object for the market value
+    if (
+      this.property.newBuildPrice == undefined ||
+      this.property.depreciatedBuildPrice == undefined
+    )
+      throw new Error(
+        "either newBuildPrice or depreciatedBuildPrice are undefined"
+      );
+
+    this.mortgageHouse = new Mortgage({
+      propertyValue: this.property.newBuildPrice,
+    }); // create the mortgage object for the new build price
+    this.mortgageDepreciatedHouse = new Mortgage({
+      propertyValue: this.property.depreciatedBuildPrice,
+    }); // create the mortgage object for the depreciated build price
+    this.mortgageLand = new Mortgage({
+      propertyValue: this.property.averagePrice - this.property.newBuildPrice,
+    }); // create the mortgage object for the land. Check with Ollie, shouldn't it be depreciated house?
+
+    if (
+      this.mortgageMarket.monthlyPayment == undefined ||
+      this.income == undefined
+    )
+      throw new Error("either monthlyPayment or income undefined");
+
+    this.mortgageMarketAffordability =
+      this.mortgageMarket.monthlyPayment / (this.income / 12); // calculate the mortage market affordability
+  }
+  calculateFairholdValues() {
+    if (
+      this.mortgageMarketAffordability == undefined ||
+      this.rentAffordability == undefined ||
+      this.property.landPrice == undefined ||
+      this.averageRentLand == undefined
+    )
+      throw new Error(
+        "either mortgageMarketAffordability or rentAffordability or property.landPrice or averageRentLand are undefined"
+      );
+
     if (this.property.depreciatedBuildPrice == undefined)
       throw new Error("depreciatedBuildPrice is undefined");
     if (this.property.landPrice == undefined)
