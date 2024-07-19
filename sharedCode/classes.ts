@@ -769,7 +769,7 @@ export class Household {
 }
 
 // create the interface
-export interface forecastTypes {
+export interface lifetimeTypes {
   year: number;
   averagePrice: number;
   newBuildPrice: number;
