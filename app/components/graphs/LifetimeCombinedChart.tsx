@@ -4,6 +4,7 @@ import React, { useEffect, useRef } from 'react';
 import {
     Chart,
     ChartData,
+    ChartDataset,
     ChartOptions,
     ChartTypeRegistry,
     PointElement,
@@ -24,8 +25,8 @@ type DataInput = {
     year: string;
     landCost: number;
     houseCost: number;
-    maintenanceCost: number;
-    billsCost: number;
+    maintenanceCost?: number | null;
+    billsCost?: number | null;
     incomeThreshold: number;
 }
 
@@ -56,50 +57,58 @@ const LifetimeCombinedChart: React.FC<LifetimeChartProps> = ({ data, colorScheme
         const years = data.map(item => item.year);
         const landData = data.map(item => item.landCost);
         const houseData = data.map(item => item.houseCost);
-        const maintenanceData = data.map(item => item.maintenanceCost);
-        const billsData = data.map(item => item.billsCost);
+        const maintenanceData = data.map(item => item.maintenanceCost ?? null);
+        const billsData = data.map(item => item.billsCost ?? null);
         const affordabilityThreshold = data.map(item => item.incomeThreshold);
+
+        const datasets: ChartDataset<'bar' | 'line', number[]>[] = [
+          {
+              type: 'bar' as const,
+              label: 'Land',
+              data: landData,
+              backgroundColor: colorScheme.land,
+              order: 1,
+          },
+          {
+              type: 'bar' as const,
+              label: 'House',
+              data: houseData,
+              backgroundColor: colorScheme.house,
+              order: 2,
+          },
+          {
+              type: 'line',
+              label: 'Affordability threshold',
+              data: affordabilityThreshold,
+              borderColor: colorScheme.incomeThreshold,
+              backgroundColor: 'transparent',
+              order: 0,
+          },
+      ];
+      // Only add maintenance data if it exists
+      if (maintenanceData.some(value => value !== null)) {
+          datasets.push({
+              type: 'bar' as const,
+              label: 'Maintenance',
+              data: maintenanceData.map(value => value ?? 0),
+              backgroundColor: colorScheme.maintenance,
+              order: 3,
+          });
+      }
+      // Only add bills data if it exists
+      if (billsData.some(value => value !== null)) {
+          datasets.push({
+              type: 'bar' as const,
+              label: 'Bills',
+              data: billsData.map(value => value ?? 0),
+              backgroundColor: colorScheme.bills,
+              order: 2,
+          });
+      }
 
         const chartData: ChartData<'bar' | 'line', number[], string> = {
             labels: years,
-            datasets: [
-                {
-                    type: 'bar' as const,
-                    label: 'Land',
-                    data: landData,
-                    backgroundColor: colorScheme.land,
-                    order: 5, 
-                },
-                {
-                    type: 'bar' as const,
-                    label: 'House',
-                    data: houseData,
-                    backgroundColor: colorScheme.house,
-                    order: 4, 
-                },
-                {
-                    type: 'bar' as const,
-                    label: 'Maintenance',
-                    data: maintenanceData,
-                    backgroundColor: colorScheme.maintenance,
-                    order: 3, 
-                },
-                {
-                    type: 'bar',
-                    label: 'Bills',
-                    data: billsData,
-                    backgroundColor: colorScheme.bills,
-                    order: 2, 
-                },
-                {
-                    type: 'line',
-                    label: 'Affordability threshold',
-                    data: affordabilityThreshold,
-                    borderColor: colorScheme.incomeThreshold,
-                    backgroundColor: 'transparent',
-                    order: 1, 
-                },
-            ]
+            datasets: datasets,
         };
 
         // Clear the canvas before re-drawing
