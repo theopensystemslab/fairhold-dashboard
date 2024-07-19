@@ -3,11 +3,19 @@ import React from 'react';
 import { Household, lifetimeTypes } from '@/sharedCode/classes';
 import LifetimeCombinedChart from './LifetimeCombinedChart';
 
+<<<<<<< HEAD
 interface LifetimeMarketPurchaseWrapperProps {
     household: Household;
   }
 
 const LifetimeMarketPurchaseWrapper: React.FC<LifetimeMarketPurchaseWrapperProps> = ({ household }) => {
+=======
+interface LifetimeCombinedWrapperProps {
+    household: Household;
+  }
+
+const LifetimeMarketPurchaseWrapper: React.FC<LifetimeCombinedWrapperProps> = ({ household }) => {
+>>>>>>> e2c978c (Restructured generic wrapper into market purchase)
   console.log('LifetimeMarketPurchaseWrapper household: ', household)
 
   // Create color scheme for different versions of the graph
