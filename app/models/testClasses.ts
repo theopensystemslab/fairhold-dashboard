@@ -1,6 +1,10 @@
+<<<<<<< HEAD:app/models/testClasses.ts
 import { DEFAULT_FORECAST_PARAMETERS } from "./ForecastParameters";
 import { Household } from "./Household";
 import { Property } from "./Property";
+=======
+import { Property, Fairhold, Household } from "./classes";
+>>>>>>> e9c1d62 (Fixed a mistake in calculating averageRentHouseYearly):sharedCode/testClasses.ts
 
 function calculateFairhold(responseData: any) {
   if (!responseData.buildPrice || responseData.buildPrice.length === 0) {
@@ -22,16 +26,37 @@ function calculateFairhold(responseData: any) {
     itl3: responseData.itl3,
   });
 
+  // define the forecast parameters
+  const forecastParameters = {
+    maintenanceCostPercentage: 0.0125, // percentage maintenance cost
+    incomeGrowthPerYear: 0.04, // 4% income growth per year
+    constructionPriceGrowthPerYear: 0.025, // 2.5%
+    rentGrowthPerYear: 0.03, // 3%
+    propertyPriceGrowthPerYear: 0.05, // 5%
+    yearsForecast: 40, // 40 years
+    affordabilityThresholdIncomePercentage: 0.35, // percentage of imcome to afford rent or purchase
+  };
+
   // define the household object
   const household = new Household({
+<<<<<<< HEAD:app/models/testClasses.ts
     incomePerPersonYearly: responseData.gdhi,
     averageRentYearly: responseData.averageRentMonthly * 12,
     socialRentAverageEarning: responseData.socialRentAverageEarning,
+=======
+    incomePerPerson: responseData.gdhi,
+    averageRentYearly: responseData.averageRent * 12,
+    socialRentAveEarning: responseData.socialRentAveEarning,
+>>>>>>> e9c1d62 (Fixed a mistake in calculating averageRentHouseYearly):sharedCode/testClasses.ts
     socialRentAdjustments: responseData.socialRentAdjustments,
     housePriceIndex: responseData.hpi,
     gasBillYearly: responseData.gasBillYearly,
     property: property,
+<<<<<<< HEAD:app/models/testClasses.ts
     forecastParameters: DEFAULT_FORECAST_PARAMETERS,
+=======
+    forecastParameters: forecastParameters,
+>>>>>>> e9c1d62 (Fixed a mistake in calculating averageRentHouseYearly):sharedCode/testClasses.ts
   });
   console.log(household);
   return household;
