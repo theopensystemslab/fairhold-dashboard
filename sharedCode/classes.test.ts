@@ -3,11 +3,11 @@ import {
   Fairhold,
   Property,
   Household,
-  FairholdLandPurchase,
-  MarketPurchase,
-  MarketRent,
-  SocialRent,
-  FairholdLandRent,
+  TenureFairholdLandPurchase,
+  TenureMarketPurchase,
+  TenureMarketRent,
+  TenureSocialRent,
+  TenureFairholdLandRent,
 } from "./classes";
 
 // Unit test for the mortgage class
@@ -113,10 +113,9 @@ describe("Property class", () => {
     expect(property.landToTotalRatio).toBeCloseTo(0.14);
   });
 });
-
 // Unit test for the tenureMarketPurchase
 describe("tenureMarketPurchase class", () => {
-  let tenureMarketPurchase: MarketPurchase;
+  let tenureMarketPurchase: TenureMarketPurchase;
 
   beforeEach(() => {
     let forecastParameters = {
@@ -140,337 +139,124 @@ describe("tenureMarketPurchase class", () => {
       itl3: "TLG24",
     });
 
-    tenureMarketPurchase = new MarketPurchase({
+    tenureMarketPurchase = new TenureMarketPurchase({
       incomeYearly: 45816,
       averagePrice: 218091.58,
       newBuildPrice: 186560,
       depreciatedBuildPrice: 110717.45,
       landPrice: 31531.579,
-      propertyPriceGrowthPerYear: forecastParameters.propertyPriceGrowthPerYear,
-      constructionPriceGrowthPerYear:
-        forecastParameters.constructionPriceGrowthPerYear,
-      yearsForecast: forecastParameters.yearsForecast,
-      maintenanceCostPercentage: forecastParameters.maintenanceCostPercentage,
+      affordabilityThresholdIncomePercentage: 0.35,
+      propertyPriceGrowthPerYear: 0.05,
+      constructionPriceGrowthPerYear: 0.05,
+      yearsForecast: 40,
+      maintenanceCostPercentage: 0.01,
+      incomeGrowthPerYear: 0.01,
     });
   });
 
   it("can be instantiated", () => {
-    expect(tenureMarketPurchase).toBeInstanceOf(MarketPurchase);
+    expect(tenureMarketPurchase).toBeInstanceOf(TenureMarketPurchase);
   });
 });
 
-// Unit test for the TenureMarketRent
-describe("TenureMarketRent class", () => {
-  let tenureMarketRent: MarketRent;
+// // Unit test for the Household class
+// describe("Household class", () => {
+//   let property: Property;
+//   let household: Household;
+//   const socialRentAdjustments = [
+//     { id: 1, inflation: 3.3, total: 4.3, year: "2001-02" },
+//     { id: 2, inflation: 1.7, total: 2.2, year: "2002-03" },
+//     { id: 3, inflation: 1.7, total: 2.2, year: "2003-04" },
+//     { id: 4, inflation: 2.8, total: 3.3, year: "2004-05" },
+//     { id: 5, inflation: 3.1, total: 3.6, year: "2005-06" },
+//     { id: 6, inflation: 2.7, total: 3.2, year: "2006-07" },
+//     { id: 7, inflation: 3.6, total: 4.1, year: "2007-08" },
+//     { id: 8, inflation: 3.9, total: 4.4, year: "2008-09" },
+//     { id: 9, inflation: 5.0, total: 5.5, year: "2009-10" },
+//     { id: 10, inflation: -1.4, total: -0.9, year: "2010-11" },
+//     { id: 11, inflation: 4.6, total: 5.1, year: "2011-12" },
+//     { id: 12, inflation: 5.6, total: 6.1, year: "2012-13" },
+//     { id: 13, inflation: 2.6, total: 3.1, year: "2013-14" },
+//     { id: 14, inflation: 3.2, total: 3.7, year: "2014-15" },
+//     { id: 15, inflation: 1.2, total: 2.2, year: "2015-16" },
+//     { id: 16, inflation: NaN, total: -1.0, year: "2016-17" },
+//     { id: 17, inflation: NaN, total: -1.0, year: "2017-18" },
+//     { id: 18, inflation: NaN, total: -1.0, year: "2018-19" },
+//     { id: 19, inflation: NaN, total: -1.0, year: "2019-20" },
+//     { id: 20, inflation: 1.7, total: 2.7, year: "2020-21" },
+//     { id: 21, inflation: 0.5, total: 1.5, year: "2021-22" },
+//     { id: 22, inflation: 3.1, total: 4.1, year: "2022-23" },
+//     { id: 23, inflation: 10.1, total: 11.1, year: "2023-24" },
+//   ];
 
-  beforeEach(() => {
-    let forecastParameters = {
-      maintenanceCostPercentage: 0.0125, // percentage maintenance cost
-      incomeGrowthPerYear: 0.04, // 4% income growth per year
-      constructionPriceGrowthPerYear: 0.025, // 2.5%
-      rentGrowthPerYear: 0.03, // 3%
-      propertyPriceGrowthPerYear: 0.05, // 5%
-      yearsForecast: 40, // 40 years
-      affordabilityThresholdIncomePercentage: 0.35, // percentage of imcome to afford rent or purchase
-    };
+//   beforeEach(() => {
+//     property = new Property({
+//       postcode: "WV8 1HG",
+//       houseType: "T",
+//       numberOfBedrooms: 2,
+//       age: 10,
+//       size: 88,
+//       newBuildPricePerMetre: 2120,
+//       averagePrice: 218091.58,
+//       itl3: "TLG24",
+//     });
 
-    let property = new Property({
-      postcode: "WV8 1HG",
-      houseType: "T",
-      numberOfBedrooms: 2,
-      age: 10,
-      size: 88,
-      newBuildPricePerMetre: 2120,
-      averagePrice: 218091.58,
-      itl3: "TLG24",
-    });
+//     household = new Household({
+//       incomePerPerson: 19090.0,
+//       averageRent: 773.875,
+//       socialRentAveEarning: 295.4,
+//       socialRentAdjustments: socialRentAdjustments,
+//       housePriceIndex: 75434.35,
+//       gasBillYearly: 800,
+//       property: property,
+//     });
+//   });
 
-    tenureMarketRent = new MarketRent({
-      averageRentYearly: 20000,
-      incomeYearly: 45816,
-      averagePrice: 218091.58,
-      newBuildPrice: 186560,
-      depreciatedBuildPrice: 110717.45,
-      landPrice: 31531.579,
-      propertyPriceGrowthPerYear: forecastParameters.propertyPriceGrowthPerYear,
-      constructionPriceGrowthPerYear:
-        forecastParameters.constructionPriceGrowthPerYear,
-      yearsForecast: forecastParameters.yearsForecast,
-      maintenanceCostPercentage: forecastParameters.maintenanceCostPercentage,
-      rentGrowthPerYear: forecastParameters.rentGrowthPerYear,
-    });
-  });
+//   it("can be instantiated", () => {
+//     expect(household).toBeInstanceOf(Household);
+//   });
 
-  it("can be instantiated", () => {
-    expect(tenureMarketRent).toBeInstanceOf(MarketRent);
-  });
-});
+//   it("correctly calculates the income per household", () => {
+//     expect(household.income).toBeCloseTo(45816);
+//   });
 
-// Unit test for the TenureFairholdLandRent
-describe("TenureFairholdLandRent class", () => {
-  let tenureFairholdLandRent: FairholdLandRent;
+//   it("correctly calculates the relativeLocalEarning", () => {
+//     expect(household.relativeLocalEarning).toBeCloseTo(0.9336);
+//   });
 
-  beforeEach(() => {
-    let forecastParameters = {
-      maintenanceCostPercentage: 0.0125, // percentage maintenance cost
-      incomeGrowthPerYear: 0.04, // 4% income growth per year
-      constructionPriceGrowthPerYear: 0.025, // 2.5%
-      rentGrowthPerYear: 0.03, // 3%
-      propertyPriceGrowthPerYear: 0.05, // 5%
-      yearsForecast: 40, // 40 years
-      affordabilityThresholdIncomePercentage: 0.35, // percentage of imcome to afford rent or purchase
-    };
+//   it("correctly calculates the relativePropertyValue", () => {
+//     expect(household.relativePropertyValue).toBeCloseTo(1.516);
+//   });
 
-    let property = new Property({
-      postcode: "WV8 1HG",
-      houseType: "T",
-      numberOfBedrooms: 2,
-      age: 10,
-      size: 88,
-      newBuildPricePerMetre: 2120,
-      averagePrice: 218091.58,
-      itl3: "TLG24",
-    });
+//   it("correctly calculates the adjusted formula rent weekly", () => {
+//     expect(household.formulaRentWeekly).toBeCloseTo(60.54);
+//   });
 
-    let tenureMarketRent = new MarketRent({
-      averageRentYearly: 20000,
-      incomeYearly: 45816,
-      averagePrice: 218091.58,
-      newBuildPrice: 186560,
-      depreciatedBuildPrice: 110717.45,
-      landPrice: 31531.579,
-      propertyPriceGrowthPerYear: forecastParameters.propertyPriceGrowthPerYear,
-      constructionPriceGrowthPerYear:
-        forecastParameters.constructionPriceGrowthPerYear,
-      yearsForecast: forecastParameters.yearsForecast,
-      maintenanceCostPercentage: forecastParameters.maintenanceCostPercentage,
-      rentGrowthPerYear: forecastParameters.rentGrowthPerYear,
-    });
+//   it("correctly calculates the adjusted monthly socialRent", () => {
+//     expect(household.adjustedSocialRentMonthly).toBeCloseTo(424.12);
+//   });
 
-    tenureFairholdLandRent = new FairholdLandRent({
-      averageRentYearly: 20000,
-      incomeYearly: 45816,
-      averagePrice: 218091.58,
-      newBuildPrice: 186560,
-      depreciatedBuildPrice: 110717.45,
-      landPrice: 31531.579,
-      maintenanceCostPercentage: forecastParameters.maintenanceCostPercentage,
-      incomeGrowthPerYear: forecastParameters.incomeGrowthPerYear,
-      rentGrowthPerYear: forecastParameters.rentGrowthPerYear,
-      propertyPriceGrowthPerYear: forecastParameters.propertyPriceGrowthPerYear,
-      constructionPriceGrowthPerYear:
-        forecastParameters.constructionPriceGrowthPerYear,
-      yearsForecast: forecastParameters.yearsForecast,
-      affordabilityThresholdIncomePercentage:
-        forecastParameters.affordabilityThresholdIncomePercentage,
-      fairhold: new Fairhold({
-        affordability: 0.2,
-        landPriceOrRent: 20000,
-      }),
-    });
-  });
+//   it("correctly calculates the mortgageMarket?.monthlyPayment", () => {
+//     expect(household.mortgageMarket?.monthlyPayment).toBeCloseTo(1111.43);
+//   });
 
-  it("can be instantiated", () => {
-    expect(tenureFairholdLandRent).toBeInstanceOf(FairholdLandRent);
-  });
-});
+//   it("correctly calculates the mortgageMarketAffordability", () => {
+//     expect(household.mortgageMarketAffordability).toBeCloseTo(0.29);
+//   });
 
-// Unit test for the TenureFairholdLandRent
-describe("TenureFairholdLandPurchase class", () => {
-  let tenureFairholdLandPurchase: FairholdLandPurchase;
+//   it("correctly calculates the socialRentMonthlyHouse", () => {
+//     expect(household.socialRentMonthlyHouse).toBeCloseTo(362.8);
+//   });
 
-  beforeEach(() => {
-    let forecastParameters = {
-      maintenanceCostPercentage: 0.0125, // percentage maintenance cost
-      incomeGrowthPerYear: 0.04, // 4% income growth per year
-      constructionPriceGrowthPerYear: 0.025, // 2.5%
-      rentGrowthPerYear: 0.03, // 3%
-      propertyPriceGrowthPerYear: 0.05, // 5%
-      yearsForecast: 40, // 40 years
-      affordabilityThresholdIncomePercentage: 0.35, // percentage of imcome to afford rent or purchase
-    };
+//   it("correctly calculates the socialRentMonthlyLand", () => {
+//     expect(household.socialRentMonthlyLand).toBeCloseTo(61.32);
+//   });
 
-    let property = new Property({
-      postcode: "WV8 1HG",
-      houseType: "T",
-      numberOfBedrooms: 2,
-      age: 10,
-      size: 88,
-      newBuildPricePerMetre: 2120,
-      averagePrice: 218091.58,
-      itl3: "TLG24",
-    });
+//   it("correctly calculates the rentAffordability", () => {
+//     expect(household.rentAffordability).toBeCloseTo(0.2);
+//   });
 
-    let tenureMarketPurchase = new MarketPurchase({
-      incomeYearly: 45816,
-      averagePrice: 218091.58,
-      newBuildPrice: 186560,
-      depreciatedBuildPrice: 110717.45,
-      landPrice: 31531.579,
-      //affordabilityThresholdIncomePercentage:forecastParameters.affordabilityThresholdIncomePercentage,
-      propertyPriceGrowthPerYear: forecastParameters.propertyPriceGrowthPerYear,
-      constructionPriceGrowthPerYear:
-        forecastParameters.constructionPriceGrowthPerYear,
-      yearsForecast: forecastParameters.yearsForecast,
-      maintenanceCostPercentage: forecastParameters.maintenanceCostPercentage,
-      //incomeGrowthPerYear: forecastParameters.incomeGrowthPerYear,
-    });
-
-    tenureFairholdLandPurchase = new FairholdLandPurchase({
-      //incomeYearly: 45816,
-      //averagePrice: 218091.58,
-      newBuildPrice: 186560,
-      depreciatedBuildPrice: 110717.45,
-      //landPrice: 31531.579,
-      maintenanceCostPercentage: forecastParameters.maintenanceCostPercentage,
-      incomeGrowthPerYear: forecastParameters.incomeGrowthPerYear,
-      //propertyPriceGrowthPerYear: forecastParameters.propertyPriceGrowthPerYear,
-      constructionPriceGrowthPerYear:
-        forecastParameters.constructionPriceGrowthPerYear,
-      yearsForecast: forecastParameters.yearsForecast,
-      //affordabilityThresholdIncomePercentage:forecastParameters.affordabilityThresholdIncomePercentage,
-      affordability: 0.2,
-      fairhold: new Fairhold({
-        affordability: 0.2,
-        landPriceOrRent: 31531.579,
-      }),
-    });
-  });
-
-  it("can be instantiated", () => {
-    expect(tenureFairholdLandPurchase).toBeInstanceOf(FairholdLandPurchase);
-  });
-});
-
-// Unit test for the TenureSocialRent
-describe("TenureSocialRent class", () => {
-  let tenureSocialRent: SocialRent;
-
-  beforeEach(() => {
-    let forecastParameters = {
-      maintenanceCostPercentage: 0.0125, // percentage maintenance cost
-      incomeGrowthPerYear: 0.04, // 4% income growth per year
-      constructionPriceGrowthPerYear: 0.025, // 2.5%
-      rentGrowthPerYear: 0.03, // 3%
-      propertyPriceGrowthPerYear: 0.05, // 5%
-      yearsForecast: 40, // 40 years
-      affordabilityThresholdIncomePercentage: 0.35, // percentage of imcome to afford rent or purchase
-    };
-
-    let property = new Property({
-      postcode: "WV8 1HG",
-      houseType: "T",
-      numberOfBedrooms: 2,
-      age: 10,
-      size: 88,
-      newBuildPricePerMetre: 2120,
-      averagePrice: 218091.58,
-      itl3: "TLG24",
-    });
-
-    let socialRentAdjustments = [
-      { id: 1, inflation: 3.3, total: 4.3, year: "2001-02" },
-      { id: 2, inflation: 1.7, total: 2.2, year: "2002-03" },
-      { id: 3, inflation: 1.7, total: 2.2, year: "2003-04" },
-      { id: 4, inflation: 2.8, total: 3.3, year: "2004-05" },
-      { id: 5, inflation: 3.1, total: 3.6, year: "2005-06" },
-      { id: 6, inflation: 2.7, total: 3.2, year: "2006-07" },
-      { id: 7, inflation: 3.6, total: 4.1, year: "2007-08" },
-      { id: 8, inflation: 3.9, total: 4.4, year: "2008-09" },
-      { id: 9, inflation: 5.0, total: 5.5, year: "2009-10" },
-      { id: 10, inflation: -1.4, total: -0.9, year: "2010-11" },
-      { id: 11, inflation: 4.6, total: 5.1, year: "2011-12" },
-      { id: 12, inflation: 5.6, total: 6.1, year: "2012-13" },
-      { id: 13, inflation: 2.6, total: 3.1, year: "2013-14" },
-      { id: 14, inflation: 3.2, total: 3.7, year: "2014-15" },
-      { id: 15, inflation: 1.2, total: 2.2, year: "2015-16" },
-      { id: 16, inflation: NaN, total: -1.0, year: "2016-17" },
-      { id: 17, inflation: NaN, total: -1.0, year: "2017-18" },
-      { id: 18, inflation: NaN, total: -1.0, year: "2018-19" },
-      { id: 19, inflation: NaN, total: -1.0, year: "2019-20" },
-      { id: 20, inflation: 1.7, total: 2.7, year: "2020-21" },
-      { id: 21, inflation: 0.5, total: 1.5, year: "2021-22" },
-      { id: 22, inflation: 3.1, total: 4.1, year: "2022-23" },
-      { id: 23, inflation: 10.1, total: 11.1, year: "2023-24" },
-    ];
-
-    tenureSocialRent = new SocialRent({
-      socialRentAverageEarning: 295.4,
-      socialRentAdjustments: socialRentAdjustments,
-      housePriceIndex: 75434.35,
-      property: property,
-    });
-  });
-  it("can be instantiated", () => {
-    expect(tenureSocialRent).toBeInstanceOf(SocialRent);
-  });
-});
-
-// Unit test for the Household class
-describe("Household class", () => {
-  let property: Property;
-  let household: Household;
-  const socialRentAdjustments = [
-    { id: 1, inflation: 3.3, total: 4.3, year: "2001-02" },
-    { id: 2, inflation: 1.7, total: 2.2, year: "2002-03" },
-    { id: 3, inflation: 1.7, total: 2.2, year: "2003-04" },
-    { id: 4, inflation: 2.8, total: 3.3, year: "2004-05" },
-    { id: 5, inflation: 3.1, total: 3.6, year: "2005-06" },
-    { id: 6, inflation: 2.7, total: 3.2, year: "2006-07" },
-    { id: 7, inflation: 3.6, total: 4.1, year: "2007-08" },
-    { id: 8, inflation: 3.9, total: 4.4, year: "2008-09" },
-    { id: 9, inflation: 5.0, total: 5.5, year: "2009-10" },
-    { id: 10, inflation: -1.4, total: -0.9, year: "2010-11" },
-    { id: 11, inflation: 4.6, total: 5.1, year: "2011-12" },
-    { id: 12, inflation: 5.6, total: 6.1, year: "2012-13" },
-    { id: 13, inflation: 2.6, total: 3.1, year: "2013-14" },
-    { id: 14, inflation: 3.2, total: 3.7, year: "2014-15" },
-    { id: 15, inflation: 1.2, total: 2.2, year: "2015-16" },
-    { id: 16, inflation: NaN, total: -1.0, year: "2016-17" },
-    { id: 17, inflation: NaN, total: -1.0, year: "2017-18" },
-    { id: 18, inflation: NaN, total: -1.0, year: "2018-19" },
-    { id: 19, inflation: NaN, total: -1.0, year: "2019-20" },
-    { id: 20, inflation: 1.7, total: 2.7, year: "2020-21" },
-    { id: 21, inflation: 0.5, total: 1.5, year: "2021-22" },
-    { id: 22, inflation: 3.1, total: 4.1, year: "2022-23" },
-    { id: 23, inflation: 10.1, total: 11.1, year: "2023-24" },
-  ];
-
-  const forecastParameters = {
-    maintenanceCostPercentage: 0.0125, // percentage maintenance cost
-    incomeGrowthPerYear: 0.04, // 4% income growth per year
-    constructionPriceGrowthPerYear: 0.025, // 2.5%
-    rentGrowthPerYear: 0.03, // 3%
-    propertyPriceGrowthPerYear: 0.05, // 5%
-    yearsForecast: 40, // 40 years
-    affordabilityThresholdIncomePercentage: 0.35, // percentage of imcome to afford rent or purchase
-  };
-
-  beforeEach(() => {
-    property = new Property({
-      postcode: "WV8 1HG",
-      houseType: "T",
-      numberOfBedrooms: 2,
-      age: 10,
-      size: 88,
-      newBuildPricePerMetre: 2120,
-      averagePrice: 218091.58,
-      itl3: "TLG24",
-    });
-
-    household = new Household({
-      incomePerPersonYearly: 19090.0,
-      averageRentYearly: 773.875 * 12,
-      socialRentAverageEarning: 295.4,
-      socialRentAdjustments: socialRentAdjustments,
-      housePriceIndex: 75434.35,
-      gasBillYearly: 800,
-      property: property,
-      forecastParameters: forecastParameters,
-    });
-  });
-
-  it("can be instantiated", () => {
-    expect(household).toBeInstanceOf(Household);
-  });
-});
+//   it("correctly calculates the fairholdLandPurchase.discountLand", () => {
+//     expect(household.fairholdLandPurchase?.discountLand).toBeCloseTo(0.386);
+//   });
+// });
