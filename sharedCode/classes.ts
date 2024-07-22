@@ -287,7 +287,7 @@ export class Mortgage {
   }
 }
 
-export class tenureMarketPurchase {
+export class TenureMarketPurchase {
   averagePrice; // average price of the property
   newBuildPrice; // new build price of the property
   depreciatedBuildPrice; // depreciated building price
@@ -482,13 +482,13 @@ export class tenureMarketPurchase {
   }
 }
 
-export class tenureMarketRent {
+export class TenureMarketRent {
   averageRentYearly; // average rent per year
   averagePrice; // average price of the property
   newBuildPrice; // new build price of the property
   depreciatedBuildPrice; // depreciated building price
   landPrice; // land price
-  income; // income
+  incomeYearly; // income
   affordabilityThresholdIncomePercentage; //  affordability threshold percentage
   propertyPriceGrowthPerYear; // property price growth per year
   constructionPriceGrowthPerYear; // construction price growth per year
@@ -496,6 +496,7 @@ export class tenureMarketRent {
   maintenanceCostPercentage; // maintenance cost percentage
   incomeGrowthPerYear; // income growth per year
   rentGrowthPerYear; // rent growth per year
+  affordability?: number; // afforadability
   averageRentLandYearly?: number; // mortgage object on the depreciated house
   averageRentHouseYearly?: number; // mortgage on the land
   lifetime?: object; // lifetime object with projections
@@ -505,7 +506,7 @@ export class tenureMarketRent {
     newBuildPrice,
     depreciatedBuildPrice,
     landPrice,
-    income,
+    incomeYearly,
     affordabilityThresholdIncomePercentage, // percentage of income that makes a property afforadable
     propertyPriceGrowthPerYear, // 5% per year
     constructionPriceGrowthPerYear, // 2.5% per year
@@ -519,7 +520,7 @@ export class tenureMarketRent {
     newBuildPrice: number;
     depreciatedBuildPrice: number;
     landPrice: number;
-    income: number;
+    incomeYearly: number;
     affordabilityThresholdIncomePercentage: number;
     propertyPriceGrowthPerYear: number;
     constructionPriceGrowthPerYear: number;
@@ -533,7 +534,7 @@ export class tenureMarketRent {
     this.newBuildPrice = newBuildPrice;
     this.depreciatedBuildPrice = depreciatedBuildPrice;
     this.landPrice = landPrice;
-    this.income = income;
+    this.incomeYearly = incomeYearly;
     this.affordabilityThresholdIncomePercentage =
       affordabilityThresholdIncomePercentage;
     this.propertyPriceGrowthPerYear = propertyPriceGrowthPerYear;
@@ -551,6 +552,8 @@ export class tenureMarketRent {
     this.averageRentLandYearly = this.averageRentYearly * landToTotalRatio; // set the avearage rent for the land
     this.averageRentHouseYearly =
       this.averageRentLandYearly - this.averageRentLandYearly; // set the average rent for the house
+    const affordability = this.averageRentHouseYearly / this.incomeYearly;
+    this.affordability = affordability;
   }
 
   calculateLifetime() {
@@ -559,7 +562,7 @@ export class tenureMarketRent {
     let newBuildPriceIterative = this.newBuildPrice;
     let landPriceIterative = this.landPrice;
     let landToTotalRatioIterative = this.landPrice / this.averagePrice;
-    let incomeIterative = this.income; // set the current income
+    let incomeIterative = this.incomeYearly; // set the current income
     let affordabilityThresholdIncomeIterative =
       incomeIterative * this.affordabilityThresholdIncomePercentage; // affordable income
     let averageRentYearlyIterative = this.averageRentYearly; // yearly rent
@@ -611,8 +614,8 @@ export class tenureMarketRent {
   }
 }
 
-export class tenureFairholdLandPurchase {
-  averagePrice: number; // average price of the property
+export class TenureFairholdLandPurchase {
+  averagePrice; // average price of the property
   newBuildPrice; // new build price of the property
   depreciatedBuildPrice; // depreciated building price
   landPrice; // land price
@@ -808,13 +811,13 @@ export class tenureFairholdLandPurchase {
   }
 }
 
-export class tenureFairholdLandRent {
+export class TenureFairholdLandRent {
   averageRentYearly; // average rent per year
   averagePrice; // average price of the property
   newBuildPrice; // new build price of the property
   depreciatedBuildPrice; // depreciated building price
   landPrice; // land price
-  income; // income
+  incomeYearly; // income
   affordabilityThresholdIncomePercentage; //  affordability threshold percentage
   propertyPriceGrowthPerYear; // property price growth per year
   constructionPriceGrowthPerYear; // construction price growth per year
@@ -823,7 +826,7 @@ export class tenureFairholdLandRent {
   incomeGrowthPerYear; // income growth per year
   rentGrowthPerYear; // rent growth per year
   fairhold; // fairhold object
-  depreciatedHouseMortgage; // mortgage on the depreciated house
+  depreciatedHouseMortgage?: Mortgage; // mortgage on the depreciated house
   discountedLandRent?: number; // discounted land price
   averageRentLandYearly?: number; // mortgage object on the depreciated house
   averageRentHouseYearly?: number; // mortgage on the land
@@ -834,7 +837,7 @@ export class tenureFairholdLandRent {
     newBuildPrice,
     depreciatedBuildPrice,
     landPrice,
-    income,
+    incomeYearly,
     affordabilityThresholdIncomePercentage, // percentage of income that makes a property afforadable
     propertyPriceGrowthPerYear, // 5% per year
     constructionPriceGrowthPerYear, // 2.5% per year
@@ -843,14 +846,13 @@ export class tenureFairholdLandRent {
     incomeGrowthPerYear, // 4% per year income growth
     rentGrowthPerYear,
     fairhold, // fairhold object
-    depreciatedHouseMortgage, // mortgage on the depreciated house
   }: {
     averageRentYearly: number;
     averagePrice: number;
     newBuildPrice: number;
     depreciatedBuildPrice: number;
     landPrice: number;
-    income: number;
+    incomeYearly: number;
     affordabilityThresholdIncomePercentage: number;
     propertyPriceGrowthPerYear: number;
     constructionPriceGrowthPerYear: number;
@@ -859,14 +861,13 @@ export class tenureFairholdLandRent {
     incomeGrowthPerYear: number;
     rentGrowthPerYear: number;
     fairhold: Fairhold;
-    depreciatedHouseMortgage: Mortgage; // mortgage on the depreciated house
   }) {
     this.averageRentYearly = averageRentYearly;
     this.averagePrice = averagePrice;
     this.newBuildPrice = newBuildPrice;
     this.depreciatedBuildPrice = depreciatedBuildPrice;
     this.landPrice = landPrice;
-    this.income = income;
+    this.incomeYearly = incomeYearly;
     this.affordabilityThresholdIncomePercentage =
       affordabilityThresholdIncomePercentage;
     this.propertyPriceGrowthPerYear = propertyPriceGrowthPerYear;
@@ -876,7 +877,6 @@ export class tenureFairholdLandRent {
     this.incomeGrowthPerYear = incomeGrowthPerYear;
     this.rentGrowthPerYear = rentGrowthPerYear;
     this.fairhold = fairhold;
-    this.depreciatedHouseMortgage = depreciatedHouseMortgage;
     this.calculateAverageRentLandAndHouse();
     this.calculateMortgage();
     this.calculateLifetime();
@@ -901,7 +901,7 @@ export class tenureFairholdLandRent {
     let newBuildPriceIterative = this.newBuildPrice;
     let landPriceIterative = this.landPrice;
     let landToTotalRatioIterative = this.landPrice / this.averagePrice;
-    let incomeIterative = this.income; // set the current income
+    let incomeIterative = this.incomeYearly; // set the current income
     let affordabilityThresholdIncomeIterative =
       incomeIterative * this.affordabilityThresholdIncomePercentage; // affordable income
     let averageRentYearlyIterative = this.averageRentYearly; // yearly rent
@@ -920,6 +920,14 @@ export class tenureFairholdLandRent {
       cumulativePaid: number;
       remainingBalance: number;
     }
+
+    if (
+      this.depreciatedHouseMortgage === undefined ||
+      this.depreciatedHouseMortgage.yearlyPaymentBreakdown === undefined
+    ) {
+      throw new Error("depreciatedHouseMortgage is undefined");
+    }
+
     const houseMortgagePaymentYearly = this.depreciatedHouseMortgage
       .yearlyPaymentBreakdown as mortgageBreakdownTypes[];
     let houseMortgagePaymentYearlyIterative = houseMortgagePaymentYearly.find(
@@ -978,7 +986,7 @@ export class tenureFairholdLandRent {
   }
 }
 
-export class tenureSocialRent {
+export class TenureSocialRent {
   socialRentAveEarning; // average social rent
   socialRentAdjustments; //rent adjustment values
   housePriceIndex; // house price index
@@ -1074,10 +1082,11 @@ export class tenureSocialRent {
 interface forecastParameters {
   maintenanceCostPercentage: number;
   incomeGrowthPerYear: number;
+  rentGrowthPerYear: number;
   constructionPriceGrowthPerYear: number;
   propertyPriceGrowthPerYear: number;
   yearsForecast: number;
-  affordabilityThresholdIncomePercentage:number;
+  affordabilityThresholdIncomePercentage: number;
 }
 export class Household {
   incomePerPerson; // income per person
@@ -1090,12 +1099,12 @@ export class Household {
   forecastParameters; // forecast parameters
   averageRentLand?: number; // average rent for the land
   averageRentHouse?: number; // average rent for the house
-  income?: number; // income per household
-  tenureMarketPurchase?: tenureMarketPurchase;
-  tenureMarketRent?: tenureMarketRent;
-  tenureSocialRent?: tenureSocialRent;
-  tenureFairholdLandPurchase?: tenureFairholdLandPurchase;
-  tenureFairholdLandRent?: tenureFairholdLandRent;
+  incomeYearly?: number; // income per household
+  tenureMarketPurchase?: TenureMarketPurchase;
+  tenureMarketRent?: TenureMarketRent;
+  tenureSocialRent?: TenureSocialRent;
+  tenureFairholdLandPurchase?: TenureFairholdLandPurchase;
+  tenureFairholdLandRent?: TenureFairholdLandRent;
 
   constructor({
     incomePerPerson,
@@ -1104,14 +1113,15 @@ export class Household {
     socialRentAdjustments,
     housePriceIndex,
     property,
-    forecastParameters ={
+    forecastParameters = {
       maintenanceCostPercentage: 0.0125, // percentage maintenance cost
-      incomeGrowthPerYear:0.04, // 4% income growth per year
-      constructionPriceGrowthPerYear: 0.025,// 2.5% 
-      propertyPriceGrowthPerYear: 0.05,// 5%
+      incomeGrowthPerYear: 0.04, // 4% income growth per year
+      constructionPriceGrowthPerYear: 0.025, // 2.5%
+      rentGrowthPerYear: 0.03, // 3%
+      propertyPriceGrowthPerYear: 0.05, // 5%
       yearsForecast: 40, // 40 years
-      affordabilityThresholdIncomePercentage:0.35, // percentage of imcome to afford rent or purchase
-    }
+      affordabilityThresholdIncomePercentage: 0.35, // percentage of imcome to afford rent or purchase
+    },
   }: {
     incomePerPerson: number;
     averageRentYearly: number;
@@ -1119,7 +1129,7 @@ export class Household {
     socialRentAdjustments: any;
     housePriceIndex: number;
     property: Property;
-    forecastParameters: forecastParameters
+    forecastParameters: forecastParameters;
   }) {
     this.incomePerPerson = incomePerPerson;
     this.averageRentYearly = averageRentYearly;
@@ -1130,33 +1140,122 @@ export class Household {
     this.property = property;
     this.forecastParameters = forecastParameters;
     this.calculateHouseholdIncome();
-    this.calculateTenureMarketPurchase();
-    this.calculateTenureMarketRent();
-    this.calculateTenureSocialRent();
-    this.calculateTenureFairholdLandPurchase();
-    this.calculateTenureFairholdLandRent();
+    this.calculateTenures();
   }
 
   calculateHouseholdIncome(houseMultiplier: number = 2.4) {
-    this.income = houseMultiplier * this.incomePerPerson; // calculate the income for house hold
+    this.incomeYearly = houseMultiplier * this.incomePerPerson; // calculate the income for house hold
   }
 
-  calculateTenureMarketPurchase() {
-    if (this.income == undefined) throw new Error("income is undefined");
-    if (this.property.newBuildPrice == undefined) throw new Error("newBuildPrice is undefined");
-    if (this. property.depreciatedBuildPrice == undefined) throw new Error("depreciatedBuildPrice is undefined");
-    if (this. property.landPrice == undefined) throw new Error("landPrice is undefined");
-    this.tenureMarketPurchase = new tenureMarketPurchase({
-      incomeYearly: this.income,
+  calculateTenures() {
+    if (this.incomeYearly == undefined) throw new Error("income is undefined");
+    if (this.property.newBuildPrice == undefined)
+      throw new Error("newBuildPrice is undefined");
+    if (this.property.depreciatedBuildPrice == undefined)
+      throw new Error("depreciatedBuildPrice is undefined");
+    if (this.property.landPrice == undefined)
+      throw new Error("landPrice is undefined");
+
+    // calculate tenure market purchase
+    this.tenureMarketPurchase = new TenureMarketPurchase({
+      incomeYearly: this.incomeYearly,
       averagePrice: this.property.averagePrice,
       newBuildPrice: this.property.newBuildPrice,
       depreciatedBuildPrice: this.property.depreciatedBuildPrice,
       landPrice: this.property.landPrice,
-      affordabilityThresholdIncomePercentage: this.forecastParameters.affordabilityThresholdIncomePercentage,
-      propertyPriceGrowthPerYear: this.forecastParameters.propertyPriceGrowthPerYear,
-      constructionPriceGrowthPerYear: this.forecastParameters.constructionPriceGrowthPerYear,
+      affordabilityThresholdIncomePercentage:
+        this.forecastParameters.affordabilityThresholdIncomePercentage,
+      propertyPriceGrowthPerYear:
+        this.forecastParameters.propertyPriceGrowthPerYear,
+      constructionPriceGrowthPerYear:
+        this.forecastParameters.constructionPriceGrowthPerYear,
       yearsForecast: this.forecastParameters.yearsForecast,
-      maintenanceCostPercentage: this.forecastParameters.maintenanceCostPercentage,
-      incomeGrowthPerYear: this.forecastParameters.incomeGrowthPerYear,}
-    }
+      maintenanceCostPercentage:
+        this.forecastParameters.maintenanceCostPercentage,
+      incomeGrowthPerYear: this.forecastParameters.incomeGrowthPerYear,
+    });
+
+    //calculate tenure market rent
+    this.tenureMarketRent = new TenureMarketRent({
+      averageRentYearly: this.averageRentYearly,
+      averagePrice: this.property.averagePrice,
+      newBuildPrice: this.property.newBuildPrice,
+      depreciatedBuildPrice: this.property.depreciatedBuildPrice,
+      landPrice: this.property.landPrice,
+      incomeYearly: this.incomeYearly,
+      affordabilityThresholdIncomePercentage:
+        this.forecastParameters.affordabilityThresholdIncomePercentage,
+      propertyPriceGrowthPerYear:
+        this.forecastParameters.propertyPriceGrowthPerYear,
+      constructionPriceGrowthPerYear:
+        this.forecastParameters.constructionPriceGrowthPerYear,
+      yearsForecast: this.forecastParameters.yearsForecast,
+      maintenanceCostPercentage:
+        this.forecastParameters.maintenanceCostPercentage,
+      incomeGrowthPerYear: this.forecastParameters.incomeGrowthPerYear,
+      rentGrowthPerYear: this.forecastParameters.rentGrowthPerYear,
+    });
+
+    //calculate tenure social rent
+    this.tenureSocialRent = new TenureSocialRent({
+      socialRentAveEarning: this.socialRentAveEarning,
+      socialRentAdjustments: this.socialRentAdjustments,
+      housePriceIndex: this.housePriceIndex,
+      property: this.property,
+    });
+
+    if (this.tenureMarketPurchase.affordability == undefined)
+      throw new Error("tenureMarketPurchase.affordability is undefined");
+
+    this.tenureFairholdLandPurchase = new TenureFairholdLandPurchase({
+      averagePrice: this.property.averagePrice, // average price of the property
+      newBuildPrice: this.property.newBuildPrice,
+      depreciatedBuildPrice: this.property.depreciatedBuildPrice,
+      landPrice: this.property.landPrice,
+      incomeYearly: this.incomeYearly, // income Yearly
+      affordabilityThresholdIncomePercentage:
+        this.forecastParameters.affordabilityThresholdIncomePercentage,
+      propertyPriceGrowthPerYear:
+        this.forecastParameters.propertyPriceGrowthPerYear,
+      constructionPriceGrowthPerYear:
+        this.forecastParameters.constructionPriceGrowthPerYear,
+      yearsForecast: this.forecastParameters.yearsForecast,
+      maintenanceCostPercentage:
+        this.forecastParameters.maintenanceCostPercentage,
+      incomeGrowthPerYear: this.forecastParameters.incomeGrowthPerYear,
+      affordability: this.tenureMarketPurchase.affordability,
+      fairhold: new Fairhold({
+        affordability: this.tenureMarketPurchase.affordability,
+        landPriceOrRent: this.property.landPrice,
+      }),
+    });
+
+    if (this.tenureMarketRent.affordability == undefined)
+      throw new Error("tenureMarketRent.affordability is undefined");
+
+    this.tenureFairholdLandRent = new TenureFairholdLandRent({
+      averageRentYearly: this.averageRentYearly,
+      averagePrice: this.property.averagePrice, // average price of the property
+      newBuildPrice: this.property.newBuildPrice,
+      depreciatedBuildPrice: this.property.depreciatedBuildPrice, // depreciated building price
+      landPrice: this.property.landPrice, // land price
+      incomeYearly: this.incomeYearly, // income
+      affordabilityThresholdIncomePercentage:
+        this.forecastParameters.affordabilityThresholdIncomePercentage, //  affordability threshold percentage
+      propertyPriceGrowthPerYear:
+        this.forecastParameters.propertyPriceGrowthPerYear, // property price growth per year
+      constructionPriceGrowthPerYear:
+        this.forecastParameters.constructionPriceGrowthPerYear, // construction price growth per year
+      yearsForecast: this.forecastParameters.yearsForecast, // years forecast
+      maintenanceCostPercentage:
+        this.forecastParameters.maintenanceCostPercentage, // maintenance cost percentage
+      incomeGrowthPerYear: this.forecastParameters.incomeGrowthPerYear, // income growth per year
+      rentGrowthPerYear: this.forecastParameters.rentGrowthPerYear, // rent growth per year
+
+      fairhold: new Fairhold({
+        affordability: this.tenureMarketRent.affordability,
+        landPriceOrRent: this.averageRentYearly,
+      }), // fairhold object
+    });
+  }
 }
