@@ -341,6 +341,7 @@ export class TenureMarketPurchase {
     this.incomeGrowthPerYear = incomeGrowthPerYear;
     this.calculateHouseMortgage();
     this.calculateLandMortgage();
+    this.calculateAffordability();
     this.calculateLifetime();
   }
 
