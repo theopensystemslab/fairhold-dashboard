@@ -552,8 +552,8 @@ export class TenureMarketRent {
     const landToTotalRatio = this.landPrice / this.averagePrice;
     this.averageRentLandYearly = this.averageRentYearly * landToTotalRatio; // set the avearage rent for the land
     this.averageRentHouseYearly =
-      this.averageRentLandYearly - this.averageRentLandYearly; // set the average rent for the house
-    const affordability = this.averageRentHouseYearly / this.incomeYearly;
+      this.averageRentYearly - this.averageRentLandYearly; // set the average rent for the house
+    const affordability = this.averageRentYearly / this.incomeYearly;
     this.affordability = affordability;
   }
 
@@ -887,7 +887,7 @@ export class TenureFairholdLandRent {
     const landToTotalRatio = this.landPrice / this.averagePrice;
     this.averageRentLandYearly = this.averageRentYearly * landToTotalRatio; // set the avearage rent for the land
     this.averageRentHouseYearly =
-      this.averageRentLandYearly - this.averageRentLandYearly; // set the average rent for the house
+      this.averageRentYearly - this.averageRentLandYearly; // set the average rent for the house
   }
 
   calculateMortgage() {
