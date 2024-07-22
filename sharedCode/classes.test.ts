@@ -472,7 +472,7 @@ describe("Household class", () => {
     });
 
     household = new Household({
-      incomePerPerson: 19090.0,
+      incomePerPersonYearly: 19090.0,
       averageRentYearly: 773.875 * 12,
       socialRentAveEarning: 295.4,
       socialRentAdjustments: socialRentAdjustments,
