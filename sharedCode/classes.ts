@@ -1069,11 +1069,13 @@ export class Household {
   averageRentLand?: number; // average rent for the land
   averageRentHouse?: number; // average rent for the house
   incomeYearly?: number; // income per household
-  marketPurchase?: MarketPurchase;
-  marketRent?: MarketRent;
-  socialRent?: SocialRent;
-  fairholdLandPurchase?: FairholdLandPurchase;
-  fairholdLandRent?: FairholdLandRent;
+  tenure: {
+    marketPurchase?: MarketPurchase;
+    marketRent?: MarketRent;
+    socialRent?: SocialRent;
+    fairholdLandPurchase?: FairholdLandPurchase;
+    fairholdLandRent?: FairholdLandRent;
+  }; // grouped tenure field
 
   constructor({
     incomePerPersonYearly,
@@ -1104,6 +1106,7 @@ export class Household {
     this.gasBillYearly = gasBillYearly;
     this.property = property;
     this.forecastParameters = forecastParameters;
+    this.tenure = {}; // Initialize the tenure object
     this.calculateHouseholdIncome();
     this.calculateTenures(
       averageRentYearly,
@@ -1132,7 +1135,7 @@ export class Household {
       throw new Error("landPrice is undefined");
 
     // calculate tenure market purchase
-    this.marketPurchase = new MarketPurchase({
+    this.tenure.marketPurchase = new MarketPurchase({
       incomeYearly: this.incomeYearly,
       averagePrice: this.property.averagePrice,
       newBuildPrice: this.property.newBuildPrice,
@@ -1151,7 +1154,7 @@ export class Household {
     });
 
     //calculate tenure market rent
-    this.marketRent = new MarketRent({
+    this.tenure.marketRent = new MarketRent({
       averageRentYearly: averageRentYearly,
       averagePrice: this.property.averagePrice,
       newBuildPrice: this.property.newBuildPrice,
@@ -1172,17 +1175,17 @@ export class Household {
     });
 
     //calculate tenure social rent
-    this.socialRent = new SocialRent({
+    this.tenure.socialRent = new SocialRent({
       socialRentAverageEarning: socialRentAverageEarning,
       socialRentAdjustments: socialRentAdjustments,
       housePriceIndex: housePriceIndex,
       property: this.property,
     });
 
-    if (this.marketPurchase.affordability == undefined)
+    if (this.tenure.marketPurchase.affordability == undefined)
       throw new Error("tenureMarketPurchase.affordability is undefined");
 
-    this.fairholdLandPurchase = new FairholdLandPurchase({
+    this.tenure.fairholdLandPurchase = new FairholdLandPurchase({
       averagePrice: this.property.averagePrice, // average price of the property
       newBuildPrice: this.property.newBuildPrice,
       depreciatedBuildPrice: this.property.depreciatedBuildPrice,
@@ -1198,17 +1201,17 @@ export class Household {
       maintenanceCostPercentage:
         this.forecastParameters.maintenanceCostPercentage,
       incomeGrowthPerYear: this.forecastParameters.incomeGrowthPerYear,
-      affordability: this.marketPurchase.affordability,
+      affordability: this.tenure.marketPurchase.affordability,
       fairhold: new Fairhold({
-        affordability: this.marketPurchase.affordability,
+        affordability: this.tenure.marketPurchase.affordability,
         landPriceOrRent: this.property.landPrice,
       }),
     });
 
-    if (this.marketRent.affordability == undefined)
+    if (this.tenure.marketRent.affordability == undefined)
       throw new Error("tenureMarketRent.affordability is undefined");
 
-    this.fairholdLandRent = new FairholdLandRent({
+    this.tenure.fairholdLandRent = new FairholdLandRent({
       averageRentYearly: averageRentYearly,
       averagePrice: this.property.averagePrice, // average price of the property
       newBuildPrice: this.property.newBuildPrice,
@@ -1228,7 +1231,7 @@ export class Household {
       rentGrowthPerYear: this.forecastParameters.rentGrowthPerYear, // rent growth per year
 
       fairhold: new Fairhold({
-        affordability: this.marketRent.affordability,
+        affordability: this.tenure.marketRent.affordability,
         landPriceOrRent: averageRentYearly,
       }), // fairhold object
     });
