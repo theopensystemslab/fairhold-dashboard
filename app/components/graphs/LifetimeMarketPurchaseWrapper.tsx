@@ -16,7 +16,7 @@ const LifetimeMarketPurchaseWrapper: React.FC<LifetimeCombinedWrapperProps> = ({
       house: '#5178b8',
       maintenance: '#595959',
       bills: '#adadad',
-      incomeThreshold: '#fff30a', // #6c9e6e
+      incomeThreshold: '#6c9e6e'
       }
 
     console.log('household.lifetime?.lifetimeMarket', household.lifetime?.lifetimeMarket)
