@@ -1,6 +1,6 @@
 "use client";
 import React from 'react';
-import { Household } from '@/sharedCode/classes';
+import { Household, lifetimeTypes } from '@/sharedCode/classes';
 import LifetimeCombinedChart from './LifetimeCombinedChart';
 
 interface LifetimeCombinedWrapperProps {
@@ -19,19 +19,17 @@ const LifetimeFairholdLandRentWrapper: React.FC<LifetimeCombinedWrapperProps> = 
       incomeThreshold: '#6c9e6e'
       }
 
-    console.log('household.lifetime?.lifetimeMarket', household.lifetime?.lifetimeMarket)
+    console.log('household.lifetime?.lifetimeMarket', household.tenure.fairholdLandRent?.lifetime)
 
     // Process and format the data for the chart
-    const chartData = household.lifetime?.lifetimeMarket
-    ? household.lifetime.lifetimeMarket.map(item => ({
-        year: item.year.toString(),
-        landCost: item.landPrice,
-        houseCost: item.newBuildPrice,
-        maintenanceCost: item.maintenanceCost,
-        billsCost: item.gasBillYearly,
-        incomeThreshold: item.affordabilityThresholdIncome,
-      }))
-    : [];
+    const chartData = ((household.tenure.fairholdLandRent?.lifetime as lifetimeTypes[])?.map((item, index) => ({
+      year: index.toString(),
+      landCost: item.rentLandFairholdYearly,
+      houseCost: item.houseMortgagePaymentYearly,
+      maintenanceCost: item.maintenanceCost,
+      billsCost: item.gasBillYearly,
+      incomeThreshold: item.affordabilityThresholdIncome,
+    })) ?? []);
 
     console.log('LifetimeFairholdLandRentWrapper.tsx chartData: ', chartData)
 
