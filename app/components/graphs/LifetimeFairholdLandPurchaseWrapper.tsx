@@ -3,47 +3,21 @@ import React from 'react';
 import { Household } from '@/sharedCode/classes';
 import LifetimeCombinedChart from './LifetimeCombinedChart';
 
-// Create colour scheme types
-type SchemeType = 'default' | 'alternative' | 'monochrome';
-
 interface LifetimeCombinedWrapperProps {
     household: Household;
-    schemeType: SchemeType;
   }
 
-interface LifetimeCombinedWrapperProps {
-    household: Household;
-}
+const LifetimeFairholdLandPurchaseWrapper: React.FC<LifetimeCombinedWrapperProps> = ({ household }) => {
+  console.log('LifetimeFairholdLandPurchaseWrapper household: ', household)
 
-const LifetimeCombinedWrapper: React.FC<LifetimeCombinedWrapperProps> = ({ household, schemeType  }) => {
-  console.log('LifetimeCombinedWrapper household: ', household)
-
-  // Create color schemes for different versions of the graph
-    const colorSchemes = {
-        default: {
-          land: '#FF0000',
-          house: '#00FF00',
-          maintenance: '#0000FF',
-          bills: '#FFFF00',
-          incomeThreshold: '#FF00FF',
-        },
-        alternative: {
-          land: '#800000',
-          house: '#008000',
-          maintenance: '#000080',
-          bills: '#808000',
-          incomeThreshold: '#800080',
-        },
-        monochrome: {
-          land: '#000000',
-          house: '#333333',
-          maintenance: '#666666',
-          bills: '#999999',
-          incomeThreshold: '#CCCCCC',
-        },
-      };
-
-    const colorScheme = colorSchemes[schemeType];
+  // Create color scheme for different versions of the graph
+    const colorScheme = {
+      land: '#026600',
+      house: '#78ba77',
+      maintenance: '#595959',
+      bills: '#adadad',
+      incomeThreshold: '#6c9e6e'
+      }
 
     console.log('household.lifetime?.lifetimeMarket', household.lifetime?.lifetimeMarket)
 
@@ -59,7 +33,7 @@ const LifetimeCombinedWrapper: React.FC<LifetimeCombinedWrapperProps> = ({ house
       }))
     : [];
 
-    console.log('LifetimeCombinedWrapper.tsx chartData: ', chartData)
+    console.log('LifetimeFairholdLandPurchaseWrapper.tsx chartData: ', chartData)
 
     return (
       <div>
@@ -69,4 +43,4 @@ const LifetimeCombinedWrapper: React.FC<LifetimeCombinedWrapperProps> = ({ house
     );
 };
   
-export default LifetimeCombinedWrapper;
+export default LifetimeFairholdLandPurchaseWrapper;
