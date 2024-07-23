@@ -38,12 +38,7 @@ const TenureComparisonWrapper: React.FC<TenureComparisonWrapperProps> = ({
         : undefined,
       averageRentLand: household.tenureMarketRent.averageRentLandYearly / 12,
 
-      socialRentMonthlyLand: household.tenureSocialRent?.socialRentMonthlyLand
-        ? {
-            socialRentMonthlyLand:
-              household.tenureSocialRent?.socialRentMonthlyLand || 0,
-          }
-        : undefined,
+      socialRentMonthlyLand: household.tenureSocialRent?.socialRentMonthlyLand,
       mortgageFairholdLandPurchase: household.tenureFairholdLandPurchase
         ?.discountedLandMortgage
         ? {
