@@ -408,7 +408,7 @@ describe("TenureSocialRent class", () => {
     ];
 
     tenureSocialRent = new TenureSocialRent({
-      socialRentAveEarning: 295.4,
+      socialRentAverageEarning: 295.4,
       socialRentAdjustments: socialRentAdjustments,
       housePriceIndex: 75434.35,
       property: property,
@@ -474,7 +474,7 @@ describe("Household class", () => {
     household = new Household({
       incomePerPersonYearly: 19090.0,
       averageRentYearly: 773.875 * 12,
-      socialRentAveEarning: 295.4,
+      socialRentAverageEarning: 295.4,
       socialRentAdjustments: socialRentAdjustments,
       housePriceIndex: 75434.35,
       gasBillYearly: 800,
