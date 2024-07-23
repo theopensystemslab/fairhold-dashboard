@@ -223,7 +223,9 @@ export async function POST(request: Request) {
 
       console.log("socialRentEarningRes: ", socialRentEarningRes);
       let socialRentAverageEarning;
+      let socialRentAverageEarning;
       if (socialRentEarningRes.length === 1) {
+        socialRentAverageEarning = socialRentEarningRes[0].earningsperweek;
         socialRentAverageEarning = socialRentEarningRes[0].earningsperweek;
       } else if (socialRentEarningRes.length > 1) {
         const socialRentTotalEarning = socialRentEarningRes.reduce(
@@ -231,7 +233,9 @@ export async function POST(request: Request) {
           0
         );
         socialRentAverageEarning = totalRent / socialRentEarningRes.length;
+        socialRentAverageEarning = totalRent / socialRentEarningRes.length;
       }
+      console.log("socialRentAverageEarning: ", socialRentAverageEarning);
       console.log("socialRentAverageEarning: ", socialRentAverageEarning);
 
       // create type for hpiRes query
@@ -279,17 +283,17 @@ export async function POST(request: Request) {
           ? parseFloat(data.houseSize.toString())
           : null,
         averagePrice: parseFloat(averagePrice.toFixed(2)),
-        itl3,
-        gdhi,
-        hpi,
-        buildPrice,
-        averageRentMonthly,
-        socialRentAdjustments,
-        socialRentAverageEarning,
-        numberOfTransactions,
-        granularityPostcode,
-        pricesPaid,
-        gasBillYearly,
+        itl3: itl3,
+        gdhi: gdhi,
+        hpi: averageHpi,
+        buildPrice: buildPrice,
+        averageRentMonthly: averageRentMonthly,
+        socialRentAdjustments: socialRentAdjustments,
+        socialRentAverageEarning: socialRentAverageEarning,
+        numberOfTransactions: numberOfTransactions,
+        granularityPostcode: granularityPostcode,
+        pricesPaid: pricesPaid,
+        gasBillYearly: gasBillYearly,
       });
     }
 
