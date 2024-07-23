@@ -1,6 +1,10 @@
 import React from 'react';
 import TenureComparisonWrapper from '../graphs/TenureComparisonWrapper'; 
-import { Household } from '@/app/models/Household';
+import LifetimeMarketPurchaseWrapper from '../graphs/LifetimeMarketPurchaseWrapper'; 
+import LifetimeMarketRentWrapper from '../graphs/LifetimeMarketRentWrapper'; 
+import LifetimeFairholdLandPurchaseWrapper from '../graphs/LifetimeFairholdLandPurchaseWrapper'; 
+import LifetimeFairholdLandRentWrapper from '../graphs/LifetimeFairholdLandRentWrapper'; 
+import { Household } from '@/sharedCode/classes';
 
 interface DashboardProps {
     data: Household; 
@@ -12,9 +16,12 @@ const Dashboard: React.FC<DashboardProps> = ({ data }) => {
       <h1>Dashboard</h1>
       {/* Render multiple graph components here */}
       <TenureComparisonWrapper household={data} />
-      <LifetimeCombinedWrapper household={data} schemeType="default" />
-    </div>
-  );
+      <LifetimeMarketPurchaseWrapper household={data} />
+      <LifetimeMarketRentWrapper household={data} />
+      <LifetimeFairholdLandPurchaseWrapper household={data} />
+      <LifetimeFairholdLandRentWrapper household={data} />    </div>
+
+);
 };
 
 export default Dashboard;
