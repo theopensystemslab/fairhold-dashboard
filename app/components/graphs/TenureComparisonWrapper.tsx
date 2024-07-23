@@ -12,8 +12,8 @@ interface TenureComparisonWrapperProps {
   fairholdLandRent?: { discountedLandRent: number };
   mortgageHouse?: { monthlyPayment: number };
   mortgageDepreciatedHouse?: { monthlyPayment: number };
-  averageRentHouse?: number;
-  socialRentMonthlyHouse?: number;
+  averageRentHouse?: { averageRentHouse: number };
+  socialRentMonthlyHouse?: { socialRentMonthlyHouse: number };
 }
 
 const TenureComparisonWrapper: React.FC<TenureComparisonWrapperProps> = ({
@@ -30,64 +30,79 @@ const TenureComparisonWrapper: React.FC<TenureComparisonWrapperProps> = ({
   ): TenureComparisonWrapperProps => {
     return {
       household,
-      mortgageLand: household.marketPurchase?.landMortgage
+      mortgageLand: household.tenure.marketPurchase?.landMortgage
         ? {
             monthlyPayment:
-              household.marketPurchase.landMortgage.monthlyPayment || 0,
+              household.tenure.marketPurchase.landMortgage.monthlyPayment || 0,
           }
         : undefined,
-      averageRentLand: household.marketRent.averageRentLandYearly / 12,
-
-      socialRentMonthlyLand: household.socialRent?.socialRentMonthlyLand,
-      mortgageFairholdLandPurchase: household.fairholdLandPurchase
+      averageRentLand: household.tenure.marketRent?.averageRentLandYearly
+        ? { averageRentLandMonthly: household.tenure.marketRent.averageRentLandYearly / 12 }
+        : undefined,
+      socialRentMonthlyLand: household.tenure.socialRent?.socialRentMonthlyLand
+        ? { socialRentMonthlyLand: household.tenure.socialRent.socialRentMonthlyLand }
+        : undefined,
+      mortgageFairholdLandPurchase: household.tenure.fairholdLandPurchase
         ?.discountedLandMortgage
         ? {
             monthlyPayment:
-              household.fairholdLandPurchase.discountedLandMortgage
+              household.tenure.fairholdLandPurchase.discountedLandMortgage
                 .monthlyPayment || 0,
           }
         : undefined,
-      fairholdLandRent: household.fairholdLandRent?.discountedLandRentYearly
+      fairholdLandRent: household.tenure.fairholdLandRent?.discountedLandRentYearly
         ? {
             discountedLandRent:
-              household.fairholdLandRent.discountedLandRentYearly / 12 || 0,
+              household.tenure.fairholdLandRent.discountedLandRentYearly / 12 || 0,
           }
         : undefined,
-      mortgageHouse: household.marketPurchase?.houseMortgage
+      mortgageHouse: household.tenure.marketPurchase?.houseMortgage
         ? {
             monthlyPayment:
-              household.marketPurchase.houseMortgage.monthlyPayment || 0,
+              household.tenure.marketPurchase.houseMortgage.monthlyPayment || 0,
           }
         : undefined,
-      mortgageDepreciatedHouse: household.fairholdLandPurchase
-        ?.depreciatedHouseMortgage
+      mortgageDepreciatedHouse: household.tenure.fairholdLandPurchase?.depreciatedHouseMortgage
         ? {
             monthlyPayment:
-              household.fairholdLandPurchase.depreciatedHouseMortgage
+              household.tenure.fairholdLandPurchase.depreciatedHouseMortgage
                 .monthlyPayment || 0,
           }
         : undefined,
-      averageRentHouse: household.marketRent?.averageRentHouseYearly / 12,
-      socialRentMonthlyHouse: household.socialRent.socialRentMonthlyHouse,
+      averageRentHouse: household.tenure.marketRent?.averageRentHouseYearly
+        ? {
+          averageRentHouse:
+            household.tenure.marketRent?.averageRentHouseYearly / 12|| 0,
+        }
+      : undefined,
+      socialRentMonthlyHouse: household.tenure.socialRent?.socialRentMonthlyHouse
+        ? {
+          socialRentMonthlyHouse:
+          household.tenure.socialRent?.socialRentMonthlyHouse || 0,
+        }
+      : undefined,
     };
   };
 
   const formatData = (household: TenureComparisonWrapperProps) => {
+    const toNumber = (value: number | { [key: string]: number } | undefined) =>
+      typeof value === 'number' ? value : value ? Object.values(value)[0] : 0;
+
     return [
       {
         category: "Monthly Costs Land",
         marketPurchase: household.mortgageLand?.monthlyPayment || 0,
-        marketRent: household.averageRentLand || 0,
-        socialRent: household.socialRentMonthlyLand || 0,
+        marketRent: toNumber(household.averageRentLand) || 0,
+        socialRent: toNumber(household.socialRentMonthlyLand) || 0,
         fairholdLandPurchase:
           household.mortgageFairholdLandPurchase?.monthlyPayment || 0,
-        fairholdLandRent: household.fairholdLandRent?.discountedLandRent || 0,
+        fairholdLandRent: toNumber(household.fairholdLandRent) || 0,
       },
       {
         category: "Monthly Costs House",
         marketPurchase: household.mortgageHouse?.monthlyPayment || 0,
-        marketRent: household.averageRentHouse || 0,
-        socialRent: household.socialRentMonthlyHouse || 0,
+        marketRent: toNumber(household.averageRentHouse) || 0,
+        socialRent: toNumber(household.socialRentMonthlyHouse) || 0,
         fairholdLandPurchase:
           household.mortgageDepreciatedHouse?.monthlyPayment || 0,
         fairholdLandRent:
