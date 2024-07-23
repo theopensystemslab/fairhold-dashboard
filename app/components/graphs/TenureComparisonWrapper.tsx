@@ -30,47 +30,45 @@ const TenureComparisonWrapper: React.FC<TenureComparisonWrapperProps> = ({
   ): TenureComparisonWrapperProps => {
     return {
       household,
-      mortgageLand: household.tenureMarketPurchase?.landMortgage
+      mortgageLand: household.marketPurchase?.landMortgage
         ? {
             monthlyPayment:
-              household.tenureMarketPurchase.landMortgage.monthlyPayment || 0,
+              household.marketPurchase.landMortgage.monthlyPayment || 0,
           }
         : undefined,
-      averageRentLand: household.tenureMarketRent.averageRentLandYearly / 12,
+      averageRentLand: household.marketRent.averageRentLandYearly / 12,
 
-      socialRentMonthlyLand: household.tenureSocialRent?.socialRentMonthlyLand,
-      mortgageFairholdLandPurchase: household.tenureFairholdLandPurchase
+      socialRentMonthlyLand: household.socialRent?.socialRentMonthlyLand,
+      mortgageFairholdLandPurchase: household.fairholdLandPurchase
         ?.discountedLandMortgage
         ? {
             monthlyPayment:
-              household.tenureFairholdLandPurchase.discountedLandMortgage
+              household.fairholdLandPurchase.discountedLandMortgage
                 .monthlyPayment || 0,
           }
         : undefined,
-      fairholdLandRent: household.tenureFairholdLandRent
-        ?.discountedLandRentYearly
+      fairholdLandRent: household.fairholdLandRent?.discountedLandRentYearly
         ? {
             discountedLandRent:
-              household.tenureFairholdLandRent.discountedLandRentYearly / 12 ||
-              0,
+              household.fairholdLandRent.discountedLandRentYearly / 12 || 0,
           }
         : undefined,
-      mortgageHouse: household.tenureMarketPurchase?.houseMortgage
+      mortgageHouse: household.marketPurchase?.houseMortgage
         ? {
             monthlyPayment:
-              household.tenureMarketPurchase.houseMortgage.monthlyPayment || 0,
+              household.marketPurchase.houseMortgage.monthlyPayment || 0,
           }
         : undefined,
-      mortgageDepreciatedHouse: household.tenureFairholdLandPurchase
+      mortgageDepreciatedHouse: household.fairholdLandPurchase
         ?.depreciatedHouseMortgage
         ? {
             monthlyPayment:
-              household.tenureFairholdLandPurchase.depreciatedHouseMortgage
+              household.fairholdLandPurchase.depreciatedHouseMortgage
                 .monthlyPayment || 0,
           }
         : undefined,
-      averageRentHouse: household.tenureMarketRent?.averageRentHouseYearly / 12,
-      socialRentMonthlyHouse: household.tenureSocialRent.socialRentMonthlyHouse,
+      averageRentHouse: household.marketRent?.averageRentHouseYearly / 12,
+      socialRentMonthlyHouse: household.socialRent.socialRentMonthlyHouse,
     };
   };
 

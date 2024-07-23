@@ -3,11 +3,11 @@ import {
   Fairhold,
   Property,
   Household,
-  TenureFairholdLandPurchase,
-  TenureMarketPurchase,
-  TenureMarketRent,
-  TenureSocialRent,
-  TenureFairholdLandRent,
+  FairholdLandPurchase,
+  MarketPurchase,
+  MarketRent,
+  SocialRent,
+  FairholdLandRent,
 } from "./classes";
 
 // Unit test for the mortgage class
@@ -116,7 +116,7 @@ describe("Property class", () => {
 
 // Unit test for the tenureMarketPurchase
 describe("tenureMarketPurchase class", () => {
-  let tenureMarketPurchase: TenureMarketPurchase;
+  let tenureMarketPurchase: MarketPurchase;
 
   beforeEach(() => {
     let forecastParameters = {
@@ -140,7 +140,7 @@ describe("tenureMarketPurchase class", () => {
       itl3: "TLG24",
     });
 
-    tenureMarketPurchase = new TenureMarketPurchase({
+    tenureMarketPurchase = new MarketPurchase({
       incomeYearly: 45816,
       averagePrice: 218091.58,
       newBuildPrice: 186560,
@@ -158,13 +158,13 @@ describe("tenureMarketPurchase class", () => {
   });
 
   it("can be instantiated", () => {
-    expect(tenureMarketPurchase).toBeInstanceOf(TenureMarketPurchase);
+    expect(tenureMarketPurchase).toBeInstanceOf(MarketPurchase);
   });
 });
 
 // Unit test for the TenureMarketRent
 describe("TenureMarketRent class", () => {
-  let tenureMarketRent: TenureMarketRent;
+  let tenureMarketRent: MarketRent;
 
   beforeEach(() => {
     let forecastParameters = {
@@ -188,7 +188,7 @@ describe("TenureMarketRent class", () => {
       itl3: "TLG24",
     });
 
-    tenureMarketRent = new TenureMarketRent({
+    tenureMarketRent = new MarketRent({
       averageRentYearly: 20000,
       incomeYearly: 45816,
       averagePrice: 218091.58,
@@ -208,13 +208,13 @@ describe("TenureMarketRent class", () => {
   });
 
   it("can be instantiated", () => {
-    expect(tenureMarketRent).toBeInstanceOf(TenureMarketRent);
+    expect(tenureMarketRent).toBeInstanceOf(MarketRent);
   });
 });
 
 // Unit test for the TenureFairholdLandRent
 describe("TenureFairholdLandRent class", () => {
-  let tenureFairholdLandRent: TenureFairholdLandRent;
+  let tenureFairholdLandRent: FairholdLandRent;
 
   beforeEach(() => {
     let forecastParameters = {
@@ -238,7 +238,7 @@ describe("TenureFairholdLandRent class", () => {
       itl3: "TLG24",
     });
 
-    let tenureMarketRent = new TenureMarketRent({
+    let tenureMarketRent = new MarketRent({
       averageRentYearly: 20000,
       incomeYearly: 45816,
       averagePrice: 218091.58,
@@ -256,7 +256,7 @@ describe("TenureFairholdLandRent class", () => {
       rentGrowthPerYear: forecastParameters.rentGrowthPerYear,
     });
 
-    tenureFairholdLandRent = new TenureFairholdLandRent({
+    tenureFairholdLandRent = new FairholdLandRent({
       averageRentYearly: 20000,
       incomeYearly: 45816,
       averagePrice: 218091.58,
@@ -280,13 +280,13 @@ describe("TenureFairholdLandRent class", () => {
   });
 
   it("can be instantiated", () => {
-    expect(tenureFairholdLandRent).toBeInstanceOf(TenureFairholdLandRent);
+    expect(tenureFairholdLandRent).toBeInstanceOf(FairholdLandRent);
   });
 });
 
 // Unit test for the TenureFairholdLandRent
 describe("TenureFairholdLandPurchase class", () => {
-  let tenureFairholdLandPurchase: TenureFairholdLandPurchase;
+  let tenureFairholdLandPurchase: FairholdLandPurchase;
 
   beforeEach(() => {
     let forecastParameters = {
@@ -310,7 +310,7 @@ describe("TenureFairholdLandPurchase class", () => {
       itl3: "TLG24",
     });
 
-    let tenureMarketPurchase = new TenureMarketPurchase({
+    let tenureMarketPurchase = new MarketPurchase({
       incomeYearly: 45816,
       averagePrice: 218091.58,
       newBuildPrice: 186560,
@@ -326,7 +326,7 @@ describe("TenureFairholdLandPurchase class", () => {
       incomeGrowthPerYear: forecastParameters.incomeGrowthPerYear,
     });
 
-    tenureFairholdLandPurchase = new TenureFairholdLandPurchase({
+    tenureFairholdLandPurchase = new FairholdLandPurchase({
       incomeYearly: 45816,
       averagePrice: 218091.58,
       newBuildPrice: 186560,
@@ -349,15 +349,13 @@ describe("TenureFairholdLandPurchase class", () => {
   });
 
   it("can be instantiated", () => {
-    expect(tenureFairholdLandPurchase).toBeInstanceOf(
-      TenureFairholdLandPurchase
-    );
+    expect(tenureFairholdLandPurchase).toBeInstanceOf(FairholdLandPurchase);
   });
 });
 
 // Unit test for the TenureSocialRent
 describe("TenureSocialRent class", () => {
-  let tenureSocialRent: TenureSocialRent;
+  let tenureSocialRent: SocialRent;
 
   beforeEach(() => {
     let forecastParameters = {
@@ -407,7 +405,7 @@ describe("TenureSocialRent class", () => {
       { id: 23, inflation: 10.1, total: 11.1, year: "2023-24" },
     ];
 
-    tenureSocialRent = new TenureSocialRent({
+    tenureSocialRent = new SocialRent({
       socialRentAverageEarning: 295.4,
       socialRentAdjustments: socialRentAdjustments,
       housePriceIndex: 75434.35,
@@ -415,7 +413,7 @@ describe("TenureSocialRent class", () => {
     });
   });
   it("can be instantiated", () => {
-    expect(tenureSocialRent).toBeInstanceOf(TenureSocialRent);
+    expect(tenureSocialRent).toBeInstanceOf(SocialRent);
   });
 });
 
