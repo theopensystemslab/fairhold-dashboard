@@ -909,13 +909,13 @@ export class FairholdLandRent {
       houseMortgagePaymentYearly[0].yearlyPayment; // find the first year
 
     interface lifetimeTypes {
-      fairholdRentLand: number;
+      rentLandFairholdYearly: number;
       houseMortgagePaymentYearly: number | undefined;
     }
 
     let lifetime: lifetimeTypes[] = [
       {
-        fairholdRentLand: fairholdRentLandIterative,
+        rentLandFairholdYearly: fairholdRentLandIterative,
         houseMortgagePaymentYearly: houseMortgagePaymentYearlyIterative,
       },
     ]; // initialize the forecast
@@ -950,7 +950,7 @@ export class FairholdLandRent {
       }
 
       lifetime.push({
-        fairholdRentLand: fairholdRentLandIterative,
+        rentLandFairholdYearly: fairholdRentLandIterative,
         houseMortgagePaymentYearly: houseMortgagePaymentYearlyIterative,
       }); // add the current price to the new build price forecast
     }
@@ -1248,7 +1248,7 @@ export interface lifetimeTypes {
   houseMortgagePaymentYearly: number;
   income: number;
   gasBillYearly: number;
-  rentYearly: number;
+  averageRentYearly: number;
   averageRentLandYearly: number;
   averageRentHouseYearly: number;
   rentLandFairholdYearly: number, 
