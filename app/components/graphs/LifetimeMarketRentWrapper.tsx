@@ -24,8 +24,8 @@ const LifetimeMarketRentWrapper: React.FC<LifetimeMarketRentProps> = ({ househol
     // Process and format the data for the chart
     const chartData = ((household.tenure.marketRent?.lifetime as lifetimeTypes[])?.map((item, index) => ({
       year: index.toString(),
-      landCost: item.rentLandYearly,
-      houseCost: item.rentHouseYearly,
+      landCost: item.averageRentLandYearly,
+      houseCost: item.averageRentHouseYearly,
       incomeThreshold: item.affordabilityThresholdIncome,
     })) ?? []);
 
