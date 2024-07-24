@@ -193,9 +193,9 @@ export class Property {
 export class Mortgage {
   propertyValue: number; //value of the property for the mortgage
   interestRate: number; // interest rate of the mortgage in percentage e.r, 0.05=5%
-  termOfTheMortgage: number; // number of years of the mortgage
+  termYears: number; // number of years of the mortgage
   initialDeposit: number; // initial deposit of the value of the mortgage in percentage e.g. 0.15 =15% deposit
-  amountOfTheMortgage?: number; // amount of the morgage requested
+  principal?: number; // amount of the morgage requested
   monthlyPayment?: number; // monthly rate of the mortgage
   totalMortgageCost?: number; // total cost of the mortgage
   yearlyPaymentBreakdown?: {
@@ -217,23 +217,23 @@ export class Mortgage {
     this.propertyValue = propertyValue;
     this.initialDeposit = initialDeposit;
     this.interestRate = interestRate;
-    this.termOfTheMortgage = termOfTheMortgage;
+    this.termYears = termOfTheMortgage;
     this.calculateAmountOfTheMortgage(); // calculate the amount of the mortgage
     this.calculateMonthlyMortgagePayment(); // calculate the montly payment
     this.calculateYearlyPaymentBreakdown(); // calculate the yearly breakdown;
   }
 
   calculateAmountOfTheMortgage() {
-    this.amountOfTheMortgage = this.propertyValue * (1 - this.initialDeposit); // calculate the amount of the mortgage by removing the deposit
-    return this.amountOfTheMortgage;
+    this.principal = this.propertyValue * (1 - this.initialDeposit); // calculate the amount of the mortgage by removing the deposit
+    return this.principal;
   }
 
   calculateMonthlyMortgagePayment() {
     const monthlyInterestRate = this.interestRate / 12; // Convert annual interest rate to monthly rate
-    const numberOfPayments = this.termOfTheMortgage * 12; // Convert term in years to total number of payments
-    if (this.amountOfTheMortgage !== undefined) {
+    const numberOfPayments = this.termYears * 12; // Convert term in years to total number of payments
+    if (this.principal !== undefined) {
       const monthlyPayment =
-        (this.amountOfTheMortgage *
+        (this.principal *
           monthlyInterestRate *
           Math.pow(1 + monthlyInterestRate, numberOfPayments)) /
         (Math.pow(1 + monthlyInterestRate, numberOfPayments) - 1); // Calculate the monthly payment
@@ -267,8 +267,8 @@ export class Mortgage {
       },
     ]; // initialize the yearlyPaymentBreakdown
 
-    for (let i = 0; i < this.termOfTheMortgage - 1; i++) {
-      if (i != this.termOfTheMortgage - 1) {
+    for (let i = 0; i < this.termYears - 1; i++) {
+      if (i != this.termYears - 1) {
         yearlyPayment = this.monthlyPayment * 12; // calculate the yearly payment
       } else {
         yearlyPayment = remainingBalance; // last year just pay the remaining balance

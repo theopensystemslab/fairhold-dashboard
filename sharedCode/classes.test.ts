@@ -30,7 +30,7 @@ describe("Mortgage class", () => {
       initialDeposit: 0.1,
     });
 
-    expect(mortgage.amountOfTheMortgage).toBeCloseTo(90);
+    expect(mortgage.principal).toBeCloseTo(90);
   });
 
   it("correctly calculates the amount of monthly payment ", () => {
