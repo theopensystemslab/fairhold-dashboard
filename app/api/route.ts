@@ -180,16 +180,16 @@ export async function POST(request: Request) {
       WHERE itl3 = ${itl3}
     `;
     console.log("rentRes: ", rentRes);
-    let averageRent;
+    let averageRentMonthly;
     if (rentRes.length === 1) {
-      averageRent = rentRes[0].monthlymeanrent;
+      averageRentMonthly = rentRes[0].monthlymeanrent;
     } else if (rentRes.length > 1) {
       const totalRent = rentRes.reduce(
         (sum, item) => sum + item.monthlymeanrent,
         0
       );
-      averageRent = totalRent / rentRes.length;
-      console.log(averageRent);
+      averageRentMonthly = totalRent / rentRes.length;
+      console.log(averageRentMonthly);
 
       // create type for rentAdjustment query
       type rentAdjustment = {
@@ -222,17 +222,17 @@ export async function POST(request: Request) {
       `;
 
       console.log("socialRentEarningRes: ", socialRentEarningRes);
-      let socialRentAveEarning;
+      let socialRentAverageEarning;
       if (socialRentEarningRes.length === 1) {
-        socialRentAveEarning = socialRentEarningRes[0].earningsperweek;
+        socialRentAverageEarning = socialRentEarningRes[0].earningsperweek;
       } else if (socialRentEarningRes.length > 1) {
         const socialRentTotalEarning = socialRentEarningRes.reduce(
           (sum, item) => sum + item.earningsperweek,
           0
         );
-        socialRentAveEarning = totalRent / socialRentEarningRes.length;
+        socialRentAverageEarning = totalRent / socialRentEarningRes.length;
       }
-      console.log("socialRentAveEarning: ", socialRentAveEarning);
+      console.log("socialRentAverageEarning: ", socialRentAverageEarning);
 
       // create type for hpiRes query
       type hpiRes = {
@@ -283,9 +283,9 @@ export async function POST(request: Request) {
         gdhi: gdhi,
         hpi: averageHpi,
         buildPrice: buildPrice,
-        averageRent: averageRent,
+        averageRentMonthly: averageRentMonthly,
         socialRentAdjustments: socialRentAdjustments,
-        socialRentAveEarning: socialRentAveEarning,
+        socialRentAverageEarning: socialRentAverageEarning,
         numberOfTransactions: numberOfTransactions,
         granularityPostcode: granularityPostcode,
         pricesPaid: pricesPaid,
