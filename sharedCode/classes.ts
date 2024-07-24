@@ -794,9 +794,7 @@ export class FairholdLandPurchase {
 
 export class FairholdLandRent {
   depreciatedHouseMortgage?: Mortgage; // mortgage on the depreciated house
-  discountedLandRentYearly?: number; // discounted land rent
-  averageRentLandYearly?: number; // mortgage object on the depreciated house
-  averageRentHouseYearly?: number; // mortgage on the land
+  discountedLandRentMonthly?: number; // discounted land rent
   lifetime?: object; // lifetime object with projections
   constructor({
     averageRentYearly, // average rent per year
@@ -826,11 +824,6 @@ export class FairholdLandRent {
     rentGrowthPerYear: number;
     fairhold: Fairhold;
   }) {
-    this.calculateAverageRentLandAndHouse(
-      landPrice,
-      averagePrice,
-      averageRentYearly
-    );
     this.calculateMortgage(depreciatedBuildPrice);
     this.calculateLifetime(
       averagePrice,
@@ -844,17 +837,6 @@ export class FairholdLandRent {
       incomeGrowthPerYear,
       rentGrowthPerYear
     );
-  }
-
-  calculateAverageRentLandAndHouse(
-    landPrice: number,
-    averagePrice: number,
-    averageRentYearly: number
-  ) {
-    const landToTotalRatio = landPrice / averagePrice;
-    this.averageRentLandYearly = averageRentYearly * landToTotalRatio; // set the avearage rent for the land
-    this.averageRentHouseYearly =
-      averageRentYearly - this.averageRentLandYearly; // set the average rent for the house
   }
 
   calculateMortgage(depreciatedBuildPrice: number) {
@@ -888,9 +870,9 @@ export class FairholdLandRent {
 
     let fairholdRentLandIterative = new Fairhold({
       affordability: affordabilityIterative,
-      landPriceOrRent: averageRentLandYearlyIterative,
+      landPriceOrRent: averageRentLandYearlyIterative / 12,
     }).calculateDiscountedPriceOrRent(); // calculate the discounted land rent
-    this.discountedLandRentYearly = fairholdRentLandIterative;
+    this.discountedLandRentMonthly = fairholdRentLandIterative;
 
     interface mortgageBreakdownTypes {
       yearlyPayment: number;
