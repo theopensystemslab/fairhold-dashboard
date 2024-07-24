@@ -1251,8 +1251,8 @@ export interface lifetimeTypes {
   income: number;
   gasBillYearly: number;
   rentYearly: number;
-  rentYearlyLand: number;
-  rentYearlyHouse: number;
+  averageRentLandYearly: number;
+  averageRentHouseYearly: number;
   rentLandFairholdYearly: number, 
   affordabilityThresholdIncome: number,
 }
