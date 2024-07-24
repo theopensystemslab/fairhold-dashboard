@@ -1235,3 +1235,22 @@ export class Household {
     });
   }
 }
+
+// create the interface
+export interface lifetimeTypes {
+  year: number;
+  averagePrice: number;
+  newBuildPrice: number;
+  landPrice: number;
+  maintenanceCost: number;
+  landToTotalRatio: number;
+  landMortgagePaymentYearly: number;
+  houseMortgagePaymentYearly: number;
+  income: number;
+  gasBillYearly: number;
+  rentYearly: number;
+  rentYearlyLand: number;
+  rentYearlyHouse: number;
+  rentLandFairholdYearly: number, 
+  affordabilityThresholdIncome: number,
+}
