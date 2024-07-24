@@ -477,10 +477,10 @@ export class MarketPurchase {
 }
 
 export class MarketRent {
-  averageRentYearly; // average rent per year
   affordability?: number; // afforadability
-  averageRentLandYearly?: number; // mortgage object on the depreciated house
-  averageRentHouseYearly?: number; // mortgage on the land
+  averageRentMonthly?: number; // average rent per year
+  averageRentLandMonthly?: number; // mortgage object on the depreciated house
+  averageRentHouseMonthly?: number; // mortgage on the land
   lifetime?: object; // lifetime object with projections
   constructor({
     averageRentYearly, // average rent per year
@@ -510,18 +510,18 @@ export class MarketRent {
     incomeGrowthPerYear: number;
     rentGrowthPerYear: number;
   }) {
-    this.averageRentYearly = averageRentYearly;
     this.calculateAverageRentLandAndHouse(
       landPrice,
       averagePrice,
-      incomeYearly
+      incomeYearly,
+      averageRentYearly
     );
     this.calculateLifetime(
       averagePrice,
       newBuildPrice,
       landPrice,
       incomeYearly,
-      affordabilityThresholdIncomePercentage,
+      averageRentYearly,
       yearsForecast,
       propertyPriceGrowthPerYear,
       constructionPriceGrowthPerYear,
@@ -533,13 +533,15 @@ export class MarketRent {
   calculateAverageRentLandAndHouse(
     landPrice: number,
     averagePrice: number,
-    incomeYearly: number
+    incomeYearly: number,
+    averageRentYearly: number
   ) {
+    this.averageRentMonthly = averageRentYearly / 12; // set the average rent per month
     const landToTotalRatio = landPrice / averagePrice;
-    this.averageRentLandYearly = this.averageRentYearly * landToTotalRatio; // set the avearage rent for the land
-    this.averageRentHouseYearly =
-      this.averageRentYearly - this.averageRentLandYearly; // set the average rent for the house
-    const affordability = this.averageRentYearly / incomeYearly;
+    this.averageRentLandMonthly = this.averageRentMonthly * landToTotalRatio; // set the avearage rent for the land
+    this.averageRentHouseMonthly =
+      this.averageRentMonthly - this.averageRentLandMonthly; // set the average rent for the house
+    const affordability = averageRentYearly / incomeYearly; // calculate the affordability
     this.affordability = affordability;
   }
 
@@ -548,7 +550,7 @@ export class MarketRent {
     newBuildPrice: number,
     landPrice: number,
     incomeYearly: number,
-    affordabilityThresholdIncomePercentage: number,
+    averageRentYearly: number,
     yearsForecast: number,
     propertyPriceGrowthPerYear: number,
     constructionPriceGrowthPerYear: number,
@@ -561,7 +563,7 @@ export class MarketRent {
     let landPriceIterative = landPrice;
     let landToTotalRatioIterative = landPrice / averagePrice;
     let incomeIterative = incomeYearly; // set the current income
-    let averageRentYearlyIterative = this.averageRentYearly; // yearly rent
+    let averageRentYearlyIterative = averageRentYearly; // yearly rent
     let averageRentLandYearlyIterative =
       averageRentYearlyIterative * landToTotalRatioIterative; // yearly rent for land
     let averageRentHouseYearlyIterative =
