@@ -1246,6 +1246,8 @@ export interface lifetimeTypes {
   landPrice: number;
   maintenanceCost: number;
   landToTotalRatio: number;
+  landMortgagePaymentYearly: number;
+  houseMortgagePaymentYearly: number;
   income: number;
   gasBillYearly: number;
   rentYearly: number;
