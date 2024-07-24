@@ -1,13 +1,13 @@
 "use client";
 import React from 'react';
-import { Household } from '@/sharedCode/classes';
+import { Household, lifetimeTypes } from '@/sharedCode/classes';
 import LifetimeCombinedChart from './LifetimeCombinedChart';
 
-interface LifetimeCombinedWrapperProps {
+interface LifetimeMarketPurchaseWrapperProps {
     household: Household;
   }
 
-const LifetimeMarketPurchaseWrapper: React.FC<LifetimeCombinedWrapperProps> = ({ household }) => {
+const LifetimeMarketPurchaseWrapper: React.FC<LifetimeMarketPurchaseWrapperProps> = ({ household }) => {
   console.log('LifetimeMarketPurchaseWrapper household: ', household)
 
   // Create color scheme for different versions of the graph
@@ -19,19 +19,17 @@ const LifetimeMarketPurchaseWrapper: React.FC<LifetimeCombinedWrapperProps> = ({
       incomeThreshold: '#6c9e6e'
       }
 
-    console.log('household.lifetime?.lifetimeMarket', household.lifetime?.lifetimeMarket)
+    console.log('household.tenure.marketPurchase.lifetime?.lifetimeMarket', household.tenure.marketPurchase?.lifetime)
 
     // Process and format the data for the chart
-    const chartData = household.lifetime?.lifetimeMarket
-    ? household.lifetime.lifetimeMarket.map(item => ({
-        year: item.year.toString(),
-        landCost: item.landPrice,
-        houseCost: item.newBuildPrice,
-        maintenanceCost: item.maintenanceCost,
-        billsCost: item.gasBillYearly,
-        incomeThreshold: item.affordabilityThresholdIncome,
-      }))
-    : [];
+    const chartData = ((household.tenure.marketPurchase?.lifetime as lifetimeTypes[])?.map((item, index) => ({
+      year: index.toString(), // or just `year: index` if you want it as a number
+      landCost: item.landMortgagePaymentYearly,
+      houseCost: item.houseMortgagePaymentYearly,
+      maintenanceCost: item.maintenanceCost,
+      billsCost: item.gasBillYearly,
+      incomeThreshold: item.affordabilityThresholdIncome,
+    })) ?? []);
 
     console.log('LifetimeMarketPurchaseWrapper.tsx chartData: ', chartData)
 
