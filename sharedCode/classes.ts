@@ -1066,8 +1066,6 @@ export class Household {
   gasBillYearly; // gas bill monthly
   property; // property object
   forecastParameters; // forecast parameters
-  averageRentLand?: number; // average rent for the land
-  averageRentHouse?: number; // average rent for the house
   incomeYearly?: number; // income per household
   tenure: {
     marketPurchase?: MarketPurchase;
