@@ -290,7 +290,11 @@ export class MarketPurchase {
   affordability?: number; // affordability fo the market
   houseMortgage?: Mortgage; // mortgage object on the new house
   landMortgage?: Mortgage; // mortgage on the land
-  lifetime?: object; // lifetime object with projections
+  lifetime?: {
+    maintenanceCost: number;
+    landMortgagePaymentYearly: number;
+    houseMortgagePaymentYearly: number;
+  }[]; // lifetime object with projections
 
   constructor({
     newBuildPrice, // new build price of the property
@@ -387,8 +391,8 @@ export class MarketPurchase {
 
     interface lifetimeTypes {
       maintenanceCost: number;
-      landMortgagePaymentYearly: number | undefined;
-      houseMortgagePaymentYearly: number | undefined;
+      landMortgagePaymentYearly: number;
+      houseMortgagePaymentYearly: number;
     }
 
     let lifetime: lifetimeTypes[] = [
@@ -430,7 +434,10 @@ export class MarketRent {
   averageRentMonthly?: number; // average rent per year
   averageRentLandMonthly?: number; // mortgage object on the depreciated house
   averageRentHouseMonthly?: number; // mortgage on the land
-  lifetime?: object; // lifetime object with projections
+  lifetime?: {
+    averageRentLandYearly: number;
+    averageRentHouseYearly: number;
+  }[]; // lifetime object with projections
   constructor({
     averageRentYearly, // average rent per year
     averagePrice, // average price of the property
@@ -549,7 +556,11 @@ export class FairholdLandPurchase {
   discountedLandPrice?: number;
   discountedLandMortgage?: Mortgage;
   depreciatedHouseMortgage?: Mortgage;
-  lifetime?: object;
+  lifetime?: {
+    maintenanceCost: number;
+    landMortgagePaymentYearly: number;
+    houseMortgagePaymentYearly: number;
+  }[];
   constructor({
     newBuildPrice, // new build price of the property
     depreciatedBuildPrice, // depreciated building price
@@ -636,8 +647,8 @@ export class FairholdLandPurchase {
 
     interface lifetimeTypes {
       maintenanceCost: number;
-      landMortgagePaymentYearly: number | undefined;
-      houseMortgagePaymentYearly: number | undefined;
+      landMortgagePaymentYearly: number;
+      houseMortgagePaymentYearly: number;
     }
 
     let lifetime: lifetimeTypes[] = [
@@ -676,7 +687,11 @@ export class FairholdLandPurchase {
 export class FairholdLandRent {
   depreciatedHouseMortgage?: Mortgage; // mortgage on the depreciated house
   discountedLandRentMonthly?: number; // discounted land rent
-  lifetime?: object; // lifetime object with projections
+  lifetime?: {
+    maintenanceCost: number;
+    fairholdRentLand: number;
+    houseMortgagePaymentYearly: number;
+  }[]; // lifetime object with projections
   constructor({
     averageRentYearly, // average rent per year
     averagePrice, // average price of the property
@@ -781,7 +796,7 @@ export class FairholdLandRent {
     interface lifetimeTypes {
       maintenanceCost: number;
       fairholdRentLand: number;
-      houseMortgagePaymentYearly: number | undefined;
+      houseMortgagePaymentYearly: number;
     }
 
     let lifetime: lifetimeTypes[] = [
@@ -941,7 +956,7 @@ export class Household {
   gasBillYearly; // gas bill monthly
   property; // property object
   forecastParameters; // forecast parameters
-  incomeYearly?: number; // income per household
+  incomeYearly!: number; // income per household
   tenure: {
     marketPurchase?: MarketPurchase;
     marketRent?: MarketRent;
@@ -949,6 +964,11 @@ export class Household {
     fairholdLandPurchase?: FairholdLandPurchase;
     fairholdLandRent?: FairholdLandRent;
   }; // grouped tenure field
+
+  lifetime?: {
+    affordabilityThresholdIncome: number;
+    incomeYearly: number;
+  }[];
 
   constructor({
     incomePerPersonYearly,
@@ -988,6 +1008,12 @@ export class Household {
       socialRentAverageEarning,
       socialRentAdjustments,
       housePriceIndex
+    );
+    this.calculateLifetime(
+      this.incomeYearly,
+      forecastParameters.incomeGrowthPerYear,
+      forecastParameters.affordabilityThresholdIncomePercentage,
+      forecastParameters.yearsForecast
     );
   }
 
@@ -1108,7 +1134,7 @@ export class Household {
     });
   }
 
-  calculateLifeTime(
+  calculateLifetime(
     incomeYearly: number,
     incomeGrowthPerYear: number,
     affordabilityThresholdIncomePercentage: number,
@@ -1139,5 +1165,6 @@ export class Household {
         affordabilityThresholdIncome: affordabilityThresholdIncomeIterative,
       });
     }
+    this.lifetime = lifetime;
   }
 }
