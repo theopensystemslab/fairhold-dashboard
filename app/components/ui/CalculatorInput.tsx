@@ -25,11 +25,15 @@ const CalculatorInput = () => {
   async function handleSubmit(e: any) {
     e.preventDefault(); // pr event the default of the form
     const formData = new FormData(e.currentTarget); // get the data in the form, e.g postcode, house size etc
+    const data = Object.fromEntries(formData.entries());
 
     //fetch the data: call the api and attach the form data
     const response = await fetch("/api", {
       method: "POST",
-      body: formData, // pass the form data to the API
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data), // pass the form data to the API
     });
     const jsonData = await response.json();
     console.log('handleSubmit jsonData: ', jsonData);

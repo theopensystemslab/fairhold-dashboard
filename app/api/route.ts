@@ -1,28 +1,18 @@
-import { NextResponse, NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
+import { calculationSchema } from "../schemas/calculationSchema";
+
 const prisma = new PrismaClient();
 
-// import the postcode library
-import { parse, fix } from "postcode";
-
 // define and export the GET handler function
-export async function POST(request: Request) {
-  const formData = await request.formData(); // get the data submitted in the form
-
-  const data = {
-    housePostcode: formData.get("housePostcode"), // get the housePostcode variable
-    houseSize: formData.get("houseSize"), // get the houseSize variable
-    houseAge: formData.get("houseAge"), // get the houseAge variable
-    houseBedrooms: formData.get("houseBedrooms"), // get the houseBedrooms variable
-    houseType: formData.get("houseType"), // get the houseType variable
-  };
-
+export async function POST(req: Request) {
   try {
-    // data are going to be queried at different levels of granularity based on the postcode
-    if (!data.housePostcode) throw Error("Invalid postcode");
-    const postcode = parse(fix(data.housePostcode.toString())); // define the postcode object. fix any issues with spacing
+    // Parse and validate user input
+    const data = await req.json()
+    const input = calculationSchema.parse(data);
 
-    if (!postcode.valid) throw Error("Invalid postcode");
+    // data are going to be queried at different levels of granularity based on the postcode
+    const postcode = input.housePostcode;
     const postcodeArea = postcode.area; // extract only the characters for the area, e.g SE
     const postcodeDistrict = postcode.district; // extract only characters for the district, SE17
     const postcodeSector = postcode.sector; // extract only the characters for the sector, SE17 1
@@ -45,7 +35,7 @@ export async function POST(request: Request) {
     const pricesPaidSector = await prisma.$queryRaw<PricePaid[]>`
       SELECT id, postcode, price 
       FROM "public"."pricespaid" 
-      WHERE propertyType = ${data.houseType} AND postcode LIKE ${postcodeSearchSector}
+      WHERE propertyType = ${input.houseType} AND postcode LIKE ${postcodeSearchSector}
     `; // execute query and extract results
     console.log(
       "pricesPaidSector: ",
@@ -65,7 +55,7 @@ export async function POST(request: Request) {
       const pricesPaidDistrict = await prisma.$queryRaw<PricePaid[]>`
         SELECT id,postcode,price 
         FROM "public"."pricespaid" 
-        WHERE propertyType = ${data.houseType} AND postcode LIKE ${postcodeSearchDistrict}
+        WHERE propertyType = ${input.houseType} AND postcode LIKE ${postcodeSearchDistrict}
       `; // create the sql query and count how many items meet the criteria; execute the query and retrieve the results
       console.log(
         "pricesPaidDistrict: ",
@@ -84,7 +74,7 @@ export async function POST(request: Request) {
         const pricesPaidArea = await prisma.$queryRaw<PricePaid[]>`
           SELECT id,postcode,price 
           FROM "public"."pricespaid" 
-          WHERE propertytype = ${data.houseType} AND postcode LIKE ${postcodeSearchArea}
+          WHERE propertytype = ${input.houseType} AND postcode LIKE ${postcodeSearchArea}
         `; // create the sql query and count how many items meet the criteria; execute the query and retrieve the results
         console.log(
           "pricesPaidArea: ",
@@ -130,7 +120,7 @@ export async function POST(request: Request) {
 
     const buildPriceRes = await prisma.$queryRaw<BuildPrice[]>`
       SELECT * FROM "public"."buildprices" 
-      WHERE "housetype" = ${data.houseType}
+      WHERE "housetype" = ${input.houseType}
     `;
     console.log("buildPriceRes:", buildPriceRes);
     const buildPrice = buildPriceRes[0]["pricemid"];
@@ -269,15 +259,11 @@ export async function POST(request: Request) {
       console.log("gasBillYearly: ", gasBillYearly);
 
       return NextResponse.json({
-        postcode,
-        houseType: data.houseType,
-        houseAge: data.houseAge ? parseFloat(data.houseAge.toString()) : null,
-        houseBedrooms: data.houseBedrooms
-          ? parseFloat(data.houseBedrooms.toString())
-          : null,
-        houseSize: data.houseSize
-          ? parseFloat(data.houseSize.toString())
-          : null,
+        postcode: input.housePostcode,
+        houseType: input.houseType,
+        houseAge: input.houseAge,
+        houseBedrooms: input.houseBedrooms,
+        houseSize: input.houseSize,
         averagePrice: parseFloat(averagePrice.toFixed(2)),
         itl3,
         gdhi,
@@ -292,17 +278,10 @@ export async function POST(request: Request) {
         gasBillYearly,
       });
     }
-
-    // return the results
   } catch (err) {
     console.log("ERROR: API - ", (err as Error).message);
-
-    const response = {
-      error: (err as Error).message,
-      returnedStatus: 200,
-    };
-
-    return NextResponse.json(response, { status: 200 });
+    const response = { error: (err as Error).message };
+    return NextResponse.json(response, { status: 500 });
   } finally {
     await prisma.$disconnect();
   }
