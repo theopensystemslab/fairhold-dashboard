@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
-import { calculationSchema } from "../schemas/calculationSchema";
+import { Calculation, calculationSchema } from "../schemas/calculationSchema";
 
 const prisma = new PrismaClient();
 
@@ -9,7 +9,7 @@ export async function POST(req: Request) {
   try {
     // Parse and validate user input
     const data = await req.json()
-    const input = calculationSchema.parse(data);
+    const input: Calculation = calculationSchema.parse(data);
 
     // data are going to be queried at different levels of granularity based on the postcode
     const postcode = input.housePostcode;
