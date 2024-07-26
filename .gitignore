@@ -36,3 +36,6 @@ next.config.mjs
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# IDE
+.vscode
