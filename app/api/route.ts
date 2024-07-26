@@ -245,14 +245,14 @@ export async function POST(request: Request) {
       WHERE itl3 = ${itl3}
     `;
       console.log("hpiRes: ", hpiRes);
-      let averageHpi;
+      let hpi;
       if (hpiRes.length === 1) {
-        averageHpi = hpiRes[0].hpi_2020;
+        hpi = hpiRes[0].hpi_2020;
       } else {
         const hpiTotal = hpiRes.reduce((sum, item) => sum + item.hpi_2020, 0);
-        averageHpi = hpiTotal / hpiRes.length;
+        hpi = hpiTotal / hpiRes.length;
       }
-      console.log("averageHpi: ", averageHpi);
+      console.log("averageHpi: ", hpi);
 
       // create type for gas bill query
       type gasBillYearlyRes = {
@@ -269,7 +269,7 @@ export async function POST(request: Request) {
       console.log("gasBillYearly: ", gasBillYearly);
 
       return NextResponse.json({
-        postcode: postcode,
+        postcode,
         houseType: data.houseType,
         houseAge: data.houseAge ? parseFloat(data.houseAge.toString()) : null,
         houseBedrooms: data.houseBedrooms
@@ -279,17 +279,17 @@ export async function POST(request: Request) {
           ? parseFloat(data.houseSize.toString())
           : null,
         averagePrice: parseFloat(averagePrice.toFixed(2)),
-        itl3: itl3,
-        gdhi: gdhi,
-        hpi: averageHpi,
-        buildPrice: buildPrice,
-        averageRentMonthly: averageRentMonthly,
-        socialRentAdjustments: socialRentAdjustments,
-        socialRentAverageEarning: socialRentAverageEarning,
-        numberOfTransactions: numberOfTransactions,
-        granularityPostcode: granularityPostcode,
-        pricesPaid: pricesPaid,
-        gasBillYearly: gasBillYearly,
+        itl3,
+        gdhi,
+        hpi,
+        buildPrice,
+        averageRentMonthly,
+        socialRentAdjustments,
+        socialRentAverageEarning,
+        numberOfTransactions,
+        granularityPostcode,
+        pricesPaid,
+        gasBillYearly,
       });
     }
 
