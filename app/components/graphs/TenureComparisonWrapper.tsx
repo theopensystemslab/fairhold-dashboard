@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Household } from "@/app/models/classes";
+import { Household } from "@/app/models/Household";
 import TenureComparisonBarChart from "./TenureComparisonBarChart";
 
 interface TenureComparisonWrapperProps {
