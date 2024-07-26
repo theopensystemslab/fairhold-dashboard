@@ -180,16 +180,16 @@ export async function POST(request: Request) {
       WHERE itl3 = ${itl3}
     `;
     console.log("rentRes: ", rentRes);
-    let averageRent;
+    let averageRentMonthly;
     if (rentRes.length === 1) {
-      averageRent = rentRes[0].monthlymeanrent;
+      averageRentMonthly = rentRes[0].monthlymeanrent;
     } else if (rentRes.length > 1) {
       const totalRent = rentRes.reduce(
         (sum, item) => sum + item.monthlymeanrent,
         0
       );
-      averageRent = totalRent / rentRes.length;
-      console.log(averageRent);
+      averageRentMonthly = totalRent / rentRes.length;
+      console.log(averageRentMonthly);
 
       // create type for rentAdjustment query
       type rentAdjustment = {
@@ -222,17 +222,17 @@ export async function POST(request: Request) {
       `;
 
       console.log("socialRentEarningRes: ", socialRentEarningRes);
-      let socialRentAveEarning;
+      let socialRentAverageEarning;
       if (socialRentEarningRes.length === 1) {
-        socialRentAveEarning = socialRentEarningRes[0].earningsperweek;
+        socialRentAverageEarning = socialRentEarningRes[0].earningsperweek;
       } else if (socialRentEarningRes.length > 1) {
         const socialRentTotalEarning = socialRentEarningRes.reduce(
           (sum, item) => sum + item.earningsperweek,
           0
         );
-        socialRentAveEarning = totalRent / socialRentEarningRes.length;
+        socialRentAverageEarning = totalRent / socialRentEarningRes.length;
       }
-      console.log("socialRentAveEarning: ", socialRentAveEarning);
+      console.log("socialRentAverageEarning: ", socialRentAverageEarning);
 
       // create type for hpiRes query
       type hpiRes = {
@@ -245,14 +245,14 @@ export async function POST(request: Request) {
       WHERE itl3 = ${itl3}
     `;
       console.log("hpiRes: ", hpiRes);
-      let averageHpi;
+      let hpi;
       if (hpiRes.length === 1) {
-        averageHpi = hpiRes[0].hpi_2020;
+        hpi = hpiRes[0].hpi_2020;
       } else {
         const hpiTotal = hpiRes.reduce((sum, item) => sum + item.hpi_2020, 0);
-        averageHpi = hpiTotal / hpiRes.length;
+        hpi = hpiTotal / hpiRes.length;
       }
-      console.log("averageHpi: ", averageHpi);
+      console.log("averageHpi: ", hpi);
 
       // create type for gas bill query
       type gasBillYearlyRes = {
@@ -269,7 +269,7 @@ export async function POST(request: Request) {
       console.log("gasBillYearly: ", gasBillYearly);
 
       return NextResponse.json({
-        postcode: postcode,
+        postcode,
         houseType: data.houseType,
         houseAge: data.houseAge ? parseFloat(data.houseAge.toString()) : null,
         houseBedrooms: data.houseBedrooms
@@ -279,17 +279,17 @@ export async function POST(request: Request) {
           ? parseFloat(data.houseSize.toString())
           : null,
         averagePrice: parseFloat(averagePrice.toFixed(2)),
-        itl3: itl3,
-        gdhi: gdhi,
-        hpi: averageHpi,
-        buildPrice: buildPrice,
-        averageRent: averageRent,
-        socialRentAdjustments: socialRentAdjustments,
-        socialRentAveEarning: socialRentAveEarning,
-        numberOfTransactions: numberOfTransactions,
-        granularityPostcode: granularityPostcode,
-        pricesPaid: pricesPaid,
-        gasBillYearly: gasBillYearly,
+        itl3,
+        gdhi,
+        hpi,
+        buildPrice,
+        averageRentMonthly,
+        socialRentAdjustments,
+        socialRentAverageEarning,
+        numberOfTransactions,
+        granularityPostcode,
+        pricesPaid,
+        gasBillYearly,
       });
     }
 
