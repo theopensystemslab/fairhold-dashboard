@@ -8,66 +8,82 @@ datasource db {
   directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
-model buildprices {
+model BuildPrices {
   id                   Int     @id @default(autoincrement())
-  housetypedescription String? @db.VarChar(250)
-  housetype            String? @db.VarChar(1)
-  pricerange           String? @db.VarChar(50)
-  pricemid             Float?
+  houseTypeDescription String? @map("housetypedescription") @db.VarChar(250) 
+  houseType            String? @map("housetype") @db.VarChar(1)
+  priceRange           String? @map("pricerange") @db.VarChar(50)
+  priceMid             Float? @map("pricemid")
+
+  @@map("buildprices")
 }
 
-model gdhi {
+model GDHI {
   id        Int     @id @default(autoincrement())
-  itllevel  String? @db.VarChar(250)
+  itlLevel  String? @map("itllevel") @db.VarChar(250)
   itl3      String? @db.VarChar(250)
   region    String? @db.VarChar(250)
-  gdhi_2020 Float?
+  gdhi2020  Float? @map("gdhi_2020")
+
+  @@map("gdhi")
 }
 
-model hpi {
+model HPI {
   id       Int     @id @default(autoincrement())
   region   String? @db.VarChar(250)
   itl3     String? @db.VarChar(250)
-  ladcode  String? @db.VarChar(250)
-  hpi_2020 Float?
+  ladCode  String? @map("ladcode") @db.VarChar(250)
+  hpi2020  Float? @map("hpi_2020")
+
+  @@map("hpi")
 }
 
-model itl_lookup {
+model ItlLookup {
   postcode String?
   district String?
   areacode String?
   itl3     String?
   id       Int     @id @default(autoincrement())
+
+  @@map("itl_lookup")
 }
 
-model pricespaid {
+model PricesPaid {
   id                    Int     @id @default(autoincrement())
-  transactionidentifier String? @db.VarChar(250)
+  transactionIdentifier String? @map("transactionidentifier") @db.VarChar(250)
   price                 Float?
   postcode              String? @db.VarChar(250)
-  propertytype          String? @db.VarChar(250)
-  newbuild              String? @db.VarChar(250)
+  propertyType          String? @map("propertytype") @db.VarChar(250)
+  newBuild              String? @map("newbuild") @db.VarChar(250)
+
+  @@map("pricespaid")
 }
 
-model rent {
+model Rent {
   id              Int     @id @default(autoincrement())
   itl3            String? @db.VarChar(250)
-  ladcode         String? @db.VarChar(250)
+  ladCode         String? @map("ladcode") @db.VarChar(250)
   region          String? @db.VarChar(250)
-  monthlymeanrent Float?
+  monthlyMeanrRent Float? @map("monthylmeanrent")
+
+  @@map("rent")
 }
 
-model soc_rent_adjustments {
+model SOCRentAdjustments {
+  id         Int     @id @default(autoincrement())
   year       String? @db.VarChar(10)
   inflation  Float?
   additional Float?
   total      Float?
-  id         Int     @id @default(autoincrement())
+
+  @@map("soc_rent_adjustments")
 }
 
-model socialrent {
+model SocialRent {
   id              Int     @id @default(autoincrement())
   county          String? @db.VarChar(250)
   itl3            String? @db.VarChar(250)
-  earningsperweek Float?
+  earningsPerWeek Float? @map("earningsperweek")
+
+  @@map("socialrent")
 }
