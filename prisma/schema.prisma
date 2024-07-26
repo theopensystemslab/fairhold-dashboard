@@ -10,30 +10,30 @@ datasource db {
 
 model BuildPrices {
   id                   Int     @id @default(autoincrement())
-  houseTypeDescription String? @map("housetypedescription") @db.VarChar(250) 
+  houseTypeDescription String? @map("housetypedescription") @db.VarChar(250)
   houseType            String? @map("housetype") @db.VarChar(1)
   priceRange           String? @map("pricerange") @db.VarChar(50)
-  priceMid             Float? @map("pricemid")
+  priceMid             Float?  @map("pricemid")
 
   @@map("buildprices")
 }
 
 model GDHI {
-  id        Int     @id @default(autoincrement())
-  itlLevel  String? @map("itllevel") @db.VarChar(250)
-  itl3      String? @db.VarChar(250)
-  region    String? @db.VarChar(250)
-  gdhi2020  Float? @map("gdhi_2020")
+  id       Int     @id @default(autoincrement())
+  itlLevel String? @map("itllevel") @db.VarChar(250)
+  itl3     String? @db.VarChar(250)
+  region   String? @db.VarChar(250)
+  gdhi2020 Float?  @map("gdhi_2020")
 
   @@map("gdhi")
 }
 
 model HPI {
-  id       Int     @id @default(autoincrement())
-  region   String? @db.VarChar(250)
-  itl3     String? @db.VarChar(250)
-  ladCode  String? @map("ladcode") @db.VarChar(250)
-  hpi2020  Float? @map("hpi_2020")
+  id      Int     @id @default(autoincrement())
+  region  String? @db.VarChar(250)
+  itl3    String? @db.VarChar(250)
+  ladCode String? @map("ladcode") @db.VarChar(250)
+  hpi2020 Float?  @map("hpi_2020")
 
   @@map("hpi")
 }
@@ -64,17 +64,17 @@ model Rent {
   itl3            String? @db.VarChar(250)
   ladCode         String? @map("ladcode") @db.VarChar(250)
   region          String? @db.VarChar(250)
-  monthlyMeanrRent Float? @map("monthylmeanrent")
+  monthlyMeanRent Float?  @map("monthlymeanrent")
 
   @@map("rent")
 }
 
 model SOCRentAdjustments {
-  id         Int     @id @default(autoincrement())
   year       String? @db.VarChar(10)
   inflation  Float?
   additional Float?
   total      Float?
+  id         Int     @id @default(autoincrement())
 
   @@map("soc_rent_adjustments")
 }
@@ -83,7 +83,16 @@ model SocialRent {
   id              Int     @id @default(autoincrement())
   county          String? @db.VarChar(250)
   itl3            String? @db.VarChar(250)
-  earningsPerWeek Float? @map("earningsperweek")
+  earningsPerWeek Float?  @map("earningsperweek")
 
   @@map("socialrent")
+}
+
+model GasBills {
+  id     Int    @id
+  region String @map("Region") @db.VarChar
+  itl    String @db.VarChar
+  bill   Float
+
+  @@map("gas_bills")
 }
