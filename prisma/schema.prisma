@@ -69,7 +69,7 @@ model Rent {
   @@map("rent")
 }
 
-model SOCRentAdjustments {
+model SocialRentAdjustments {
   year       String? @db.VarChar(10)
   inflation  Float?
   additional Float?
