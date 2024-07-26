@@ -1,20 +1,43 @@
 
 import * as math from "mathjs";
 
+const DEPRECIATION_FACTOR = -32938;
+
+// TODO: Reuse HouseType enum
+type HouseType = "D" | "S" | "T" | "F";
+
 export class Property {
-  postcode; // postcode of the property
-  houseType; // type of the house: D--> detached, S--> semidetached, T--> Terrace, F--> Flats
-  numberOfBedrooms; // number of bedrooms in the house
-  age; // age of the house
-  size; // size of the house in metre squares
-  newBuildPricePerMetre: number; // average build price per metre of a new house
-  averagePrice: number; // average market price
-  itl3: string; // ITL code
-  newBuildPrice?: number; // price of the house if it was new
-  depreciatedBuildPrice?: number; // price of the house according to the depreciation regression
-  bedWeightedAveragePrice?: number; // price of the house weigheted by the number of bedrooms
-  landPrice?: number; // price of the land
-  landToTotalRatio?: number; // ratio of the land price over the total
+  postcode: string;
+  houseType: HouseType;
+  numberOfBedrooms: number;
+  age: number;
+  /**
+   * Size of the house in squares meters
+   */
+  size: number;
+  /**
+   * Average build price per metre of a new house
+   */
+  newBuildPricePerMetre: number;
+  averageMarketPrice: number;
+  itl3: string;
+  /**
+   *  Price of the house if it was new
+   */
+  newBuildPrice: number;
+  /**
+   * Price of the house according to the depreciation regression
+   */
+  depreciatedBuildPrice: number;
+  /**
+   * Price of the house weighted by the number of bedrooms
+   */
+  bedWeightedAveragePrice: number;
+  landPrice: number;
+  /**
+   * Ratio of the land price to the total price
+   */
+  landToTotalRatio: number;
 
   constructor({
     postcode,
@@ -23,16 +46,16 @@ export class Property {
     age,
     size,
     newBuildPricePerMetre,
-    averagePrice,
+    averageMarketPrice,
     itl3,
   }: {
     postcode: any;
-    houseType: string;
+    houseType: HouseType;
     numberOfBedrooms: number;
     age: number;
     size: number;
     newBuildPricePerMetre: number;
-    averagePrice: number;
+    averageMarketPrice: number;
     itl3: string;
   }) {
     this.postcode = postcode;
@@ -41,84 +64,54 @@ export class Property {
     this.age = age;
     this.size = size;
     this.newBuildPricePerMetre = newBuildPricePerMetre;
-    this.averagePrice = averagePrice;
+    this.averageMarketPrice = averageMarketPrice;
     this.itl3 = itl3;
-
-    this.calculateNewBuildPrice(); // calculate new building price
-    this.calculateDepreciatedBuildPrice(); // calculated the depreciated building price
-    this.calculateBedWeightedAveragePrice(); // calculate the bed weighted building price
-    this.calculateLandPrice(); // calculate the price of the land
-    if (
-      this.landPrice !== undefined &&
-      this.bedWeightedAveragePrice !== undefined
-    ) {
-      this.landToTotalRatio = this.landPrice / this.bedWeightedAveragePrice; // define the land to total ratio
-    }
+    this.newBuildPrice = this.calculateNewBuildPrice();
+    this.depreciatedBuildPrice = this.calculateDepreciatedBuildPrice();
+    this.bedWeightedAveragePrice = this.calculateBedWeightedAveragePrice();
+    this.landPrice = this.averageMarketPrice - this.newBuildPrice;
+    this.landToTotalRatio = this.landPrice / this.bedWeightedAveragePrice; 
   }
 
-  // calculate new building price
-  calculateNewBuildPrice(precisionRounding: number = 2) {
-    if (!this.newBuildPricePerMetre) {
-      throw new Error(
-        "The Build Price cannot be calculated because pricePerMetre has not been set"
-      );
-    }
-    const newBuildPrice = this.newBuildPricePerMetre * this.size; // calculate the price of the new build
-    this.newBuildPrice = parseFloat(newBuildPrice.toFixed(precisionRounding)); // round the number
+  private calculateNewBuildPrice(precisionRounding: number = 2) {
+    let newBuildPrice = this.newBuildPricePerMetre * this.size;
+    newBuildPrice = parseFloat(newBuildPrice.toFixed(precisionRounding));
 
-    return this.newBuildPrice;
+    return newBuildPrice;
   }
 
-  // calculate nthe depraciated building price
-  calculateDepreciatedBuildPrice(
-    depreciationFactor: number = -32938,
+  private calculateDepreciatedBuildPrice(
     precisionRounding: number = 2
   ) {
-    if (!this.newBuildPrice) {
-      throw new Error(
-        "The Depreciated Price cannot be calculated because newBuildPrice has not been set"
-      );
-    }
 
-    const depreciatedBuildPrice =
-      this.newBuildPrice + depreciationFactor * math.log(this.age); // depreciated building price
-    this.depreciatedBuildPrice = parseFloat(
+    let depreciatedBuildPrice =
+      this.newBuildPrice + DEPRECIATION_FACTOR * math.log(this.age);
+    depreciatedBuildPrice = parseFloat(
       depreciatedBuildPrice.toFixed(precisionRounding)
-    ); // round the number
+    ); 
 
-    if (this.depreciatedBuildPrice == undefined) {
-      throw new Error("depreciatedBuildPrice is undefined");
-    }
-
-    return this.depreciatedBuildPrice;
+    return depreciatedBuildPrice;
   }
 
-  // calculate the average property price based on the  number of bedrooms
-  calculateBedWeightedAveragePrice(
-    numberOfBeds: number = this.numberOfBedrooms,
+  private calculateBedWeightedAveragePrice(
     beds: number[] = [0, 1, 2, 3, 4, 5, 6],
     bedWeights: number[] = [0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4],
     precisionRounding: number = 2
   ) {
-    let bedWeight; // initialize the variable
+    let bedWeight;
 
-    if (numberOfBeds < beds[beds.length - 1]) {
-      bedWeight = bedWeights[numberOfBeds]; // assign the weight based on the number of beds
+    if (this.numberOfBedrooms < beds[beds.length - 1]) {
+      // assign the weight based on the number of beds
+      bedWeight = bedWeights[this.numberOfBedrooms];
     } else {
-      bedWeight = bedWeights[bedWeights.length - 1]; // assign the last value if out of scale
+      // assign the last value if out of scale
+      bedWeight = bedWeights[bedWeights.length - 1];
     }
 
-    if (bedWeight == undefined) {
-      throw new Error("bedWeight is undefined.");
-    }
+    bedWeight = parseFloat(
+      (bedWeight * this.averageMarketPrice).toFixed(precisionRounding)
+    );
 
-    return (this.bedWeightedAveragePrice = parseFloat(
-      (bedWeight * this.averagePrice).toFixed(precisionRounding)
-    )); // calculate the bed weighted average price
-  }
-  calculateLandPrice() {
-    if (this.newBuildPrice == undefined)
-      throw new Error("newBuildPrice is undefined");
-    return (this.landPrice = this.averagePrice - this.newBuildPrice); // calculate the price of the land
+    return bedWeight;
   }
 }

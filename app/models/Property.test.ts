@@ -10,7 +10,7 @@ beforeEach(() => {
     age: 10,
     size: 88,
     newBuildPricePerMetre: 2120,
-    averagePrice: 218091.58,
+    averageMarketPrice: 218091.58,
     itl3: "TLG24",
   });
 });
