@@ -86,7 +86,7 @@ export class Household {
     // calculate tenure market purchase
     this.tenure.marketPurchase = new MarketPurchase({
       incomeYearly: this.incomeYearly,
-      averagePrice: this.property.averagePrice,
+      averagePrice: this.property.averageMarketPrice,
       newBuildPrice: this.property.newBuildPrice,
       depreciatedBuildPrice: this.property.depreciatedBuildPrice,
       landPrice: this.property.landPrice,
@@ -104,7 +104,7 @@ export class Household {
     //calculate tenure market rent
     this.tenure.marketRent = new MarketRent({
       averageRentYearly: averageRentYearly,
-      averagePrice: this.property.averagePrice,
+      averagePrice: this.property.averageMarketPrice,
       newBuildPrice: this.property.newBuildPrice,
       depreciatedBuildPrice: this.property.depreciatedBuildPrice,
       landPrice: this.property.landPrice,
@@ -158,7 +158,7 @@ export class Household {
 
     this.tenure.fairholdLandRent = new FairholdLandRent({
       averageRentYearly: averageRentYearly,
-      averagePrice: this.property.averagePrice, // average price of the property
+      averagePrice: this.property.averageMarketPrice, // average price of the property
       newBuildPrice: this.property.newBuildPrice,
       depreciatedBuildPrice: this.property.depreciatedBuildPrice, // depreciated building price
       landPrice: this.property.landPrice, // land price
