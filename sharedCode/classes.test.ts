@@ -146,14 +146,11 @@ describe("tenureMarketPurchase class", () => {
       newBuildPrice: 186560,
       depreciatedBuildPrice: 110717.45,
       landPrice: 31531.579,
-      affordabilityThresholdIncomePercentage:
-        forecastParameters.affordabilityThresholdIncomePercentage,
       propertyPriceGrowthPerYear: forecastParameters.propertyPriceGrowthPerYear,
       constructionPriceGrowthPerYear:
         forecastParameters.constructionPriceGrowthPerYear,
       yearsForecast: forecastParameters.yearsForecast,
       maintenanceCostPercentage: forecastParameters.maintenanceCostPercentage,
-      incomeGrowthPerYear: forecastParameters.incomeGrowthPerYear,
     });
   });
 
@@ -195,14 +192,11 @@ describe("TenureMarketRent class", () => {
       newBuildPrice: 186560,
       depreciatedBuildPrice: 110717.45,
       landPrice: 31531.579,
-      affordabilityThresholdIncomePercentage:
-        forecastParameters.affordabilityThresholdIncomePercentage,
       propertyPriceGrowthPerYear: forecastParameters.propertyPriceGrowthPerYear,
       constructionPriceGrowthPerYear:
         forecastParameters.constructionPriceGrowthPerYear,
       yearsForecast: forecastParameters.yearsForecast,
       maintenanceCostPercentage: forecastParameters.maintenanceCostPercentage,
-      incomeGrowthPerYear: forecastParameters.incomeGrowthPerYear,
       rentGrowthPerYear: forecastParameters.rentGrowthPerYear,
     });
   });
@@ -245,14 +239,11 @@ describe("TenureFairholdLandRent class", () => {
       newBuildPrice: 186560,
       depreciatedBuildPrice: 110717.45,
       landPrice: 31531.579,
-      affordabilityThresholdIncomePercentage:
-        forecastParameters.affordabilityThresholdIncomePercentage,
       propertyPriceGrowthPerYear: forecastParameters.propertyPriceGrowthPerYear,
       constructionPriceGrowthPerYear:
         forecastParameters.constructionPriceGrowthPerYear,
       yearsForecast: forecastParameters.yearsForecast,
       maintenanceCostPercentage: forecastParameters.maintenanceCostPercentage,
-      incomeGrowthPerYear: forecastParameters.incomeGrowthPerYear,
       rentGrowthPerYear: forecastParameters.rentGrowthPerYear,
     });
 
@@ -316,30 +307,28 @@ describe("TenureFairholdLandPurchase class", () => {
       newBuildPrice: 186560,
       depreciatedBuildPrice: 110717.45,
       landPrice: 31531.579,
-      affordabilityThresholdIncomePercentage:
-        forecastParameters.affordabilityThresholdIncomePercentage,
+      //affordabilityThresholdIncomePercentage:forecastParameters.affordabilityThresholdIncomePercentage,
       propertyPriceGrowthPerYear: forecastParameters.propertyPriceGrowthPerYear,
       constructionPriceGrowthPerYear:
         forecastParameters.constructionPriceGrowthPerYear,
       yearsForecast: forecastParameters.yearsForecast,
       maintenanceCostPercentage: forecastParameters.maintenanceCostPercentage,
-      incomeGrowthPerYear: forecastParameters.incomeGrowthPerYear,
+      //incomeGrowthPerYear: forecastParameters.incomeGrowthPerYear,
     });
 
     tenureFairholdLandPurchase = new FairholdLandPurchase({
-      incomeYearly: 45816,
-      averagePrice: 218091.58,
+      //incomeYearly: 45816,
+      //averagePrice: 218091.58,
       newBuildPrice: 186560,
       depreciatedBuildPrice: 110717.45,
-      landPrice: 31531.579,
+      //landPrice: 31531.579,
       maintenanceCostPercentage: forecastParameters.maintenanceCostPercentage,
       incomeGrowthPerYear: forecastParameters.incomeGrowthPerYear,
-      propertyPriceGrowthPerYear: forecastParameters.propertyPriceGrowthPerYear,
+      //propertyPriceGrowthPerYear: forecastParameters.propertyPriceGrowthPerYear,
       constructionPriceGrowthPerYear:
         forecastParameters.constructionPriceGrowthPerYear,
       yearsForecast: forecastParameters.yearsForecast,
-      affordabilityThresholdIncomePercentage:
-        forecastParameters.affordabilityThresholdIncomePercentage,
+      //affordabilityThresholdIncomePercentage:forecastParameters.affordabilityThresholdIncomePercentage,
       affordability: 0.2,
       fairhold: new Fairhold({
         affordability: 0.2,
