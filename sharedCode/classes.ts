@@ -1081,6 +1081,7 @@ export class Household {
     socialRentAverageEarning,
     socialRentAdjustments,
     housePriceIndex,
+    gasBillYearly,
     property,
     forecastParameters = {
       maintenanceCostPercentage: 0.0125, // percentage maintenance cost
@@ -1097,6 +1098,7 @@ export class Household {
     socialRentAverageEarning: number;
     socialRentAdjustments: any;
     housePriceIndex: number;
+    gasBillYearly: number;
     property: Property;
     forecastParameters: forecastParameters;
   }) {
