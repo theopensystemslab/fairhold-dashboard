@@ -22,8 +22,9 @@ export async function POST(req: Request) {
     let pricesPaid; // declare the variable for prices paid
     let numberOfTransactions; // declare the variable for numbers of transactions retrieved
     let granularityPostcode; // declare the granularity of the postcode
+    let averagePrice;
 
-    const pricesPaidSector = await prisma.pricesPaid.findMany({
+    const pricesPaidSector = await prisma.pricesPaid.aggregate({
       where: {
         propertyType: {
           equals: data.houseType as string,
@@ -32,19 +33,21 @@ export async function POST(req: Request) {
           startsWith: postcodeSector,
         },
       },
-      select: {
-        id: true,
-        postcode: true,
+      _count: {
+        id: true
+      },
+      _avg: {
         price: true,
-      }
+      },
     });
 
     console.log({ pricesPaidSector });
 
-    const isMinMetBySector = pricesPaidSector.length >= minimumNumberPostcodes;
+    const numberPerSector = pricesPaidSector._count.id;
+    const isMinMetBySector = numberPerSector >= minimumNumberPostcodes;
 
     if (!isMinMetBySector) {
-      const pricesPaidDistrict = await prisma.pricesPaid.findMany({
+      const pricesPaidDistrict = await prisma.pricesPaid.aggregate({
         where: {
           propertyType: {
             equals: data.houseType as string,
@@ -53,19 +56,21 @@ export async function POST(req: Request) {
             startsWith: postcodeDistrict,
           },
         },
-        select: {
+        _count: {
           id: true,
-          postcode: true,
+        },
+        _avg: {
           price: true,
         },
       });
 
-      const isMinMetByDistrict = pricesPaidDistrict.length >= minimumNumberPostcodes;
+      const numberPerDistrict = pricesPaidDistrict._count.id;
+      const isMinMetByDistrict = numberPerDistrict >= minimumNumberPostcodes;
 
       console.log({ pricesPaidDistrict });
 
       if (!isMinMetByDistrict) {
-        const pricesPaidArea = await prisma.pricesPaid.findMany({
+        const pricesPaidArea = await prisma.pricesPaid.aggregate({
           where: {
             propertyType: {
               equals: data.houseType as string,
@@ -74,38 +79,38 @@ export async function POST(req: Request) {
               startsWith: postcodeArea,
             },
           },
-          select: {
+          _count: {
             id: true,
-            postcode: true,
+          },
+          _avg: {
             price: true,
           },
         });
         console.log({ pricesPaidArea });
 
+        const numberPerArea = pricesPaidArea._count.id;
+
         pricesPaid = pricesPaidArea; // if condition is met, the granularity is appropriate
-        numberOfTransactions = pricesPaidArea.length; // check the granularity
+        numberOfTransactions = numberPerArea; // check the granularity
         granularityPostcode = postcodeArea; // granularity of the postcode when performing the average price search
+        averagePrice = pricesPaidArea._avg.price
       } else {
         pricesPaid = pricesPaidDistrict; // if condition is met, the granularity is appropriate
-        numberOfTransactions = pricesPaidDistrict.length; // check the granularity
-        granularityPostcode = postcodeDistrict; // granularity of the postcode}
+        numberOfTransactions = numberPerDistrict; // check the granularity
+        granularityPostcode = postcodeDistrict; // granularity of the postcode
+        averagePrice = pricesPaidDistrict._avg.price;
       }
     } else {
       pricesPaid = pricesPaidSector; // if condition is met, the granularity is appropriate
-      numberOfTransactions = pricesPaidSector.length; // check the granularity
-      granularityPostcode = postcodeSector; // granularity of the postcode}
+      numberOfTransactions = numberPerSector; // check the granularity
+      granularityPostcode = postcodeSector; // granularity of the postcode
+      averagePrice = pricesPaidSector._avg.price;
     }
     console.log({ pricesPaid });
 
-    // Calculate the total price    if (!pricesPaid) throw Error("Prices fetching failed");
-    const totalPrice = pricesPaid.reduce(
-      (total: number, item: any) => total + item.price,
-      0
-    );
-    console.log({ totalPrice });
-
-    // Calculate the average price
-    const averagePrice = totalPrice / pricesPaid.length;
+    if (averagePrice === null) {
+      throw new Error("Unable to calculate average price");
+    }
 
     const buildPrice = await prisma.buildPrices.findFirst({
       where: {
@@ -187,7 +192,7 @@ export async function POST(req: Request) {
     console.log({ gasBillYearly });
 
     return NextResponse.json({
-      postcode: postcode,
+      postcode,
       houseType: data.houseType,
       houseAge: data.houseAge ? parseFloat(data.houseAge.toString()) : null,
       houseBedrooms: data.houseBedrooms
@@ -197,17 +202,17 @@ export async function POST(req: Request) {
         ? parseFloat(data.houseSize.toString())
         : null,
       averagePrice: parseFloat(averagePrice.toFixed(2)),
-      itl3: itl3,
-      gdhi: gdhi,
+      itl3,
+      gdhi,
       hpi: averageHpi,
-      buildPrice: buildPrice,
-      averageRent: averageRent,
-      socialRentAdjustments: socialRentAdjustments,
-      socialRentAveEarning: socialRentAveEarning,
-      numberOfTransactions: numberOfTransactions,
-      granularityPostcode: granularityPostcode,
-      pricesPaid: pricesPaid,
-      gasBillYearly: gasBillYearly,
+      buildPrice,
+      averageRent,
+      socialRentAdjustments,
+      socialRentAveEarning,
+      numberOfTransactions,
+      granularityPostcode,
+      pricesPaid,
+      gasBillYearly,
     });
   } catch (err) {
     console.log("ERROR: API - ", (err as Error).message);
