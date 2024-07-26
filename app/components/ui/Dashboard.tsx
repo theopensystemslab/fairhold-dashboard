@@ -1,6 +1,6 @@
 import React from 'react';
 import TenureComparisonWrapper from '../graphs/TenureComparisonWrapper'; 
-import { Household } from '@/sharedCode/classes';
+import { Household } from '@/app/models/classes';
 
 interface DashboardProps {
     data: Household; 
