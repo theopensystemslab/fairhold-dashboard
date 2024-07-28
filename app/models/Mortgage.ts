@@ -4,6 +4,13 @@ const DEFAULT_INTEREST_RATE = 0.06;
 const DEFAULT_MORTGAGE_TERM = 30;
 const DEFAULT_INITIAL_DEPOSIT = 0.15;
 
+interface MortgageParams {
+  propertyValue: number;
+  interestRate?: number;
+  mortgageTerm?: number;
+  initialDeposit?: number;
+}
+
 type MortgageBreakdown = {
   yearlyPayment: number;
   cumulativePaid: number;
@@ -29,21 +36,13 @@ export class Mortgage {
   totalMortgageCost: number;
   yearlyPaymentBreakdown: MortgageBreakdown;
 
-  constructor({
-    propertyValue,
-    interestRate = DEFAULT_INTEREST_RATE,
-    mortgageTerm = DEFAULT_MORTGAGE_TERM,
-    initialDeposit = DEFAULT_INITIAL_DEPOSIT,
-  }: {
-    propertyValue: number;
-    interestRate?: number;
-    mortgageTerm?: number;
-    initialDeposit?: number;
-  }) {
-    this.propertyValue = propertyValue;
-    this.initialDeposit = initialDeposit;
-    this.interestRate = interestRate;
-    this.termYears = mortgageTerm;
+  constructor(params: MortgageParams) {
+    this.propertyValue = params.propertyValue;
+    this.initialDeposit = params.initialDeposit || DEFAULT_INITIAL_DEPOSIT;
+    this.interestRate = params.interestRate || DEFAULT_INTEREST_RATE;
+    this.termYears = params.mortgageTerm || DEFAULT_MORTGAGE_TERM;
+
+    // Computed properties, order is significant
     this.principal = this.calculateMortgagePrinciple();
 
     const { monthlyPayment, totalMortgageCost } =
