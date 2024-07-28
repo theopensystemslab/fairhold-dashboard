@@ -1,6 +1,17 @@
 import { Fairhold } from "../Fairhold";
 import { Mortgage } from "../Mortgage";
 
+interface FairholdLandPurchaseParams {
+  newBuildPrice: number;
+  depreciatedBuildPrice: number;
+  constructionPriceGrowthPerYear: number;
+  yearsForecast: number;
+  maintenanceCostPercentage: number;
+  incomeGrowthPerYear: number;
+  affordability: number;
+  fairhold: Fairhold;
+};
+
 type Lifetime = {
   maintenanceCost: number;
   landMortgagePaymentYearly: number;
@@ -13,47 +24,26 @@ export class FairholdLandPurchase {
   depreciatedHouseMortgage: Mortgage;
   lifetime: Lifetime;
 
-  constructor({
-    newBuildPrice,
-    depreciatedBuildPrice,
-    constructionPriceGrowthPerYear,
-    yearsForecast,
-    maintenanceCostPercentage,
-    fairhold,
-  }: {
-    newBuildPrice: number;
-    depreciatedBuildPrice: number;
-    constructionPriceGrowthPerYear: number;
-    yearsForecast: number;
-    maintenanceCostPercentage: number;
-    incomeGrowthPerYear: number;
-    affordability: number;
-    fairhold: Fairhold;
-  }) {
-    this.discountedLandPrice = fairhold.calculateDiscountedPriceOrRent();
+  constructor(params: FairholdLandPurchaseParams) {
+    this.discountedLandPrice = params.fairhold.calculateDiscountedPriceOrRent();
 
     this.discountedLandMortgage = new Mortgage({
       propertyValue: this.discountedLandPrice,
     });
 
     this.depreciatedHouseMortgage = new Mortgage({
-      propertyValue: depreciatedBuildPrice,
+      propertyValue: params.depreciatedBuildPrice,
     });
 
-    this.lifetime = this.calculateLifetime(
-      newBuildPrice,
-      maintenanceCostPercentage,
-      yearsForecast,
-      constructionPriceGrowthPerYear
-    );
+    this.lifetime = this.calculateLifetime(params);
   }
 
-  private calculateLifetime(
-    newBuildPrice: number,
-    maintenanceCostPercentage: number,
-    yearsForecast: number,
-    constructionPriceGrowthPerYear: number
-  ) {
+  private calculateLifetime({
+    newBuildPrice,
+    maintenanceCostPercentage,
+    yearsForecast,
+    constructionPriceGrowthPerYear,
+  }: FairholdLandPurchaseParams) {
     let newBuildPriceIterative = newBuildPrice;
     let maintenanceCostIterative = maintenanceCostPercentage * newBuildPrice;
 
