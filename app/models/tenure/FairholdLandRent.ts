@@ -1,5 +1,6 @@
 import { Fairhold } from "../Fairhold";
 import { Mortgage } from "../Mortgage";
+import { MONTHS_PER_YEAR } from "../constants";
 
 interface FairholdLandRentParams {
   averageRentYearly: number;
@@ -37,10 +38,31 @@ export class FairholdLandRent {
       propertyValue: params.depreciatedBuildPrice,
     });
 
-    this.discountedLandRentMonthly = calculateDiscountedLandRentMonthly(params);
+    this.discountedLandRentMonthly =
+      this.calculateDiscountedLandRentMonthly(params);
     this.lifetime = this.calculateLifetime(params);
   }
 
+  private calculateDiscountedLandRentMonthly({
+    incomeYearly,
+    averageRentYearly,
+    landPrice,
+    averagePrice,
+  }: FairholdLandRentParams) {
+    const marketRentAffordability = incomeYearly / averageRentYearly;
+    const landToTotalRatio = landPrice / averagePrice;
+    const averageRentLandMonthly =
+      (averageRentYearly / MONTHS_PER_YEAR) * landToTotalRatio;
+
+    const fairholdLandRent = new Fairhold({
+      affordability: marketRentAffordability,
+      landPriceOrRent: averageRentLandMonthly,
+    });
+    const discountedLandRentMonthly =
+      fairholdLandRent.calculateDiscountedPriceOrRent();
+
+    return discountedLandRentMonthly;
+  }
   private calculateLifetime({
     averagePrice,
     newBuildPrice,
@@ -123,6 +145,6 @@ export class FairholdLandRent {
         houseMortgagePaymentYearly: houseMortgagePaymentYearlyIterative,
       }); // add the current price to the new build price forecast
     }
-    this.lifetime = lifetime; // save the object
+    return lifetime; // save the object
   }
 }
