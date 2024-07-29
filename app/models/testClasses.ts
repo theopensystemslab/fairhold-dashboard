@@ -1,10 +1,6 @@
-<<<<<<< HEAD:app/models/testClasses.ts
 import { DEFAULT_FORECAST_PARAMETERS } from "./ForecastParameters";
 import { Household } from "./Household";
 import { Property } from "./Property";
-=======
-import { Property, Fairhold, Household } from "./classes";
->>>>>>> e9c1d62 (Fixed a mistake in calculating averageRentHouseYearly):sharedCode/testClasses.ts
 
 function calculateFairhold(responseData: any) {
   if (!responseData.buildPrice || responseData.buildPrice.length === 0) {
@@ -39,24 +35,14 @@ function calculateFairhold(responseData: any) {
 
   // define the household object
   const household = new Household({
-<<<<<<< HEAD:app/models/testClasses.ts
     incomePerPersonYearly: responseData.gdhi,
     averageRentYearly: responseData.averageRentMonthly * 12,
     socialRentAverageEarning: responseData.socialRentAverageEarning,
-=======
-    incomePerPerson: responseData.gdhi,
-    averageRentYearly: responseData.averageRent * 12,
-    socialRentAveEarning: responseData.socialRentAveEarning,
->>>>>>> e9c1d62 (Fixed a mistake in calculating averageRentHouseYearly):sharedCode/testClasses.ts
     socialRentAdjustments: responseData.socialRentAdjustments,
     housePriceIndex: responseData.hpi,
     gasBillYearly: responseData.gasBillYearly,
     property: property,
-<<<<<<< HEAD:app/models/testClasses.ts
     forecastParameters: DEFAULT_FORECAST_PARAMETERS,
-=======
-    forecastParameters: forecastParameters,
->>>>>>> e9c1d62 (Fixed a mistake in calculating averageRentHouseYearly):sharedCode/testClasses.ts
   });
   console.log(household);
   return household;
