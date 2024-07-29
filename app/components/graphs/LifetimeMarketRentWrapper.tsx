@@ -1,6 +1,6 @@
 "use client";
 import React from 'react';
-import { Household, lifetimeTypes } from '@/sharedCode/classes';
+import { Household, lifetimeTypes } from '@/app/models/Household';
 import LifetimeCombinedChart from './LifetimeCombinedChart';
 
 interface LifetimeMarketRentProps {
@@ -22,12 +22,21 @@ const LifetimeMarketRentWrapper: React.FC<LifetimeMarketRentProps> = ({ househol
     console.log('household.lifetime?.lifetimeMarketRent', household.tenure.marketRent?.lifetime)
 
     // Process and format the data for the chart
-    const chartData = ((household.tenure.marketRent?.lifetime as lifetimeTypes[])?.map((item, index) => ({
-      year: index.toString(),
-      landCost: item.averageRentLandYearly,
-      houseCost: item.averageRentHouseYearly,
-      incomeThreshold: item.affordabilityThresholdIncome,
-    })) ?? []);
+    const chartData = (household.tenure.marketRent?.lifetime || []).map((item, index) => {
+      // Access and store household.lifetime array 
+      const incomeThreshold = household.lifetime && household.lifetime[index]
+        ? household.lifetime[index].affordabilityThresholdIncome
+        : 0;
+      
+        // Access and store all other variables
+      return {
+        year: index.toString(),
+        landCost: item.averageRentLandYearly,
+        houseCost: item.averageRentHouseYearly,
+        // billsCost: item.gasBillYearly,
+        incomeThreshold: incomeThreshold,
+      };
+  }) ?? [];
 
     console.log('LifetimeMarketRentWrapper.tsx chartData: ', chartData)
 
