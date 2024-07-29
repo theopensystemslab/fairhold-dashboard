@@ -4,7 +4,7 @@ import LifetimeMarketPurchaseWrapper from '../graphs/LifetimeMarketPurchaseWrapp
 import LifetimeMarketRentWrapper from '../graphs/LifetimeMarketRentWrapper'; 
 import LifetimeFairholdLandPurchaseWrapper from '../graphs/LifetimeFairholdLandPurchaseWrapper'; 
 import LifetimeFairholdLandRentWrapper from '../graphs/LifetimeFairholdLandRentWrapper'; 
-import { Household } from '@/sharedCode/classes';
+import { Household } from '@/app/models/Household';
 
 interface DashboardProps {
     data: Household; 
@@ -19,7 +19,7 @@ const Dashboard: React.FC<DashboardProps> = ({ data }) => {
       <LifetimeMarketPurchaseWrapper household={data} />
       <LifetimeMarketRentWrapper household={data} />
       <LifetimeFairholdLandPurchaseWrapper household={data} />
-      <LifetimeFairholdLandRentWrapper household={data} />    </div>
+      <LifetimeFairholdLandRentWrapper household={data} />    </div> 
 
 );
 };
