@@ -192,10 +192,6 @@ export class Household {
     let affordabilityThresholdIncomeIterative =
       incomeYearlyIterative * affordabilityThresholdIncomePercentage; // affordable income
 
-    interface lifetimeTypes {
-      affordabilityThresholdIncome: number;
-      incomeYearly: number;
-    }
     let lifetime: lifetimeTypes[] = [
       {
         incomeYearly: incomeYearlyIterative,
@@ -215,4 +211,9 @@ export class Household {
     }
     this.lifetime = lifetime;
   }
+}
+
+export interface lifetimeTypes {
+  affordabilityThresholdIncome: number;
+  incomeYearly: number;
 }
