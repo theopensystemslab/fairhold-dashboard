@@ -69,7 +69,7 @@ const CalculatorInput = () => {
             className="mb-3 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500
             disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none
              rounded-md "
-            type="text"
+            type="number"
             placeholder="Provide the house size in m square, e.g. 66"
             value={howSize}
             onChange={(e) => setHouseSize(e.target.value)}
@@ -135,7 +135,7 @@ const CalculatorInput = () => {
             className="mb-3 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500
             disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none
              rounded-md "
-            type="float"
+            type="number"
             placeholder="Provide the house age in years. For a new build, insert age 1"
             value={houseAge}
             onChange={(e) => setHouseAge(e.target.value)}
@@ -146,7 +146,7 @@ const CalculatorInput = () => {
             className="mb-3 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500
             disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none
              rounded-md "
-            type="integer"
+            type="number"
             placeholder="Provide the number of bedrooms e.g. 2"
             value={houseBedrooms}
             onChange={(e) => setHouseBedrooms(e.target.value)}
