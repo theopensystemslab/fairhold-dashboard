@@ -1,8 +1,8 @@
 "use client";
 import { trueDependencies } from "mathjs";
 import React, { useState } from "react";
-import calculateFairhold from "@/sharedCode/testClasses";
-import { Household } from "@/sharedCode/classes";
+import calculateFairhold from "@/app/models/testClasses";
+import { Household } from "@/app/models/Household";
 import Dashboard from './Dashboard';
 
 const CalculatorInput = () => {

@@ -1,4 +1,6 @@
-import { Property, Fairhold, Household } from "./classes";
+import { DEFAULT_FORECAST_PARAMETERS } from "./ForecastParameters";
+import { Household } from "./Household";
+import { Property } from "./Property";
 
 function calculateFairhold(responseData: any) {
   if (!responseData.buildPrice || responseData.buildPrice.length === 0) {
@@ -20,17 +22,6 @@ function calculateFairhold(responseData: any) {
     itl3: responseData.itl3,
   });
 
-  // define the forecast parameters
-  const forecastParameters = {
-    maintenanceCostPercentage: 0.0125, // percentage maintenance cost
-    incomeGrowthPerYear: 0.04, // 4% income growth per year
-    constructionPriceGrowthPerYear: 0.025, // 2.5%
-    rentGrowthPerYear: 0.03, // 3%
-    propertyPriceGrowthPerYear: 0.05, // 5%
-    yearsForecast: 40, // 40 years
-    affordabilityThresholdIncomePercentage: 0.35, // percentage of imcome to afford rent or purchase
-  };
-
   // define the household object
   const household = new Household({
     incomePerPersonYearly: responseData.gdhi,
@@ -40,7 +31,7 @@ function calculateFairhold(responseData: any) {
     housePriceIndex: responseData.hpi,
     gasBillYearly: responseData.gasBillYearly,
     property: property,
-    forecastParameters: forecastParameters,
+    forecastParameters: DEFAULT_FORECAST_PARAMETERS,
   });
   console.log(household);
   return household;
