@@ -1,8 +1,6 @@
-<<<<<<< HEAD
-=======
 "use client";
 import React from 'react';
-import { Household, lifetimeTypes } from '@/app/models/Household';
+import { Household } from '@/app/models/Household';
 import LifetimeCombinedChart from './LifetimeCombinedChart';
 
 interface LifetimeMarketRentProps {
@@ -51,4 +49,3 @@ const LifetimeMarketRentWrapper: React.FC<LifetimeMarketRentProps> = ({ househol
 };
   
 export default LifetimeMarketRentWrapper;
->>>>>>> c0c4d4a (Refactored for new data structure)
