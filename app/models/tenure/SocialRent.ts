@@ -1,9 +1,5 @@
 import { WEEKS_PER_MONTH } from "../constants";
-import {
-  BED_WEIGHTS_AND_CAPS,
-  bedWeightsAndCapsType,
-  NATIONAL_AVERAGE_PARAMETRS,
-} from "../constants";
+import { BED_WEIGHTS_AND_CAPS, NATIONAL_AVERAGES } from "../constants";
 
 interface SocialRentParams {
   numberOfBedrooms: number;
@@ -11,18 +7,14 @@ interface SocialRentParams {
   socialRentAdjustments: socialRentAdjustmentTypes;
   housePriceIndex: number;
   landToTotalRatio: number;
-  bedWeightsAndCaps: bedWeightsAndCapsType;
-  nationalAverageRent: number;
-  nationalAveragePropertyValue: number;
-  nationalAverageEarnings: number;
 }
 
-type socialRentAdjustmentTypes = {
+export type socialRentAdjustmentTypes = {
   year: string;
   inflation: string;
   additional: string;
   total: string;
-};
+}[];
 
 export class SocialRent {
   socialRentAverageEarning: number;
@@ -49,17 +41,12 @@ export class SocialRent {
   private calculateSocialRent(params: SocialRentParams) {
     let bedWeight; // initialize the bedWeight variable
     let rentCapWeekly; // initialize the rent Cap values
-    const bedWeightsAndCaps = params.bedWeightsAndCaps || BED_WEIGHTS_AND_CAPS;
+    const bedWeightsAndCaps = BED_WEIGHTS_AND_CAPS;
     const numberOfBedrooms = params.numberOfBedrooms;
 
-    const nationalAverageRent =
-      params.nationalAverageRent || NATIONAL_AVERAGE_PARAMETRS.socialRentWeekly;
-    const nationalAverageProperty =
-      params.nationalAveragePropertyValue ||
-      NATIONAL_AVERAGE_PARAMETRS.propertyValue;
-    const nationalAverageEarnings =
-      params.nationalAverageEarnings ||
-      NATIONAL_AVERAGE_PARAMETRS.earningsWeekly;
+    const nationalAverageRent = NATIONAL_AVERAGES.socialRentWeekly;
+    const nationalAverageProperty = NATIONAL_AVERAGES.propertyValue;
+    const nationalAverageEarnings = NATIONAL_AVERAGES.earningsWeekly;
 
     if (numberOfBedrooms < bedWeightsAndCaps.numberOfBedrooms.length - 1) {
       bedWeight = bedWeightsAndCaps.weight[numberOfBedrooms]; // find the weight corresponding to the number of beds
@@ -85,9 +72,9 @@ export class SocialRent {
     let adjustedRentWeekly = formulaRentWeekly; // Initialize the adjusted rent weekly
     // Loop through each rent adjustment up to the second to last year
 
-    for (let i = 0; i < params.socialRentAdjustments.total.length - 2; i++) {
+    for (let i = 0; i < params.socialRentAdjustments.length - 2; i++) {
       const adjustmentFactor =
-        Number(params.socialRentAdjustments.total[i]) / 100 + 1; // Calculate the adjustment factor
+        Number(params.socialRentAdjustments[i].total) / 100 + 1; // Calculate the adjustment factor
       adjustedRentWeekly *= adjustmentFactor; // Apply the adjustment
     }
 
