@@ -25,7 +25,7 @@ export type nationalAverageType = {
 /**
  * National average values
  */
-export const NATIONAL_AVERAGE_PARAMETRS: nationalAverageType = {
+export const NATIONAL_AVERAGES: nationalAverageType = {
   socialRentWeekly: 54.62,
   propertyValue: 49750,
   earningsWeekly: 316.4,

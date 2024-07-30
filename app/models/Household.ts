@@ -4,7 +4,7 @@ import { FairholdLandPurchase } from "./tenure/FairholdLandPurchase";
 import { FairholdLandRent } from "./tenure/FairholdLandRent";
 import { Fairhold } from "./Fairhold";
 import { Property } from "./Property";
-import { SocialRent } from "./tenure/SocialRent";
+import { SocialRent, socialRentAdjustmentTypes } from "./tenure/SocialRent";
 import { ForecastParameters } from "./ForecastParameters";
 
 export class Household {
@@ -39,7 +39,7 @@ export class Household {
     incomePerPersonYearly: number;
     averageRentYearly: number;
     socialRentAverageEarning: number;
-    socialRentAdjustments: any;
+    socialRentAdjustments: socialRentAdjustmentTypes;
     housePriceIndex: number;
     gasBillYearly: number;
     property: Property;
@@ -72,7 +72,7 @@ export class Household {
   calculateTenures(
     averageRentYearly: number,
     socialRentAverageEarning: number,
-    socialRentAdjustments: any,
+    socialRentAdjustments: socialRentAdjustmentTypes,
     housePriceIndex: number
   ) {
     if (this.incomeYearly == undefined) throw new Error("income is undefined");
@@ -126,7 +126,8 @@ export class Household {
       socialRentAverageEarning: socialRentAverageEarning,
       socialRentAdjustments: socialRentAdjustments,
       housePriceIndex: housePriceIndex,
-      property: this.property,
+      landToTotalRatio: this.property.landToTotalRatio,
+      numberOfBedrooms: this.property.numberOfBedrooms,
     });
 
     if (this.tenure.marketPurchase.affordability == undefined)
