@@ -1,6 +1,6 @@
 "use client";
 import React from 'react';
-import { Household, lifetimeTypes } from '@/app/models/Household';
+import { Household } from '@/app/models/Household';
 import LifetimeCombinedChart from './LifetimeCombinedChart';
 
 interface LifetimeMarketPurchaseWrapperProps {
@@ -49,4 +49,4 @@ const LifetimeMarketPurchaseWrapper: React.FC<LifetimeMarketPurchaseWrapperProps
     );
   };
   
-  export default LifetimeCombinedWrapper;
+  export default LifetimeMarketPurchaseWrapper;

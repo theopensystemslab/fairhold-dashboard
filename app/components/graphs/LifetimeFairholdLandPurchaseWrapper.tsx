@@ -1,6 +1,6 @@
 "use client";
 import React from 'react';
-import { Household, lifetimeTypes } from '@/app/models/Household';
+import { Household } from '@/app/models/Household';
 import LifetimeCombinedChart from './LifetimeCombinedChart';
 
 interface LifetimeFairholdLandPurchaseWrapperProps {
@@ -10,32 +10,14 @@ interface LifetimeFairholdLandPurchaseWrapperProps {
 const LifetimeFairholdLandPurchaseWrapper: React.FC<LifetimeFairholdLandPurchaseWrapperProps> = ({ household }) => {
   console.log('LifetimeFairholdLandPurchaseWrapper household: ', household)
 
-  // Create color schemes for different versions of the graph
-    const colorSchemes = {
-        default: {
-          land: '#FF0000',
-          house: '#00FF00',
-          maintenance: '#0000FF',
-          bills: '#FFFF00',
-          incomeThreshold: '#FF00FF',
-        },
-        alternative: {
-          land: '#800000',
-          house: '#008000',
-          maintenance: '#000080',
-          bills: '#808000',
-          incomeThreshold: '#800080',
-        },
-        monochrome: {
-          land: '#000000',
-          house: '#333333',
-          maintenance: '#666666',
-          bills: '#999999',
-          incomeThreshold: '#CCCCCC',
-        },
-      };
-
-    const colorScheme = colorSchemes[schemeType];
+  // Create color scheme for different versions of the graph
+  const colorScheme = {
+    land: '#026600',
+    house: '#78ba77',
+    maintenance: '#595959',
+    bills: '#adadad',
+    incomeThreshold: '#6c9e6e'
+    }
 
     console.log('household.tenure.fairholdLandPurchase.lifetime?', household.tenure.fairholdLandPurchase?.lifetime)
 
@@ -67,4 +49,4 @@ const LifetimeFairholdLandPurchaseWrapper: React.FC<LifetimeFairholdLandPurchase
     );
 };
   
-export default LifetimeCombinedWrapper;
+export default LifetimeFairholdLandPurchaseWrapper;
