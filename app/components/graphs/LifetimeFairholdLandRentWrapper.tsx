@@ -1,49 +1,22 @@
 "use client";
 import React from 'react';
-import { Household, lifetimeTypes } from '@/app/models/Household';
+import { Household } from '@/app/models/Household';
 import LifetimeCombinedChart from './LifetimeCombinedChart';
-
-// Create colour scheme types
-type SchemeType = 'default' | 'alternative' | 'monochrome';
-
-interface LifetimeCombinedWrapperProps {
-    household: Household;
-    schemeType: SchemeType;
-  }
-
-interface LifetimeCombinedWrapperProps {
+interface LifetimeFairholdLandRentWrapperProps {
     household: Household;
 }
 
-const LifetimeCombinedWrapper: React.FC<LifetimeCombinedWrapperProps> = ({ household, schemeType  }) => {
-  console.log('LifetimeCombinedWrapper household: ', household)
+const LifetimeFairholdLandRentWrapper: React.FC<LifetimeFairholdLandRentWrapperProps> = ({ household  }) => {
+  console.log('LifetimeFairholdLandRentWrapper household: ', household)
 
-  // Create color schemes for different versions of the graph
-    const colorSchemes = {
-        default: {
-          land: '#FF0000',
-          house: '#00FF00',
-          maintenance: '#0000FF',
-          bills: '#FFFF00',
-          incomeThreshold: '#FF00FF',
-        },
-        alternative: {
-          land: '#800000',
-          house: '#008000',
-          maintenance: '#000080',
-          bills: '#808000',
-          incomeThreshold: '#800080',
-        },
-        monochrome: {
-          land: '#000000',
-          house: '#333333',
-          maintenance: '#666666',
-          bills: '#999999',
-          incomeThreshold: '#CCCCCC',
-        },
-      };
-
-    const colorScheme = colorSchemes[schemeType];
+  // Create color scheme for different versions of the graph
+  const colorScheme = {
+    land: '#6c2091',
+    house: '#b275d1',
+    maintenance: '#595959',
+    bills: '#adadad',
+    incomeThreshold: '#6c9e6e'
+    }
 
     console.log('household.lifetime?.lifetimeMarket', household.tenure.fairholdLandRent?.lifetime)
 
@@ -75,4 +48,4 @@ const LifetimeCombinedWrapper: React.FC<LifetimeCombinedWrapperProps> = ({ house
     );
 };
   
-export default LifetimeCombinedWrapper;
+export default LifetimeFairholdLandRentWrapper;
