@@ -29,19 +29,29 @@ const TenureComparisonWrapper: React.FC<TenureComparisonWrapperProps> = ({
     return [
       {
         category: "Monthly Costs Land",
-        marketPurchase: household.tenure.marketPurchase?.landMortgage?.monthlyPayment || 0,
-        marketRent: household.tenure.marketRent?.averageRentLandYearly ? household.tenure.marketRent.averageRentLandYearly / 12 : 0,
-        socialRent: household.tenure.socialRent?.socialRentMonthlyLand || 0,
-        fairholdLandPurchase: household.tenure.fairholdLandPurchase?.discountedLandMortgage?.monthlyPayment || 0,
-        fairholdLandRent: household.tenure.fairholdLandRent?.discountedLandRentYearly ? household.tenure.fairholdLandRent.discountedLandRentYearly / 12 : 0
+        marketPurchase:
+          household.tenure.marketPurchase?.landMortgage?.monthlyPayment || 0,
+        marketRent: 
+          household.tenure.marketRent?.averageRentLandMonthly || 0,
+        socialRent: 
+          household.tenure.socialRent?.socialRentMonthlyLand || 0,
+        fairholdLandPurchase:
+          household.tenure.fairholdLandPurchase?.discountedLandMortgage?.monthlyPayment || 0,
+        fairholdLandRent:
+          household.tenure.fairholdLandRent?.discountedLandRentMonthly || 0,
       },
       {
         category: "Monthly Costs House",
-        marketPurchase: household.tenure.marketPurchase?.houseMortgage?.monthlyPayment || 0,
-        marketRent: household.tenure.marketRent?.averageRentHouseYearly ? household.tenure.marketRent.averageRentHouseYearly / 12 : 0,
-        socialRent: household.tenure.socialRent?.socialRentMonthlyHouse || 0,
-        fairholdLandPurchase: household.tenure.fairholdLandPurchase?.depreciatedHouseMortgage?.monthlyPayment || 0,
-        fairholdLandRent: household.tenure.fairholdLandPurchase?.depreciatedHouseMortgage?.monthlyPayment || 0,
+        marketPurchase:
+          household.tenure.marketPurchase?.houseMortgage?.monthlyPayment || 0,
+        marketRent: 
+          household.tenure.marketRent?.averageRentHouseMonthly || 0,
+        socialRent: 
+          household.tenure.socialRent?.socialRentMonthlyHouse || 0,
+        fairholdLandPurchase:
+          household.tenure.fairholdLandPurchase?.depreciatedHouseMortgage?.monthlyPayment || 0,
+        fairholdLandRent:
+          household.tenure.fairholdLandPurchase?.depreciatedHouseMortgage?.monthlyPayment || 0,
       },
     ];
   };
