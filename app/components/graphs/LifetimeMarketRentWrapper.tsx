@@ -1,6 +1,6 @@
 "use client";
 import React from 'react';
-import { Household } from '@/app/models/Household';
+import { Household, lifetimeTypes } from '@/app/models/Household';
 import LifetimeCombinedChart from './LifetimeCombinedChart';
 
 interface LifetimeMarketRentProps {

@@ -25,8 +25,8 @@ type DataInput = {
     year: string;
     landCost: number;
     houseCost: number;
-    maintenanceCost?: number;
-    billsCost?: number;
+    maintenanceCost?: number | null;
+    billsCost?: number | null;
     incomeThreshold: number;
 }
 
