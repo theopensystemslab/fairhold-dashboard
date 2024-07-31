@@ -18,7 +18,7 @@ function calculateFairhold(responseData: any) {
     age: responseData.houseAge,
     size: responseData.houseSize,
     newBuildPricePerMetre: responseData.buildPrice,
-    averagePrice: responseData.averagePrice,
+    averageMarketPrice: responseData.averagePrice,
     itl3: responseData.itl3,
   });
 
