@@ -1,7 +1,6 @@
 import { MONTHS_PER_YEAR } from "../constants";
 import { Fairhold } from "../Fairhold";
 import { Mortgage } from "../Mortgage";
-import { MONTHS_PER_YEAR } from "../constants";
 
 interface FairholdLandRentParams {
   averageRentYearly: number;
@@ -60,7 +59,7 @@ export class FairholdLandRent {
       landPriceOrRent: averageRentLandMonthly,
     });
     const discountedLandRentMonthly =
-      fairholdLandRent.calculateDiscountedPriceOrRent();
+      fairholdLandRent.discountedLandPriceOrRent
 
     return discountedLandRentMonthly;
   }
@@ -144,8 +143,8 @@ export class FairholdLandRent {
         maintenanceCost: maintenanceCostIterative,
         fairholdRentLand: fairholdRentLandIterative,
         houseMortgagePaymentYearly: houseMortgagePaymentYearlyIterative,
-      }); // add the current price to the new build price forecast
+      });
     }
-    return lifetime; // save the object
+    return lifetime;
   }
 }
