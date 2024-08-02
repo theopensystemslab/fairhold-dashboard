@@ -27,7 +27,7 @@ export async function POST(req: Request) {
     const pricesPaidSector = await prisma.pricesPaid.aggregate({
       where: {
         propertyType: {
-          equals: data.houseType as string,
+          equals: input.houseType,
         },
         postcode: {
           startsWith: postcodeSector,
@@ -41,8 +41,6 @@ export async function POST(req: Request) {
       },
     });
 
-    console.log({ pricesPaidSector });
-
     const numberPerSector = pricesPaidSector._count.id;
     const isMinMetBySector = numberPerSector >= minimumNumberPostcodes;
 
@@ -50,7 +48,7 @@ export async function POST(req: Request) {
       const pricesPaidDistrict = await prisma.pricesPaid.aggregate({
         where: {
           propertyType: {
-            equals: data.houseType as string,
+            equals: input.houseType,
           },
           postcode: {
             startsWith: postcodeDistrict,
@@ -67,13 +65,11 @@ export async function POST(req: Request) {
       const numberPerDistrict = pricesPaidDistrict._count.id;
       const isMinMetByDistrict = numberPerDistrict >= minimumNumberPostcodes;
 
-      console.log({ pricesPaidDistrict });
-
       if (!isMinMetByDistrict) {
         const pricesPaidArea = await prisma.pricesPaid.aggregate({
           where: {
             propertyType: {
-              equals: data.houseType as string,
+              equals: input.houseType,
             },
             postcode: {
               startsWith: postcodeArea,
@@ -106,7 +102,6 @@ export async function POST(req: Request) {
       granularityPostcode = postcodeSector; // granularity of the postcode
       averagePrice = pricesPaidSector._avg.price;
     }
-    console.log({ pricesPaid });
 
     if (averagePrice === null) {
       throw new Error("Unable to calculate average price");
@@ -114,7 +109,7 @@ export async function POST(req: Request) {
 
     const buildPrice = await prisma.buildPrices.findFirst({
       where: {
-        houseType: { equals: data.houseType as string },
+        houseType: { equals: input.houseType },
       },
       select: { priceMid: true },
     });
@@ -133,7 +128,6 @@ export async function POST(req: Request) {
     
     // Casting required as prisma does not type narrow with above clause "not: null"
     const itl3 = (itlLookup.itl3 as string)[3]; // Extract the 3rd value (index 3)
-    console.log("itl3: ", itl3);
 
     const gdhi = await prisma.gDHI.findFirst({
       where: {
@@ -142,14 +136,12 @@ export async function POST(req: Request) {
       select: { gdhi2020: true },
     });
 
-    const averageRent = await prisma.rent.aggregate({
+    const averageRentMonthly = await prisma.rent.aggregate({
       where: { itl3 },
       _avg: {
         monthlyMeanRent: true,
       },
     });
-
-    console.log({ averageRent });
 
     const socialRentAdjustments = await prisma.socialRentAdjustments.findMany();
     const itl3Prefix = itl3.substring(0, 4);
@@ -164,7 +156,6 @@ export async function POST(req: Request) {
         earningsPerWeek: true,
       },
     });
-    console.log({ socialRentAveEarning });
 
     const averageHpi = await prisma.hPI.aggregate({
       where: {
@@ -177,7 +168,6 @@ export async function POST(req: Request) {
         }
       }
     );
-    console.log({ averageHpi });
 
     const gasBillYearly = await prisma.gasBills.findFirstOrThrow({
       where: {
@@ -189,7 +179,6 @@ export async function POST(req: Request) {
         bill: true
       }
     })
-    console.log({ gasBillYearly });
 
     return NextResponse.json({
       postcode: input.housePostcode,
@@ -202,7 +191,9 @@ export async function POST(req: Request) {
       gdhi,
       hpi: averageHpi,
       buildPrice,
+      averageRentMonthly,
       socialRentAdjustments,
+      socialRentAveEarning,
       numberOfTransactions,
       granularityPostcode,
       pricesPaid,
