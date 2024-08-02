@@ -13,7 +13,7 @@ export const calculationSchema = z.object({
     .min(1, "housePostcode is required")
     .refine(fixPostcode, "Invalid postcode")
     .transform(parsePostcode)
-    .refine((postcode) => postcode.valid),
+    .refine((postcode) => postcode.valid, { message: "Invalid postcode" }),
   houseSize: z.coerce.number().positive("houseSize must be a positive integer"),
   houseAge: z.coerce.number().positive("houseAge must be a positive integer"),
   houseBedrooms: z.coerce
