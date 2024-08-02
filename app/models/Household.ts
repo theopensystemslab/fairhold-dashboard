@@ -174,11 +174,6 @@ export class Household {
         this.forecastParameters.maintenanceCostPercentage, // maintenance cost percentage
       incomeGrowthPerYear: this.forecastParameters.incomeGrowthPerYear, // income growth per year
       rentGrowthPerYear: this.forecastParameters.rentGrowthPerYear, // rent growth per year
-
-      fairhold: new Fairhold({
-        affordability: this.tenure.marketRent.affordability,
-        landPriceOrRent: averageRentYearly,
-      }), // fairhold object
     });
   }
 

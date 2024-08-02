@@ -1,4 +1,3 @@
-import { Fairhold } from "../Fairhold";
 import { DEFAULT_FORECAST_PARAMETERS } from "../ForecastParameters";
 import { Property } from "../Property";
 import { FairholdLandRent } from "./FairholdLandRent";
@@ -37,10 +36,6 @@ beforeEach(() => {
     depreciatedBuildPrice: 110717.45,
     landPrice: 31531.579,
     ...DEFAULT_FORECAST_PARAMETERS,
-    fairhold: new Fairhold({
-      affordability: 0.2,
-      landPriceOrRent: 20000,
-    }),
   });
 });
 
