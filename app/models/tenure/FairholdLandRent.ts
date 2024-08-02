@@ -1,3 +1,4 @@
+import { MONTHS_PER_YEAR } from "../constants";
 import { Fairhold } from "../Fairhold";
 import { Mortgage } from "../Mortgage";
 
@@ -88,7 +89,7 @@ export class FairholdLandRent {
 
     let fairholdRentLandIterative = new Fairhold({
       affordability: affordabilityIterative,
-      landPriceOrRent: averageRentLandYearlyIterative / 12,
+      landPriceOrRent: averageRentLandYearlyIterative / MONTHS_PER_YEAR,
     }).discountedLandPriceOrRent;
     this.discountedLandRentMonthly = fairholdRentLandIterative;
 
