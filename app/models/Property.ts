@@ -1,10 +1,9 @@
-
 import * as math from "mathjs";
-
+import { BED_WEIGHTS_AND_CAPS } from "./constants";
 /**
  * Number of decimal places to use when rounding numerical values
  */
-const PRECISION = 2
+const PRECISION = 2;
 const DEPRECIATION_FACTOR = -32938;
 
 type PropertyParams = Pick<
@@ -90,18 +89,22 @@ export class Property {
     return depreciatedBuildPrice;
   }
 
-  private calculateBedWeightedAveragePrice(
-    beds: number[] = [0, 1, 2, 3, 4, 5, 6],
-    bedWeights: number[] = [0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4],
-  ) {
+  private calculateBedWeightedAveragePrice() {
+    const beds = BED_WEIGHTS_AND_CAPS.numberOfBedrooms;
+    const bedWeights = BED_WEIGHTS_AND_CAPS.weight;
     let bedWeight;
 
-    if (this.numberOfBedrooms < beds[beds.length - 1]) {
+    if (
+      this.numberOfBedrooms <
+      BED_WEIGHTS_AND_CAPS.numberOfBedrooms[
+        BED_WEIGHTS_AND_CAPS.numberOfBedrooms.length - 1
+      ]
+    ) {
       // assign the weight based on the number of beds
-      bedWeight = bedWeights[this.numberOfBedrooms];
+      bedWeight = BED_WEIGHTS_AND_CAPS.weight[this.numberOfBedrooms];
     } else {
       // assign the last value if out of scale
-      bedWeight = bedWeights[bedWeights.length - 1];
+      bedWeight = BED_WEIGHTS_AND_CAPS.weight[bedWeights.length - 1];
     }
 
     bedWeight = parseFloat(
