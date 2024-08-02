@@ -27,7 +27,7 @@ type Lifetime = {
 }[];
 
 export class FairholdLandRent {
-  /** Mortgage on the depreaciated value of the house */
+  /** Mortgage on the depreciated value of the house */
   depreciatedHouseMortgage: Mortgage;
   /** discounted value of the monthly land rent according to fairhold */
   discountedLandRentMonthly: number;
