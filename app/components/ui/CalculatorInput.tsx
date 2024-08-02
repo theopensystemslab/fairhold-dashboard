@@ -50,7 +50,7 @@ const CalculatorInput = () => {
     <div className="flex -centeitemsr justify-center text-black mt-5">
       <div className=" w-1/2  border-black border-2 rounded-lg ">
         <div className="bg-black text-white h-48 flex items-center justify-center">
-          <h1 className="text-6xl">Fairhold Calculator is cool</h1>
+          <h1 className="text-6xl">Fairhold Calculator is veery cold</h1>
         </div>
         <form onSubmit={handleSubmit} className=" flex flex-col m-5">
           <h2 className="mb-1 font-bold">House postcode</h2>
