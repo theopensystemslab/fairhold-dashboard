@@ -8,7 +8,7 @@ const prisma = new PrismaClient();
 export async function POST(req: Request) {
   try {
     // Parse and validate user input
-    const data = await req.json()
+    const data = await req.json();
     const input: Calculation = calculationSchema.parse(data);
 
     // data are going to be queried at different levels of granularity based on the postcode
@@ -34,7 +34,7 @@ export async function POST(req: Request) {
         },
       },
       _count: {
-        id: true
+        id: true,
       },
       _avg: {
         price: true,
@@ -82,14 +82,12 @@ export async function POST(req: Request) {
             price: true,
           },
         });
-        console.log({ pricesPaidArea });
-
         const numberPerArea = pricesPaidArea._count.id;
 
         pricesPaid = pricesPaidArea; // if condition is met, the granularity is appropriate
         numberOfTransactions = numberPerArea; // check the granularity
         granularityPostcode = postcodeArea; // granularity of the postcode when performing the average price search
-        averagePrice = pricesPaidArea._avg.price
+        averagePrice = pricesPaidArea._avg.price;
       } else {
         pricesPaid = pricesPaidDistrict; // if condition is met, the granularity is appropriate
         numberOfTransactions = numberPerDistrict; // check the granularity
@@ -107,14 +105,16 @@ export async function POST(req: Request) {
       throw new Error("Unable to calculate average price");
     }
 
-    const buildPrice = await prisma.buildPrices.findFirst({
+    const { priceMid: buildPrice } = await prisma.buildPrices.findFirstOrThrow({
       where: {
         houseType: { equals: input.houseType },
       },
       select: { priceMid: true },
     });
+    // TODO: Make columns non-nullable
+    if (!buildPrice) throw Error("Missing buildPrice");
 
-    const itlLookup = await prisma.itlLookup.findFirstOrThrow({
+    const { itl3 } = await prisma.itlLookup.findFirstOrThrow({
       where: {
         postcode: postcodeDistrict,
         itl3: {
@@ -125,60 +125,69 @@ export async function POST(req: Request) {
         itl3: true,
       },
     });
-    
-    // Casting required as prisma does not type narrow with above clause "not: null"
-    const itl3 = (itlLookup.itl3 as string)[3]; // Extract the 3rd value (index 3)
+    if (!itl3) throw Error("Missing itl3");
 
-    const gdhi = await prisma.gDHI.findFirst({
+    const { gdhi2020: gdhi } = await prisma.gDHI.findFirstOrThrow({
       where: {
         itl3: { equals: itl3 },
       },
       select: { gdhi2020: true },
     });
+    if (!gdhi) throw Error("Missing gdhi");
 
-    const averageRentMonthly = await prisma.rent.aggregate({
+    const {
+      _avg: { monthlyMeanRent: averageRentMonthly },
+    } = await prisma.rent.aggregate({
       where: { itl3 },
       _avg: {
         monthlyMeanRent: true,
       },
     });
+    if (!averageRentMonthly) throw Error("Missing averageRentMonthly");
 
     const socialRentAdjustments = await prisma.socialRentAdjustments.findMany();
     const itl3Prefix = itl3.substring(0, 4);
 
-    const socialRentAveEarning = await prisma.socialRent.aggregate({
+    const {
+      _avg: { earningsPerWeek: socialRentAveEarning },
+    } = await prisma.socialRent.aggregate({
       where: {
         itl3: {
-          startsWith: itl3Prefix
-        }
+          startsWith: itl3Prefix,
+        },
       },
       _avg: {
         earningsPerWeek: true,
       },
     });
 
-    const averageHpi = await prisma.hPI.aggregate({
+    if (!socialRentAveEarning) throw Error("Missing socialRentAveEarning");
+
+    const {
+      _avg: { hpi2020: averageHpi },
+    } = await prisma.hPI.aggregate({
       where: {
         itl3: {
-          endsWith: itl3
+          endsWith: itl3,
         },
       },
-        _avg: {
-          hpi2020: true
-        }
-      }
-    );
+      _avg: {
+        hpi2020: true,
+      },
+    });
+    if (!averageHpi) throw Error("Missing averageHpi");
 
-    const gasBillYearly = await prisma.gasBills.findFirstOrThrow({
+    const { bill: gasBillYearly } = await prisma.gasBills.findFirstOrThrow({
       where: {
         itl: {
-          startsWith: itl3.substring(0, 3)
+          startsWith: itl3.substring(0, 3),
         },
       },
       select: {
-        bill: true
-      }
-    })
+        bill: true,
+      },
+    });
+    if (!gasBillYearly) throw Error("Missing gasBillYearly");
 
     return NextResponse.json({
       postcode: input.housePostcode,
