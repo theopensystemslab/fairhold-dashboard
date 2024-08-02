@@ -192,23 +192,17 @@ export async function POST(req: Request) {
     console.log({ gasBillYearly });
 
     return NextResponse.json({
-      postcode,
-      houseType: data.houseType,
-      houseAge: data.houseAge ? parseFloat(data.houseAge.toString()) : null,
-      houseBedrooms: data.houseBedrooms
-        ? parseFloat(data.houseBedrooms.toString())
-        : null,
-      houseSize: data.houseSize
-        ? parseFloat(data.houseSize.toString())
-        : null,
+      postcode: input.housePostcode,
+      houseType: input.houseType,
+      houseAge: input.houseAge,
+      houseBedrooms: input.houseBedrooms,
+      houseSize: input.houseSize,
       averagePrice: parseFloat(averagePrice.toFixed(2)),
       itl3,
       gdhi,
       hpi: averageHpi,
       buildPrice,
-      averageRent,
       socialRentAdjustments,
-      socialRentAveEarning,
       numberOfTransactions,
       granularityPostcode,
       pricesPaid,
