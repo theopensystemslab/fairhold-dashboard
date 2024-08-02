@@ -1,3 +1,4 @@
+import { MONTHS_PER_YEAR } from "../constants";
 import { Fairhold } from "../Fairhold";
 import { Mortgage } from "../Mortgage";
 import { MONTHS_PER_YEAR } from "../constants";
@@ -91,8 +92,8 @@ export class FairholdLandRent {
 
     let fairholdRentLandIterative = new Fairhold({
       affordability: affordabilityIterative,
-      landPriceOrRent: averageRentLandYearlyIterative / 12,
-    }).calculateDiscountedPriceOrRent(); // calculate the discounted land rent
+      landPriceOrRent: averageRentLandYearlyIterative / MONTHS_PER_YEAR,
+    }).discountedLandPriceOrRent;
     this.discountedLandRentMonthly = fairholdRentLandIterative;
 
     const houseMortgagePaymentYearly =
@@ -130,7 +131,7 @@ export class FairholdLandRent {
       let fairholdRentLandIterative = new Fairhold({
         affordability: affordabilityIterative,
         landPriceOrRent: averageRentLandYearlyIterative,
-      }).calculateDiscountedPriceOrRent(); // calculate the discounted land rent
+      }).discountedLandPriceOrRent;
 
       if (i < houseMortgagePaymentYearly.length - 1) {
         houseMortgagePaymentYearlyIterative =

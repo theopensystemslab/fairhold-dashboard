@@ -25,7 +25,7 @@ export class FairholdLandPurchase {
   lifetime: Lifetime;
 
   constructor(params: FairholdLandPurchaseParams) {
-    this.discountedLandPrice = params.fairhold.calculateDiscountedPriceOrRent();
+    this.discountedLandPrice = params.fairhold.discountedLandPriceOrRent;
 
     this.discountedLandMortgage = new Mortgage({
       propertyValue: this.discountedLandPrice,
