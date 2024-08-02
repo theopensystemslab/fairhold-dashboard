@@ -1,95 +1,114 @@
+import { MONTHS_PER_YEAR } from "./constants";
+
+const DEFAULT_INTEREST_RATE = 0.06;
+const DEFAULT_MORTGAGE_TERM = 30;
+const DEFAULT_INITIAL_DEPOSIT = 0.15;
+
+interface MortgageParams {
+  propertyValue: number;
+  interestRate?: number;
+  mortgageTerm?: number;
+  initialDeposit?: number;
+}
+
+type MortgageBreakdown = {
+  yearlyPayment: number;
+  cumulativePaid: number;
+  remainingBalance: number;
+}[];
+
 export class Mortgage {
-  propertyValue: number; //value of the property for the mortgage
-  interestRate: number; // interest rate of the mortgage in percentage e.r, 0.05=5%
-  termYears: number; // number of years of the mortgage
-  initialDeposit: number; // initial deposit of the value of the mortgage in percentage e.g. 0.15 =15% deposit
-  principal?: number; // amount of the morgage requested
-  monthlyPayment?: number; // monthly rate of the mortgage
-  totalMortgageCost?: number; // total cost of the mortgage
-  yearlyPaymentBreakdown?: {
-    yearlyPayment: number;
-    cumulativePaid: number;
-    remainingBalance: number;
-  }[]; // yearly breakdown of the mortgage
-  constructor({
-    propertyValue,
-    interestRate = 0.06,
-    termOfTheMortgage = 30,
-    initialDeposit = 0.15,
-  }: {
-    propertyValue: number;
-    interestRate?: number;
-    termOfTheMortgage?: number;
-    initialDeposit?: number;
-  }) {
-    this.propertyValue = propertyValue;
-    this.initialDeposit = initialDeposit;
-    this.interestRate = interestRate;
-    this.termYears = termOfTheMortgage;
-    this.calculateAmountOfTheMortgage(); // calculate the amount of the mortgage
-    this.calculateMonthlyMortgagePayment(); // calculate the montly payment
-    this.calculateYearlyPaymentBreakdown(); // calculate the yearly breakdown;
+  propertyValue: number;
+  /**
+   * This value is given as a percentage. For example, 0.05 represents a 5% rate
+   */
+  interestRate: number;
+  termYears: number;
+  /**
+   * This value is given as a percentage. For example, 0.15 represents a 15% deposit
+   */
+  initialDeposit: number;
+  /**
+   * The principle is the value of the property, minus the deposit
+   */
+  principal: number;
+  monthlyPayment: number;
+  totalMortgageCost: number;
+  yearlyPaymentBreakdown: MortgageBreakdown;
+
+  constructor(params: MortgageParams) {
+    this.propertyValue = params.propertyValue;
+    this.initialDeposit = params.initialDeposit || DEFAULT_INITIAL_DEPOSIT;
+    this.interestRate = params.interestRate || DEFAULT_INTEREST_RATE;
+    this.termYears = params.mortgageTerm || DEFAULT_MORTGAGE_TERM;
+
+    // Computed properties, order is significant
+    this.principal = this.calculateMortgagePrinciple();
+
+    const { monthlyPayment, totalMortgageCost } =
+      this.calculateMonthlyMortgagePayment();
+    this.monthlyPayment = monthlyPayment;
+    this.totalMortgageCost = totalMortgageCost;
+
+    this.yearlyPaymentBreakdown = this.calculateYearlyPaymentBreakdown();
   }
 
-  calculateAmountOfTheMortgage() {
-    this.principal = this.propertyValue * (1 - this.initialDeposit); // calculate the amount of the mortgage by removing the deposit
-    return this.principal;
+  private calculateMortgagePrinciple() {
+    const principal = this.propertyValue * (1 - this.initialDeposit);
+    return principal;
   }
 
-  calculateMonthlyMortgagePayment() {
-    const monthlyInterestRate = this.interestRate / 12; // Convert annual interest rate to monthly rate
-    const numberOfPayments = this.termYears * 12; // Convert term in years to total number of payments
-    if (this.principal !== undefined) {
-      const monthlyPayment =
-        (this.principal *
-          monthlyInterestRate *
-          Math.pow(1 + monthlyInterestRate, numberOfPayments)) /
-        (Math.pow(1 + monthlyInterestRate, numberOfPayments) - 1); // Calculate the monthly payment
-      this.monthlyPayment = parseFloat(monthlyPayment.toFixed(2)); // Store monthly payment rounded to 2 decimal places in class property
-      this.totalMortgageCost = this.monthlyPayment * numberOfPayments; // total cost of the mortgage
-      return this.monthlyPayment;
-    } else {
-      throw new Error("amountOfTheMortgage is undefined");
-    }
-  }
-  calculateYearlyPaymentBreakdown() {
-    if (this.monthlyPayment == undefined || this.totalMortgageCost == undefined)
-      throw new Error("monthlyPayment or totalMortgageCost is undefined");
+  private calculateMonthlyMortgagePayment() {
+    const monthlyInterestRate = this.interestRate / MONTHS_PER_YEAR;
+    const numberOfPayments = this.termYears * MONTHS_PER_YEAR;
 
+    let monthlyPayment =
+      (this.principal *
+        monthlyInterestRate *
+        Math.pow(1 + monthlyInterestRate, numberOfPayments)) /
+      (Math.pow(1 + monthlyInterestRate, numberOfPayments) - 1);
+    monthlyPayment = parseFloat(monthlyPayment.toFixed(2));
+
+    const totalMortgageCost = monthlyPayment * numberOfPayments;
+
+    return { monthlyPayment, totalMortgageCost };
+  }
+  private calculateYearlyPaymentBreakdown() {
     let yearlyPayment =
-      this.initialDeposit * this.propertyValue + this.monthlyPayment * 12;
+      this.initialDeposit * this.propertyValue +
+      this.monthlyPayment * MONTHS_PER_YEAR;
     let cumulativePaid =
-      this.initialDeposit * this.propertyValue + this.monthlyPayment * 12;
-    let remainingBalance = this.totalMortgageCost - this.monthlyPayment * 12;
+      this.initialDeposit * this.propertyValue +
+      this.monthlyPayment * MONTHS_PER_YEAR;
+    let remainingBalance =
+      this.totalMortgageCost - this.monthlyPayment * MONTHS_PER_YEAR;
 
-    interface mortgageBreakdownTypes {
-      yearlyPayment: number;
-      cumulativePaid: number;
-      remainingBalance: number;
-    }
-    let yearlyPaymentBreakdown: mortgageBreakdownTypes[] = [
+    let yearlyPaymentBreakdown: MortgageBreakdown = [
       {
         yearlyPayment: yearlyPayment,
         cumulativePaid: cumulativePaid,
         remainingBalance: remainingBalance,
       },
-    ]; // initialize the yearlyPaymentBreakdown
+    ];
 
     for (let i = 0; i < this.termYears - 1; i++) {
       if (i != this.termYears - 1) {
-        yearlyPayment = this.monthlyPayment * 12; // calculate the yearly payment
+        yearlyPayment = this.monthlyPayment * MONTHS_PER_YEAR;
       } else {
-        yearlyPayment = remainingBalance; // last year just pay the remaining balance
+        // last year just pay the remaining balance
+        yearlyPayment = remainingBalance;
       }
 
-      cumulativePaid = cumulativePaid + yearlyPayment; // calculate the updated cumulative paid
-      remainingBalance = remainingBalance - yearlyPayment; // calculate the updated remaining balance
+      cumulativePaid = cumulativePaid + yearlyPayment;
+      remainingBalance = remainingBalance - yearlyPayment;
+
       yearlyPaymentBreakdown.push({
         yearlyPayment: yearlyPayment,
         cumulativePaid: cumulativePaid,
         remainingBalance: remainingBalance,
-      }); // add the current yearly payment to the yearlyPaymentBreakdown
+      });
     }
-    this.yearlyPaymentBreakdown = yearlyPaymentBreakdown; // set the yearlyPaymentBreakdown
+
+    return yearlyPaymentBreakdown;
   }
 }
