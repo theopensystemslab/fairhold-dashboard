@@ -103,7 +103,7 @@ export async function POST(req: Request) {
 
     // Calculate the total price    if (!pricesPaid) throw Error("Prices fetching failed");
     const totalPrice = pricesPaid.reduce(
-      (total: number, item: any) => total + item.price,
+      (total, item) => total + item.price,
       0
     );
     console.log("totalPrice:", totalPrice);
@@ -216,10 +216,6 @@ export async function POST(req: Request) {
       if (socialRentEarningRes.length === 1) {
         socialRentAverageEarning = socialRentEarningRes[0].earningsperweek;
       } else if (socialRentEarningRes.length > 1) {
-        const socialRentTotalEarning = socialRentEarningRes.reduce(
-          (sum, item) => sum + item.earningsperweek,
-          0
-        );
         socialRentAverageEarning = totalRent / socialRentEarningRes.length;
       }
       console.log("socialRentAverageEarning: ", socialRentAverageEarning);

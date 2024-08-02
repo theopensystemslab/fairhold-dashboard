@@ -8,9 +8,7 @@ import {
   BarController,
   CategoryScale,
   LinearScale,
-  Tooltip,
-  Legend,
-} from "chart.js";
+} from 'chart.js';
 
 Chart.register(BarElement, BarController, CategoryScale, LinearScale);
 

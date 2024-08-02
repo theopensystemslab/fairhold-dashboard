@@ -85,11 +85,11 @@ export class FairholdLandRent {
     let averageRentYearlyIterative = averageRentYearly;
     let averageRentLandYearlyIterative =
       averageRentYearlyIterative * landToTotalRatioIterative;
-    let affordabilityIterative = averageRentYearlyIterative / incomeIterative;
+    const affordabilityIterative = averageRentYearlyIterative / incomeIterative;
     let maintenanceCostIterative =
       maintenanceCostPercentage * newBuildPriceIterative;
 
-    let fairholdRentLandIterative = new Fairhold({
+    const fairholdRentLandIterative = new Fairhold({
       affordability: affordabilityIterative,
       landPriceOrRent: averageRentLandYearlyIterative / MONTHS_PER_YEAR,
     }).discountedLandPriceOrRent;
@@ -100,7 +100,7 @@ export class FairholdLandRent {
     let houseMortgagePaymentYearlyIterative =
       houseMortgagePaymentYearly[0].yearlyPayment; // find the first year
 
-    let lifetime: Lifetime = [
+    const lifetime: Lifetime = [
       {
         maintenanceCost: maintenanceCostIterative,
         fairholdRentLand: fairholdRentLandIterative,
@@ -125,9 +125,9 @@ export class FairholdLandRent {
       averageRentLandYearlyIterative =
         averageRentYearlyIterative * landToTotalRatioIterative;
 
-      let affordabilityIterative = averageRentYearlyIterative / incomeIterative;
+      const affordabilityIterative = averageRentYearlyIterative / incomeIterative;
 
-      let fairholdRentLandIterative = new Fairhold({
+      const fairholdRentLandIterative = new Fairhold({
         affordability: affordabilityIterative,
         landPriceOrRent: averageRentLandYearlyIterative,
       }).discountedLandPriceOrRent;

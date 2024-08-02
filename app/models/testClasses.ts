@@ -2,7 +2,7 @@ import { DEFAULT_FORECAST_PARAMETERS } from "./ForecastParameters";
 import { Household } from "./Household";
 import { Property } from "./Property";
 
-function calculateFairhold(responseData: any) {
+function calculateFairhold(responseData) {
   if (!responseData.buildPrice || responseData.buildPrice.length === 0) {
     throw new Error("buildPrice data is missing or empty");
   }

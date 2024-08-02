@@ -91,7 +91,6 @@ export class Property {
   }
 
   private calculateBedWeightedAveragePrice() {
-    const beds = BED_WEIGHTS_AND_CAPS.numberOfBedrooms;
     const bedWeights = BED_WEIGHTS_AND_CAPS.weight;
     let bedWeight;
 

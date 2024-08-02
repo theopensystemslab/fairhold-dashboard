@@ -83,7 +83,7 @@ export class Mortgage {
     let remainingBalance =
       this.totalMortgageCost - this.monthlyPayment * MONTHS_PER_YEAR;
 
-    let yearlyPaymentBreakdown: MortgageBreakdown = [
+    const yearlyPaymentBreakdown: MortgageBreakdown = [
       {
         yearlyPayment: yearlyPayment,
         cumulativePaid: cumulativePaid,

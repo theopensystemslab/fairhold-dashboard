@@ -61,7 +61,7 @@ export class FairholdLandPurchase {
     let landMortgagePaymentYearlyIterative =
       landMortgagePaymentYearly[0].yearlyPayment;
 
-    let lifetime: Lifetime = [
+    const lifetime: Lifetime = [
       {
         maintenanceCost: maintenanceCostIterative,
         landMortgagePaymentYearly: landMortgagePaymentYearlyIterative,
