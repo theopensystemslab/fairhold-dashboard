@@ -3,12 +3,11 @@ import React from 'react';
 import { Household } from '@/app/models/Household';
 import LifetimeCombinedChart from './LifetimeCombinedChart';
 
-interface LifetimeMarketPurchaseWrapperProps {
+interface Props {
     household: Household;
   }
 
-const LifetimeMarketPurchaseWrapper: React.FC<LifetimeMarketPurchaseWrapperProps> = ({ household }) => {
-  console.log('LifetimeMarketPurchaseWrapper household: ', household)
+const LifetimeMarketPurchaseWrapper: React.FC<Props> = ({ household }) => {
 
   // Create color scheme for different versions of the graph
     const colorScheme = {
@@ -19,11 +18,10 @@ const LifetimeMarketPurchaseWrapper: React.FC<LifetimeMarketPurchaseWrapperProps
       incomeThreshold: '#6c9e6e'
       }
 
-    console.log('household.tenure.marketPurchase.lifetime?.lifetimeMarket', household.tenure.marketPurchase?.lifetime)
-
     // Process and format the data for the chart
     const chartData = (household.tenure.marketPurchase?.lifetime || []).map((item, index) => {
       // Access and store household.lifetime array 
+      // TODO remove defensive code after types tightened upstream
       const incomeThreshold = household.lifetime && household.lifetime[index]
         ? household.lifetime[index].affordabilityThresholdIncome
         : 0;
@@ -38,8 +36,6 @@ const LifetimeMarketPurchaseWrapper: React.FC<LifetimeMarketPurchaseWrapperProps
         incomeThreshold: incomeThreshold,
     };
   }) ?? [];
-
-    console.log('LifetimeMarketPurchaseWrapper.tsx chartData: ', chartData)
 
     return (
       <div>

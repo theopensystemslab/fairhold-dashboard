@@ -20,7 +20,6 @@ import {
 
 Chart.register(PointElement, BarElement, BarController, LineController, LineElement, CategoryScale, LinearScale, Tooltip, Legend);
 
-// Define type for DataInput
 type DataInput = {
     year: string;
     landCost: number;
@@ -45,7 +44,6 @@ interface LifetimeChartProps {
 
 // Implementation of combination bar and line chart
 const LifetimeCombinedChart: React.FC<LifetimeChartProps> = ({ data, colorScheme }) => {
-    // console.log('LifetimeCombinedChart data: ', data);
 
     const ref = useRef<HTMLCanvasElement>(null);
     const chartRef = useRef<Chart | null>(null);
@@ -63,14 +61,14 @@ const LifetimeCombinedChart: React.FC<LifetimeChartProps> = ({ data, colorScheme
 
         const datasets: ChartDataset<'bar' | 'line', number[]>[] = [
           {
-              type: 'bar' as const,
+              type: 'bar',
               label: 'Land',
               data: landData,
               backgroundColor: colorScheme.land,
               order: 1,
           },
           {
-              type: 'bar' as const,
+              type: 'bar',
               label: 'House',
               data: houseData,
               backgroundColor: colorScheme.house,
@@ -88,7 +86,7 @@ const LifetimeCombinedChart: React.FC<LifetimeChartProps> = ({ data, colorScheme
       // Only add maintenance data if it exists
       if (maintenanceData.some(value => value !== null)) {
           datasets.push({
-              type: 'bar' as const,
+              type: 'bar',
               label: 'Maintenance',
               data: maintenanceData.map(value => value ?? 0),
               backgroundColor: colorScheme.maintenance,
@@ -98,7 +96,7 @@ const LifetimeCombinedChart: React.FC<LifetimeChartProps> = ({ data, colorScheme
       // Only add bills data if it exists
       if (billsData.some(value => value !== null)) {
           datasets.push({
-              type: 'bar' as const,
+              type: 'bar',
               label: 'Bills',
               data: billsData.map(value => value ?? 0),
               backgroundColor: colorScheme.bills,
