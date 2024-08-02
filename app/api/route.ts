@@ -202,6 +202,7 @@ export async function POST(req: Request) {
       buildPrice,
       averageRentMonthly,
       socialRentAdjustments,
+      socialRentAveEarning,
       numberOfTransactions,
       granularityPostcode,
       pricesPaid,
