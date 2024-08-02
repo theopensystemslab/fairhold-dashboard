@@ -1,7 +1,8 @@
 import { z } from "zod";
 import { parse as parsePostcode, fix as fixPostcode } from "postcode";
+import { HOUSE_TYPES } from "../models/Property";
 
-const HouseTypeEnum = z.enum(['D', 'S', 'T', 'F']);
+const HouseTypeEnum = z.enum(HOUSE_TYPES);
 
 /**
  * Describes the form the user will interact with in the frontend
@@ -21,7 +22,7 @@ export const calculationSchema = z.object({
   houseType: HouseTypeEnum.refine(
     (value) => HouseTypeEnum.options.includes(value),
     {
-      message: "houseType is required and must be one of 'D', 'S', 'T', 'F'",
+      message: `houseType is required and must be one of ${HOUSE_TYPES}`,
     }
   ),
 });
