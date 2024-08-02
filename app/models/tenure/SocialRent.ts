@@ -1,94 +1,97 @@
+import { WEEKS_PER_MONTH } from "../constants";
 import { Property } from "../Property";
 
+const NATIONAL_AVERAGE_RENT = 54.62;
+// TODO: Check values with Ollie
+const NATIONAL_AVERAGE_PROPERTY = 49750;
+const NATIONAL_AVERAGE_EARNINGS = 316.4;
+
+interface ConstructorParams {
+  socialRentAverageEarning: number;
+  // TODO: Replace 'any'
+  socialRentAdjustments: any;
+  housePriceIndex: number;
+  property: Property;
+}
+
 export class SocialRent {
-  socialRentAverageEarning; // average social rent
-  socialRentAdjustments; //rent adjustment values
-  housePriceIndex; // house price index
-  //property; // preoperty information
-  adjustedSocialRentMonthly?: number; //adjusted social rent monthly
-  socialRentMonthlyLand?: number; // social rent to pay the land
-  socialRentMonthlyHouse?: number; // social rent monthly House
-  relativeLocalEarning?: number; // relative local earnings
-  formulaRentWeekly?: number; // weekly rent
-  constructor({
-    socialRentAverageEarning,
-    socialRentAdjustments,
-    housePriceIndex,
-    property,
-  }: {
-    socialRentAverageEarning: number;
-    socialRentAdjustments: any;
-    housePriceIndex: number;
-    property: Property;
-  }) {
-    this.socialRentAverageEarning = socialRentAverageEarning;
-    this.socialRentAdjustments = socialRentAdjustments;
-    this.housePriceIndex = housePriceIndex;
-    //this.property = property;
-    this.calculateSocialRent(property);
+  public socialRentAverageEarning: number;
+  public socialRentAdjustments: any;
+  public housePriceIndex: number;
+  public adjustedSocialRentMonthly: number;
+  public socialRentMonthlyLand: number;
+  public socialRentMonthlyHouse: number;
+  public relativeLocalEarning: number;
+
+  constructor(params: ConstructorParams) {
+    this.socialRentAverageEarning = params.socialRentAverageEarning;
+    this.socialRentAdjustments = params.socialRentAdjustments;
+    this.housePriceIndex = params.housePriceIndex;
+    this.relativeLocalEarning =
+      params.socialRentAverageEarning / NATIONAL_AVERAGE_EARNINGS;
+
+    const {
+      adjustedSocialRentMonthly,
+      socialRentMonthlyLand,
+      socialRentMonthlyHouse,
+    } = this.calculateSocialRent(params.property);
+
+    this.adjustedSocialRentMonthly = adjustedSocialRentMonthly;
+    this.socialRentMonthlyLand = socialRentMonthlyLand;
+    this.socialRentMonthlyHouse = socialRentMonthlyHouse;
   }
 
-  calculateSocialRent(
-    property: any,
-    numberOfBeds: number = property.numberOfBedrooms,
-    beds: number[] = [0, 1, 2, 3, 4, 5, 6],
-    bedWeights: number[] = [0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4],
-    socialRentCapValues: number[] = [
+  private calculateSocialRent({ numberOfBedrooms, landToTotalRatio }: Property) {
+    // TODO: Could this be better expressed as an object?
+    const beds = [0, 1, 2, 3, 4, 5, 6];
+    const bedWeights = [0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4];
+    const socialRentCapValues = [
       155.73, 155.73, 164.87, 174.03, 183.18, 192.35, 201.5,
-    ],
-    precisionRounding: number = 2,
-    nationalAverageRent: number = 54.62, // national average rent :check with Ollie
-    nationalAverageProperty: number = 49750, // national average property value: check with Ollie
-    nationalAverageEarnings: number = 316.4 // check with Ollie
-  ) {
-    let bedWeight; // initialize the bedWeight variable
-    let rentCapWeekly; // initialize the rent Cap values
-    if (numberOfBeds < beds[beds.length - 1]) {
-      bedWeight = bedWeights[numberOfBeds]; // assign the weight based on the number of beds
-      rentCapWeekly = socialRentCapValues[numberOfBeds]; // assign the rent cap value based on the number of beds
-    } else {
-      bedWeight = bedWeights[bedWeights.length - 1]; // assign the last value if out of scale
-      rentCapWeekly = socialRentCapValues[bedWeights.length - 1]; // assign the last value if out of scale
-    }
+    ];
 
-    const relativeLocalEarning =
-      this.socialRentAverageEarning / nationalAverageEarnings; // relative local earnings
-    this.relativeLocalEarning = relativeLocalEarning;
+    let bedWeight;
+    let rentCapWeekly;
+    if (numberOfBedrooms < beds[beds.length - 1]) {
+      bedWeight = bedWeights[numberOfBedrooms];
+      rentCapWeekly = socialRentCapValues[numberOfBedrooms];
+    } else {
+      // assign the last value if out of scale
+      bedWeight = bedWeights[bedWeights.length - 1];
+      // assign the last value if out of scale
+      rentCapWeekly = socialRentCapValues[bedWeights.length - 1];
+    }
 
     const relativePropertyValue =
-      this.housePriceIndex / nationalAverageProperty; // relative property value
+      this.housePriceIndex / NATIONAL_AVERAGE_PROPERTY;
 
-    const formulaRentWeekly =
-      0.7 * nationalAverageRent * relativeLocalEarning * bedWeight +
-      0.3 * nationalAverageRent * relativePropertyValue;
-    this.formulaRentWeekly = formulaRentWeekly;
+    // TODO: Magic numbers - what are 0.7 and 0.3?
+    let adjustedRentWeekly =
+      0.7 * NATIONAL_AVERAGE_RENT * this.relativeLocalEarning * bedWeight +
+      0.3 * NATIONAL_AVERAGE_RENT * relativePropertyValue;
 
-    let adjustedRentWeekly = formulaRentWeekly; // Initialize the adjusted rent weekly
-    // Loop through each rent adjustment up to the second to last year
-    if (this.socialRentAdjustments == undefined)
-      throw new Error("socialRentAdjustments is undefined");
+    const secondToLastYear = this.socialRentAdjustments.length - 2;
 
-    for (let i = 0; i < this.socialRentAdjustments.length - 2; i++) {
-      const adjustment = this.socialRentAdjustments[i]; // Get the current adjustment
-      const adjustmentFactor = adjustment.total / 100 + 1; // Calculate the adjustment factor
-      adjustedRentWeekly *= adjustmentFactor; // Apply the adjustment
+    for (let i = 0; i < secondToLastYear; i++) {
+      const adjustment = this.socialRentAdjustments[i];
+      const adjustmentFactor = adjustment.total / 100 + 1;
+      adjustedRentWeekly *= adjustmentFactor;
     }
 
-    let socialRentWeekly; // initialize the variable
+    let socialRentWeekly;
     if (adjustedRentWeekly < rentCapWeekly) {
       socialRentWeekly = adjustedRentWeekly;
     } else {
       socialRentWeekly = rentCapWeekly;
     }
 
-    const adjustedSocialRentMonthly = socialRentWeekly * 4.2; // define the monthly social rent
+    const adjustedSocialRentMonthly = socialRentWeekly * WEEKS_PER_MONTH;
+    const socialRentMonthlyLand = adjustedSocialRentMonthly * landToTotalRatio; 
+    const socialRentMonthlyHouse = adjustedSocialRentMonthly - this.socialRentMonthlyLand; 
 
-    this.adjustedSocialRentMonthly = adjustedSocialRentMonthly; // set the value of adjusted social rent monthly
-    if (property.landToTotalRatio == undefined)
-      throw new Error("landToTotalRatio is undefined");
-    this.socialRentMonthlyLand =
-      adjustedSocialRentMonthly * property.landToTotalRatio; // set the rent value paid for the land
-    this.socialRentMonthlyHouse =
-      adjustedSocialRentMonthly - this.socialRentMonthlyLand; // set the rent value paid or the house
+    return {
+      adjustedSocialRentMonthly,
+      socialRentMonthlyLand,
+      socialRentMonthlyHouse,
+    };
   }
 }
