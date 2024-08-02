@@ -18,8 +18,9 @@ type PropertyParams = Pick<
   | "itl3"
 >;
 
-// TODO: Reuse HouseType enum
-type HouseType = "D" | "S" | "T" | "F";
+export const HOUSE_TYPES = ["D", "S",  "T", "F"] as const;
+
+type HouseType = typeof HOUSE_TYPES[number];
 
 export class Property {
   postcode: string;
