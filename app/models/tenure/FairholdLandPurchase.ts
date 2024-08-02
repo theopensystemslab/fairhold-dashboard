@@ -1,123 +1,89 @@
 import { Fairhold } from "../Fairhold";
 import { Mortgage } from "../Mortgage";
 
+interface FairholdLandPurchaseParams {
+  newBuildPrice: number;
+  depreciatedBuildPrice: number;
+  constructionPriceGrowthPerYear: number;
+  yearsForecast: number;
+  maintenanceCostPercentage: number;
+  incomeGrowthPerYear: number;
+  affordability: number;
+  fairhold: Fairhold;
+};
+
+type Lifetime = {
+  maintenanceCost: number;
+  landMortgagePaymentYearly: number;
+  houseMortgagePaymentYearly: number;
+}[];
+
 export class FairholdLandPurchase {
-  discountedLandPrice?: number;
-  discountedLandMortgage?: Mortgage;
-  depreciatedHouseMortgage?: Mortgage;
-  lifetime?: {
-    maintenanceCost: number;
-    landMortgagePaymentYearly: number;
-    houseMortgagePaymentYearly: number;
-  }[];
-  constructor({
-    newBuildPrice, // new build price of the property
-    depreciatedBuildPrice, // depreciated building price
-    constructionPriceGrowthPerYear, // construction price growth per year
-    yearsForecast, // years forecast
-    maintenanceCostPercentage, // maintenance cost percentage
-    fairhold,
-  }: {
-    newBuildPrice: number;
-    depreciatedBuildPrice: number;
-    constructionPriceGrowthPerYear: number;
-    yearsForecast: number;
-    maintenanceCostPercentage: number;
-    incomeGrowthPerYear: number;
-    affordability: number;
-    fairhold: Fairhold;
-  }) {
-    this.calculateFairholdDiscount(fairhold); // calculate the fairhold discountLand
-    this.calculateMortgage(depreciatedBuildPrice); // calculate the mortgage
-    this.calculateLifetime(
-      newBuildPrice,
-      maintenanceCostPercentage,
-      yearsForecast,
-      constructionPriceGrowthPerYear
-    ); // calculate the lifetime
-  }
+  discountedLandPrice: number;
+  discountedLandMortgage: Mortgage;
+  depreciatedHouseMortgage: Mortgage;
+  lifetime: Lifetime;
 
-  calculateFairholdDiscount(fairhold: Fairhold) {
-    let discountedLandPrice = fairhold.calculateDiscountedPriceOrRent(); // calculate the discounted land price
-    this.discountedLandPrice = discountedLandPrice; // discounted land price
-  }
+  constructor(params: FairholdLandPurchaseParams) {
+    this.discountedLandPrice = params.fairhold.calculateDiscountedPriceOrRent();
 
-  calculateMortgage(depreciatedBuildPrice: number) {
-    if (this.discountedLandPrice == undefined) {
-      throw new Error("discountedLandPrice is not defined");
-    }
     this.discountedLandMortgage = new Mortgage({
       propertyValue: this.discountedLandPrice,
     });
 
     this.depreciatedHouseMortgage = new Mortgage({
-      propertyValue: depreciatedBuildPrice,
+      propertyValue: params.depreciatedBuildPrice,
     });
+
+    this.lifetime = this.calculateLifetime(params);
   }
 
-  calculateLifetime(
-    newBuildPrice: number,
-    maintenanceCostPercentage: number,
-    yearsForecast: number,
-    constructionPriceGrowthPerYear: number
-  ) {
+  private calculateLifetime({
+    newBuildPrice,
+    maintenanceCostPercentage,
+    yearsForecast,
+    constructionPriceGrowthPerYear,
+  }: FairholdLandPurchaseParams) {
     let newBuildPriceIterative = newBuildPrice;
     let maintenanceCostIterative = maintenanceCostPercentage * newBuildPrice;
-    // retrieve the mortgage payments for the first year
-    if (
-      this.depreciatedHouseMortgage === undefined ||
-      this.depreciatedHouseMortgage.yearlyPaymentBreakdown === undefined
-    ) {
-      throw new Error("depreciatedHouseMortgage is undefined");
-    }
 
-    interface mortgageBreakdownTypes {
-      yearlyPayment: number;
-      cumulativePaid: number;
-      remainingBalance: number;
-    }
-    const houseMortgagePaymentYearly = this.depreciatedHouseMortgage
-      .yearlyPaymentBreakdown as mortgageBreakdownTypes[];
+    const houseMortgagePaymentYearly =
+      this.depreciatedHouseMortgage.yearlyPaymentBreakdown;
+
+    // find the first year
     let houseMortgagePaymentYearlyIterative =
-      houseMortgagePaymentYearly[0].yearlyPayment; // find the first year
+      houseMortgagePaymentYearly[0].yearlyPayment;
 
-    if (
-      this.discountedLandMortgage === undefined ||
-      this.discountedLandMortgage.yearlyPaymentBreakdown === undefined
-    ) {
-      throw new Error("depreciatedHouseMortgage is undefined");
-    }
+    const landMortgagePaymentYearly =
+      this.discountedLandMortgage.yearlyPaymentBreakdown;
 
-    const landMortgagePaymentYearly = this.discountedLandMortgage
-      .yearlyPaymentBreakdown as mortgageBreakdownTypes[];
-
+    // find the first year
     let landMortgagePaymentYearlyIterative =
-      landMortgagePaymentYearly[0].yearlyPayment; // find the first year
+      landMortgagePaymentYearly[0].yearlyPayment;
 
-    interface lifetimeTypes {
-      maintenanceCost: number;
-      landMortgagePaymentYearly: number;
-      houseMortgagePaymentYearly: number;
-    }
-
-    let lifetime: lifetimeTypes[] = [
+    let lifetime: Lifetime = [
       {
         maintenanceCost: maintenanceCostIterative,
         landMortgagePaymentYearly: landMortgagePaymentYearlyIterative,
         houseMortgagePaymentYearly: houseMortgagePaymentYearlyIterative,
       },
-    ]; // initialize the forecast
+    ];
+
     for (let i = 0; i < yearsForecast - 1; i++) {
+      // calculate the new build price at a given year
       newBuildPriceIterative =
-        newBuildPriceIterative * (1 + constructionPriceGrowthPerYear); // calculate the new build price at a given year
+        newBuildPriceIterative * (1 + constructionPriceGrowthPerYear);
+      // set the current maintenance cost
       maintenanceCostIterative =
-        newBuildPriceIterative * maintenanceCostPercentage; // set the current maintenance cost
+        newBuildPriceIterative * maintenanceCostPercentage;
 
       if (i < houseMortgagePaymentYearly.length - 1) {
+        // find the first year
         houseMortgagePaymentYearlyIterative =
-          houseMortgagePaymentYearly[i + 1].yearlyPayment; // find the first year
+          houseMortgagePaymentYearly[i + 1].yearlyPayment;
+        // find the first year
         landMortgagePaymentYearlyIterative =
-          landMortgagePaymentYearly[i + 1].yearlyPayment; // find the first year
+          landMortgagePaymentYearly[i + 1].yearlyPayment;
       } else {
         houseMortgagePaymentYearlyIterative = 0;
         landMortgagePaymentYearlyIterative = 0;
@@ -127,8 +93,9 @@ export class FairholdLandPurchase {
         maintenanceCost: maintenanceCostIterative,
         landMortgagePaymentYearly: landMortgagePaymentYearlyIterative,
         houseMortgagePaymentYearly: houseMortgagePaymentYearlyIterative,
-      }); // add the current price to the new build price forecast
+      });
     }
-    this.lifetime = lifetime; // save the object
+
+    return lifetime;
   }
 }
