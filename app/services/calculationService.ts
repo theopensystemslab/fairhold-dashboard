@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
-import * as itl3Service from "../services/itlLookupService";
-import * as ghdiService from "../services/gdhiService";
+import { itlService } from "./itlService";
+import { gdhiService } from "./gdhiService";
 import { Calculation } from "../schemas/calculationSchema";
 
 const prisma = new PrismaClient();
@@ -112,8 +112,8 @@ export const getHouseholdData = async (
     // TODO: Make columns non-nullable
     if (!buildPrice) throw Error("Missing buildPrice");
 
-    const itl3 = await itl3Service.getByPostcodeDistrict(postcodeDistrict);
-    const gdhi = await ghdiService.getByITL3(itl3);
+    const itl3 = await itlService.getByPostcodeDistrict(postcodeDistrict);
+    const gdhi = await gdhiService.getByITL3(itl3);
 
     const {
       _avg: { monthlyMeanRent: averageRentMonthly },

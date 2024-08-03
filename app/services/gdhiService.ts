@@ -1,5 +1,9 @@
-import * as repo from './../data/gdhiRepo';
+import { gdhiRepo } from "../data/gdhiRepo";
 
-export const getByITL3 = async (itl3: string) => {
-  return await repo.getGDHI2020ByITL3(itl3);
+const getByITL3 = async (itl3: string) => {
+  return await gdhiRepo.getGDHI2020ByITL3(itl3);
+};
+
+export const gdhiService = {
+  getByITL3,
 };
