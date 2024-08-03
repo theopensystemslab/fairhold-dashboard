@@ -8,7 +8,7 @@ const prisma = new PrismaClient();
 export async function POST(req: Request) {
   try {
     // Parse and validate user input
-    const data = await req.json()
+    const data = await req.json();
     const input: Calculation = calculationSchema.parse(data);
 
     // data are going to be queried at different levels of granularity based on the postcode

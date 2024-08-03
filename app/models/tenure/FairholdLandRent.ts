@@ -59,7 +59,7 @@ export class FairholdLandRent {
       landPriceOrRent: averageRentLandMonthly,
     });
     const discountedLandRentMonthly =
-      fairholdLandRent.discountedLandPriceOrRent
+      fairholdLandRent.discountedLandPriceOrRent;
 
     return discountedLandRentMonthly;
   }
