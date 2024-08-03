@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 import { Calculation, calculationSchema } from "../schemas/calculationSchema";
+import * as itl3Service from "../services/itlLookupService";
 
 const prisma = new PrismaClient();
 
@@ -114,18 +115,7 @@ export async function POST(req: Request) {
     // TODO: Make columns non-nullable
     if (!buildPrice) throw Error("Missing buildPrice");
 
-    const { itl3 } = await prisma.itlLookup.findFirstOrThrow({
-      where: {
-        postcode: postcodeDistrict,
-        itl3: {
-          not: null,
-        },
-      },
-      select: {
-        itl3: true,
-      },
-    });
-    if (!itl3) throw Error("Missing itl3");
+    const itl3 = await itl3Service.getByPostcodeDistrict(postcodeDistrict);
 
     const { gdhi2020: gdhi } = await prisma.gDHI.findFirstOrThrow({
       where: {
