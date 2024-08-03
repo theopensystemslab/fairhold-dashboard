@@ -12,6 +12,7 @@
     "test:coverage": "jest; open ./coverage/lcov-report/index.html",
     "prisma:generate": "prisma generate",
     "postinstall": "npm run prisma:generate",
+    "prettier": "prettier --write .",
     "prepare": "husky"
   },
   "lint-staged": {
