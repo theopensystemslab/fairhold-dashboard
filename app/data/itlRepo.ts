@@ -1,6 +1,6 @@
 import prisma from "./db";
 
-export const getItl3ByPostcodeDistrict = async (
+const getItl3ByPostcodeDistrict = async (
   postcodeDistrict: string
 ): Promise<string> => {
   try {
@@ -22,3 +22,7 @@ export const getItl3ByPostcodeDistrict = async (
     throw new Error(`Data error: Unable get get itl3 for postcode district ${postcodeDistrict}`);
   }
 };
+
+export const itlRepo = {
+  getItl3ByPostcodeDistrict,
+}
