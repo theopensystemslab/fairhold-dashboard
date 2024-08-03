@@ -1,6 +1,6 @@
 import prisma from "./db";
 
-export const getGDHI2020ByITL3 = async (
+const getGDHI2020ByITL3 = async (
   itl3: string
 ): Promise<number> => {
   try {
@@ -20,3 +20,7 @@ export const getGDHI2020ByITL3 = async (
     throw Error(`Data error: Unable to find gdhi2020 for itl3 ${itl3}`);
   }
 };
+
+export const gdhiRepo = {
+  getGDHI2020ByITL3,
+}
