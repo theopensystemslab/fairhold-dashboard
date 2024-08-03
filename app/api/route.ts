@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 import { Calculation, calculationSchema } from "../schemas/calculationSchema";
 import * as itl3Service from "../services/itlLookupService";
+import * as ghdiService from "../services/gdhiService";
 
 const prisma = new PrismaClient();
 
@@ -116,14 +117,7 @@ export async function POST(req: Request) {
     if (!buildPrice) throw Error("Missing buildPrice");
 
     const itl3 = await itl3Service.getByPostcodeDistrict(postcodeDistrict);
-
-    const { gdhi2020: gdhi } = await prisma.gDHI.findFirstOrThrow({
-      where: {
-        itl3: { equals: itl3 },
-      },
-      select: { gdhi2020: true },
-    });
-    if (!gdhi) throw Error("Missing gdhi");
+    const gdhi = await ghdiService.getByITL3(itl3);
 
     const {
       _avg: { monthlyMeanRent: averageRentMonthly },
