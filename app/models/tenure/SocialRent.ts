@@ -4,16 +4,17 @@ import { BED_WEIGHTS_AND_CAPS, NATIONAL_AVERAGES } from "../constants";
 interface SocialRentParams {
   numberOfBedrooms: number;
   socialRentAverageEarning: number;
-  socialRentAdjustments: socialRentAdjustmentTypes;
+  socialRentAdjustments: SocialRentAdjustments;
   housePriceIndex: number;
   landToTotalRatio: number;
 }
 
-export type socialRentAdjustmentTypes = {
+export type SocialRentAdjustments = {
   year: string;
-  inflation: string;
-  additional: string;
-  total: string;
+  inflation: number;
+  // TODO: Is this optional or required?
+  additional?: number;
+  total: number;
 }[];
 
 export class SocialRent {
