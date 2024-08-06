@@ -4,93 +4,66 @@ import { FairholdLandPurchase } from "./tenure/FairholdLandPurchase";
 import { FairholdLandRent } from "./tenure/FairholdLandRent";
 import { Fairhold } from "./Fairhold";
 import { Property } from "./Property";
-import { SocialRent, socialRentAdjustmentTypes } from "./tenure/SocialRent";
+import { SocialRent, SocialRentAdjustments } from "./tenure/SocialRent";
 import { ForecastParameters } from "./ForecastParameters";
 
+const HOUSE_MULTIPLIER = 2.4;
+
+type ConstructorParams = Pick<
+  Household,
+  "incomePerPersonYearly" | "gasBillYearly" | "property" | "forecastParameters"
+> & {
+  averageRentYearly: number;
+  socialRentAverageEarning: number;
+  socialRentAdjustments: SocialRentAdjustments;
+  housePriceIndex: number;
+};
+
+type Lifetime = {
+  affordabilityThresholdIncome: number;
+  incomeYearly: number;
+}[];
+
 export class Household {
-  incomePerPersonYearly; // income per person
-  gasBillYearly; // gas bill monthly
-  property; // property object
-  forecastParameters; // forecast parameters
-  incomeYearly!: number; // income per household
-  tenure: {
-    marketPurchase?: MarketPurchase;
-    marketRent?: MarketRent;
-    socialRent?: SocialRent;
-    fairholdLandPurchase?: FairholdLandPurchase;
-    fairholdLandRent?: FairholdLandRent;
-  }; // grouped tenure field
+  public incomePerPersonYearly: number;
+  public gasBillYearly: number;
+  public property: Property;
+  public forecastParameters: ForecastParameters;
+  public incomeYearly: number;
+  public tenure: {
+    marketPurchase: MarketPurchase;
+    marketRent: MarketRent;
+    socialRent: SocialRent;
+    fairholdLandPurchase: FairholdLandPurchase;
+    fairholdLandRent: FairholdLandRent;
+  };
+  public lifetime: Lifetime;
 
-  lifetime?: {
-    affordabilityThresholdIncome: number;
-    incomeYearly: number;
-  }[];
+  constructor(params: ConstructorParams) {
+    this.incomePerPersonYearly = params.incomePerPersonYearly;
+    this.gasBillYearly = params.gasBillYearly;
+    this.property = params.property;
+    this.forecastParameters = params.forecastParameters;
+    this.incomeYearly = HOUSE_MULTIPLIER * params.incomePerPersonYearly;
+    this.tenure = this.calculateTenures(params);
+    this.lifetime = this.calculateLifetime(
+      this.incomeYearly,
+      params.forecastParameters
+    );
+  }
 
-  constructor({
-    incomePerPersonYearly,
+  private calculateTenures({
     averageRentYearly,
     socialRentAverageEarning,
     socialRentAdjustments,
     housePriceIndex,
-    gasBillYearly,
-    property,
-    forecastParameters,
-  }: {
-    incomePerPersonYearly: number;
-    averageRentYearly: number;
-    socialRentAverageEarning: number;
-    socialRentAdjustments: socialRentAdjustmentTypes;
-    housePriceIndex: number;
-    gasBillYearly: number;
-    property: Property;
-    forecastParameters: ForecastParameters;
-  }) {
-    this.incomePerPersonYearly = incomePerPersonYearly;
-    this.gasBillYearly = gasBillYearly;
-    this.property = property;
-    this.forecastParameters = forecastParameters;
-    this.tenure = {}; // Initialize the tenure object
-    this.calculateHouseholdIncome();
-    this.calculateTenures(
-      averageRentYearly,
-      socialRentAverageEarning,
-      socialRentAdjustments,
-      housePriceIndex
-    );
-    this.calculateLifetime(
-      this.incomeYearly,
-      forecastParameters.incomeGrowthPerYear,
-      forecastParameters.affordabilityThresholdIncomePercentage,
-      forecastParameters.yearsForecast
-    );
-  }
-
-  calculateHouseholdIncome(houseMultiplier: number = 2.4) {
-    this.incomeYearly = houseMultiplier * this.incomePerPersonYearly; // calculate the income for house hold
-  }
-
-  calculateTenures(
-    averageRentYearly: number,
-    socialRentAverageEarning: number,
-    socialRentAdjustments: socialRentAdjustmentTypes,
-    housePriceIndex: number
-  ) {
-    if (this.incomeYearly == undefined) throw new Error("income is undefined");
-    if (this.property.newBuildPrice == undefined)
-      throw new Error("newBuildPrice is undefined");
-    if (this.property.depreciatedBuildPrice == undefined)
-      throw new Error("depreciatedBuildPrice is undefined");
-    if (this.property.landPrice == undefined)
-      throw new Error("landPrice is undefined");
-
-    // calculate tenure market purchase
-    this.tenure.marketPurchase = new MarketPurchase({
+  }: ConstructorParams) {
+    const marketPurchase = new MarketPurchase({
       incomeYearly: this.incomeYearly,
       averagePrice: this.property.averageMarketPrice,
       newBuildPrice: this.property.newBuildPrice,
       depreciatedBuildPrice: this.property.depreciatedBuildPrice,
       landPrice: this.property.landPrice,
-      //affordabilityThresholdIncomePercentage:this.forecastParameters.affordabilityThresholdIncomePercentage,
       propertyPriceGrowthPerYear:
         this.forecastParameters.propertyPriceGrowthPerYear,
       constructionPriceGrowthPerYear:
@@ -98,18 +71,15 @@ export class Household {
       yearsForecast: this.forecastParameters.yearsForecast,
       maintenanceCostPercentage:
         this.forecastParameters.maintenanceCostPercentage,
-      //incomeGrowthPerYear: this.forecastParameters.incomeGrowthPerYear,
     });
 
-    //calculate tenure market rent
-    this.tenure.marketRent = new MarketRent({
+    const marketRent = new MarketRent({
       averageRentYearly: averageRentYearly,
       averagePrice: this.property.averageMarketPrice,
       newBuildPrice: this.property.newBuildPrice,
       depreciatedBuildPrice: this.property.depreciatedBuildPrice,
       landPrice: this.property.landPrice,
       incomeYearly: this.incomeYearly,
-      //affordabilityThresholdIncomePercentage:this.forecastParameters.affordabilityThresholdIncomePercentage,
       propertyPriceGrowthPerYear:
         this.forecastParameters.propertyPriceGrowthPerYear,
       constructionPriceGrowthPerYear:
@@ -117,47 +87,34 @@ export class Household {
       yearsForecast: this.forecastParameters.yearsForecast,
       maintenanceCostPercentage:
         this.forecastParameters.maintenanceCostPercentage,
-      //incomeGrowthPerYear: this.forecastParameters.incomeGrowthPerYear,
       rentGrowthPerYear: this.forecastParameters.rentGrowthPerYear,
     });
 
-    //calculate tenure social rent
-    this.tenure.socialRent = new SocialRent({
-      socialRentAverageEarning: socialRentAverageEarning,
-      socialRentAdjustments: socialRentAdjustments,
-      housePriceIndex: housePriceIndex,
+    const socialRent = new SocialRent({
+      socialRentAverageEarning,
+      socialRentAdjustments,
+      housePriceIndex,
       landToTotalRatio: this.property.landToTotalRatio,
       numberOfBedrooms: this.property.numberOfBedrooms,
     });
 
-    if (this.tenure.marketPurchase.affordability == undefined)
-      throw new Error("tenureMarketPurchase.affordability is undefined");
-
-    this.tenure.fairholdLandPurchase = new FairholdLandPurchase({
-      //averagePrice: this.property.averagePrice, // average price of the property
+    const fairholdLandPurchase = new FairholdLandPurchase({
       newBuildPrice: this.property.newBuildPrice,
       depreciatedBuildPrice: this.property.depreciatedBuildPrice,
-      //landPrice: this.property.landPrice,
-      //incomeYearly: this.incomeYearly, // income Yearly
-      //affordabilityThresholdIncomePercentage:this.forecastParameters.affordabilityThresholdIncomePercentage,
-      //propertyPriceGrowthPerYear:this.forecastParameters.propertyPriceGrowthPerYear,
       constructionPriceGrowthPerYear:
         this.forecastParameters.constructionPriceGrowthPerYear,
       yearsForecast: this.forecastParameters.yearsForecast,
       maintenanceCostPercentage:
         this.forecastParameters.maintenanceCostPercentage,
       incomeGrowthPerYear: this.forecastParameters.incomeGrowthPerYear,
-      affordability: this.tenure.marketPurchase.affordability,
+      affordability: marketPurchase.affordability,
       fairhold: new Fairhold({
-        affordability: this.tenure.marketPurchase.affordability,
+        affordability: marketPurchase.affordability,
         landPriceOrRent: this.property.landPrice,
       }),
     });
 
-    if (this.tenure.marketRent.affordability == undefined)
-      throw new Error("tenureMarketRent.affordability is undefined");
-
-    this.tenure.fairholdLandRent = new FairholdLandRent({
+    const fairholdLandRent = new FairholdLandRent({
       averageRentYearly: averageRentYearly,
       averagePrice: this.property.averageMarketPrice, // average price of the property
       newBuildPrice: this.property.newBuildPrice,
@@ -177,27 +134,33 @@ export class Household {
       rentGrowthPerYear: this.forecastParameters.rentGrowthPerYear, // rent growth per year
 
       fairhold: new Fairhold({
-        affordability: this.tenure.marketRent.affordability,
+        affordability: marketRent.affordability,
         landPriceOrRent: averageRentYearly,
       }), // fairhold object
     });
+
+    return {
+      marketPurchase,
+      marketRent,
+      socialRent,
+      fairholdLandPurchase,
+      fairholdLandRent,
+    };
   }
 
-  calculateLifetime(
+  private calculateLifetime(
     incomeYearly: number,
-    incomeGrowthPerYear: number,
-    affordabilityThresholdIncomePercentage: number,
-    yearsForecast: number
+    {
+      incomeGrowthPerYear,
+      affordabilityThresholdIncomePercentage,
+      yearsForecast,
+    }: ForecastParameters
   ) {
-    let incomeYearlyIterative = incomeYearly; // set the current income
+    let incomeYearlyIterative = incomeYearly;
     let affordabilityThresholdIncomeIterative =
-      incomeYearlyIterative * affordabilityThresholdIncomePercentage; // affordable income
+      incomeYearlyIterative * affordabilityThresholdIncomePercentage;
 
-    interface lifetimeTypes {
-      affordabilityThresholdIncome: number;
-      incomeYearly: number;
-    }
-    let lifetime: lifetimeTypes[] = [
+    const lifetime: Lifetime = [
       {
         incomeYearly: incomeYearlyIterative,
         affordabilityThresholdIncome: affordabilityThresholdIncomeIterative,
@@ -205,15 +168,16 @@ export class Household {
     ];
 
     for (let i = 0; i < yearsForecast - 1; i++) {
-      incomeYearlyIterative = incomeYearlyIterative * (1 + incomeGrowthPerYear); // calculate the current income
+      incomeYearlyIterative = incomeYearlyIterative * (1 + incomeGrowthPerYear);
       affordabilityThresholdIncomeIterative =
-        incomeYearlyIterative * affordabilityThresholdIncomePercentage; // affordable income
+        incomeYearlyIterative * affordabilityThresholdIncomePercentage;
 
       lifetime.push({
         incomeYearly: incomeYearlyIterative,
         affordabilityThresholdIncome: affordabilityThresholdIncomeIterative,
       });
     }
-    this.lifetime = lifetime;
+
+    return lifetime;
   }
 }
