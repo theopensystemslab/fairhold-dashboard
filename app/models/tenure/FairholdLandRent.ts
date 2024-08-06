@@ -125,7 +125,8 @@ export class FairholdLandRent {
       averageRentLandYearlyIterative =
         averageRentYearlyIterative * landToTotalRatioIterative;
 
-      const affordabilityIterative = averageRentYearlyIterative / incomeIterative;
+      const affordabilityIterative =
+        averageRentYearlyIterative / incomeIterative;
 
       const fairholdRentLandIterative = new Fairhold({
         affordability: affordabilityIterative,

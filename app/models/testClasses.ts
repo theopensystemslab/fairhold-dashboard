@@ -2,7 +2,7 @@ import { DEFAULT_FORECAST_PARAMETERS } from "./ForecastParameters";
 import { Household } from "./Household";
 import { HouseType, Property } from "./Property";
 import { MONTHS_PER_YEAR } from "./constants";
-import { SocialRentAdjustmentTypes } from "./tenure/SocialRent";
+import { SocialRentAdjustments } from "./tenure/SocialRent";
 
 // TODO: Share type with backend
 export interface ResponseData {
@@ -18,7 +18,7 @@ export interface ResponseData {
   gdhi: number;
   averageRentMonthly: number;
   socialRentAverageEarning: number;
-  socialRentAdjustments: SocialRentAdjustmentTypes;
+  socialRentAdjustments: SocialRentAdjustments;
   hpi: number;
   gasBillYearly: number;
 }

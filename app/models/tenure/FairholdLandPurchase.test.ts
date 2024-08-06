@@ -5,7 +5,6 @@ import { FairholdLandPurchase } from "./FairholdLandPurchase";
 let tenureFairholdLandPurchase: FairholdLandPurchase;
 
 beforeEach(() => {
-
   tenureFairholdLandPurchase = new FairholdLandPurchase({
     //incomeYearly: 45816,
     //averagePrice: 218091.58,

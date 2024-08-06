@@ -20,7 +20,7 @@ type PropertyParams = Pick<
 
 export const HOUSE_TYPES = ["D", "S", "T", "F"] as const;
 
-export type HouseType = typeof HOUSE_TYPES[number];
+export type HouseType = (typeof HOUSE_TYPES)[number];
 
 export class Property {
   postcode: string;

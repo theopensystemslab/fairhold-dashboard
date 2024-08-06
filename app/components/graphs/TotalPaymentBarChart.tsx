@@ -8,7 +8,7 @@ import {
   BarController,
   CategoryScale,
   LinearScale,
-} from 'chart.js';
+} from "chart.js";
 
 Chart.register(BarElement, BarController, CategoryScale, LinearScale);
 

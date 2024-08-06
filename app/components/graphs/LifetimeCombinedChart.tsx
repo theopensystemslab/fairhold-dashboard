@@ -8,13 +8,13 @@ import {
   PointElement,
   BarElement,
   BarController,
-  LineController, 
+  LineController,
   LineElement,
   CategoryScale,
   LinearScale,
   Tooltip,
-  Legend
-} from 'chart.js';
+  Legend,
+} from "chart.js";
 
 Chart.register(
   PointElement,
