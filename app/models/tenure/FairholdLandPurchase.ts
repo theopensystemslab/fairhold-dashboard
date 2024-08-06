@@ -10,7 +10,7 @@ interface FairholdLandPurchaseParams {
   incomeGrowthPerYear: number;
   affordability: number;
   fairhold: Fairhold;
-};
+}
 
 type Lifetime = {
   maintenanceCost: number;

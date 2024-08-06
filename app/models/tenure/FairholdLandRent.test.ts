@@ -7,7 +7,6 @@ import { MarketRent } from "./MarketRent";
 let tenureFairholdLandRent: FairholdLandRent;
 
 beforeEach(() => {
-
   let property = new Property({
     postcode: "WV8 1HG",
     houseType: "T",
