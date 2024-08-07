@@ -28,6 +28,9 @@ const CalculatorInput = () => {
     formState: { errors },
   } = useForm<Calculation>({
     resolver: zodResolver(calculationSchema),
+    defaultValues: {
+      houseType: "D", // Default value for house type
+    },
   });
 
   // create different view states: one for form and one for graph dashboard
