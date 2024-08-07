@@ -83,7 +83,7 @@ export class MarketRent {
     let averageRentHouseYearlyIterative =
       averageRentYearlyIterative - averageRentLandYearlyIterative;
 
-    let lifetime: Lifetime = [
+    const lifetime: Lifetime = [
       {
         averageRentLandYearly: averageRentLandYearlyIterative,
         averageRentHouseYearly: averageRentHouseYearlyIterative,
