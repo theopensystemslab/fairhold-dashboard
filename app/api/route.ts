@@ -7,7 +7,6 @@ export async function POST(req: Request) {
     // Parse and validate user input
     const data = await req.json();
     const input: Calculation = calculationSchema.parse(data);
-
     const householdData = await calculationService.getHouseholdData(input);
     return NextResponse.json(householdData);
   } catch (err) {
