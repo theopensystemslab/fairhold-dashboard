@@ -21,7 +21,7 @@ export const calculationSchema = z.object({
   houseAge: z.coerce.number().positive("houseAge must be a positive integer"),
   houseBedrooms: z.coerce
     .number()
-    .positive("houseBedrooms must be a positive integer"),
+    .positive("houseBedroomsmust be a positive integer"),
   houseType: HouseTypeEnum.refine(
     (value) => HouseTypeEnum.options.includes(value),
     {
