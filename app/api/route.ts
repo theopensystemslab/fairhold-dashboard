@@ -216,7 +216,12 @@ export async function POST(req: Request) {
       if (socialRentEarningRes.length === 1) {
         socialRentAverageEarning = socialRentEarningRes[0].earningsperweek;
       } else if (socialRentEarningRes.length > 1) {
-        socialRentAverageEarning = totalRent / socialRentEarningRes.length;
+          const socialRentTotalEarning = socialRentEarningRes.reduce(
+            (sum, item) => sum + item.earningsperweek,
+            0
+          );
+        socialRentAverageEarning =
+          socialRentTotalEarning / socialRentEarningRes.length;
       }
       console.log("socialRentAverageEarning: ", socialRentAverageEarning);
 
