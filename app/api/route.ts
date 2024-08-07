@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
-import { Calculation, calculationSchema } from "../schemas/calculationSchema";
+//import { Calculation, calculationSchema } from "../schemas/calculationSchema";
 
 const prisma = new PrismaClient();
 
@@ -9,10 +9,10 @@ export async function POST(req: Request) {
   try {
     // Parse and validate user input
     const data = await req.json();
-    const input: Calculation = calculationSchema.parse(data);
+    //const input: Calculation = calculationSchema.parse(data);
 
     // data are going to be queried at different levels of granularity based on the postcode
-    const postcode = input.housePostcode;
+    const postcode = data.housePostcode;
     const postcodeArea = postcode.area; // extract only the characters for the area, e.g SE
     const postcodeDistrict = postcode.district; // extract only characters for the district, SE17
     const postcodeSector = postcode.sector; // extract only the characters for the sector, SE17 1
@@ -35,7 +35,7 @@ export async function POST(req: Request) {
     const pricesPaidSector = await prisma.$queryRaw<PricePaid[]>`
       SELECT id, postcode, price 
       FROM "public"."pricespaid" 
-      WHERE propertyType = ${input.houseType} AND postcode LIKE ${postcodeSearchSector}
+      WHERE propertyType = ${data.houseType} AND postcode LIKE ${postcodeSearchSector}
     `; // execute query and extract results
     console.log(
       "pricesPaidSector: ",
@@ -55,7 +55,7 @@ export async function POST(req: Request) {
       const pricesPaidDistrict = await prisma.$queryRaw<PricePaid[]>`
         SELECT id,postcode,price 
         FROM "public"."pricespaid" 
-        WHERE propertyType = ${input.houseType} AND postcode LIKE ${postcodeSearchDistrict}
+        WHERE propertyType = ${data.houseType} AND postcode LIKE ${postcodeSearchDistrict}
       `; // create the sql query and count how many items meet the criteria; execute the query and retrieve the results
       console.log(
         "pricesPaidDistrict: ",
@@ -74,7 +74,7 @@ export async function POST(req: Request) {
         const pricesPaidArea = await prisma.$queryRaw<PricePaid[]>`
           SELECT id,postcode,price 
           FROM "public"."pricespaid" 
-          WHERE propertytype = ${input.houseType} AND postcode LIKE ${postcodeSearchArea}
+          WHERE propertytype = ${data.houseType} AND postcode LIKE ${postcodeSearchArea}
         `; // create the sql query and count how many items meet the criteria; execute the query and retrieve the results
         console.log(
           "pricesPaidArea: ",
@@ -120,7 +120,7 @@ export async function POST(req: Request) {
 
     const buildPriceRes = await prisma.$queryRaw<BuildPrice[]>`
       SELECT * FROM "public"."buildprices" 
-      WHERE "housetype" = ${input.houseType}
+      WHERE "housetype" = ${data.houseType}
     `;
     console.log("buildPriceRes:", buildPriceRes);
     const buildPrice = buildPriceRes[0]["pricemid"];
@@ -259,11 +259,11 @@ export async function POST(req: Request) {
       console.log("gasBillYearly: ", gasBillYearly);
 
       return NextResponse.json({
-        postcode: input.housePostcode,
-        houseType: input.houseType,
-        houseAge: input.houseAge,
-        houseBedrooms: input.houseBedrooms,
-        houseSize: input.houseSize,
+        postcode: data.housePostcode,
+        houseType: data.houseType,
+        houseAge: data.houseAge,
+        houseBedrooms: data.houseBedrooms,
+        houseSize: data.houseSize,
         averagePrice: parseFloat(averagePrice.toFixed(2)),
         itl3,
         gdhi,
