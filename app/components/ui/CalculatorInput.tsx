@@ -11,7 +11,6 @@ const CalculatorInput = () => {
   // create different view states: one for form and one for graph dashboard
   const [view, setView] = useState("form");
   const [data, setData] = useState<Household | null>(null);
-  const [housePostcode, sethousePostcode] = useState(""); // variable associated to the postcode
   const houseTypes = {
     Detached: "D",
     Semidetached: "S",
@@ -72,34 +71,8 @@ const CalculatorInput = () => {
       />
     );
   };
-  // const [houseType, setHouseType] = useState(houseTypes.Detached); // variables associated to the house type
-  // const [houseBedrooms, setHouseBedrooms] = useState(""); // variables associated to the number of bedrooms in the house
-  // const [howSize, setHouseSize] = useState(""); // variables associated to the house size
-  // const [houseAge, setHouseAge] = useState(""); // variables associated to the house age
 
-  // fucntion that defines what happens after submitting the form
-  // handleSubmit(e: any) =>{
-  //   e.preventDefault(); // pr event the default of the form
-  //   const formData = new FormData(e.currentTarget); // get the data in the form, e.g postcode, house size etc
-  //   const data = Object.fromEntries(formData.entries());
-
-  //fetch the data: call the api and attach the form data
-  // const response = await fetch("/api", {
-  //   method: "POST",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  //   body: JSON.stringify(data), // pass the form data to the API
-  // });
-  // const jsonData = await response.json();
-  // console.log("handleSubmit jsonData: ", jsonData);
-  // const processedData = calculateFairhold(jsonData);
-  // console.log("handleSubmit processedData: ", processedData);
-
-  // // saved processedData & switch to dashboard view
-  // setData(processedData);
-  // setView("dashboard");
-  // }
+  const submitFormData = () => {};
 
   return view === "form" ? (
     <div className="flex -centeitemsr justify-center text-black mt-5">
@@ -108,8 +81,25 @@ const CalculatorInput = () => {
           <h1 className="text-6xl">Fairhold Calculator</h1>
         </div>
         <form
-          onSubmit={handleSubmit((data) => {
+          onSubmit={handleSubmit(async (data) => {
             console.log(data);
+            console.log(JSON.stringify(data));
+            const response = await fetch("/api", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(data), // pass the form data to the API
+            });
+
+            const jsonData = await response.json();
+            console.log("handleSubmit jsonData: ", jsonData);
+            const processedData = calculateFairhold(jsonData);
+            console.log("handleSubmit processedData: ", processedData);
+
+            // saved processedData & switch to dashboard view
+            setData(processedData);
+            setView("dashboard");
           })}
           className=" flex flex-col m-5"
         >
@@ -125,7 +115,7 @@ const CalculatorInput = () => {
           <InputEntryField
             type="number"
             placeholder="Provide the house size in m square, e.g. 66"
-            id="howSize"
+            id="houseSize"
             register={register}
           />
 
