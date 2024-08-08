@@ -5,8 +5,6 @@ import {
   Chart,
   ChartData,
   ChartDataset,
-  ChartOptions,
-  ChartTypeRegistry,
   PointElement,
   BarElement,
   BarController,
