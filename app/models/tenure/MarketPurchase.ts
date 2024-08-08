@@ -58,12 +58,12 @@ export class MarketPurchase {
     const houseMortgagePaymentYearly =
       this.houseMortgage.yearlyPaymentBreakdown;
     const landMortgagePaymentYearly = this.landMortgage.yearlyPaymentBreakdown;
-    
+
     // Find the first year
     let houseMortgagePaymentYearlyIterative =
       houseMortgagePaymentYearly[0].yearlyPayment;
     let landMortgagePaymentYearlyIterative =
-      landMortgagePaymentYearly[0].yearlyPayment; 
+      landMortgagePaymentYearly[0].yearlyPayment;
 
     const lifetime: Lifetime = [
       {
