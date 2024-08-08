@@ -1,11 +1,12 @@
 import React from "react";
 import { UseFormRegister } from "react-hook-form";
+import { Calculation } from "@/app/schemas/calculationSchema";
 
 interface radioButtonProps {
   id: string;
   value: string;
   label: string;
-  register: UseFormRegister<any>;
+  register: UseFormRegister<Calculation>;
   error?: string;
 }
 

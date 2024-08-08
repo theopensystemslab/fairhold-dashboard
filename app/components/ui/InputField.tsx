@@ -1,11 +1,12 @@
 import React from "react";
 import { UseFormRegister } from "react-hook-form";
+import { Calculation } from "@/app/schemas/calculationSchema";
 
 interface InputFieldProps {
-  id: string;
+  id: keyof Calculation;
   placeholder: string;
   type: string;
-  register: UseFormRegister<any>;
+  register: UseFormRegister<Calculation>;
   error?: string;
 }
 

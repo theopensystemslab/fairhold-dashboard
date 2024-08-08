@@ -38,7 +38,6 @@ const CalculatorInput = () => {
   const [data, setData] = useState<Household | null>(null);
 
   const onSubmit = async (data: Calculation) => {
-
     const response = await fetch("/api", {
       method: "POST",
       headers: {
