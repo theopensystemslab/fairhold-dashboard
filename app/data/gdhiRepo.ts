@@ -1,21 +1,19 @@
 import prisma from "./db";
 
-const getGDHI2020ByITL3 = async (
-  itl3: string
-): Promise<number> => {
+const getGDHI2020ByITL3 = async (itl3: string): Promise<number> => {
   try {
-    const { gdhi2020 } = await prisma.gDHI.findFirstOrThrow({
+    const { gdhi_2020 } = await prisma.gdhi.findFirstOrThrow({
       where: {
         AND: {
           itl3: { equals: itl3 },
           // TODO: Add `NOT NULL` constraint to column
-          gdhi2020: { not: null }
+          gdhi_2020: { not: null },
         },
       },
-      select: { gdhi2020: true },
+      select: { gdhi_2020: true },
     });
 
-    return gdhi2020 as number;
+    return gdhi_2020 as number;
   } catch (error) {
     throw Error(`Data error: Unable to find gdhi2020 for itl3 ${itl3}`);
   }
@@ -23,4 +21,4 @@ const getGDHI2020ByITL3 = async (
 
 export const gdhiRepo = {
   getGDHI2020ByITL3,
-}
+};
