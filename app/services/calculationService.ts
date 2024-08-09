@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { itlService } from "./itlService";
 import { gdhiService } from "./gdhiService";
 import { pricesPaidService } from "./pricesPaidService";
+import { buildPriceService } from "./buildPriceService";
 import { Calculation } from "../schemas/calculationSchema";
 
 const prisma = new PrismaClient();
@@ -23,15 +24,9 @@ export const getHouseholdData = async (input: Calculation) => {
         postcodeSector,
         input.houseType
       );
-
-    const { priceMid: buildPrice } = await prisma.buildPrices.findFirstOrThrow({
-      where: {
-        houseType: { equals: input.houseType },
-      },
-      select: { priceMid: true },
-    });
-    // TODO: Make columns non-nullable
-    if (!buildPrice) throw Error("Missing buildPrice");
+    const buildPrice = await buildPriceService.getBuildPriceByHouseType(
+      input.houseType
+    );
 
     const {
       _avg: { monthlyMeanRent: averageRentMonthly },
