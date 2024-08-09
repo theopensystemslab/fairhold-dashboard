@@ -103,7 +103,6 @@ export const getHouseholdData = async (input: Calculation) => {
       socialRentAveEarning,
       numberOfTransactions,
       granularityPostcode,
-      pricesPaid,
       gasBillYearly,
     };
   } catch (err) {
