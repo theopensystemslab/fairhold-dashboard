@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import ErrorBoundary from '../ErrorBoundary';
 import { Household } from "@/app/models/Household";
 import TotalPaymentBarChart from "./TotalPaymentBarChart";
 
@@ -55,10 +56,12 @@ const TotalPaymentWrapper: React.FC<TotalPaymentWrapperProps> = ({
   ];
 
   return (
-    <div>
-      <h2>Total Payments Chart</h2>
-      <TotalPaymentBarChart data={chartData} />
-    </div>
+    <ErrorBoundary>
+      <div>
+        <h2>Total Payments Chart</h2>
+        <TotalPaymentBarChart data={chartData} />
+      </div>
+    </ErrorBoundary>
   );
 };
 
