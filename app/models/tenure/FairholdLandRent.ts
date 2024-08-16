@@ -10,7 +10,6 @@ interface FairholdLandRentParams {
   depreciatedBuildPrice: number;
   landPrice: number;
   incomeYearly: number;
-  affordabilityThresholdIncomePercentage: number;
   fairhold: Fairhold;
   forecastParameters: ForecastParameters;
 }
