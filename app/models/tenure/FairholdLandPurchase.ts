@@ -1,15 +1,12 @@
 import { Fairhold } from "../Fairhold";
 import { Mortgage } from "../Mortgage";
-
+import { ForecastParameters } from '../ForecastParameters'; 
 interface FairholdLandPurchaseParams {
   newBuildPrice: number;
   depreciatedBuildPrice: number;
-  constructionPriceGrowthPerYear: number;
-  yearsForecast: number;
-  maintenanceCostPercentage: number;
-  incomeGrowthPerYear: number;
   affordability: number;
   fairhold: Fairhold;
+  forecastParameters: ForecastParameters;
 }
 
 type Lifetime = {
@@ -19,12 +16,14 @@ type Lifetime = {
 }[];
 
 export class FairholdLandPurchase {
+  params: FairholdLandPurchaseParams;
   discountedLandPrice: number;
   discountedLandMortgage: Mortgage;
   depreciatedHouseMortgage: Mortgage;
   lifetime: Lifetime;
 
   constructor(params: FairholdLandPurchaseParams) {
+    this.params = params;
     this.discountedLandPrice = params.fairhold.discountedLandPriceOrRent;
 
     this.discountedLandMortgage = new Mortgage({
@@ -35,15 +34,18 @@ export class FairholdLandPurchase {
       propertyValue: params.depreciatedBuildPrice,
     });
 
-    this.lifetime = this.calculateLifetime(params);
+    this.lifetime = this.calculateLifetime();
   }
 
-  private calculateLifetime({
-    newBuildPrice,
-    maintenanceCostPercentage,
-    yearsForecast,
-    constructionPriceGrowthPerYear,
-  }: FairholdLandPurchaseParams) {
+  private calculateLifetime() {
+      const {
+        newBuildPrice,
+        forecastParameters: {
+          maintenanceCostPercentage,
+          yearsForecast,
+          constructionPriceGrowthPerYear,
+        },
+      } = this.params;
     let newBuildPriceIterative = newBuildPrice;
     let maintenanceCostIterative = maintenanceCostPercentage * newBuildPrice;
 

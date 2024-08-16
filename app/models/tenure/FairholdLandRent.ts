@@ -1,6 +1,7 @@
 import { MONTHS_PER_YEAR } from "../constants";
 import { Fairhold } from "../Fairhold";
 import { Mortgage } from "../Mortgage";
+import { ForecastParameters } from '../ForecastParameters'; 
 
 interface FairholdLandRentParams {
   averageRentYearly: number;
@@ -10,13 +11,8 @@ interface FairholdLandRentParams {
   landPrice: number;
   incomeYearly: number;
   affordabilityThresholdIncomePercentage: number;
-  propertyPriceGrowthPerYear: number;
-  constructionPriceGrowthPerYear: number;
-  yearsForecast: number;
-  maintenanceCostPercentage: number;
-  incomeGrowthPerYear: number;
-  rentGrowthPerYear: number;
   fairhold: Fairhold;
+  forecastParameters: ForecastParameters;
 }
 
 type Lifetime = {
@@ -26,6 +22,7 @@ type Lifetime = {
 }[];
 
 export class FairholdLandRent {
+  params: FairholdLandRentParams;
   /** Mortgage on the depreciated value of the house */
   depreciatedHouseMortgage: Mortgage;
   /** discounted value of the monthly land rent according to fairhold */
@@ -34,13 +31,14 @@ export class FairholdLandRent {
   lifetime: Lifetime;
 
   constructor(params: FairholdLandRentParams) {
+    this.params = params;
     this.depreciatedHouseMortgage = new Mortgage({
       propertyValue: params.depreciatedBuildPrice,
     });
 
     this.discountedLandRentMonthly =
       this.calculateDiscountedLandRentMonthly(params);
-    this.lifetime = this.calculateLifetime(params);
+    this.lifetime = this.calculateLifetime();
   }
 
   private calculateDiscountedLandRentMonthly({
@@ -63,19 +61,22 @@ export class FairholdLandRent {
 
     return discountedLandRentMonthly;
   }
-  private calculateLifetime({
-    averagePrice,
-    newBuildPrice,
-    landPrice,
-    incomeYearly,
-    averageRentYearly,
-    yearsForecast,
-    propertyPriceGrowthPerYear,
-    constructionPriceGrowthPerYear,
-    incomeGrowthPerYear,
-    rentGrowthPerYear,
-    maintenanceCostPercentage,
-  }: FairholdLandRentParams) {
+  private calculateLifetime() {
+    const {
+      averagePrice,
+      newBuildPrice,
+      landPrice,
+      incomeYearly,
+      averageRentYearly,
+      forecastParameters: {
+        yearsForecast,
+        propertyPriceGrowthPerYear,
+        constructionPriceGrowthPerYear,
+        incomeGrowthPerYear,
+        rentGrowthPerYear,
+        maintenanceCostPercentage
+      },
+    } = this.params; 
     // initialize the variables that are going to be iterated
     let averagePriceIterative = averagePrice;
     let newBuildPriceIterative = newBuildPrice;
