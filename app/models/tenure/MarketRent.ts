@@ -1,17 +1,14 @@
 import { MONTHS_PER_YEAR } from "../constants";
+import { ForecastParameters,  DEFAULT_FORECAST_PARAMETERS } from '../ForecastParameters'; 
 
-interface ConstructorParams {
+interface MarketRentParams {
   averageRentYearly: number;
   averagePrice: number;
   newBuildPrice: number;
   depreciatedBuildPrice: number;
   landPrice: number;
   incomeYearly: number;
-  propertyPriceGrowthPerYear: number;
-  constructionPriceGrowthPerYear: number;
-  yearsForecast: number;
-  maintenanceCostPercentage: number;
-  rentGrowthPerYear: number;
+  forecastParameters: ForecastParameters;
 }
 
 type Lifetime = {
@@ -20,13 +17,19 @@ type Lifetime = {
 }[];
 
 export class MarketRent {
+  params: MarketRentParams;
   public affordability: number;
   public averageRentMonthly: number;
   public averageRentLandMonthly: number;
   public averageRentHouseMonthly: number;
   public lifetime: Lifetime;
 
-  constructor(params: ConstructorParams) {
+  constructor(params: MarketRentParams) {
+    this.params = params;
+    this.params.forecastParameters = {
+      ...DEFAULT_FORECAST_PARAMETERS,
+      ...params.forecastParameters
+    };
     const {
       averageRentMonthly,
       averageRentLandMonthly,
@@ -39,7 +42,7 @@ export class MarketRent {
     this.averageRentHouseMonthly = averageRentHouseMonthly;
     this.affordability = affordability;
 
-    this.lifetime = this.calculateLifetime(params);
+    this.lifetime = this.calculateLifetime();
   }
 
   private calculateAverageRentLandAndHouse({
@@ -47,7 +50,7 @@ export class MarketRent {
     averagePrice,
     incomeYearly,
     averageRentYearly,
-  }: ConstructorParams) {
+  }: MarketRentParams) {
     const averageRentMonthly = averageRentYearly / MONTHS_PER_YEAR;
     const landToTotalRatio = landPrice / averagePrice;
     const averageRentLandMonthly = averageRentMonthly * landToTotalRatio;
@@ -62,16 +65,20 @@ export class MarketRent {
     };
   }
 
-  private calculateLifetime({
-    averagePrice,
-    newBuildPrice,
-    landPrice,
-    averageRentYearly,
-    yearsForecast,
-    propertyPriceGrowthPerYear,
-    constructionPriceGrowthPerYear,
-    rentGrowthPerYear,
-  }: ConstructorParams) {
+  private calculateLifetime() {
+    const { 
+      averagePrice,
+      newBuildPrice,
+      landPrice,
+      averageRentYearly,
+      forecastParameters: {
+        yearsForecast,
+        propertyPriceGrowthPerYear,
+        constructionPriceGrowthPerYear,
+        rentGrowthPerYear,
+      },
+    } = this.params;
+
     // initialize the variables that are going to be iterated
     let averagePriceIterative = averagePrice;
     let newBuildPriceIterative = newBuildPrice;

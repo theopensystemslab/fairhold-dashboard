@@ -1,16 +1,14 @@
-import { Mortgage } from "../Mortgage";
 import { MONTHS_PER_YEAR } from "../constants";
+import { Mortgage } from "../Mortgage";
+import { ForecastParameters, DEFAULT_FORECAST_PARAMETERS } from '../ForecastParameters'; 
 
-interface ConstructorParams {
+interface MarketPurchaseParams {
   averagePrice: number;
   newBuildPrice: number;
   depreciatedBuildPrice: number;
   landPrice: number;
   incomeYearly: number;
-  propertyPriceGrowthPerYear: number;
-  constructionPriceGrowthPerYear: number;
-  yearsForecast: number;
-  maintenanceCostPercentage: number;
+  forecastParameters: ForecastParameters;
 }
 
 type Lifetime = {
@@ -20,12 +18,18 @@ type Lifetime = {
 }[];
 
 export class MarketPurchase {
+  params: MarketPurchaseParams;
   public affordability: number;
   public houseMortgage: Mortgage;
   public landMortgage: Mortgage;
   public lifetime: Lifetime;
 
-  constructor(params: ConstructorParams) {
+  constructor(params: MarketPurchaseParams) {
+    this.params = params;
+    this.params.forecastParameters = {
+      ...DEFAULT_FORECAST_PARAMETERS,
+      ...params.forecastParameters
+    };
     this.houseMortgage = new Mortgage({
       propertyValue: params.newBuildPrice,
     });
@@ -35,10 +39,10 @@ export class MarketPurchase {
     });
 
     this.affordability = this.calculateAffordability(params);
-    this.lifetime = this.calculateLifetime(params);
+    this.lifetime = this.calculateLifetime();
   }
 
-  private calculateAffordability({ incomeYearly }: ConstructorParams) {
+  private calculateAffordability({ incomeYearly }: MarketPurchaseParams) {
     const affordability =
       (this.landMortgage.monthlyPayment * MONTHS_PER_YEAR +
         this.houseMortgage.monthlyPayment * MONTHS_PER_YEAR) /
@@ -46,12 +50,16 @@ export class MarketPurchase {
     return affordability;
   }
 
-  private calculateLifetime({
-    newBuildPrice,
-    maintenanceCostPercentage,
-    yearsForecast,
-    constructionPriceGrowthPerYear,
-  }: ConstructorParams) {
+  private calculateLifetime() {
+    const {
+      newBuildPrice,
+      forecastParameters: {
+        maintenanceCostPercentage,
+        yearsForecast,
+        constructionPriceGrowthPerYear
+      },
+    } = this.params;
+  
     let newBuildPriceIterative = newBuildPrice;
     let maintenanceCostIterative = maintenanceCostPercentage * newBuildPrice;
 
