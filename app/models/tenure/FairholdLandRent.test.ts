@@ -1,10 +1,14 @@
 import { Fairhold } from "../Fairhold";
-import { DEFAULT_FORECAST_PARAMETERS } from "../ForecastParameters";
+import { DEFAULT_FORECAST_PARAMETERS, ForecastParameters } from "../ForecastParameters";
 import { FairholdLandRent } from "./FairholdLandRent";
 
 let tenureFairholdLandRent: FairholdLandRent;
 
 beforeEach(() => {
+  const forecastParameters: ForecastParameters = {
+    ...DEFAULT_FORECAST_PARAMETERS,
+  };
+
   tenureFairholdLandRent = new FairholdLandRent({
     averageRentYearly: 20000,
     incomeYearly: 45816,
@@ -17,6 +21,7 @@ beforeEach(() => {
       affordability: 0.2,
       landPriceOrRent: 20000,
     }),
+    forecastParameters: forecastParameters,
   });
 });
 
