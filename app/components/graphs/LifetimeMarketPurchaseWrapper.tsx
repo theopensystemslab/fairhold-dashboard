@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import ErrorBoundary from '../ErrorBoundary';
 import { Household } from "@/app/models/Household";
 import LifetimeCombinedChart from "./LifetimeCombinedChart";
 
@@ -39,10 +40,12 @@ const LifetimeMarketPurchaseWrapper: React.FC<Props> = ({ household }) => {
     }) ?? [];
 
   return (
-    <div>
-      <h2>Lifetime Costs Chart</h2>
-      <LifetimeCombinedChart data={chartData} colorScheme={colorScheme} />
-    </div>
+    <ErrorBoundary>
+      <div>
+        <h2>Lifetime Costs Chart</h2>
+        <LifetimeCombinedChart data={chartData} colorScheme={colorScheme} />
+      </div>
+    </ErrorBoundary>
   );
 };
 
