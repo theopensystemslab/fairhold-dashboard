@@ -20,9 +20,9 @@ const getPricesPaidByPostcodeAndHouseType = async (
     let granularityPostcode; // declare the granularity of the postcode
     let averagePrice;
 
-    const pricesPaidSector = await prisma.pricespaid.aggregate({
+    const pricesPaidSector = await prisma.pricesPaid.aggregate({
       where: {
-        propertytype: {
+        propertyType: {
           equals: houseType,
         },
         postcode: {
@@ -41,9 +41,9 @@ const getPricesPaidByPostcodeAndHouseType = async (
     const isMinMetBySector = numberPerSector >= MINIMUM_NUMBER_OF_POSTCODES;
 
     if (!isMinMetBySector) {
-      const pricesPaidDistrict = await prisma.pricespaid.aggregate({
+      const pricesPaidDistrict = await prisma.pricesPaid.aggregate({
         where: {
-          propertytype: {
+          propertyType: {
             equals: houseType,
           },
           postcode: {
@@ -63,9 +63,9 @@ const getPricesPaidByPostcodeAndHouseType = async (
         numberPerDistrict >= MINIMUM_NUMBER_OF_POSTCODES;
 
       if (!isMinMetByDistrict) {
-        const pricesPaidArea = await prisma.pricespaid.aggregate({
+        const pricesPaidArea = await prisma.pricesPaid.aggregate({
           where: {
-            propertytype: {
+            propertyType: {
               equals: houseType,
             },
             postcode: {
