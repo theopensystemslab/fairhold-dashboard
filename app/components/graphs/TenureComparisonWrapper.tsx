@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import ErrorBoundary from '../ErrorBoundary';
 import { Household } from "@/app/models/Household";
 import TenureComparisonBarChart from "./TenureComparisonBarChart";
 
@@ -58,10 +59,12 @@ const TenureComparisonWrapper: React.FC<TenureComparisonWrapperProps> = ({
   const formattedData = formatData(household);
 
   return (
-    <div>
-      <h2>Tenure Comparison Chart</h2>
-      <TenureComparisonBarChart data={formattedData} />
-    </div>
+    <ErrorBoundary>
+      <div>
+        <h2>Tenure Comparison Chart</h2>
+        <TenureComparisonBarChart data={formattedData} />
+      </div>
+    </ErrorBoundary>
   );
 };
 
