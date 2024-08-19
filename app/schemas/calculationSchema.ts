@@ -3,7 +3,7 @@ import { parse as parsePostcode, fix as fixPostcode } from "postcode";
 import { HOUSE_TYPES } from "../models/Property";
 
 // Type not exported by postcode lib directly
-type ValidPostcode = Extract<ReturnType<typeof parsePostcode>, { valid: true }>;
+//type ValidPostcode = Extract<ReturnType<typeof parsePostcode>, { valid: true }>;
 
 const HouseTypeEnum = z.enum(HOUSE_TYPES);
 
