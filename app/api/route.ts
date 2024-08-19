@@ -8,7 +8,7 @@ export async function POST(req: Request) {
     const data = await req.json();
     const input: Calculation = calculationSchema.parse(data);
 
-    const householdData = await calculationService.getHouseholdData(data);
+    const householdData = await calculationService.getHouseholdData(input);
     return NextResponse.json(householdData);
   } catch (err) {
     console.log("ERROR: API - ", (err as Error).message);
