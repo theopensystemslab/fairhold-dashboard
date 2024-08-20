@@ -2,14 +2,25 @@ import prisma from "./db";
 
 const getSocialRentEarningsByITL3 = async (itl3: string): Promise<number> => {
     try {
-        const { earningsPerWeek } = await prisma.socialRent.findFirstOrThrow({
+        const result = await prisma.socialRent.aggregate({ 
             where: {
-                itl3: { equals: itl3 },
+              itl3: {
+                startsWith: itl3.substring(0, 3),
+              },
             },
-            select: { earningsPerWeek: true },
-        });
-
-        return earningsPerWeek as number;
+            _avg: {
+              earningsPerWeek: true,
+            },
+          });
+        
+        const monthlyMeanRent = result._avg.earningsPerWeek;
+        
+        if (monthlyMeanRent === null) {
+            throw new Error(`No data found for itl3 ${itl3}`);
+        }
+        
+        return monthlyMeanRent;
+        
     } catch (error) {
         throw Error(`Data error: Unable to find earningsPerWeek for itl3 ${itl3}`);
     }
@@ -17,5 +28,4 @@ const getSocialRentEarningsByITL3 = async (itl3: string): Promise<number> => {
 
 export const socialRentEarningsRepo = {
     getSocialRentEarningsByITL3,
-  };
-  
+};
