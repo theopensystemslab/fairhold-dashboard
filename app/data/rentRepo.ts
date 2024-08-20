@@ -1,21 +1,24 @@
 import prisma from "./db";
 
-const getRentByITL3 = async (itl3: string): Promise<number> => {
+const getRentByITL3 = async (itl3: string): Promise<number | null> => {
     try {
-        const { monthlyMeanRent } = await prisma.rent.findFirstOrThrow({
+        const result = await prisma.rent.aggregate({
             where: {
                 itl3: { equals: itl3 },
             },
-            select: { monthlyMeanRent: true },
+            _avg: {
+                monthlyMeanRent: true,
+            },
         });
 
-        return monthlyMeanRent as number;
+        const monthlyMeanRent = result._avg.monthlyMeanRent;
+
+        return monthlyMeanRent;
     } catch (error) {
-        throw Error(`Data error: Unable to find monthlyMeanRent for itl3 ${itl3}`);
+        throw new Error(`Data error: Unable to find monthlyMeanRent for itl3 ${itl3}`);
     }
 };
 
 export const rentRepo = {
     getRentByITL3,
-  };
-  
+};
