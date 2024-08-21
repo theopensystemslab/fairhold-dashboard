@@ -3,7 +3,7 @@ import { parse as parsePostcode, fix as fixPostcode } from "postcode";
 import { HOUSE_TYPES } from "../models/Property";
 
 // Type not exported by postcode lib directly
-//type ValidPostcode = Extract<ReturnType<typeof parsePostcode>, { valid: true }>;
+type ValidPostcode = Extract<ReturnType<typeof parsePostcode>, { valid: true }>;
 
 const HouseTypeEnum = z.enum(HOUSE_TYPES);
 
@@ -16,7 +16,10 @@ export const calculationSchema = z.object({
     .min(1, "housePostcode is required")
     .refine(fixPostcode, "Invalid postcode")
     .transform(parsePostcode)
-    .refine((postcode) => postcode.valid, "Invalid postcode"),
+    .refine(
+      (postcode): postcode is ValidPostcode => postcode.valid,
+      "Invalid postcode"
+    ),
 
   houseSize: z.coerce.number().positive("houseSize must be a positive integer"),
   houseAge: z.coerce.number().positive("houseAge must be a positive integer"),
