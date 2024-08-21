@@ -33,13 +33,13 @@ export class MarketRent {
       averageRentHouseMonthly,
       affordability,
     } = this.calculateAverageRentLandAndHouse(params);
-    
+
     this.averageRentMonthly = averageRentMonthly;
     this.averageRentLandMonthly = averageRentLandMonthly;
     this.averageRentHouseMonthly = averageRentHouseMonthly;
     this.affordability = affordability;
-    
-    this.lifetime = this.calculateLifetime(params)
+
+    this.lifetime = this.calculateLifetime(params);
   }
 
   private calculateAverageRentLandAndHouse({
@@ -83,7 +83,7 @@ export class MarketRent {
     let averageRentHouseYearlyIterative =
       averageRentYearlyIterative - averageRentLandYearlyIterative;
 
-    let lifetime: Lifetime = [
+    const lifetime: Lifetime = [
       {
         averageRentLandYearly: averageRentLandYearlyIterative,
         averageRentHouseYearly: averageRentHouseYearlyIterative,
@@ -92,24 +92,24 @@ export class MarketRent {
 
     for (let i = 0; i < yearsForecast - 1; i++) {
       averagePriceIterative =
-        averagePriceIterative * (1 + propertyPriceGrowthPerYear); 
+        averagePriceIterative * (1 + propertyPriceGrowthPerYear);
       newBuildPriceIterative =
-        newBuildPriceIterative * (1 + constructionPriceGrowthPerYear); 
-      landPriceIterative = averagePriceIterative - newBuildPriceIterative; 
-      landToTotalRatioIterative = landPriceIterative / averagePriceIterative; 
+        newBuildPriceIterative * (1 + constructionPriceGrowthPerYear);
+      landPriceIterative = averagePriceIterative - newBuildPriceIterative;
+      landToTotalRatioIterative = landPriceIterative / averagePriceIterative;
       averageRentYearlyIterative =
-        averageRentYearlyIterative * (1 + rentGrowthPerYear); 
+        averageRentYearlyIterative * (1 + rentGrowthPerYear);
       averageRentLandYearlyIterative =
-        averageRentYearlyIterative * landToTotalRatioIterative; 
+        averageRentYearlyIterative * landToTotalRatioIterative;
       averageRentHouseYearlyIterative =
-        averageRentYearlyIterative - averageRentLandYearlyIterative; 
+        averageRentYearlyIterative - averageRentLandYearlyIterative;
 
       lifetime.push({
         averageRentLandYearly: averageRentLandYearlyIterative,
         averageRentHouseYearly: averageRentHouseYearlyIterative,
       });
     }
-    
+
     return lifetime;
   }
 }

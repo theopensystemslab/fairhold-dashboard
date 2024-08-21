@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import ErrorBoundary from '../ErrorBoundary';
 import { Household } from "@/app/models/Household";
 import TenureComparisonBarChart from "./TenureComparisonBarChart";
 
@@ -31,12 +32,11 @@ const TenureComparisonWrapper: React.FC<TenureComparisonWrapperProps> = ({
         category: "Monthly Costs Land",
         marketPurchase:
           household.tenure.marketPurchase?.landMortgage?.monthlyPayment || 0,
-        marketRent: 
-          household.tenure.marketRent?.averageRentLandMonthly || 0,
-        socialRent: 
-          household.tenure.socialRent?.socialRentMonthlyLand || 0,
+        marketRent: household.tenure.marketRent?.averageRentLandMonthly || 0,
+        socialRent: household.tenure.socialRent?.socialRentMonthlyLand || 0,
         fairholdLandPurchase:
-          household.tenure.fairholdLandPurchase?.discountedLandMortgage?.monthlyPayment || 0,
+          household.tenure.fairholdLandPurchase?.discountedLandMortgage
+            ?.monthlyPayment || 0,
         fairholdLandRent:
           household.tenure.fairholdLandRent?.discountedLandRentMonthly || 0,
       },
@@ -44,14 +44,14 @@ const TenureComparisonWrapper: React.FC<TenureComparisonWrapperProps> = ({
         category: "Monthly Costs House",
         marketPurchase:
           household.tenure.marketPurchase?.houseMortgage?.monthlyPayment || 0,
-        marketRent: 
-          household.tenure.marketRent?.averageRentHouseMonthly || 0,
-        socialRent: 
-          household.tenure.socialRent?.socialRentMonthlyHouse || 0,
+        marketRent: household.tenure.marketRent?.averageRentHouseMonthly || 0,
+        socialRent: household.tenure.socialRent?.socialRentMonthlyHouse || 0,
         fairholdLandPurchase:
-          household.tenure.fairholdLandPurchase?.depreciatedHouseMortgage?.monthlyPayment || 0,
+          household.tenure.fairholdLandPurchase?.depreciatedHouseMortgage
+            ?.monthlyPayment || 0,
         fairholdLandRent:
-          household.tenure.fairholdLandPurchase?.depreciatedHouseMortgage?.monthlyPayment || 0,
+          household.tenure.fairholdLandPurchase?.depreciatedHouseMortgage
+            ?.monthlyPayment || 0,
       },
     ];
   };
@@ -59,10 +59,12 @@ const TenureComparisonWrapper: React.FC<TenureComparisonWrapperProps> = ({
   const formattedData = formatData(household);
 
   return (
-    <div>
-      <h2>Tenure Comparison Chart</h2>
-      <TenureComparisonBarChart data={formattedData} />
-    </div>
+    <ErrorBoundary>
+      <div>
+        <h2>Tenure Comparison Chart</h2>
+        <TenureComparisonBarChart data={formattedData} />
+      </div>
+    </ErrorBoundary>
   );
 };
 

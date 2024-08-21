@@ -18,9 +18,9 @@ type PropertyParams = Pick<
   | "itl3"
 >;
 
-export const HOUSE_TYPES = ["D", "S",  "T", "F"] as const;
+export const HOUSE_TYPES = ["D", "S", "T", "F"] as const;
 
-type HouseType = typeof HOUSE_TYPES[number];
+export type HouseType = (typeof HOUSE_TYPES)[number];
 
 export class Property {
   postcode: string;
@@ -91,7 +91,6 @@ export class Property {
   }
 
   private calculateBedWeightedAveragePrice() {
-    const beds = BED_WEIGHTS_AND_CAPS.numberOfBedrooms;
     const bedWeights = BED_WEIGHTS_AND_CAPS.weight;
     let bedWeight;
 

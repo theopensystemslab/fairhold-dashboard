@@ -10,7 +10,7 @@ interface FairholdLandPurchaseParams {
   incomeGrowthPerYear: number;
   affordability: number;
   fairhold: Fairhold;
-};
+}
 
 type Lifetime = {
   maintenanceCost: number;
@@ -61,7 +61,7 @@ export class FairholdLandPurchase {
     let landMortgagePaymentYearlyIterative =
       landMortgagePaymentYearly[0].yearlyPayment;
 
-    let lifetime: Lifetime = [
+    const lifetime: Lifetime = [
       {
         maintenanceCost: maintenanceCostIterative,
         landMortgagePaymentYearly: landMortgagePaymentYearlyIterative,

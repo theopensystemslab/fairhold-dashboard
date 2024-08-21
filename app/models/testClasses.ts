@@ -1,9 +1,30 @@
 import { DEFAULT_FORECAST_PARAMETERS } from "./ForecastParameters";
 import { Household } from "./Household";
-import { Property } from "./Property";
+import { HouseType, Property } from "./Property";
+import { MONTHS_PER_YEAR } from "./constants";
+import { SocialRentAdjustments } from "./tenure/SocialRent";
 
-function calculateFairhold(responseData: any) {
-  if (!responseData.buildPrice || responseData.buildPrice.length === 0) {
+// TODO: Share type with backend
+export interface ResponseData {
+  postcode: string;
+  houseType: HouseType;
+  houseBedrooms: number;
+  buildPrice: number;
+  houseAge: number;
+  houseSize: number;
+  newBuildPricePerMetre: number;
+  averagePrice: number;
+  itl3: string;
+  gdhi: number;
+  averageRentMonthly: number;
+  socialRentAverageEarning: number;
+  socialRentAdjustments: SocialRentAdjustments;
+  hpi: number;
+  gasBillYearly: number;
+}
+
+function calculateFairhold(responseData: ResponseData) {
+  if (!responseData.buildPrice) {
     throw new Error("buildPrice data is missing or empty");
   }
   if (!responseData.itl3 || responseData.itl3.length === 0) {
@@ -25,7 +46,7 @@ function calculateFairhold(responseData: any) {
   // define the household object
   const household = new Household({
     incomePerPersonYearly: responseData.gdhi,
-    averageRentYearly: responseData.averageRentMonthly * 12,
+    averageRentYearly: responseData.averageRentMonthly * MONTHS_PER_YEAR,
     socialRentAverageEarning: responseData.socialRentAverageEarning,
     socialRentAdjustments: responseData.socialRentAdjustments,
     housePriceIndex: responseData.hpi,
