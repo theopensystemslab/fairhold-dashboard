@@ -15,7 +15,6 @@ const getPricesPaidByPostcodeAndHouseType = async (
 ): Promise<pricesPaidParams> => {
   try {
     // create the progressive queries
-    let pricesPaid; // declare the variable for prices paid
     let numberOfTransactions; // declare the variable for numbers of transactions retrieved
     let granularityPostcode; // declare the granularity of the postcode
     let averagePrice;
@@ -80,18 +79,15 @@ const getPricesPaidByPostcodeAndHouseType = async (
           },
         });
         const numberPerArea = pricesPaidArea._count.id;
-        pricesPaid = pricesPaidArea; // if condition is met, the granularity is appropriate
         numberOfTransactions = numberPerArea; // check the granularity
         granularityPostcode = postcodeArea; // granularity of the postcode when performing the average price search
         averagePrice = pricesPaidArea._avg.price;
       } else {
-        pricesPaid = pricesPaidDistrict; // if condition is met, the granularity is appropriate
         numberOfTransactions = numberPerDistrict; // check the granularity
         granularityPostcode = postcodeDistrict; // granularity of the postcode
         averagePrice = pricesPaidDistrict._avg.price;
       }
     } else {
-      pricesPaid = pricesPaidSector; // if condition is met, the granularity is appropriate
       numberOfTransactions = numberPerSector; // check the granularity
       granularityPostcode = postcodeSector; // granularity of the postcode
       averagePrice = pricesPaidSector._avg.price;
