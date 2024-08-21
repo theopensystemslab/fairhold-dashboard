@@ -4,7 +4,7 @@ const getItl3ByPostcodeDistrict = async (
   postcodeDistrict: string
 ): Promise<string> => {
   try {
-    const { itl3 } = await prisma.itl_lookup.findFirstOrThrow({
+    const { itl3 } = await prisma.itlLookup.findFirstOrThrow({
       where: {
         postcode: postcodeDistrict,
         itl3: {

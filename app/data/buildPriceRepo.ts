@@ -2,11 +2,11 @@ import prisma from "./db";
 
 const getBuildPriceByHouseType = async (houseType: string): Promise<number> => {
   try {
-    const { pricemid: buildPrice } = await prisma.buildprices.findFirstOrThrow({
+    const { priceMid: buildPrice } = await prisma.buildPrices.findFirstOrThrow({
       where: {
-        housetype: { equals: houseType },
+        houseType: { equals: houseType },
       },
-      select: { pricemid: true },
+      select: { priceMid: true },
     });
 
     // Cast to string as 'not: null' clause in Prisma query does not type narrow
