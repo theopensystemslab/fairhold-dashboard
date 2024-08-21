@@ -8,11 +8,14 @@ import { pricesPaidService } from "./pricesPaidService";
 import { socialRentAdjustmentsService } from "./socialRentAdjustmentsService";
 import { socialRentEarningsService } from "./socialRentEarningsService";
 import { rentService } from "./rentService"
+
 import { Calculation } from "../schemas/calculationSchema";
 
 const prisma = new PrismaClient();
 
+
 export const getHouseholdData = async (input: Calculation) => {
+
   try {
     // data are going to be queried at different levels of granularity based on the postcode
     const postcode = input.housePostcode;
@@ -57,6 +60,7 @@ export const getHouseholdData = async (input: Calculation) => {
       granularityPostcode,
       gasBillYearly,
     };
+
   } catch (err) {
     throw Error(
       `Service error: Unable to generate household. Message: ${(err as Error).message}`

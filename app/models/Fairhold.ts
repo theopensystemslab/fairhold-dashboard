@@ -54,7 +54,7 @@ export class Fairhold {
       const nominalRent = 1;
       return nominalRent;
     }
-      
+
     const discountedLandPriceOrRent = this.discountLand * this.landPriceOrRent;
     return discountedLandPriceOrRent;
   }

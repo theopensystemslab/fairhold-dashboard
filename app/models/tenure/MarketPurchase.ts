@@ -1,133 +1,90 @@
 import { Mortgage } from "../Mortgage";
+import { MONTHS_PER_YEAR } from "../constants";
+
+interface ConstructorParams {
+  averagePrice: number;
+  newBuildPrice: number;
+  depreciatedBuildPrice: number;
+  landPrice: number;
+  incomeYearly: number;
+  propertyPriceGrowthPerYear: number;
+  constructionPriceGrowthPerYear: number;
+  yearsForecast: number;
+  maintenanceCostPercentage: number;
+}
+
+type Lifetime = {
+  maintenanceCost: number;
+  landMortgagePaymentYearly: number;
+  houseMortgagePaymentYearly: number;
+}[];
 
 export class MarketPurchase {
-  affordability?: number; // affordability fo the market
-  houseMortgage?: Mortgage; // mortgage object on the new house
-  landMortgage?: Mortgage; // mortgage on the land
-  lifetime?: {
-    maintenanceCost: number;
-    landMortgagePaymentYearly: number;
-    houseMortgagePaymentYearly: number;
-  }[]; // lifetime object with projections
+  public affordability: number;
+  public houseMortgage: Mortgage;
+  public landMortgage: Mortgage;
+  public lifetime: Lifetime;
 
-  constructor({
-    newBuildPrice, // new build price of the property
-    landPrice, // land price
-    incomeYearly, // income Yearly per household
-    constructionPriceGrowthPerYear, // 2.5% per year
-    yearsForecast, // 40 years
-    maintenanceCostPercentage, // 1.5% percentage maintenance cost
-  }: {
-    averagePrice: number;
-    newBuildPrice: number;
-    depreciatedBuildPrice: number;
-    landPrice: number;
-    incomeYearly: number;
-    propertyPriceGrowthPerYear: number;
-    constructionPriceGrowthPerYear: number;
-    yearsForecast: number;
-    maintenanceCostPercentage: number;
-  }) {
-    this.calculateHouseMortgage(newBuildPrice);
-    this.calculateLandMortgage(landPrice);
-    this.calculateAffordability(incomeYearly);
-    this.calculateLifetime(
-      newBuildPrice,
-      maintenanceCostPercentage,
-      yearsForecast,
-      constructionPriceGrowthPerYear
-    );
-  }
-
-  calculateHouseMortgage(newBuildPrice: number) {
+  constructor(params: ConstructorParams) {
     this.houseMortgage = new Mortgage({
-      propertyValue: newBuildPrice,
+      propertyValue: params.newBuildPrice,
     });
-  }
-  calculateLandMortgage(landPrice: number) {
+
     this.landMortgage = new Mortgage({
-      propertyValue: landPrice,
+      propertyValue: params.landPrice,
     });
+
+    this.affordability = this.calculateAffordability(params);
+    this.lifetime = this.calculateLifetime(params);
   }
 
-  calculateAffordability(incomeYearly: number) {
-    if (
-      this.landMortgage === undefined ||
-      this.houseMortgage === undefined ||
-      this.landMortgage.monthlyPayment === undefined ||
-      this.houseMortgage.monthlyPayment === undefined
-    ) {
-      throw new Error("landMortgage or houseMortgage is undefined");
-    }
-    let affordability =
-      (this.landMortgage?.monthlyPayment * 12 +
-        this.houseMortgage?.monthlyPayment * 12) /
+  private calculateAffordability({ incomeYearly }: ConstructorParams) {
+    const affordability =
+      (this.landMortgage.monthlyPayment * MONTHS_PER_YEAR +
+        this.houseMortgage.monthlyPayment * MONTHS_PER_YEAR) /
       incomeYearly;
-    this.affordability = affordability;
+    return affordability;
   }
 
-  calculateLifetime(
-    newBuildPrice: number,
-    maintenanceCostPercentage: number,
-    yearsForecast: number,
-    constructionPriceGrowthPerYear: number
-  ) {
+  private calculateLifetime({
+    newBuildPrice,
+    maintenanceCostPercentage,
+    yearsForecast,
+    constructionPriceGrowthPerYear,
+  }: ConstructorParams) {
     let newBuildPriceIterative = newBuildPrice;
     let maintenanceCostIterative = maintenanceCostPercentage * newBuildPrice;
 
-    // retrieve the mortgage payments for the first year
-    if (
-      this.houseMortgage === undefined ||
-      this.houseMortgage.yearlyPaymentBreakdown === undefined
-    ) {
-      throw new Error("houseMortgage is undefined");
-    }
+    const houseMortgagePaymentYearly =
+      this.houseMortgage.yearlyPaymentBreakdown;
+    const landMortgagePaymentYearly = this.landMortgage.yearlyPaymentBreakdown;
 
-    if (
-      this.landMortgage === undefined ||
-      this.landMortgage.yearlyPaymentBreakdown === undefined
-    ) {
-      throw new Error("landMortgage is undefined");
-    }
-    interface mortgageBreakdownTypes {
-      yearlyPayment: number;
-      cumulativePaid: number;
-      remainingBalance: number;
-    }
-    const houseMortgagePaymentYearly = this.houseMortgage
-      .yearlyPaymentBreakdown as mortgageBreakdownTypes[];
-    const landMortgagePaymentYearly = this.landMortgage
-      .yearlyPaymentBreakdown as mortgageBreakdownTypes[];
+    // Find the first year
     let houseMortgagePaymentYearlyIterative =
-      houseMortgagePaymentYearly[0].yearlyPayment; // find the first year
+      houseMortgagePaymentYearly[0].yearlyPayment;
     let landMortgagePaymentYearlyIterative =
-      landMortgagePaymentYearly[0].yearlyPayment; // find the first year
+      landMortgagePaymentYearly[0].yearlyPayment;
 
-    interface lifetimeTypes {
-      maintenanceCost: number;
-      landMortgagePaymentYearly: number;
-      houseMortgagePaymentYearly: number;
-    }
-
-    let lifetime: lifetimeTypes[] = [
+    const lifetime: Lifetime = [
       {
         maintenanceCost: maintenanceCostIterative,
         landMortgagePaymentYearly: landMortgagePaymentYearlyIterative,
         houseMortgagePaymentYearly: houseMortgagePaymentYearlyIterative,
       },
-    ]; // initialize the forecast
+    ];
 
     for (let i = 0; i < yearsForecast - 1; i++) {
       newBuildPriceIterative =
-        newBuildPriceIterative * (1 + constructionPriceGrowthPerYear); // calculate the new build price at a given year
+        newBuildPriceIterative * (1 + constructionPriceGrowthPerYear);
       maintenanceCostIterative =
-        newBuildPriceIterative * maintenanceCostPercentage; // set the current maintenance cost
+        newBuildPriceIterative * maintenanceCostPercentage;
 
       if (i < houseMortgagePaymentYearly.length - 1) {
+        // Find the first year
         houseMortgagePaymentYearlyIterative =
-          houseMortgagePaymentYearly[i + 1].yearlyPayment; // find the first year
+          houseMortgagePaymentYearly[i + 1].yearlyPayment;
         landMortgagePaymentYearlyIterative =
-          landMortgagePaymentYearly[i + 1].yearlyPayment; // find the first year
+          landMortgagePaymentYearly[i + 1].yearlyPayment;
       } else {
         houseMortgagePaymentYearlyIterative = 0;
         landMortgagePaymentYearlyIterative = 0;
@@ -137,8 +94,9 @@ export class MarketPurchase {
         maintenanceCost: maintenanceCostIterative,
         landMortgagePaymentYearly: landMortgagePaymentYearlyIterative,
         houseMortgagePaymentYearly: houseMortgagePaymentYearlyIterative,
-      }); // add the current price to the new build price forecast
+      });
     }
-    this.lifetime = lifetime; // save the object
+
+    return lifetime;
   }
 }

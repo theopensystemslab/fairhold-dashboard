@@ -22,3 +22,4 @@ const getGDHI2020ByITL3 = async (itl3: string): Promise<number> => {
 export const gdhiRepo = {
   getGDHI2020ByITL3,
 };
+

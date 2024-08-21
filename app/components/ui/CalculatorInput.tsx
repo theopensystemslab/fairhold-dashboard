@@ -1,13 +1,12 @@
 "use client";
-import { trueDependencies } from "mathjs";
-import React, { useState } from "react";
+import React, { FormEvent, useState } from "react";
 import calculateFairhold from "@/app/models/testClasses";
 import { Household } from "@/app/models/Household";
-import Dashboard from './Dashboard';
+import Dashboard from "./Dashboard";
 
 const CalculatorInput = () => {
   // create different view states: one for form and one for graph dashboard
-  const [view, setView] = useState('form'); 
+  const [view, setView] = useState("form");
   const [data, setData] = useState<Household | null>(null);
   const [housePostcode, sethousePostcode] = useState(""); // variable associated to the postcode
   const houseTypes = {
@@ -20,9 +19,9 @@ const CalculatorInput = () => {
   const [houseBedrooms, setHouseBedrooms] = useState(""); // variables associated to the number of bedrooms in the house
   const [howSize, setHouseSize] = useState(""); // variables associated to the house size
   const [houseAge, setHouseAge] = useState(""); // variables associated to the house age
-  
+
   // fucntion that defines what happens after submitting the form
-  async function handleSubmit(e: any) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault(); // pr event the default of the form
     const formData = new FormData(e.currentTarget); // get the data in the form, e.g postcode, house size etc
     const data = Object.fromEntries(formData.entries());
@@ -31,22 +30,21 @@ const CalculatorInput = () => {
     const response = await fetch("/api", {
       method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(data), // pass the form data to the API
     });
     const jsonData = await response.json();
-    console.log('handleSubmit jsonData: ', jsonData);
+    console.log("handleSubmit jsonData: ", jsonData);
     const processedData = calculateFairhold(jsonData);
-    console.log('handleSubmit processedData: ', processedData);
-    
+    console.log("handleSubmit processedData: ", processedData);
+
     // saved processedData & switch to dashboard view
     setData(processedData);
-    setView('dashboard');
+    setView("dashboard");
   }
 
-  return (
-    view === 'form' ? (
+  return view === "form" ? (
     <div className="flex -centeitemsr justify-center text-black mt-5">
       <div className=" w-1/2  border-black border-2 rounded-lg ">
         <div className="bg-black text-white h-48 flex items-center justify-center">
@@ -161,9 +159,8 @@ const CalculatorInput = () => {
         </form>
       </div>
     </div>
-    ) : (
-      <Dashboard data={data as Household} />
-    )
+  ) : (
+    <Dashboard data={data as Household} />
   );
 };
 
