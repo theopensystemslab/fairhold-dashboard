@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { useForm, UseFormRegister } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import calculateFairhold from "@/app/models/testClasses";
