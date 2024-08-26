@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import calculateFairhold from "@/app/models/testClasses";
 import { Household } from "@/app/models/Household";
 import Dashboard from "./Dashboard";
 import {
