@@ -44,7 +44,7 @@ it("correctly calculates the values even for number of bedroooms exceeding the m
     postcode: "WV8 1HG",
     houseType: "T",
     numberOfBedrooms: 20,
-    age: 10,
+    age: 9,
     size: 88,
     newBuildPricePerMetre: 2120,
     averageMarketPrice: 218091.58,
