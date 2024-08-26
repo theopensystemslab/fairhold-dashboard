@@ -49,8 +49,7 @@ const CalculatorInput = () => {
       body: JSON.stringify(data), // pass the form data to the API
     });
 
-    const jsonData = await response.json();
-    const processedData = calculateFairhold(jsonData);
+    const processedData = await response.json();
 
     // saved processedData & switch to dashboard view
     setData(processedData);
