@@ -25,4 +25,4 @@ jobs:
         run: rm -rf coverage
 
       - name: Run tests
-        run: jest --no-cache --coverage
+        run: npm run test -- --no-cache
