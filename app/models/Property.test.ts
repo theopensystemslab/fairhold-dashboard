@@ -38,3 +38,17 @@ it("correctly calculates the landPrice", () => {
 it("correctly calculates the landToTotalRatio", () => {
   expect(property.landToTotalRatio).toBeCloseTo(0.14);
 });
+
+it("correctly calculates the values even for number of bedroooms exceeding the max ", () => {
+  property = new Property({
+    postcode: "WV8 1HG",
+    houseType: "T",
+    numberOfBedrooms: 20,
+    age: 10,
+    size: 88,
+    newBuildPricePerMetre: 2120,
+    averageMarketPrice: 218091.58,
+    itl3: "TLG24",
+  });
+  expect(property).toBeInstanceOf(Property);
+});
