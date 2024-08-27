@@ -24,7 +24,7 @@ export interface LifetimeParams {
     incomeYearly: number;
 }
 
-export class Lifetime {
+interface LifetimeData {
     incomeYearly: number;
     affordabilityThresholdIncome: number;
     newbuildHouseMortgageYearly: number;
@@ -37,22 +37,29 @@ export class Lifetime {
     marketHouseRentYearly: number;
     // we will need the below for newbuilds & retrofits, and oldbuilds
     // gasBillYearly: number;
+}
+
+export class Lifetime {
+    public lifetimeData: LifetimeData[];
 
     constructor(params: LifetimeParams) {
-        // initialise properties; all properties with default value of 0 will be updated in the loop
-        this.incomeYearly = params.incomeYearly;
-        this.affordabilityThresholdIncome = params.incomeYearly * params.affordabilityThresholdIncomePercentage;
-        this.newbuildHouseMortgageYearly = 0; 
-        this.depreciatedHouseMortgageYearly = 0;
-        this.fairholdLandMortgageYearly = 0; 
-        this.marketLandMortgageYearly = 0; 
-        this.fairholdLandRentYearly = 0; 
-        this.maintenanceCost = params.property.newBuildPrice * params.maintenanceCostPercentage;
-        this.marketLandRentYearly = 0; 
-        this.marketHouseRentYearly = 0; 
-        
-        // initialise lifetime array
-        const lifetime = []
+        this.lifetimeData = this.calculateLifetime(params);
+    }
+    
+    private calculateLifetime(params: LifetimeParams): LifetimeData[] {
+        const lifetime: LifetimeData[] = [];
+
+        // // initialise properties; all properties with default value of 0 will be updated in the loop
+        // this.incomeYearly = params.incomeYearly;
+        // this.affordabilityThresholdIncome = params.incomeYearly * params.affordabilityThresholdIncomePercentage;
+        // this.newbuildHouseMortgageYearly = 0; 
+        // this.depreciatedHouseMortgageYearly = 0;
+        // this.fairholdLandMortgageYearly = 0; 
+        // this.marketLandMortgageYearly = 0; 
+        // this.fairholdLandRentYearly = 0; 
+        // this.maintenanceCost = params.property.newBuildPrice * params.maintenanceCostPercentage;
+        // this.marketLandRentYearly = 0; 
+        // this.marketHouseRentYearly = 0; 
 
         // initialise mortgage values
         let newbuildHouseMortgageYearlyIterative;
@@ -137,5 +144,6 @@ export class Lifetime {
                 marketHouseRentYearly: marketRentHouseYearlyIterative,
             });
         }
+        return lifetime;
     }
 };

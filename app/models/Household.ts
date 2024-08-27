@@ -34,7 +34,7 @@ export class Household {
     fairholdLandPurchase: FairholdLandPurchase;
     fairholdLandRent: FairholdLandRent;
   };
-  public lifetime: Lifetime[];
+  public lifetime: Lifetime;
 
   constructor(params: ConstructorParams) {
     this.incomePerPersonYearly = params.incomePerPersonYearly;
@@ -142,10 +142,7 @@ export class Household {
     };
   }
 
-    private calculateLifetime(params: ConstructorParams): Lifetime[] {
-      const lifetimes: Lifetime[] = [];
-
-      for (let i = 0; i < params.forecastParameters.yearsForecast; i++) {
+    private calculateLifetime(params: ConstructorParams): Lifetime {
       const lifetimeParams: LifetimeParams = {
         marketPurchase: this.tenure.marketPurchase,
         marketRent: this.tenure.marketRent,
@@ -161,11 +158,6 @@ export class Household {
         affordabilityThresholdIncomePercentage: params.forecastParameters.affordabilityThresholdIncomePercentage,
         incomeYearly: this.incomeYearly,
       };
-
-      const lifetime = new Lifetime(lifetimeParams);
-      lifetimes.push(lifetime); // Add each Lifetime object to the array
+      return new Lifetime(lifetimeParams);
     }
-
-    return lifetimes;
-    }
-    }
+  }
