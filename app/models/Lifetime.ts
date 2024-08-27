@@ -24,7 +24,7 @@ export interface LifetimeParams {
     incomeYearly: number;
 }
 
-interface LifetimeData {
+export interface LifetimeData {
     incomeYearly: number;
     affordabilityThresholdIncome: number;
     newbuildHouseMortgageYearly: number;
@@ -37,6 +37,7 @@ interface LifetimeData {
     marketHouseRentYearly: number;
     // we will need the below for newbuilds & retrofits, and oldbuilds
     // gasBillYearly: number;
+    [key: number]: number;
 }
 
 export class Lifetime {
