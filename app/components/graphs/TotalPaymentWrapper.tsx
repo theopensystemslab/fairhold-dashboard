@@ -3,14 +3,11 @@ import React from "react";
 import ErrorBoundary from '../ErrorBoundary';
 import { Household } from "@/app/models/Household";
 import TotalPaymentBarChart from "./TotalPaymentBarChart";
+import { LifetimeData } from "@/app/models/Lifetime";
 
 interface TotalPaymentWrapperProps {
   household: Household;
 }
-
-type LifetimeValues = {
-  [key: string]: number;
-};
 
 const TotalPaymentWrapper: React.FC<TotalPaymentWrapperProps> = ({
   household,
@@ -18,39 +15,42 @@ const TotalPaymentWrapper: React.FC<TotalPaymentWrapperProps> = ({
   console.log("TotalPaymentWrapper household: ", household);
 
   const sumLifetimeValues = (
-    lifetime: LifetimeValues[] | undefined,
-    keys: string[]
+    lifetime: LifetimeData[] | undefined,
+    keys: (keyof LifetimeData)[]
   ): number => {
     if (!lifetime || !Array.isArray(lifetime)) return 0;
-
-    return lifetime.reduce((sum, entry) => {
-      return (
-        sum +
-        keys.reduce((entrySum, key) => {
-          return entrySum + (typeof entry[key] === "number" ? entry[key] : 0);
-        }, 0)
-      );
-    }, 0);
+  
+    let totalSum = 0;
+  
+    for (const entry of lifetime) {
+      let entrySum = 0;
+      for (const key of keys) {
+        entrySum += entry[key];
+      }
+      totalSum += entrySum;
+    }
+  
+    return totalSum;
   };
 
   const chartData = [
     {
       paymentType: "Total Payments",
       marketPurchase: sumLifetimeValues(
-        household.tenure.marketPurchase?.lifetime,
-        ["houseMortgagePaymentYearly", "landMortgagePaymentYearly"]
+        household.lifetime.lifetimeData,
+        ["newbuildHouseMortgageYearly", "marketLandMortgageYearly"]
       ),
-      marketRent: sumLifetimeValues(household.tenure.marketRent?.lifetime, [
-        "averageRentHouseYearly",
-        "averageRentLandYearly",
+      marketRent: sumLifetimeValues(
+        household.lifetime.lifetimeData, 
+        ["marketHouseRentYearly", "marketLandRentYearly",
       ]),
       fairholdLandPurchase: sumLifetimeValues(
-        household.tenure.fairholdLandPurchase?.lifetime,
-        ["houseMortgagePaymentYearly", "landMortgagePaymentYearly"]
+        household.lifetime.lifetimeData, 
+        ["depreciatedHouseMortgageYearly", "fairholdLandMortgageYearly"]
       ),
       fairholdLandRent: sumLifetimeValues(
-        household.tenure.fairholdLandRent?.lifetime,
-        ["fairholdRentLand", "houseMortgagePaymentYearly"]
+        household.lifetime.lifetimeData, 
+        ["depreciatedHouseMortgageYearly", "fairholdLandRentYearly"]
       ),
     },
   ];
