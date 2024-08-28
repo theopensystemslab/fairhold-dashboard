@@ -2,7 +2,7 @@ import { SocialRent } from "./SocialRent";
 import { socialRentAdjustmentTypes } from "../../data/socialRentAdjustmentsRepo";
 
 let tenureSocialRent: SocialRent;
-const socialRentAdjustments: SocialRentAdjustments = [
+const socialRentAdjustments: socialRentAdjustmentTypes = [
   {
     inflation: 3.3,
     total: 4.3,
