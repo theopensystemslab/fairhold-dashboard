@@ -1,4 +1,5 @@
-import { SocialRent, SocialRentAdjustments } from "./SocialRent";
+import { SocialRent } from "./SocialRent";
+import { socialRentAdjustmentTypes } from "../../data/socialRentAdjustmentsRepo";
 
 let tenureSocialRent: SocialRent;
 const socialRentAdjustments: SocialRentAdjustments = [
