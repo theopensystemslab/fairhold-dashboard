@@ -51,8 +51,8 @@ export class Fairhold {
   private calculateDiscountedPriceOrRent() {
     if (this.landPriceOrRent < 0) {
       // TODO: Set a nominal value (Check with Ollie)
-      const nominalRent = 1;
-      return nominalRent;
+      const nominalLandPriceOrRent = 1;
+      return nominalLandPriceOrRent;
     }
 
     const discountedLandPriceOrRent = this.discountLand * this.landPriceOrRent;
