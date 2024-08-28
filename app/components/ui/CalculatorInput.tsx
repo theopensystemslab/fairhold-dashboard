@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import calculateFairhold from "@/app/models/testClasses";
 import { Household } from "@/app/models/Household";
 import Dashboard from "./Dashboard";
 import {
@@ -49,8 +48,7 @@ const CalculatorInput = () => {
       body: JSON.stringify(data), // pass the form data to the API
     });
 
-    const jsonData = await response.json();
-    const processedData = calculateFairhold(jsonData);
+    const processedData = await response.json();
 
     // saved processedData & switch to dashboard view
     setData(processedData);
