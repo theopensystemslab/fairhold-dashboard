@@ -1,9 +1,10 @@
-import { SocialRent, SocialRentAdjustments } from "./SocialRent";
+import { SocialRent } from "./SocialRent";
+import { socialRentAdjustmentTypes } from "../../data/socialRentAdjustmentsRepo";
 
 let tenureSocialRent: SocialRent;
 
 beforeEach(() => {
-  const socialRentAdjustments: SocialRentAdjustments = [
+  const socialRentAdjustments: socialRentAdjustmentTypes = [
     {
       inflation: 3.3,
       total: 4.3,

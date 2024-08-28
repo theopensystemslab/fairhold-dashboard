@@ -4,8 +4,9 @@ import { FairholdLandPurchase } from "./tenure/FairholdLandPurchase";
 import { FairholdLandRent } from "./tenure/FairholdLandRent";
 import { Fairhold } from "./Fairhold";
 import { Property } from "./Property";
-import { SocialRent, SocialRentAdjustments } from "./tenure/SocialRent";
+import { SocialRent } from "./tenure/SocialRent";
 import { ForecastParameters } from "./ForecastParameters";
+import { socialRentAdjustmentTypes } from "../data/socialRentAdjustmentsRepo";
 
 const HOUSE_MULTIPLIER = 2.4;
 
@@ -15,7 +16,7 @@ type ConstructorParams = Pick<
 > & {
   averageRentYearly: number;
   socialRentAverageEarning: number;
-  socialRentAdjustments: SocialRentAdjustments;
+  socialRentAdjustments: socialRentAdjustmentTypes;
   housePriceIndex: number;
 };
 
