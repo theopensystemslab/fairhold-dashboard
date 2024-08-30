@@ -1,16 +1,11 @@
 import { MarketPurchase } from "./MarketPurchase";
+import { DEFAULT_FORECAST_PARAMETERS, ForecastParameters } from "../ForecastParameters";
 
 let tenureMarketPurchase: MarketPurchase;
 
 beforeEach(() => {
-  const forecastParameters = {
-    maintenanceCostPercentage: 0.0125, // percentage maintenance cost
-    incomeGrowthPerYear: 0.04, // 4% income growth per year
-    constructionPriceGrowthPerYear: 0.025, // 2.5%
-    rentGrowthPerYear: 0.03, // 3%
-    propertyPriceGrowthPerYear: 0.05, // 5%
-    yearsForecast: 40, // 40 years
-    affordabilityThresholdIncomePercentage: 0.35, // percentage of imcome to afford rent or purchase
+  const forecastParameters: ForecastParameters = {
+    ...DEFAULT_FORECAST_PARAMETERS,
   };
 
   tenureMarketPurchase = new MarketPurchase({
@@ -19,11 +14,7 @@ beforeEach(() => {
     newBuildPrice: 186560,
     depreciatedBuildPrice: 110717.45,
     landPrice: 31531.579,
-    propertyPriceGrowthPerYear: forecastParameters.propertyPriceGrowthPerYear,
-    constructionPriceGrowthPerYear:
-      forecastParameters.constructionPriceGrowthPerYear,
-    yearsForecast: forecastParameters.yearsForecast,
-    maintenanceCostPercentage: forecastParameters.maintenanceCostPercentage,
+    forecastParameters: forecastParameters,
   });
 });
 
