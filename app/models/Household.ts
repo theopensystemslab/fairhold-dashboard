@@ -4,8 +4,27 @@ import { FairholdLandPurchase } from "./tenure/FairholdLandPurchase";
 import { FairholdLandRent } from "./tenure/FairholdLandRent";
 import { Fairhold } from "./Fairhold";
 import { Property } from "./Property";
-import { SocialRent, SocialRentAdjustments } from "./tenure/SocialRent";
 import { ForecastParameters, DEFAULT_FORECAST_PARAMETERS } from "./ForecastParameters";
+import { SocialRent } from "./tenure/SocialRent";
+import { ForecastParameters } from "./ForecastParameters";
+import { socialRentAdjustmentTypes } from "../data/socialRentAdjustmentsRepo";
+
+const HOUSE_MULTIPLIER = 2.4;
+
+type ConstructorParams = Pick<
+  Household,
+  "incomePerPersonYearly" | "gasBillYearly" | "property" | "forecastParameters"
+> & {
+  averageRentYearly: number;
+  socialRentAverageEarning: number;
+  socialRentAdjustments: socialRentAdjustmentTypes;
+  housePriceIndex: number;
+};
+
+type Lifetime = {
+  affordabilityThresholdIncome: number;
+  incomeYearly: number;
+}[];
 
 export class Household {
   incomePerPersonYearly; // income per person

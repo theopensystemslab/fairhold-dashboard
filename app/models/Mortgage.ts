@@ -90,14 +90,13 @@ export class Mortgage {
         remainingBalance: remainingBalance,
       },
     ];
-
+    const isFinalYear = this.termYears - 2;
     for (let i = 0; i < this.termYears - 1; i++) {
-      if (i != this.termYears - 1) {
-        yearlyPayment = this.monthlyPayment * MONTHS_PER_YEAR;
-      } else {
-        // last year just pay the remaining balance
+      if (i == isFinalYear) {
         yearlyPayment = remainingBalance;
+        continue;
       }
+      yearlyPayment = this.monthlyPayment * MONTHS_PER_YEAR;
 
       cumulativePaid = cumulativePaid + yearlyPayment;
       remainingBalance = remainingBalance - yearlyPayment;

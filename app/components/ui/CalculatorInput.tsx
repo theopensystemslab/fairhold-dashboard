@@ -1,32 +1,45 @@
 "use client";
-import React, { FormEvent, useState } from "react";
-import calculateFairhold from "@/app/models/testClasses";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
 import { Household } from "@/app/models/Household";
 import Dashboard from "./Dashboard";
+import {
+  calculationSchema,
+  Calculation,
+} from "@/app/schemas/calculationSchema";
+
+import RadioButton from "./RadioButton";
+import InputField from "./InputField";
+
+import { ClipLoader } from "react-spinners";
+
+const houseTypes = {
+  Detached: "D",
+  Semidetached: "S",
+  Terrace: "T",
+  Flat: "F",
+}; // variables associated to the house types
 
 const CalculatorInput = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Calculation>({
+    resolver: zodResolver(calculationSchema),
+    defaultValues: {
+      houseType: "D", // Default value for house type
+    },
+  });
+
   // create different view states: one for form and one for graph dashboard
   const [view, setView] = useState("form");
   const [data, setData] = useState<Household | null>(null);
-  const [housePostcode, sethousePostcode] = useState(""); // variable associated to the postcode
-  const houseTypes = {
-    Detached: "D",
-    Semidetached: "S",
-    Terrace: "T",
-    Flat: "F",
-  }; // variables associated to the house types
-  const [houseType, setHouseType] = useState(houseTypes.Detached); // variables associated to the house type
-  const [houseBedrooms, setHouseBedrooms] = useState(""); // variables associated to the number of bedrooms in the house
-  const [howSize, setHouseSize] = useState(""); // variables associated to the house size
-  const [houseAge, setHouseAge] = useState(""); // variables associated to the house age
 
-  // fucntion that defines what happens after submitting the form
-  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault(); // pr event the default of the form
-    const formData = new FormData(e.currentTarget); // get the data in the form, e.g postcode, house size etc
-    const data = Object.fromEntries(formData.entries());
-
-    //fetch the data: call the api and attach the form data
+  const onSubmit = async (data: Calculation) => {
+    setView("loading");
     const response = await fetch("/api", {
       method: "POST",
       headers: {
@@ -34,134 +47,92 @@ const CalculatorInput = () => {
       },
       body: JSON.stringify(data), // pass the form data to the API
     });
-    const jsonData = await response.json();
-    console.log("handleSubmit jsonData: ", jsonData);
-    const processedData = calculateFairhold(jsonData);
-    console.log("handleSubmit processedData: ", processedData);
+
+    const processedData = await response.json();
 
     // saved processedData & switch to dashboard view
     setData(processedData);
     setView("dashboard");
-  }
+  };
 
-  return view === "form" ? (
-    <div className="flex -centeitemsr justify-center text-black mt-5">
-      <div className=" w-1/2  border-black border-2 rounded-lg ">
-        <div className="bg-black text-white h-48 flex items-center justify-center">
-          <h1 className="text-6xl">Fairhold Calculator</h1>
-        </div>
-        <form onSubmit={handleSubmit} className=" flex flex-col m-5">
-          <h2 className="mb-1 font-bold">House postcode</h2>
-          <input
-            className="mb-3 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500
-            disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none
-             rounded-md "
-            type="text"
-            placeholder="e.g. SE17 1PE"
-            value={housePostcode}
-            onChange={(e) => sethousePostcode(e.target.value)}
-            name="housePostcode"
-          />
-          <h2 className="mb-1 font-bold">House size</h2>
-          <input
-            className="mb-3 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500
-            disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none
-             rounded-md "
-            type="number"
-            placeholder="Provide the house size in m square, e.g. 66"
-            value={howSize}
-            onChange={(e) => setHouseSize(e.target.value)}
-            name="houseSize"
-          />
-          <h2 className="mb-1 font-bold">House typology</h2>
-          <div className="flex">
-            <label className="mx-2">
-              <input
-                className="accent-black"
-                type="radio"
-                id="Detached"
-                name="houseType"
-                value={houseTypes.Detached}
-                checked={houseType === houseTypes.Detached}
-                onChange={() => setHouseType(houseTypes.Detached)}
-              />
-              Detached
-            </label>
-
-            <label className="mx-2">
-              <input
-                className="accent-black"
-                type="radio"
-                id="Semidetached"
-                name="houseType"
-                value={houseTypes.Semidetached}
-                checked={houseType === houseTypes.Semidetached}
-                onChange={() => setHouseType(houseTypes.Semidetached)}
-              />
-              Semi-Detached
-            </label>
-
-            <label className="mx-2">
-              <input
-                className="accent-black"
-                type="radio"
-                id="Terrace"
-                name="houseType"
-                value={houseTypes.Terrace}
-                checked={houseType === houseTypes.Terrace}
-                onChange={() => setHouseType(houseTypes.Terrace)}
-              />
-              Terrace
-            </label>
-
-            <label className="mx-2">
-              <input
-                className="accent-black"
-                type="radio"
-                id="Flat"
-                name="houseType"
-                value={houseTypes.Flat}
-                checked={houseType === houseTypes.Flat}
-                onChange={() => setHouseType(houseTypes.Flat)}
-              />
-              Flat
-            </label>
+  if (view === "form") {
+    return (
+      <div className="flex -centeritems justify-center text-black mt-5">
+        <div className=" w-1/2  border-black border-2 rounded-lg ">
+          <div className="bg-black text-white h-48 flex items-center justify-center">
+            <h1 className="text-6xl">Fairhold Calculator</h1>
           </div>
-
-          <h2 className="mb-1 font-bold">House age</h2>
-          <input
-            className="mb-3 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500
-            disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none
-             rounded-md "
-            type="number"
-            placeholder="Provide the house age in years. For a new build, insert age 1"
-            value={houseAge}
-            onChange={(e) => setHouseAge(e.target.value)}
-            name="houseAge"
-          />
-          <h2 className="mb-1 font-bold">Number of bedrooms</h2>
-          <input
-            className="mb-3 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500
-            disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none
-             rounded-md "
-            type="number"
-            placeholder="Provide the number of bedrooms e.g. 2"
-            value={houseBedrooms}
-            onChange={(e) => setHouseBedrooms(e.target.value)}
-            name="houseBedrooms"
-          />
-          <button
-            className="text-white bg-black w-1/3 rounded-xl"
-            type="submit"
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className=" flex flex-col m-5"
           >
-            Calculate
-          </button>
-        </form>
+            <h2 className="mb-1 font-bold">House postcode</h2>
+            <InputField
+              id="housePostcode"
+              type="text"
+              placeholder="set the postcode, e.g. SE17 1PE"
+              register={register}
+              error={errors.housePostcode?.message}
+            />
+
+            <h2 className="mb-1 font-bold">House size</h2>
+            <InputField
+              type="number"
+              placeholder="Provide the house size in m square, e.g. 66"
+              id="houseSize"
+              register={register}
+              error={errors.houseSize?.message}
+            />
+
+            <h2 className="mb-1 font-bold">House type</h2>
+            <div className="flex">
+              {Object.entries(houseTypes).map(([label, value]) => (
+                <RadioButton
+                  key={label}
+                  label={label}
+                  id={label}
+                  value={value}
+                  register={register}
+                  error={errors.houseType?.message}
+                />
+              ))}
+            </div>
+
+            <h2 className="mb-1 font-bold">House age</h2>
+            <InputField
+              type="number"
+              placeholder="Provide the house age in years. For a new build, insert age 1"
+              id="houseAge"
+              register={register}
+              error={errors.houseAge?.message}
+            />
+            <h2 className="mb-1 font-bold">Number of bedrooms</h2>
+            <InputField
+              type="number"
+              placeholder="Provide the number of bedrooms e.g. 2"
+              id="houseBedrooms"
+              register={register}
+              error={errors.houseBedrooms?.message}
+            />
+            <button
+              className="text-white bg-black w-1/3 rounded-xl"
+              type="submit"
+            >
+              Calculate
+            </button>
+          </form>
+        </div>
       </div>
-    </div>
-  ) : (
-    <Dashboard data={data as Household} />
-  );
+    );
+  } else if (view === "loading") {
+    return (
+      <div className="flex items-center justify-center h-screen text-black mt-5">
+        <ClipLoader color="black" size={50} />
+      </div>
+    );
+  } else if (view === "dashboard") {
+    return <Dashboard data={data as Household} />;
+  }
 };
 
 export default CalculatorInput;
