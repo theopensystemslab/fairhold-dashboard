@@ -8,7 +8,6 @@ interface MarketPurchaseParams {
   depreciatedBuildPrice: number;
   landPrice: number;
   incomeYearly: number;
-  maintenanceCostPercentage: number;
   forecastParameters: ForecastParameters;
 }
 
