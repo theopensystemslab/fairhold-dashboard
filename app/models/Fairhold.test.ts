@@ -24,3 +24,11 @@ it("correctly calculates the fairhold formula above the threshold", () => {
   });
   expect(fairhold.discountLand).toBeCloseTo(0.68776);
 });
+
+it("correctly deals with negative values of landPriceOrRent", () => {
+  const fairhold = new Fairhold({
+    affordability: 0.05,
+    landPriceOrRent: -100,
+  });
+  expect(fairhold.discountedLandPriceOrRent).toBeCloseTo(1);
+});

@@ -1,24 +1,24 @@
+import { ValidPostcode } from "../schemas/apiSchema";
 import { DEFAULT_FORECAST_PARAMETERS } from "./ForecastParameters";
 import { Household } from "./Household";
 import { HouseType, Property } from "./Property";
 import { MONTHS_PER_YEAR } from "./constants";
-import { SocialRentAdjustments } from "./tenure/SocialRent";
+import { socialRentAdjustmentTypes } from "../data/socialRentAdjustmentsRepo";
 
 // TODO: Share type with backend
 export interface ResponseData {
-  postcode: string;
+  postcode: ValidPostcode;
   houseType: HouseType;
   houseBedrooms: number;
   buildPrice: number;
   houseAge: number;
   houseSize: number;
-  newBuildPricePerMetre: number;
   averagePrice: number;
   itl3: string;
   gdhi: number;
   averageRentMonthly: number;
   socialRentAverageEarning: number;
-  socialRentAdjustments: SocialRentAdjustments;
+  socialRentAdjustments: socialRentAdjustmentTypes;
   hpi: number;
   gasBillYearly: number;
 }
@@ -33,7 +33,7 @@ function calculateFairhold(responseData: ResponseData) {
 
   // define the property object
   const property = new Property({
-    postcode: responseData.postcode,
+    postcode: responseData.postcode.postcode,
     houseType: responseData.houseType,
     numberOfBedrooms: responseData.houseBedrooms,
     age: responseData.houseAge,
