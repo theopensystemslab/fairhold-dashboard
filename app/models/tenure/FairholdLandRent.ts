@@ -1,6 +1,7 @@
 import { MONTHS_PER_YEAR } from "../constants";
 import { Fairhold } from "../Fairhold";
 import { Mortgage } from "../Mortgage";
+import { ForecastParameters } from '../ForecastParameters'; 
 
 interface FairholdLandRentParams {
   averageRentYearly: number;
@@ -9,23 +10,19 @@ interface FairholdLandRentParams {
   depreciatedBuildPrice: number;
   landPrice: number;
   incomeYearly: number;
-  affordabilityThresholdIncomePercentage: number;
-  propertyPriceGrowthPerYear: number;
-  constructionPriceGrowthPerYear: number;
-  yearsForecast: number;
-  maintenanceCostPercentage: number;
-  incomeGrowthPerYear: number;
-  rentGrowthPerYear: number;
   fairhold: Fairhold;
+  forecastParameters: ForecastParameters;
 }
 
 export class FairholdLandRent {
+  params: FairholdLandRentParams;
   /** Mortgage on the depreciated value of the house */
   depreciatedHouseMortgage: Mortgage;
   /** discounted value of the monthly land rent according to fairhold */
   discountedLandRentMonthly: number;
 
   constructor(params: FairholdLandRentParams) {
+    this.params = params;
     this.depreciatedHouseMortgage = new Mortgage({
       propertyValue: params.depreciatedBuildPrice,
     });
