@@ -19,19 +19,11 @@ interface FairholdLandRentParams {
   fairhold: Fairhold;
 }
 
-type Lifetime = {
-  maintenanceCost: number;
-  fairholdRentLand: number;
-  houseMortgagePaymentYearly: number;
-}[];
-
 export class FairholdLandRent {
   /** Mortgage on the depreciated value of the house */
   depreciatedHouseMortgage: Mortgage;
   /** discounted value of the monthly land rent according to fairhold */
   discountedLandRentMonthly: number;
-  /** lifetime projections of the tenure model */
-  lifetime: Lifetime;
 
   constructor(params: FairholdLandRentParams) {
     this.depreciatedHouseMortgage = new Mortgage({
@@ -40,7 +32,6 @@ export class FairholdLandRent {
 
     this.discountedLandRentMonthly =
       this.calculateDiscountedLandRentMonthly(params);
-    this.lifetime = this.calculateLifetime(params);
   }
 
   private calculateDiscountedLandRentMonthly({
@@ -62,90 +53,5 @@ export class FairholdLandRent {
       fairholdLandRent.discountedLandPriceOrRent;
 
     return discountedLandRentMonthly;
-  }
-  private calculateLifetime({
-    averagePrice,
-    newBuildPrice,
-    landPrice,
-    incomeYearly,
-    averageRentYearly,
-    yearsForecast,
-    propertyPriceGrowthPerYear,
-    constructionPriceGrowthPerYear,
-    incomeGrowthPerYear,
-    rentGrowthPerYear,
-    maintenanceCostPercentage,
-  }: FairholdLandRentParams) {
-    // initialize the variables that are going to be iterated
-    let averagePriceIterative = averagePrice;
-    let newBuildPriceIterative = newBuildPrice;
-    let landPriceIterative = landPrice;
-    let landToTotalRatioIterative = landPrice / averagePrice;
-    let incomeIterative = incomeYearly;
-    let averageRentYearlyIterative = averageRentYearly;
-    let averageRentLandYearlyIterative =
-      averageRentYearlyIterative * landToTotalRatioIterative;
-    const affordabilityIterative = averageRentYearlyIterative / incomeIterative;
-    let maintenanceCostIterative =
-      maintenanceCostPercentage * newBuildPriceIterative;
-
-    const fairholdRentLandIterative = new Fairhold({
-      affordability: affordabilityIterative,
-      landPriceOrRent: averageRentLandYearlyIterative / MONTHS_PER_YEAR,
-    }).discountedLandPriceOrRent;
-    this.discountedLandRentMonthly = fairholdRentLandIterative;
-
-    const houseMortgagePaymentYearly =
-      this.depreciatedHouseMortgage.yearlyPaymentBreakdown;
-    let houseMortgagePaymentYearlyIterative =
-      houseMortgagePaymentYearly[0].yearlyPayment; // find the first year
-
-    const lifetime: Lifetime = [
-      {
-        maintenanceCost: maintenanceCostIterative,
-        fairholdRentLand: fairholdRentLandIterative,
-        houseMortgagePaymentYearly: houseMortgagePaymentYearlyIterative,
-      },
-    ];
-
-    for (let i = 0; i < yearsForecast - 1; i++) {
-      averagePriceIterative =
-        averagePriceIterative * (1 + propertyPriceGrowthPerYear);
-      newBuildPriceIterative =
-        newBuildPriceIterative * (1 + constructionPriceGrowthPerYear);
-      landPriceIterative = averagePriceIterative - newBuildPriceIterative;
-      landToTotalRatioIterative = landPriceIterative / averagePriceIterative;
-      incomeIterative = incomeIterative * (1 + incomeGrowthPerYear);
-      maintenanceCostIterative =
-        maintenanceCostPercentage * newBuildPriceIterative;
-
-      averageRentYearlyIterative =
-        averageRentYearlyIterative * (1 + rentGrowthPerYear);
-
-      averageRentLandYearlyIterative =
-        averageRentYearlyIterative * landToTotalRatioIterative;
-
-      const affordabilityIterative =
-        averageRentYearlyIterative / incomeIterative;
-
-      const fairholdRentLandIterative = new Fairhold({
-        affordability: affordabilityIterative,
-        landPriceOrRent: averageRentLandYearlyIterative,
-      }).discountedLandPriceOrRent;
-
-      if (i < houseMortgagePaymentYearly.length - 1) {
-        houseMortgagePaymentYearlyIterative =
-          houseMortgagePaymentYearly[i + 1].yearlyPayment; // find the first year
-      } else {
-        houseMortgagePaymentYearlyIterative = 0;
-      }
-
-      lifetime.push({
-        maintenanceCost: maintenanceCostIterative,
-        fairholdRentLand: fairholdRentLandIterative,
-        houseMortgagePaymentYearly: houseMortgagePaymentYearlyIterative,
-      });
-    }
-    return lifetime;
   }
 }

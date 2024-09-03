@@ -7,6 +7,7 @@ import { Property } from "./Property";
 import { SocialRent } from "./tenure/SocialRent";
 import { ForecastParameters } from "./ForecastParameters";
 import { socialRentAdjustmentTypes } from "../data/socialRentAdjustmentsRepo";
+import { Lifetime, LifetimeParams } from "./Lifetime"; 
 
 const HOUSE_MULTIPLIER = 2.4;
 
@@ -19,11 +20,6 @@ type ConstructorParams = Pick<
   socialRentAdjustments: socialRentAdjustmentTypes;
   housePriceIndex: number;
 };
-
-type Lifetime = {
-  affordabilityThresholdIncome: number;
-  incomeYearly: number;
-}[];
 
 export class Household {
   public incomePerPersonYearly: number;
@@ -47,10 +43,7 @@ export class Household {
     this.forecastParameters = params.forecastParameters;
     this.incomeYearly = HOUSE_MULTIPLIER * params.incomePerPersonYearly;
     this.tenure = this.calculateTenures(params);
-    this.lifetime = this.calculateLifetime(
-      this.incomeYearly,
-      params.forecastParameters
-    );
+    this.lifetime = this.calculateLifetime(params);
   }
 
   private calculateTenures({
@@ -149,36 +142,22 @@ export class Household {
     };
   }
 
-  private calculateLifetime(
-    incomeYearly: number,
-    {
-      incomeGrowthPerYear,
-      affordabilityThresholdIncomePercentage,
-      yearsForecast,
-    }: ForecastParameters
-  ) {
-    let incomeYearlyIterative = incomeYearly;
-    let affordabilityThresholdIncomeIterative =
-      incomeYearlyIterative * affordabilityThresholdIncomePercentage;
-
-    const lifetime: Lifetime = [
-      {
-        incomeYearly: incomeYearlyIterative,
-        affordabilityThresholdIncome: affordabilityThresholdIncomeIterative,
-      },
-    ];
-
-    for (let i = 0; i < yearsForecast - 1; i++) {
-      incomeYearlyIterative = incomeYearlyIterative * (1 + incomeGrowthPerYear);
-      affordabilityThresholdIncomeIterative =
-        incomeYearlyIterative * affordabilityThresholdIncomePercentage;
-
-      lifetime.push({
-        incomeYearly: incomeYearlyIterative,
-        affordabilityThresholdIncome: affordabilityThresholdIncomeIterative,
-      });
+    private calculateLifetime(params: ConstructorParams): Lifetime {
+      const lifetimeParams: LifetimeParams = {
+        marketPurchase: this.tenure.marketPurchase,
+        marketRent: this.tenure.marketRent,
+        fairholdLandPurchase: this.tenure.fairholdLandPurchase,
+        fairholdLandRent: this.tenure.fairholdLandRent,
+        property: this.property,
+        propertyPriceGrowthPerYear: params.forecastParameters.propertyPriceGrowthPerYear,
+        constructionPriceGrowthPerYear: params.forecastParameters.constructionPriceGrowthPerYear,
+        rentGrowthPerYear: params.forecastParameters.rentGrowthPerYear,
+        yearsForecast: params.forecastParameters.yearsForecast,
+        maintenanceCostPercentage: params.forecastParameters.maintenanceCostPercentage,
+        incomeGrowthPerYear: params.forecastParameters.incomeGrowthPerYear,
+        affordabilityThresholdIncomePercentage: params.forecastParameters.affordabilityThresholdIncomePercentage,
+        incomeYearly: this.incomeYearly,
+      };
+      return new Lifetime(lifetimeParams);
     }
-
-    return lifetime;
   }
-}
