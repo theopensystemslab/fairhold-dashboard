@@ -22,23 +22,15 @@ const LifetimeFairholdLandPurchaseWrapper: React.FC<Props> = ({
 
   // Process and format the data for the chart
   const chartData =
-    (household.tenure.fairholdLandPurchase?.lifetime || []).map(
+    (household.lifetime.lifetimeData).map(
       (item, index) => {
-        // Access and store household.lifetime array
-        // TODO remove defensive code after types tightened upstream
-        const incomeThreshold =
-          household.lifetime && household.lifetime[index]
-            ? household.lifetime[index].affordabilityThresholdIncome
-            : 0;
-
-        // Access and store all other variables
         return {
           year: index.toString(),
-          landCost: item.landMortgagePaymentYearly,
-          houseCost: item.houseMortgagePaymentYearly,
+          incomeThreshold: item.affordabilityThresholdIncome,
+          landCost: item.fairholdLandMortgageYearly,
+          houseCost: item.depreciatedHouseMortgageYearly,
           // billsCost: item.gasBillYearly,
           maintenanceCost: item.maintenanceCost,
-          incomeThreshold: incomeThreshold,
         };
       }
     ) ?? [];
