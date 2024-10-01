@@ -161,6 +161,8 @@ export class Household {
         incomeGrowthPerYear: params.forecastParameters.incomeGrowthPerYear,
         affordabilityThresholdIncomePercentage: params.forecastParameters.affordabilityThresholdIncomePercentage,
         incomeYearly: this.incomeYearly,
+        gasBillAdjustedYearly: this.gasBillAdjustedYearly,
+        gasBillRetrofitYearly: this.gasBillRetrofitYearly
       };
       return new Lifetime(lifetimeParams);
     }
