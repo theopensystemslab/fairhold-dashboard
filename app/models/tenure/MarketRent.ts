@@ -8,7 +8,7 @@ interface ConstructorParams {
   landPrice: number;
   incomeYearly: number;
   propertyPriceGrowthPerYear: number;
-  constructionPriceGrowthPerYear: number;
+  consumerPriceGrowthPerYear: number;
   yearsForecast: number;
   maintenanceCostPercentage: number;
   rentGrowthPerYear: number;
