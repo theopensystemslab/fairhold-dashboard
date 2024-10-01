@@ -13,7 +13,7 @@ const HOUSE_MULTIPLIER = 2.4;
 
 type ConstructorParams = Pick<
   Household,
-  "incomePerPersonYearly" | "gasBillYearly" | "property" | "forecastParameters"
+  "incomePerPersonYearly" | "gasBillAverageYearly" | "gasBillAdjustedYearly" | "gasBillRetrofitYearly" | "property" | "forecastParameters"
 > & {
   averageRentYearly: number;
   socialRentAverageEarning: number;
@@ -23,7 +23,9 @@ type ConstructorParams = Pick<
 
 export class Household {
   public incomePerPersonYearly: number;
-  public gasBillYearly: number;
+  public gasBillAverageYearly: number;
+  public gasBillAdjustedYearly: number;
+  public gasBillRetrofitYearly: number;
   public property: Property;
   public forecastParameters: ForecastParameters;
   public incomeYearly: number;
@@ -38,8 +40,10 @@ export class Household {
 
   constructor(params: ConstructorParams) {
     this.incomePerPersonYearly = params.incomePerPersonYearly;
-    this.gasBillYearly = params.gasBillYearly;
+    this.gasBillAverageYearly = params.gasBillAverageYearly;
     this.property = params.property;
+    this.gasBillAdjustedYearly = this.calculateGasBillAdjustedYearly(); // args? this.gasBillAverageYearly, this.property.size, this.property.houseType
+    this.gasBillRetrofitYearly = this.calculateGasBillRetrofitYearly();
     this.forecastParameters = params.forecastParameters;
     this.incomeYearly = HOUSE_MULTIPLIER * params.incomePerPersonYearly;
     this.tenure = this.calculateTenures(params);
@@ -160,4 +164,28 @@ export class Household {
       };
       return new Lifetime(lifetimeParams);
     }
+
+  private calculateGasBillAdjustedYearly() {
+    const averageHeatDemandKwhByType = {
+      "F": 118, // Figures from LETI, via Studio PDP
+      "T": 110,
+      "S": 168,
+      "D": 167,
+    }
+    const costPerKwh = this.gasBillAverageYearly / 13600 // 13,600 kwh is assumed in the data
+    const gasBillAdjustedYearly = costPerKwh * this.property.size * averageHeatDemandKwhByType[this.property.houseType]
+    return gasBillAdjustedYearly
+  } 
+
+  private calculateGasBillRetrofitYearly() {
+    const retrofitHeatDemandKwhByType = {
+        "F": 26, // Figures from LETI, via Studio PDP
+        "T": 20,
+        "S": 51,
+        "D": 55,
+      }
+      const costPerKwh = this.gasBillAverageYearly / 13600 // 13,600 kwh is assumed in the data
+      const gasBillRetrofitYearly = costPerKwh * this.property.size * retrofitHeatDemandKwhByType[this.property.houseType]
+      return gasBillRetrofitYearly
   }
+};
