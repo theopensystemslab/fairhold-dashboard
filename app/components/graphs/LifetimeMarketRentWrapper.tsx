@@ -27,7 +27,7 @@ const LifetimeMarketRentWrapper: React.FC<Props> = ({ household }) => {
         incomeThreshold: item.affordabilityThresholdIncome,
         landCost: item.marketLandRentYearly,
         houseCost: item.marketHouseRentYearly,
-        // billsCost: item.gasBillYearly,
+        billsCost: item.gasBillAdjustedYearly,
       };
     }) ?? [];
 

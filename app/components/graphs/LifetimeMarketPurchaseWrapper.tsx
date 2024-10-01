@@ -28,7 +28,7 @@ const LifetimeMarketPurchaseWrapper: React.FC<Props> = ({ household }) => {
           landCost: item.marketLandMortgageYearly,
           houseCost: item.newbuildHouseMortgageYearly,
           maintenanceCost: item.maintenanceCost,
-          // billsCost: item.gasBillYearly,
+          billsCost: item.gasBillAdjustedYearly,
         };
     }) ?? [];
 

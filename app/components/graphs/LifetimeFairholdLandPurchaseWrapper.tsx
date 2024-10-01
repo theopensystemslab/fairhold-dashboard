@@ -29,7 +29,7 @@ const LifetimeFairholdLandPurchaseWrapper: React.FC<Props> = ({
           incomeThreshold: item.affordabilityThresholdIncome,
           landCost: item.fairholdLandMortgageYearly,
           houseCost: item.depreciatedHouseMortgageYearly,
-          // billsCost: item.gasBillYearly,
+          billsCost: item.gasBillRetrofitYearly,
           maintenanceCost: item.maintenanceCost,
         };
       }
