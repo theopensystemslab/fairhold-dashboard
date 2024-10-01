@@ -11,7 +11,7 @@ interface FairholdLandRentParams {
   incomeYearly: number;
   affordabilityThresholdIncomePercentage: number;
   propertyPriceGrowthPerYear: number;
-  constructionPriceGrowthPerYear: number;
+  consumerPriceGrowthPerYear: number;
   yearsForecast: number;
   maintenanceCostPercentage: number;
   incomeGrowthPerYear: number;

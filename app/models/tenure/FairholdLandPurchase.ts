@@ -4,7 +4,7 @@ import { Mortgage } from "../Mortgage";
 interface FairholdLandPurchaseParams {
   newBuildPrice: number;
   depreciatedBuildPrice: number;
-  constructionPriceGrowthPerYear: number;
+  consumerPriceGrowthPerYear: number;
   yearsForecast: number;
   maintenanceCostPercentage: number;
   incomeGrowthPerYear: number;

@@ -15,7 +15,7 @@ export interface LifetimeParams {
     fairholdLandRent: FairholdLandRent;
     property: Property;
     propertyPriceGrowthPerYear: number;
-    constructionPriceGrowthPerYear: number;
+    consumerPriceGrowthPerYear: number;
     rentGrowthPerYear: number;
     yearsForecast: number;
     maintenanceCostPercentage: number;
@@ -102,7 +102,7 @@ export class Lifetime {
             averageMarketPriceIterative =
                 averageMarketPriceIterative * (1 + params.propertyPriceGrowthPerYear);
             newBuildPriceIterative =
-              newBuildPriceIterative * (1 + params.constructionPriceGrowthPerYear);
+              newBuildPriceIterative * (1 + params.consumerPriceGrowthPerYear);
             landToTotalRatioIterative = 
                 landPriceIterative / averageMarketPriceIterative;
             landPriceIterative = 
@@ -118,9 +118,9 @@ export class Lifetime {
             maintenanceCostIterative =
                 newBuildPriceIterative * params.maintenanceCostPercentage;
             gasBillAdjustedYearlyIterative = 
-                gasBillAdjustedYearlyIterative * (1 + params.constructionPriceGrowthPerYear);
+                gasBillAdjustedYearlyIterative * (1 + params.consumerPriceGrowthPerYear);
             gasBillRetrofitYearlyIterative = 
-                gasBillRetrofitYearlyIterative * (1 + params.constructionPriceGrowthPerYear);
+                gasBillRetrofitYearlyIterative * (1 + params.consumerPriceGrowthPerYear);
 
             if (i < params.marketPurchase.houseMortgage.termYears - 1) {
                 newbuildHouseMortgageYearlyIterative = params.marketPurchase.houseMortgage.yearlyPaymentBreakdown[i].yearlyPayment;
