@@ -22,6 +22,8 @@ export interface LifetimeParams {
     incomeGrowthPerYear: number;
     affordabilityThresholdIncomePercentage: number;
     incomeYearly: number;
+    gasBillAdjustedYearly: number;
+    gasBillRetrofitYearly: number;
 }
 
 export interface LifetimeData {
@@ -35,8 +37,8 @@ export interface LifetimeData {
     maintenanceCost: number;
     marketLandRentYearly: number;
     marketHouseRentYearly: number;
-    // we will need the below for newbuilds & retrofits, and oldbuilds
-    // gasBillYearly: number;
+    gasBillAdjustedYearly: number;
+    gasBillRetrofitYearly: number;
     [key: number]: number;
 }
 
@@ -87,6 +89,10 @@ export class Lifetime {
             marketRentYearlyIterative - marketRentLandYearlyIterative;
         let maintenanceCostIterative = 
             params.maintenanceCostPercentage * newBuildPriceIterative;
+        let gasBillAdjustedYearlyIterative = 
+            params.gasBillAdjustedYearly;
+        let gasBillRetrofitYearlyIterative = 
+            params.gasBillRetrofitYearly;
 
         for (let i = 0; i < params.yearsForecast - 1; i++) {
             incomeYearlyIterative = 
@@ -111,6 +117,10 @@ export class Lifetime {
                 marketRentYearlyIterative - marketRentLandYearlyIterative;
             maintenanceCostIterative =
                 newBuildPriceIterative * params.maintenanceCostPercentage;
+            gasBillAdjustedYearlyIterative = 
+                gasBillAdjustedYearlyIterative * (1 + params.constructionPriceGrowthPerYear);
+            gasBillRetrofitYearlyIterative = 
+                gasBillRetrofitYearlyIterative * (1 + params.constructionPriceGrowthPerYear);
 
             if (i < params.marketPurchase.houseMortgage.termYears - 1) {
                 newbuildHouseMortgageYearlyIterative = params.marketPurchase.houseMortgage.yearlyPaymentBreakdown[i].yearlyPayment;
@@ -143,6 +153,8 @@ export class Lifetime {
                 maintenanceCost: maintenanceCostIterative,
                 marketLandRentYearly: marketRentLandYearlyIterative,
                 marketHouseRentYearly: marketRentHouseYearlyIterative,
+                gasBillAdjustedYearly: gasBillAdjustedYearlyIterative,
+                gasBillRetrofitYearly: gasBillRetrofitYearlyIterative
             });
         }
         return lifetime;
