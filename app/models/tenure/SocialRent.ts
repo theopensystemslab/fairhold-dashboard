@@ -4,7 +4,7 @@ import { socialRentAdjustmentTypes } from "../../data/socialRentAdjustmentsRepo"
 
 interface SocialRentParams {
   numberOfBedrooms: number;
-  socialRentAverageEarning: number;
+  socialRentAverageEarning: number; // COUNTY AVERAGE EARNING? CHECK! 
   socialRentAdjustments: socialRentAdjustmentTypes;
   housePriceIndex: number;
   landToTotalRatio: number;
@@ -38,7 +38,7 @@ export class SocialRent {
     const bedWeightsAndCaps = BED_WEIGHTS_AND_CAPS;
     const numberOfBedrooms = params.numberOfBedrooms;
 
-    const nationalAverageRent = NATIONAL_AVERAGES.socialRentWeekly;
+    const nationalAverageRent = NATIONAL_AVERAGES.averageRentWeekly;
     const nationalAverageProperty = NATIONAL_AVERAGES.propertyValue;
     const nationalAverageEarnings = NATIONAL_AVERAGES.earningsWeekly;
 

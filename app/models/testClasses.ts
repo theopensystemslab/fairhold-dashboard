@@ -17,7 +17,7 @@ export interface ResponseData {
   itl3: string;
   gdhi: number;
   averageRentMonthly: number;
-  socialRentAverageEarning: number;
+  countyAverageEarnings: number;
   socialRentAdjustments: socialRentAdjustmentTypes;
   hpi: number;
   gasBillYearly: number;
@@ -47,7 +47,7 @@ function calculateFairhold(responseData: ResponseData) {
   const household = new Household({
     incomePerPersonYearly: responseData.gdhi,
     averageRentYearly: responseData.averageRentMonthly * MONTHS_PER_YEAR,
-    socialRentAverageEarning: responseData.socialRentAverageEarning,
+    countyAverageEarnings: responseData.countyAverageEarnings,
     socialRentAdjustments: responseData.socialRentAdjustments,
     housePriceIndex: responseData.hpi,
     gasBillYearly: responseData.gasBillYearly,

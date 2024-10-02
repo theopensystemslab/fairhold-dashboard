@@ -8,7 +8,7 @@ export type bedWeightsAndCapsType = {
 };
 
 /**
- * multiplying value weight and social rent cap for a property based on number of bed rooms
+ * For calculating social rent; these are the variables for weighting the formula rent by # of bedrooms and checking against weekly rent caps
  */
 export const BED_WEIGHTS_AND_CAPS: bedWeightsAndCapsType = {
   numberOfBedrooms: [0, 1, 2, 3, 4, 5, 6],
@@ -17,16 +17,19 @@ export const BED_WEIGHTS_AND_CAPS: bedWeightsAndCapsType = {
 };
 
 export type nationalAverageType = {
-  socialRentWeekly: number;
+  rentWeekly: number;
   propertyValue: number;
   earningsWeekly: number;
 };
 
 /**
- * National average values
+ * National average values (rents, property prices and earnings) that are used as inputs into the social rent formula
  */
 export const NATIONAL_AVERAGES: nationalAverageType = {
-  socialRentWeekly: 54.62,
+  /** The national average rent that must be used, for April 2000, from GOV UK "Policy statement on rents for social housing" */
+  rentWeekly: 54.62,
+  /** The national average property value that must be used, for January 1999, from GOV UK "Policy statement on rents for social housing" */
   propertyValue: 49750,
+  /** The national average earnings from New Earning Survey in 1999 prices, from GOV UK "Policy statement on rents for social housing" */
   earningsWeekly: 316.4,
 };

@@ -161,7 +161,7 @@ beforeEach(() => {
   household = new Household({
     incomePerPersonYearly: 19090.0,
     averageRentYearly: 773.875 * 12,
-    socialRentAverageEarning: 295.4,
+    countyAverageEarnings: 295.4,
     socialRentAdjustments: socialRentAdjustments,
     housePriceIndex: 75434.35,
     gasBillYearly: 800,

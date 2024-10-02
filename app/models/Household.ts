@@ -16,7 +16,7 @@ type ConstructorParams = Pick<
   "incomePerPersonYearly" | "gasBillYearly" | "property" | "forecastParameters"
 > & {
   averageRentYearly: number;
-  socialRentAverageEarning: number;
+  countyAverageEarnings: number;
   socialRentAdjustments: socialRentAdjustmentTypes;
   housePriceIndex: number;
 };
@@ -48,7 +48,7 @@ export class Household {
 
   private calculateTenures({
     averageRentYearly,
-    socialRentAverageEarning,
+    countyAverageEarnings,
     socialRentAdjustments,
     housePriceIndex,
   }: ConstructorParams) {
@@ -85,7 +85,7 @@ export class Household {
     });
 
     const socialRent = new SocialRent({
-      socialRentAverageEarning,
+      countyAverageEarnings,
       socialRentAdjustments,
       housePriceIndex,
       landToTotalRatio: this.property.landToTotalRatio,

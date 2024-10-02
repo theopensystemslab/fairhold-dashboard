@@ -40,7 +40,7 @@ export const getHouseholdData = async (input: Calculation) => {
     const averageRentMonthly = await rentService.getByITL3(itl3); 
 
     const socialRentAdjustments = await socialRentAdjustmentsService.getAdjustments();
-    const socialRentAverageEarning = await socialRentEarningsService.getByITL3(itl3)
+    const countyAverageEarnings = await socialRentEarningsService.getByITL3(itl3)
 
     return {
       postcode: input.housePostcode,
@@ -55,7 +55,7 @@ export const getHouseholdData = async (input: Calculation) => {
       buildPrice,
       averageRentMonthly,
       socialRentAdjustments,
-      socialRentAverageEarning,
+      countyAverageEarnings,
       numberOfTransactions,
       granularityPostcode,
       gasBillYearly,
