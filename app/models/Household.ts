@@ -13,7 +13,7 @@ const HOUSE_MULTIPLIER = 2.4;
 
 type ConstructorParams = Pick<
   Household,
-  "incomePerPersonYearly" | "gasBillAverageYearly" | "gasBillAdjustedYearly" | "gasBillRetrofitYearly" | "property" | "forecastParameters"
+  "incomePerPersonYearly" | "gasBillAverageYearly" | "property" | "forecastParameters"
 > & {
   averageRentYearly: number;
   socialRentAverageEarning: number;
@@ -42,7 +42,7 @@ export class Household {
     this.incomePerPersonYearly = params.incomePerPersonYearly;
     this.gasBillAverageYearly = params.gasBillAverageYearly;
     this.property = params.property;
-    this.gasBillAdjustedYearly = this.calculateGasBillAdjustedYearly(); // args? this.gasBillAverageYearly, this.property.size, this.property.houseType
+    this.gasBillAdjustedYearly = this.calculateGasBillAdjustedYearly();
     this.gasBillRetrofitYearly = this.calculateGasBillRetrofitYearly();
     this.forecastParameters = params.forecastParameters;
     this.incomeYearly = HOUSE_MULTIPLIER * params.incomePerPersonYearly;
