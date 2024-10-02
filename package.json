@@ -10,6 +10,7 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest; open ./coverage/lcov-report/index.html",
+    "prisma:pull": "node load-env-and-prisma.js db pull",
     "prisma:generate": "prisma generate",
     "postinstall": "npm run prisma:generate",
     "prettier": "prettier --write .",
