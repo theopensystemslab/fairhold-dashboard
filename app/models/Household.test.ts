@@ -156,6 +156,7 @@ beforeEach(() => {
     newBuildPricePerMetre: 2120,
     averageMarketPrice: 218091.58,
     itl3: "TLG24",
+    hpi2000: 58055.99,
   });
 
   household = new Household({
@@ -163,7 +164,7 @@ beforeEach(() => {
     averageRentYearly: 773.875 * 12,
     countyAverageEarnings1999: 295.4,
     socialRentAdjustments: socialRentAdjustments,
-    housePriceIndex: 75434.35,
+    hpi2000: 75434.35,
     gasBillYearly: 800,
     property: property,
     forecastParameters: DEFAULT_FORECAST_PARAMETERS,

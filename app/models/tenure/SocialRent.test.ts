@@ -147,7 +147,7 @@ beforeEach(() => {
   tenureSocialRent = new SocialRent({
     countyAverageEarnings1999: 295.4,
     socialRentAdjustments: socialRentAdjustments,
-    averageMarketPrice2000: 75434.35,
+    hpi2000: 75434.35,
     landToTotalRatio: 0.3,
     numberOfBedrooms: 3,
   });
@@ -160,7 +160,7 @@ it("can be instantiated with number of bedrooms above the threshold", () => {
   tenureSocialRent = new SocialRent({
     countyAverageEarnings1999: 600,
     socialRentAdjustments: socialRentAdjustments,
-    averageMarketPrice2000: 75434.35,
+    hpi2000: 75434.35,
     landToTotalRatio: 0.3,
     numberOfBedrooms: 10,
   });

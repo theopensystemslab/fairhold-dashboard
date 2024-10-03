@@ -12,6 +12,7 @@ beforeEach(() => {
     newBuildPricePerMetre: 2120,
     averageMarketPrice: 218091.58,
     itl3: "TLG24",
+    hpi2000: 58055.99,
   });
 });
 
@@ -49,6 +50,7 @@ it("correctly calculates the values even for number of bedroooms exceeding the m
     newBuildPricePerMetre: 2120,
     averageMarketPrice: 218091.58,
     itl3: "TLG24",
+    hpi2000: 58055.99,
   });
   expect(property).toBeInstanceOf(Property);
 });

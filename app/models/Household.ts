@@ -18,7 +18,7 @@ type ConstructorParams = Pick<
   averageRentYearly: number;
   countyAverageEarnings1999: number;
   socialRentAdjustments: socialRentAdjustmentTypes;
-  housePriceIndex: number;
+  hpi2000: number;
 };
 
 export class Household {
@@ -50,11 +50,11 @@ export class Household {
     averageRentYearly,
     countyAverageEarnings1999,
     socialRentAdjustments,
-    housePriceIndex,
+    hpi2000,
   }: ConstructorParams) {
     const marketPurchase = new MarketPurchase({
       incomeYearly: this.incomeYearly,
-      averagePrice: this.property.averageMarketPrice,
+      averageMarketPrice: this.property.averageMarketPrice,
       newBuildPrice: this.property.newBuildPrice,
       depreciatedBuildPrice: this.property.depreciatedBuildPrice,
       landPrice: this.property.landPrice,
@@ -69,7 +69,7 @@ export class Household {
 
     const marketRent = new MarketRent({
       averageRentYearly: averageRentYearly,
-      averagePrice: this.property.averageMarketPrice,
+      averageMarketPrice: this.property.averageMarketPrice,
       newBuildPrice: this.property.newBuildPrice,
       depreciatedBuildPrice: this.property.depreciatedBuildPrice,
       landPrice: this.property.landPrice,
@@ -87,7 +87,7 @@ export class Household {
     const socialRent = new SocialRent({
       countyAverageEarnings1999,
       socialRentAdjustments,
-      housePriceIndex,
+      hpi2000,
       landToTotalRatio: this.property.landToTotalRatio,
       numberOfBedrooms: this.property.numberOfBedrooms,
     });
@@ -110,7 +110,7 @@ export class Household {
 
     const fairholdLandRent = new FairholdLandRent({
       averageRentYearly: averageRentYearly,
-      averagePrice: this.property.averageMarketPrice, // average price of the property
+      averageMarketPrice: this.property.averageMarketPrice, // average price of the property
       newBuildPrice: this.property.newBuildPrice,
       depreciatedBuildPrice: this.property.depreciatedBuildPrice, // depreciated building price
       landPrice: this.property.landPrice, // land price

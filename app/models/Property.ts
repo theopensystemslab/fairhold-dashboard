@@ -15,7 +15,7 @@ type PropertyParams = Pick<
   | "size"
   | "newBuildPricePerMetre"
   | "averageMarketPrice"
-  | "averageMarketPrice2000"
+  | "hpi2000"
   | "itl3"
 >;
 
@@ -37,7 +37,7 @@ export class Property {
    */
   newBuildPricePerMetre: number;
   averageMarketPrice: number;
-  averageMarketPrice2000: number;
+  hpi2000: number;
   itl3: string;
   /**
    *  Price of the house if it was new
@@ -65,7 +65,7 @@ export class Property {
     this.size = params.size;
     this.newBuildPricePerMetre = params.newBuildPricePerMetre;
     this.averageMarketPrice = params.averageMarketPrice;
-    this.averageMarketPrice2000 = params.averageMarketPrice2000;
+    this.hpi2000 = params.hpi2000;
     this.itl3 = params.itl3;
 
     // Computed properties, order is significant
