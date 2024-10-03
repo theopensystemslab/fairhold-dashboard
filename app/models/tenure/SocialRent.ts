@@ -2,26 +2,27 @@ import { WEEKS_PER_MONTH } from "../constants";
 import { BED_WEIGHTS_AND_CAPS, NATIONAL_AVERAGES } from "../constants";
 import { socialRentAdjustmentTypes } from "../../data/socialRentAdjustmentsRepo";
 
+/** Here are the variables (non-constant) needed to calculate social rent */
 interface SocialRentParams {
   numberOfBedrooms: number;
-  socialRentAverageEarning: number; // COUNTY AVERAGE EARNING? CHECK! 
+  countyAverageEarnings1999: number; 
+  /** An object that includes inflation and additional adjustments (by percentage) for uprating formula rent from 2000 values  */
   socialRentAdjustments: socialRentAdjustmentTypes;
-  housePriceIndex: number;
+  averageMarketPrice2000: number;
   landToTotalRatio: number;
 }
 
 export class SocialRent {
-  socialRentAverageEarning: number;
-  /** adjustment factors that take into account the increase of living cost  */
+  countyAverageEarnings1999: number;
   socialRentAdjustments;
-  housePriceIndex;
+  averageMarketPrice2000;
   adjustedSocialRentMonthly: number; //adjusted social rent monthly
   socialRentMonthlyLand: number; // social rent to pay the land
   socialRentMonthlyHouse: number; // social rent monthly House
   constructor(params: SocialRentParams) {
-    this.socialRentAverageEarning = params.socialRentAverageEarning;
+    this.countyAverageEarnings1999 = params.countyAverageEarnings1999;
     this.socialRentAdjustments = params.socialRentAdjustments;
-    this.housePriceIndex = params.housePriceIndex;
+    this.averageMarketPrice2000 = params.averageMarketPrice2000;
     const {
       adjustedSocialRentMonthly,
       socialRentMonthlyLand,
@@ -39,8 +40,8 @@ export class SocialRent {
     const numberOfBedrooms = params.numberOfBedrooms;
 
     const nationalAverageRent = NATIONAL_AVERAGES.averageRentWeekly;
-    const nationalAverageProperty = NATIONAL_AVERAGES.propertyValue;
-    const nationalAverageEarnings = NATIONAL_AVERAGES.earningsWeekly;
+    const nationalAverageMarketPrice1999 = NATIONAL_AVERAGES.propertyValue;
+    const nationalAverageEarnings1999 = NATIONAL_AVERAGES.earningsWeekly;
 
     if (numberOfBedrooms < bedWeightsAndCaps.numberOfBedrooms.length - 1) {
       bedWeight = bedWeightsAndCaps.weight[numberOfBedrooms]; // find the weight corresponding to the number of beds
@@ -54,10 +55,10 @@ export class SocialRent {
     }
 
     const relativeLocalEarning =
-      this.socialRentAverageEarning / nationalAverageEarnings; // relative local earnings
+      this.countyAverageEarnings1999 / nationalAverageEarnings1999; // relative local earnings
 
     const relativePropertyValue =
-      this.housePriceIndex / nationalAverageProperty; // relative property value
+      this.averageMarketPrice2000 / nationalAverageMarketPrice1999; // relative property value; our local average market price is from 2000 because that's as far back as the HPI goes
 
     const formulaRentWeekly =
       0.7 * nationalAverageRent * relativeLocalEarning * bedWeight +

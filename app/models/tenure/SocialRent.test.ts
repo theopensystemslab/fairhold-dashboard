@@ -145,9 +145,9 @@ const socialRentAdjustments: socialRentAdjustmentTypes = [
 
 beforeEach(() => {
   tenureSocialRent = new SocialRent({
-    countyAverageEarnings: 295.4,
+    countyAverageEarnings1999: 295.4,
     socialRentAdjustments: socialRentAdjustments,
-    housePriceIndex: 75434.35,
+    averageMarketPrice2000: 75434.35,
     landToTotalRatio: 0.3,
     numberOfBedrooms: 3,
   });
@@ -158,9 +158,9 @@ it("can be instantiated with number of bedroome below the threshold", () => {
 
 it("can be instantiated with number of bedrooms above the threshold", () => {
   tenureSocialRent = new SocialRent({
-    countyAverageEarnings: 600,
+    countyAverageEarnings1999: 600,
     socialRentAdjustments: socialRentAdjustments,
-    housePriceIndex: 75434.35,
+    averageMarketPrice2000: 75434.35,
     landToTotalRatio: 0.3,
     numberOfBedrooms: 10,
   });

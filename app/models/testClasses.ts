@@ -13,11 +13,12 @@ export interface ResponseData {
   buildPrice: number;
   houseAge: number;
   houseSize: number;
-  averagePrice: number;
+  averageMarketPrice: number;
+  averageMarketPrice2000: number;
   itl3: string;
   gdhi: number;
   averageRentMonthly: number;
-  countyAverageEarnings: number;
+  countyAverageEarnings1999: number;
   socialRentAdjustments: socialRentAdjustmentTypes;
   hpi: number;
   gasBillYearly: number;
@@ -39,7 +40,8 @@ function calculateFairhold(responseData: ResponseData) {
     age: responseData.houseAge,
     size: responseData.houseSize,
     newBuildPricePerMetre: responseData.buildPrice,
-    averageMarketPrice: responseData.averagePrice,
+    averageMarketPrice: responseData.averageMarketPrice,
+    averageMarketPrice2000: responseData.averageMarketPrice2000,
     itl3: responseData.itl3,
   });
 
@@ -47,7 +49,7 @@ function calculateFairhold(responseData: ResponseData) {
   const household = new Household({
     incomePerPersonYearly: responseData.gdhi,
     averageRentYearly: responseData.averageRentMonthly * MONTHS_PER_YEAR,
-    countyAverageEarnings: responseData.countyAverageEarnings,
+    countyAverageEarnings1999: responseData.countyAverageEarnings1999,
     socialRentAdjustments: responseData.socialRentAdjustments,
     housePriceIndex: responseData.hpi,
     gasBillYearly: responseData.gasBillYearly,
