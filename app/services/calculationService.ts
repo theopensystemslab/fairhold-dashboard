@@ -26,10 +26,10 @@ export const getHouseholdData = async (input: Calculation) => {
     const itl3 = await itlService.getByPostcodeDistrict(postcodeDistrict);
     const gdhi = await gdhiService.getByITL3(itl3);
     const gasBillYearly = await gasBillService.getByITL3(itl3);
-    const hpi = await hpiService.getByITL3(itl3);
+    const hpi2000 = await hpiService.getByITL3(itl3);
     const buildPrice = await buildPriceService.getBuildPriceByHouseType(input.houseType);
 
-    const { averagePrice, numberOfTransactions, granularityPostcode } =
+    const { averageMarketPrice, numberOfTransactions, granularityPostcode } =
       await pricesPaidService.getPricesPaidByPostcodeAndHouseType(
         postcodeDistrict,
         postcodeArea,
@@ -40,7 +40,7 @@ export const getHouseholdData = async (input: Calculation) => {
     const averageRentMonthly = await rentService.getByITL3(itl3); 
 
     const socialRentAdjustments = await socialRentAdjustmentsService.getAdjustments();
-    const countyAverageEarnings = await socialRentEarningsService.getByITL3(itl3)
+    const countyAverageEarnings1999 = await socialRentEarningsService.getByITL3(itl3)
 
     return {
       postcode: input.housePostcode,
@@ -48,14 +48,14 @@ export const getHouseholdData = async (input: Calculation) => {
       houseAge: input.houseAge,
       houseBedrooms: input.houseBedrooms,
       houseSize: input.houseSize,
-      averagePrice: parseFloat(averagePrice.toFixed(2)),
+      averageMarketPrice: parseFloat(averageMarketPrice.toFixed(2)),
       itl3,
       gdhi,
-      hpi,
+      hpi2000,
       buildPrice,
       averageRentMonthly,
       socialRentAdjustments,
-      countyAverageEarnings,
+      countyAverageEarnings1999,
       numberOfTransactions,
       granularityPostcode,
       gasBillYearly,

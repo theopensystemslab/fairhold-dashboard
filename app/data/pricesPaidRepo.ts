@@ -3,7 +3,7 @@ import prisma from "./db";
 const MINIMUM_NUMBER_OF_POSTCODES = 30;
 
 interface pricesPaidParams {
-  averagePrice: number;
+  averageMarketPrice: number;
   numberOfTransactions: number;
   granularityPostcode: string;
 }
@@ -17,7 +17,7 @@ const getPricesPaidByPostcodeAndHouseType = async (
     // create the progressive queries
     let numberOfTransactions; // declare the variable for numbers of transactions retrieved
     let granularityPostcode; // declare the granularity of the postcode
-    let averagePrice;
+    let averageMarketPrice;
 
     const pricesPaidSector = await prisma.pricesPaid.aggregate({
       where: {
@@ -81,25 +81,25 @@ const getPricesPaidByPostcodeAndHouseType = async (
         const numberPerArea = pricesPaidArea._count.id;
         numberOfTransactions = numberPerArea; // check the granularity
         granularityPostcode = postcodeArea; // granularity of the postcode when performing the average price search
-        averagePrice = pricesPaidArea._avg.price;
+        averageMarketPrice = pricesPaidArea._avg.price;
       } else {
         numberOfTransactions = numberPerDistrict; // check the granularity
         granularityPostcode = postcodeDistrict; // granularity of the postcode
-        averagePrice = pricesPaidDistrict._avg.price;
+        averageMarketPrice = pricesPaidDistrict._avg.price;
       }
     } else {
       numberOfTransactions = numberPerSector; // check the granularity
       granularityPostcode = postcodeSector; // granularity of the postcode
-      averagePrice = pricesPaidSector._avg.price;
+      averageMarketPrice = pricesPaidSector._avg.price;
     }
 
-    if (averagePrice === null) {
+    if (averageMarketPrice === null) {
       throw new Error("Unable to calculate average price");
     }
 
     // Cast to string as 'not: null' clause in Prisma query does not type narrow
     return {
-      averagePrice,
+      averageMarketPrice,
       numberOfTransactions,
       granularityPostcode,
     } as pricesPaidParams;

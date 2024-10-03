@@ -2,7 +2,7 @@ import { MONTHS_PER_YEAR } from "../constants";
 
 interface ConstructorParams {
   averageRentYearly: number;
-  averagePrice: number;
+  averageMarketPrice: number;
   newBuildPrice: number;
   depreciatedBuildPrice: number;
   landPrice: number;
@@ -36,12 +36,12 @@ export class MarketRent {
 
   private calculateAverageRentLandAndHouse({
     landPrice,
-    averagePrice,
+    averageMarketPrice,
     incomeYearly,
     averageRentYearly,
   }: ConstructorParams) {
     const averageRentMonthly = averageRentYearly / MONTHS_PER_YEAR;
-    const landToTotalRatio = landPrice / averagePrice;
+    const landToTotalRatio = landPrice / averageMarketPrice;
     const averageRentLandMonthly = averageRentMonthly * landToTotalRatio;
     const averageRentHouseMonthly = averageRentMonthly - averageRentLandMonthly;
     const affordability = averageRentYearly / incomeYearly;

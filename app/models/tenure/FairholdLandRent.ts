@@ -4,7 +4,7 @@ import { Mortgage } from "../Mortgage";
 
 interface FairholdLandRentParams {
   averageRentYearly: number;
-  averagePrice: number;
+  averageMarketPrice: number;
   newBuildPrice: number;
   depreciatedBuildPrice: number;
   landPrice: number;
@@ -38,10 +38,10 @@ export class FairholdLandRent {
     incomeYearly,
     averageRentYearly,
     landPrice,
-    averagePrice,
+    averageMarketPrice,
   }: FairholdLandRentParams) {
     const marketRentAffordability = incomeYearly / averageRentYearly;
-    const landToTotalRatio = landPrice / averagePrice;
+    const landToTotalRatio = landPrice / averageMarketPrice;
     const averageRentLandMonthly =
       (averageRentYearly / MONTHS_PER_YEAR) * landToTotalRatio;
 

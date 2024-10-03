@@ -7,7 +7,7 @@ let tenureFairholdLandPurchase: FairholdLandPurchase;
 beforeEach(() => {
   tenureFairholdLandPurchase = new FairholdLandPurchase({
     //incomeYearly: 45816,
-    //averagePrice: 218091.58,
+    //averageMarketPrice: 218091.58,
     newBuildPrice: 186560,
     depreciatedBuildPrice: 110717.45,
     //landPrice: 31531.579,

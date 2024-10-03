@@ -8,7 +8,7 @@ beforeEach(() => {
   tenureFairholdLandRent = new FairholdLandRent({
     averageRentYearly: 20000,
     incomeYearly: 45816,
-    averagePrice: 218091.58,
+    averageMarketPrice: 218091.58,
     newBuildPrice: 186560,
     depreciatedBuildPrice: 110717.45,
     landPrice: 31531.579,

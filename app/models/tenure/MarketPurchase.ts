@@ -2,7 +2,7 @@ import { Mortgage } from "../Mortgage";
 import { MONTHS_PER_YEAR } from "../constants";
 
 interface ConstructorParams {
-  averagePrice: number;
+  averageMarketPrice: number;
   newBuildPrice: number;
   depreciatedBuildPrice: number;
   landPrice: number;
