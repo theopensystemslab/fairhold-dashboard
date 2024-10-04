@@ -58,13 +58,7 @@ export class Household {
       newBuildPrice: this.property.newBuildPrice,
       depreciatedBuildPrice: this.property.depreciatedBuildPrice,
       landPrice: this.property.landPrice,
-      propertyPriceGrowthPerYear:
-        this.forecastParameters.propertyPriceGrowthPerYear,
-      constructionPriceGrowthPerYear:
-        this.forecastParameters.constructionPriceGrowthPerYear,
-      yearsForecast: this.forecastParameters.yearsForecast,
-      maintenanceCostPercentage:
-        this.forecastParameters.maintenanceCostPercentage,
+      forecastParameters: this.forecastParameters,
     });
 
     const marketRent = new MarketRent({
@@ -74,14 +68,7 @@ export class Household {
       depreciatedBuildPrice: this.property.depreciatedBuildPrice,
       landPrice: this.property.landPrice,
       incomeYearly: this.incomeYearly,
-      propertyPriceGrowthPerYear:
-        this.forecastParameters.propertyPriceGrowthPerYear,
-      constructionPriceGrowthPerYear:
-        this.forecastParameters.constructionPriceGrowthPerYear,
-      yearsForecast: this.forecastParameters.yearsForecast,
-      maintenanceCostPercentage:
-        this.forecastParameters.maintenanceCostPercentage,
-      rentGrowthPerYear: this.forecastParameters.rentGrowthPerYear,
+      forecastParameters: this.forecastParameters,
     });
 
     const socialRent = new SocialRent({
@@ -95,12 +82,7 @@ export class Household {
     const fairholdLandPurchase = new FairholdLandPurchase({
       newBuildPrice: this.property.newBuildPrice,
       depreciatedBuildPrice: this.property.depreciatedBuildPrice,
-      constructionPriceGrowthPerYear:
-        this.forecastParameters.constructionPriceGrowthPerYear,
-      yearsForecast: this.forecastParameters.yearsForecast,
-      maintenanceCostPercentage:
-        this.forecastParameters.maintenanceCostPercentage,
-      incomeGrowthPerYear: this.forecastParameters.incomeGrowthPerYear,
+      forecastParameters: this.forecastParameters,
       affordability: marketPurchase.affordability,
       fairhold: new Fairhold({
         affordability: marketPurchase.affordability,
@@ -115,17 +97,7 @@ export class Household {
       depreciatedBuildPrice: this.property.depreciatedBuildPrice, // depreciated building price
       landPrice: this.property.landPrice, // land price
       incomeYearly: this.incomeYearly, // income
-      affordabilityThresholdIncomePercentage:
-        this.forecastParameters.affordabilityThresholdIncomePercentage, //  affordability threshold percentage
-      propertyPriceGrowthPerYear:
-        this.forecastParameters.propertyPriceGrowthPerYear, // property price growth per year
-      constructionPriceGrowthPerYear:
-        this.forecastParameters.constructionPriceGrowthPerYear, // construction price growth per year
-      yearsForecast: this.forecastParameters.yearsForecast, // years forecast
-      maintenanceCostPercentage:
-        this.forecastParameters.maintenanceCostPercentage, // maintenance cost percentage
-      incomeGrowthPerYear: this.forecastParameters.incomeGrowthPerYear, // income growth per year
-      rentGrowthPerYear: this.forecastParameters.rentGrowthPerYear, // rent growth per year
+      forecastParameters: this.forecastParameters,
 
       fairhold: new Fairhold({
         affordability: marketRent.affordability,

@@ -1,26 +1,28 @@
 import { MONTHS_PER_YEAR } from "../constants";
-
-interface ConstructorParams {
+import { ForecastParameters,  DEFAULT_FORECAST_PARAMETERS } from '../ForecastParameters'; 
+interface MarketRentParams {
   averageRentYearly: number;
   averagePrice: number;
   newBuildPrice: number;
   depreciatedBuildPrice: number;
   landPrice: number;
   incomeYearly: number;
-  propertyPriceGrowthPerYear: number;
-  constructionPriceGrowthPerYear: number;
-  yearsForecast: number;
-  maintenanceCostPercentage: number;
-  rentGrowthPerYear: number;
+  forecastParameters: ForecastParameters;
 }
 
 export class MarketRent {
+  params: MarketRentParams;
   public affordability: number;
   public averageRentMonthly: number;
   public averageRentLandMonthly: number;
   public averageRentHouseMonthly: number;
 
-  constructor(params: ConstructorParams) {
+  constructor(params: MarketRentParams) {
+    this.params = params;
+    this.params.forecastParameters = {
+      ...DEFAULT_FORECAST_PARAMETERS,
+      ...params.forecastParameters
+    };
     const {
       averageRentMonthly,
       averageRentLandMonthly,
@@ -39,7 +41,7 @@ export class MarketRent {
     averagePrice,
     incomeYearly,
     averageRentYearly,
-  }: ConstructorParams) {
+  }: MarketRentParams) {
     const averageRentMonthly = averageRentYearly / MONTHS_PER_YEAR;
     const landToTotalRatio = landPrice / averagePrice;
     const averageRentLandMonthly = averageRentMonthly * landToTotalRatio;
