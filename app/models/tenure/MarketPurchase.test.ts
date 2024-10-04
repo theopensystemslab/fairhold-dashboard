@@ -6,7 +6,7 @@ beforeEach(() => {
   const forecastParameters = {
     maintenanceCostPercentage: 0.0125, // percentage maintenance cost
     incomeGrowthPerYear: 0.04, // 4% income growth per year
-    constructionPriceGrowthPerYear: 0.025, // 2.5%
+    consumerPriceGrowthPerYear: 0.025, // 2.5%
     rentGrowthPerYear: 0.03, // 3%
     propertyPriceGrowthPerYear: 0.05, // 5%
     yearsForecast: 40, // 40 years
@@ -20,8 +20,8 @@ beforeEach(() => {
     depreciatedBuildPrice: 110717.45,
     landPrice: 31531.579,
     propertyPriceGrowthPerYear: forecastParameters.propertyPriceGrowthPerYear,
-    constructionPriceGrowthPerYear:
-      forecastParameters.constructionPriceGrowthPerYear,
+    consumerPriceGrowthPerYear:
+      forecastParameters.consumerPriceGrowthPerYear,
     yearsForecast: forecastParameters.yearsForecast,
     maintenanceCostPercentage: forecastParameters.maintenanceCostPercentage,
   });

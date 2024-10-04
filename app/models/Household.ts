@@ -64,8 +64,8 @@ export class Household {
       landPrice: this.property.landPrice,
       propertyPriceGrowthPerYear:
         this.forecastParameters.propertyPriceGrowthPerYear,
-      constructionPriceGrowthPerYear:
-        this.forecastParameters.constructionPriceGrowthPerYear,
+      consumerPriceGrowthPerYear:
+        this.forecastParameters.consumerPriceGrowthPerYear,
       yearsForecast: this.forecastParameters.yearsForecast,
       maintenanceCostPercentage:
         this.forecastParameters.maintenanceCostPercentage,
@@ -80,8 +80,8 @@ export class Household {
       incomeYearly: this.incomeYearly,
       propertyPriceGrowthPerYear:
         this.forecastParameters.propertyPriceGrowthPerYear,
-      constructionPriceGrowthPerYear:
-        this.forecastParameters.constructionPriceGrowthPerYear,
+      consumerPriceGrowthPerYear:
+        this.forecastParameters.consumerPriceGrowthPerYear,
       yearsForecast: this.forecastParameters.yearsForecast,
       maintenanceCostPercentage:
         this.forecastParameters.maintenanceCostPercentage,
@@ -99,8 +99,8 @@ export class Household {
     const fairholdLandPurchase = new FairholdLandPurchase({
       newBuildPrice: this.property.newBuildPrice,
       depreciatedBuildPrice: this.property.depreciatedBuildPrice,
-      constructionPriceGrowthPerYear:
-        this.forecastParameters.constructionPriceGrowthPerYear,
+      consumerPriceGrowthPerYear:
+        this.forecastParameters.consumerPriceGrowthPerYear,
       yearsForecast: this.forecastParameters.yearsForecast,
       maintenanceCostPercentage:
         this.forecastParameters.maintenanceCostPercentage,
@@ -123,8 +123,8 @@ export class Household {
         this.forecastParameters.affordabilityThresholdIncomePercentage, //  affordability threshold percentage
       propertyPriceGrowthPerYear:
         this.forecastParameters.propertyPriceGrowthPerYear, // property price growth per year
-      constructionPriceGrowthPerYear:
-        this.forecastParameters.constructionPriceGrowthPerYear, // construction price growth per year
+      consumerPriceGrowthPerYear:
+        this.forecastParameters.consumerPriceGrowthPerYear, // construction price growth per year
       yearsForecast: this.forecastParameters.yearsForecast, // years forecast
       maintenanceCostPercentage:
         this.forecastParameters.maintenanceCostPercentage, // maintenance cost percentage
@@ -154,7 +154,7 @@ export class Household {
         fairholdLandRent: this.tenure.fairholdLandRent,
         property: this.property,
         propertyPriceGrowthPerYear: params.forecastParameters.propertyPriceGrowthPerYear,
-        constructionPriceGrowthPerYear: params.forecastParameters.constructionPriceGrowthPerYear,
+        consumerPriceGrowthPerYear: params.forecastParameters.consumerPriceGrowthPerYear,
         rentGrowthPerYear: params.forecastParameters.rentGrowthPerYear,
         yearsForecast: params.forecastParameters.yearsForecast,
         maintenanceCostPercentage: params.forecastParameters.maintenanceCostPercentage,
