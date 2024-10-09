@@ -56,14 +56,14 @@ describe("POST API Route", () => {
     expect(res).toEqual(NextResponse.json(processedData));
   });
 
-  /* it("should return an error for invalid input", async () => {
-    const invalidInput = calculationSchema.parse({
+  it("should return an error for invalid input", async () => {
+    const invalidInput = {
       housePostcode: "SE17 1PE",
       houseSize: 100,
       houseAge: 3,
-      houseBedrooms: 2,
+      houseBedrooms: -1,
       houseType: "D",
-    });
+    };
 
     const req = mockRequest(invalidInput);
 
@@ -75,7 +75,7 @@ describe("POST API Route", () => {
       { status: 500 }
     );
   });
- */
+
   it("should handle service errors", async () => {
     const validApiInput = calculationSchema.parse({
       housePostcode: "SE17 1PE",
