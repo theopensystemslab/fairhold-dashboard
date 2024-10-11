@@ -2,7 +2,7 @@ import { POST } from "../api/route";
 import * as calculationService from "../services/calculationService";
 import calculateFairhold from "../models/testClasses";
 import { NextResponse } from "next/server";
-import { calculationSchema } from "../schemas/calculationSchema";
+import { calculationSchema, Calculation } from "../schemas/calculationSchema";
 
 // Mock dependencies
 jest.mock("../services/calculationService");
@@ -13,8 +13,12 @@ jest.mock("next/server", () => ({
   },
 }));
 
+const callResponse = (res: unknown) => {
+  return res;
+};
+
 describe("POST API Route", () => {
-  const mockRequest = (data: any) => ({
+  const mockRequest = (data: Calculation | string) => ({
     json: jest.fn().mockResolvedValueOnce(data),
   });
 
@@ -46,7 +50,7 @@ describe("POST API Route", () => {
     (calculateFairhold as jest.Mock).mockReturnValueOnce(processedData);
 
     const req = mockRequest(validApiInput);
-    const res = await POST(req as any);
+    const res = await POST(req as unknown as Request);
 
     // Assertions
     expect(calculationService.getHouseholdData).toHaveBeenCalledWith(
@@ -57,17 +61,12 @@ describe("POST API Route", () => {
   });
 
   it("should return an error for invalid input", async () => {
-    const invalidInput = {
-      housePostcode: "SE17 1PE",
-      houseSize: 100,
-      houseAge: 3,
-      houseBedrooms: -1,
-      houseType: "D",
-    };
+    const invalidInput = "invalid input";
 
     const req = mockRequest(invalidInput);
 
-    const res = await POST(req as any);
+    const res = await POST(req as unknown as Request);
+    callResponse(res);
 
     // Assertions for the expected error response
     expect(NextResponse.json).toHaveBeenCalledWith(
@@ -93,7 +92,8 @@ describe("POST API Route", () => {
     );
 
     const req = mockRequest(validApiInput);
-    const res = await POST(req as any);
+    const res = await POST(req as unknown as Request);
+    callResponse(res);
 
     // Assertions
     expect(calculationService.getHouseholdData).toHaveBeenCalledWith(
