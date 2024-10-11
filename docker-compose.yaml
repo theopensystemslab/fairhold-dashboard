@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  backup:
+    image: postgres:latest
+    env_file: .env
+    volumes:
+      - ./backups:/backups
+    command: >
+      bash -c "PGPASSWORD=\$POSTGRES_PASSWORD PGSSLMODE=require pg_dump 
+      -h \"\$POSTGRES_HOST\" 
+      -U \"\$POSTGRES_USER\" 
+      -d \"\$POSTGRES_DATABASE\" 
+      -F c -b -v -w 
+      -f \"/backups/\$(date +%F).dump\""
+    profiles:
+      - backup
