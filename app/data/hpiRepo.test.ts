@@ -1,5 +1,5 @@
 // __tests__/hpiRepo.test.ts
-import { hpi2020Repo } from "./hpiRepo"; // Adjust the import according to your file structure
+import { hpi2000Repo } from "./hpiRepo"; // Adjust the import according to your file structure
 import prisma from "./db"; // Your Prisma setup file
 
 jest.mock("./db", () => ({
@@ -8,7 +8,7 @@ jest.mock("./db", () => ({
   },
 }));
 
-describe("hpi2020Repo", () => {
+describe("hpi2000Repo", () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
@@ -19,11 +19,11 @@ describe("hpi2020Repo", () => {
 
     // Mock the Prisma client response
     (prisma.hPI.aggregate as jest.Mock).mockResolvedValueOnce({
-      _avg: { hpi2020: mockAverageHpi },
+      _avg: { hpi2000: mockAverageHpi },
     });
 
     // Call the function
-    const result = await hpi2020Repo.getHPIByITL3(itl3);
+    const result = await hpi2000Repo.getHPIByITL3(itl3);
 
     // Assertions
     expect(result).toBe(mockAverageHpi);
@@ -34,7 +34,7 @@ describe("hpi2020Repo", () => {
         },
       },
       _avg: {
-        hpi2020: true,
+        hpi2000: true,
       },
     });
   });
@@ -44,12 +44,12 @@ describe("hpi2020Repo", () => {
 
     // Mock rejection of the Prisma client
     (prisma.hPI.aggregate as jest.Mock).mockResolvedValueOnce({
-      _avg: { hpi2020: null },
+      _avg: { hpi2000: null },
     });
 
     // Call the function and expect an error
-    await expect(hpi2020Repo.getHPIByITL3(itl3)).rejects.toThrow(
-      `Data error: Unable to find hpi2020 for itl3 ${itl3}`
+    await expect(hpi2000Repo.getHPIByITL3(itl3)).rejects.toThrow(
+      `Data error: Unable to find hpi2000 for itl3 ${itl3}`
     );
   });
 
@@ -62,8 +62,8 @@ describe("hpi2020Repo", () => {
     );
 
     // Call the function and expect an error
-    await expect(hpi2020Repo.getHPIByITL3(itl3)).rejects.toThrow(
-      `Data error: Unable to find hpi2020 for itl3 ${itl3}`
+    await expect(hpi2000Repo.getHPIByITL3(itl3)).rejects.toThrow(
+      `Data error: Unable to find hpi2000 for itl3 ${itl3}`
     );
   });
 });

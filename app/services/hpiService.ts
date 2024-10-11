@@ -1,7 +1,7 @@
-import { hpi2020Repo } from "../data/hpiRepo";
+import { hpi2000Repo } from "../data/hpiRepo";
 
 const getByITL3 = async (itl3: string) => {
-  return await hpi2020Repo.getHPIByITL3(itl3);
+  return await hpi2000Repo.getHPIByITL3(itl3);
 };
 
 export const hpiService = {
