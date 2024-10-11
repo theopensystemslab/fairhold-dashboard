@@ -33,7 +33,7 @@ model HPI {
   region   String? @db.VarChar(250)
   itl3     String? @db.VarChar(250)
   ladCode  String? @map("ladcode") @db.VarChar(250)
-  hpi_2000 Float?
+  hpi2000 Float? @map("hpi_2000")
 
   @@map("hpi")
 }
