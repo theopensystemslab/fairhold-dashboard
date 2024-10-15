@@ -31,7 +31,7 @@ export class Mortgage {
   /**
    * The principle is the value of the property, minus the deposit
    */
-  principal: number;
+  principle: number;
   monthlyPayment: number;
   totalMortgageCost: number;
   yearlyPaymentBreakdown: MortgageBreakdown;
@@ -43,7 +43,7 @@ export class Mortgage {
     this.termYears = params.mortgageTerm || DEFAULT_MORTGAGE_TERM;
 
     // Computed properties, order is significant
-    this.principal = this.calculateMortgagePrinciple();
+    this.principle = this.calculateMortgagePrinciple();
 
     const { monthlyPayment, totalMortgageCost } =
       this.calculateMonthlyMortgagePayment();
@@ -54,8 +54,8 @@ export class Mortgage {
   }
 
   private calculateMortgagePrinciple() {
-    const principal = this.propertyValue * (1 - this.initialDeposit);
-    return principal;
+    const principle = this.propertyValue * (1 - this.initialDeposit);
+    return principle;
   }
 
   private calculateMonthlyMortgagePayment() {
@@ -63,7 +63,7 @@ export class Mortgage {
     const numberOfPayments = this.termYears * MONTHS_PER_YEAR;
 
     let monthlyPayment =
-      (this.principal *
+      (this.principle *
         monthlyInterestRate *
         Math.pow(1 + monthlyInterestRate, numberOfPayments)) /
       (Math.pow(1 + monthlyInterestRate, numberOfPayments) - 1);
