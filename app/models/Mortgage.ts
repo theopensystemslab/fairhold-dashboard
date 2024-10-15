@@ -35,6 +35,7 @@ export class Mortgage {
   monthlyPayment: number;
   totalMortgageCost: number;
   yearlyPaymentBreakdown: MortgageBreakdown;
+  totalInterest: number;
 
   constructor(params: MortgageParams) {
     this.propertyValue = params.propertyValue;
@@ -51,6 +52,7 @@ export class Mortgage {
     this.totalMortgageCost = totalMortgageCost;
 
     this.yearlyPaymentBreakdown = this.calculateYearlyPaymentBreakdown();
+    this.totalInterest = this.calculateTotalInterest();
   }
 
   private calculateMortgagePrinciple() {
@@ -109,5 +111,10 @@ export class Mortgage {
     }
 
     return yearlyPaymentBreakdown;
+  }
+  private calculateTotalInterest() {
+    const totalInterest = parseFloat((this.principal * this.interestRate * this.termYears).toFixed(2))
+    console.log("Total interest: ", totalInterest)
+    return totalInterest
   }
 }
