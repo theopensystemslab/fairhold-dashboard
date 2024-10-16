@@ -1,10 +1,16 @@
 import { Fairhold } from "../Fairhold";
 import { DEFAULT_FORECAST_PARAMETERS, ForecastParameters } from "../ForecastParameters";
 import { FairholdLandRent } from "./FairholdLandRent";
+import { MarketPurchase } from "./MarketPurchase"
 
 let tenureFairholdLandRent: FairholdLandRent;
 
 beforeEach(() => {
+    // partial MarketPurchase object with only necessary properties for test (instead of mocking a whole MarketPurchase object)
+    const partialMarketPurchase: Pick<MarketPurchase, 'interestPaid'> = {
+      interestPaid: 200000, 
+    };
+
   const forecastParameters: ForecastParameters = {
     ...DEFAULT_FORECAST_PARAMETERS,
   };
@@ -22,7 +28,8 @@ beforeEach(() => {
       landPriceOrRent: 20000,
     }),
     forecastParameters: forecastParameters,
-  });
+    marketPurchase: partialMarketPurchase as MarketPurchase
+  })
 });
 
 it("can be instantiated", () => {
