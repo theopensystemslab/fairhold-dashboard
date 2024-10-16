@@ -16,6 +16,7 @@ export class MarketPurchase {
   public affordability: number;
   public houseMortgage: Mortgage;
   public landMortgage: Mortgage;
+  public interestPaid: number;
 
   constructor(params: MarketPurchaseParams) {
     this.params = params;
@@ -32,6 +33,8 @@ export class MarketPurchase {
     });
 
     this.affordability = this.calculateAffordability(params);
+
+    this.interestPaid = this.calculateInterestPaid();
   }
 
   private calculateAffordability({ incomeYearly }: MarketPurchaseParams) {
@@ -40,6 +43,10 @@ export class MarketPurchase {
         this.houseMortgage.monthlyPayment * MONTHS_PER_YEAR) /
       incomeYearly;
     return affordability;
+  }
+
+  private calculateInterestPaid() {
+    return this.houseMortgage.totalInterest + this.landMortgage.totalInterest
   }
 
 }
