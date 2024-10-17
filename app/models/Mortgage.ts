@@ -43,7 +43,7 @@ export class Mortgage {
     this.termYears = params.mortgageTerm || DEFAULT_MORTGAGE_TERM;
 
     // Computed properties, order is significant
-    this.principal = this.calculateMortgageprincipal();
+    this.principal = this.calculateMortgagePrincipal();
 
     const { monthlyPayment, totalMortgageCost } =
       this.calculateMonthlyMortgagePayment();
