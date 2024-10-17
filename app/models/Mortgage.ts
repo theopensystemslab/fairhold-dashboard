@@ -114,7 +114,6 @@ export class Mortgage {
   }
   private calculateTotalInterest() {
     const totalInterest = parseFloat((this.principal * this.interestRate * this.termYears).toFixed(2))
-    console.log("Total interest: ", totalInterest)
     return totalInterest
   }
 }
