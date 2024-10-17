@@ -88,6 +88,7 @@ export class Household {
         affordability: marketPurchase.affordability,
         landPriceOrRent: this.property.landPrice,
       }),
+      marketPurchase: marketPurchase
     });
 
     const fairholdLandRent = new FairholdLandRent({
@@ -103,6 +104,8 @@ export class Household {
         affordability: marketRent.affordability,
         landPriceOrRent: averageRentYearly,
       }), // fairhold object
+
+      marketPurchase: marketPurchase
     });
 
     return {

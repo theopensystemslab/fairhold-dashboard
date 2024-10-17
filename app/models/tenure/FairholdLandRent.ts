@@ -2,6 +2,7 @@ import { MONTHS_PER_YEAR } from "../constants";
 import { Fairhold } from "../Fairhold";
 import { Mortgage } from "../Mortgage";
 import { ForecastParameters } from '../ForecastParameters'; 
+import { MarketPurchase } from "./MarketPurchase";
 
 interface FairholdLandRentParams {
   averageRentYearly: number;
@@ -12,6 +13,7 @@ interface FairholdLandRentParams {
   incomeYearly: number;
   fairhold: Fairhold;
   forecastParameters: ForecastParameters;
+  marketPurchase: MarketPurchase;
 }
 
 export class FairholdLandRent {
@@ -20,6 +22,9 @@ export class FairholdLandRent {
   depreciatedHouseMortgage: Mortgage;
   /** discounted value of the monthly land rent according to fairhold */
   discountedLandRentMonthly: number;
+  interestPaid: number;
+  /** interest saved relative to market purchase, pounds */
+  interestSaved: number;
 
   constructor(params: FairholdLandRentParams) {
     this.params = params;
@@ -29,6 +34,12 @@ export class FairholdLandRent {
 
     this.discountedLandRentMonthly =
       this.calculateDiscountedLandRentMonthly(params);
+
+    this.interestPaid = 
+      this.calculateInterestPaid();
+
+    this.interestSaved = 
+      this.calculateInterestSaved(params.marketPurchase);
   }
 
   private calculateDiscountedLandRentMonthly({
@@ -50,5 +61,13 @@ export class FairholdLandRent {
       fairholdLandRent.discountedLandPriceOrRent;
 
     return discountedLandRentMonthly;
+  }
+
+  private calculateInterestPaid() {
+    return this.depreciatedHouseMortgage.totalInterest;
+  }
+
+  private calculateInterestSaved(marketPurchase: MarketPurchase): number {
+    return marketPurchase.interestPaid - this.interestPaid;
   }
 }
