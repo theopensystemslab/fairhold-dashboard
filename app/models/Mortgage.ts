@@ -53,7 +53,7 @@ export class Mortgage {
     this.yearlyPaymentBreakdown = this.calculateYearlyPaymentBreakdown();
   }
 
-  private calculateMortgageprincipal() {
+  private calculateMortgagePrincipal() {
     const principal = this.propertyValue * (1 - this.initialDeposit);
     return principal;
   }
