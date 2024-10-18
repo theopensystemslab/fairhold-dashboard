@@ -3,7 +3,6 @@ version: '3.8'
 services:
   backup:
     image: postgres:latest
-    env_file: .env
     volumes:
       - ./backups:/backups
     command: >
@@ -12,6 +11,6 @@ services:
       -U \"\$POSTGRES_USER\" 
       -d \"\$POSTGRES_DATABASE\" 
       -F c -b -v -w 
-      -f \"/backups/\$(date +%F).dump\""
+      -f \"/backups/\$(date +'%Y-%m-%d_%H-%M-%S').dump\""
     profiles:
       - backup
