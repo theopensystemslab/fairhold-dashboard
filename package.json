@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "backup": "docker-compose --profile backup up",
+    "backup": "docker-compose --profile backup --env-file .env.production up",
     "build": "npm run prisma:generate && next build",
     "start": "next start",
     "lint": "next lint",
