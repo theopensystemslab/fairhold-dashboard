@@ -30,3 +30,6 @@ export const NATIONAL_AVERAGES: nationalAverageType = {
   propertyValue: 49750,
   earningsWeekly: 316.4,
 };
+
+export const MAINTENANCE_LEVELS = ["0.015", "0.02", "0.0375"];
+
