@@ -23,7 +23,7 @@ export const HOUSE_TYPES = ["D", "S", "T", "F"] as const;
 
 export type HouseType = (typeof HOUSE_TYPES)[number];
 
-export type MaintenanceSpend = (typeof MAINTENANCE_LEVELS)[number]
+export type MaintenancePercentage = (typeof MAINTENANCE_LEVELS)[number]
 
 export class Property {
   postcode: string;
@@ -34,7 +34,7 @@ export class Property {
    * Size of the house in squares meters
    */
   size: number;
-  maintenancePercentage: MaintenanceSpend;
+  maintenancePercentage: MaintenancePercentage;
   /**
    * Average build price per metre of a new house
    */
