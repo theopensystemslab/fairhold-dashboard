@@ -22,6 +22,12 @@ const houseTypes = {
   Flat: "F",
 }; // variables associated to the house types
 
+const maintenance = {
+  "Low (1.5%)": "0.015",
+  "Medium (2.0%)": "0.02%",
+  "High (3.75%)": "0.0375",
+}; // variables associated with maintenance spend levels
+
 const CalculatorInput = () => {
   const {
     register,
@@ -114,6 +120,20 @@ const CalculatorInput = () => {
               register={register}
               error={errors.houseBedrooms?.message}
             />
+            
+            <h2 className="mb-1 font-bold">Maintenance spend</h2>
+            <div className="flex">
+              {Object.entries(maintenance).map(([label, value]) => (
+                <RadioButton
+                  key={label}
+                  label={label}
+                  id={label}
+                  value={value}
+                  register={register}
+                />
+              ))}
+            </div>
+
             <button
               className="text-white bg-black w-1/3 rounded-xl"
               type="submit"
