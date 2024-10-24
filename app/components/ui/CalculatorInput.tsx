@@ -21,6 +21,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
+const maintenance = {
+  "Low (1.5%)": "0.015",
+  "Medium (2.0%)": "0.02%",
+  "High (3.75%)": "0.0375",
+}; // variables associated with maintenance spend levels
+
 const CalculatorInput = () => {
   const methods = useForm<formType>({
     resolver: zodResolver(formSchema),
