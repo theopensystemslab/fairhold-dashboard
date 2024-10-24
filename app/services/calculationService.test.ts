@@ -51,6 +51,7 @@ describe("getHouseholdData", () => {
     houseAge: number;
     houseBedrooms: number;
     houseSize: number;
+    maintenanceSpend: "0.015" | "0.02" | "0.0375";
   }
 
   const mockInput: MockInputType = {
@@ -59,6 +60,7 @@ describe("getHouseholdData", () => {
     houseAge: 20,
     houseBedrooms: 3,
     houseSize: 100,
+    maintenanceSpend: "0.02"
   };
 
   beforeEach(() => {
