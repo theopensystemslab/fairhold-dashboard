@@ -37,7 +37,7 @@ const CalculatorInput = () => {
     resolver: zodResolver(calculationSchema),
     defaultValues: {
       houseType: "D", // Default value for house type
-      maintenanceSpend: "0.02",
+      maintenancePercentage: "0.02",
     },
   });
 
@@ -131,9 +131,9 @@ const CalculatorInput = () => {
                   label={label}
                   id={`maintenance-${label}`}
                   value={value}
-                  name="maintenanceSpend"
+                  name="maintenancePercentage"
                   register={register}
-                  error={errors.maintenanceSpend?.message}
+                  error={errors.maintenancePercentage?.message}
                 />
               ))}
             </div>

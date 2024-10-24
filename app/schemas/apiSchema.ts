@@ -25,10 +25,10 @@ export const apiSchema = z.object({
       message: `houseType is required and must be one of ${HOUSE_TYPES}`,
     }
   ),
-  maintenanceSpend: MaintenanceEnum.refine(
+  maintenancePercentage: MaintenanceEnum.refine(
     (value) => MaintenanceEnum.options.includes(value),
     {
-      message: `maintenanceSpend is required and must be one of ${MAINTENANCE_LEVELS}`,
+      message: `maintenancePercentage is required and must be one of ${MAINTENANCE_LEVELS}`,
     }
   ),
 });
