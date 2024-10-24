@@ -22,6 +22,12 @@ const houseTypes = {
   Flat: "F",
 }; // variables associated to the house types
 
+const maintenance = {
+  "Low (1.5%)": "0.015",
+  "Medium (2.0%)": "0.02",
+  "High (3.75%)": "0.0375",
+}; // variables associated with maintenance spend levels
+
 const CalculatorInput = () => {
   const {
     register,
@@ -31,6 +37,7 @@ const CalculatorInput = () => {
     resolver: zodResolver(calculationSchema),
     defaultValues: {
       houseType: "D", // Default value for house type
+      maintenanceSpend: "0.02",
     },
   });
 
@@ -90,8 +97,9 @@ const CalculatorInput = () => {
                 <RadioButton
                   key={label}
                   label={label}
-                  id={label}
+                  id={`houseType-${label}`}
                   value={value}
+                  name="houseType"
                   register={register}
                   error={errors.houseType?.message}
                 />
@@ -114,6 +122,22 @@ const CalculatorInput = () => {
               register={register}
               error={errors.houseBedrooms?.message}
             />
+            
+            <h2 className="mb-1 font-bold">Maintenance spend</h2>
+            <div className="flex">
+              {Object.entries(maintenance).map(([label, value]) => (
+                <RadioButton
+                  key={label}
+                  label={label}
+                  id={`maintenance-${label}`}
+                  value={value}
+                  name="maintenanceSpend"
+                  register={register}
+                  error={errors.maintenanceSpend?.message}
+                />
+              ))}
+            </div>
+
             <button
               className="text-white bg-black w-1/3 rounded-xl"
               type="submit"
