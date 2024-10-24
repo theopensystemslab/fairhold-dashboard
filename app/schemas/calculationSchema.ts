@@ -1,13 +1,13 @@
 import { z } from "zod";
 import { parse as parsePostcode, fix as fixPostcode } from "postcode";
 import { HOUSE_TYPES } from "../models/Property";
+import { MAINTENANCE_LEVELS } from "../models/constants";
 
 // Type not exported by postcode lib directly
 type ValidPostcode = Extract<ReturnType<typeof parsePostcode>, { valid: true }>;
 
 const HouseTypeEnum = z.enum(HOUSE_TYPES);
 
-export const MAINTENANCE_LEVELS = ["0.015", "0.02", "0.0375"] as const;
 const MaintenanceEnum = z.enum(MAINTENANCE_LEVELS);
 
 /**
