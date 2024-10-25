@@ -5,10 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Household } from "@/app/models/Household";
 import Dashboard from "./Dashboard";
 import { formSchema, formType } from "@/app/schemas/formSchema";
-import {
-  calculationSchema,
-  Calculation,
-} from "@/app/schemas/calculationSchema";
+
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { ClipLoader } from "react-spinners";
 import {
@@ -23,13 +20,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-
-const houseTypes = {
-  Detached: "D",
-  Semidetached: "S",
-  Terrace: "T",
-  Flat: "F",
-};
 
 const CalculatorInput = () => {
   const methods = useForm<formType>({

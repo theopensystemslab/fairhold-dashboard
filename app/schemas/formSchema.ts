@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { parse as parsePostcode, fix as fixPostcode } from "postcode";
+import { fix as fixPostcode } from "postcode";
 import { HOUSE_TYPES } from "../models/Property";
 
 const HouseTypeEnum = z.enum(HOUSE_TYPES);
