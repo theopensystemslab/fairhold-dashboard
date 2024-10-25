@@ -1,0 +1,6 @@
+{
+    "entryPoints": ["app/models/**/*.ts"],
+    "entryPointStrategy": "expand",
+    "exclude": ["**/*.test.ts"],
+    "out": "docs",    
+  }
