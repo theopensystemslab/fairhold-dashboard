@@ -1,5 +1,5 @@
 import { ValidPostcode } from "../schemas/apiSchema";
-import { DEFAULT_FORECAST_PARAMETERS } from "./ForecastParameters";
+import { createForecastParameters } from "./ForecastParameters";
 import { Household } from "./Household";
 import { HouseType, MaintenancePercentage, Property } from "./Property";
 import { MONTHS_PER_YEAR } from "./constants";
@@ -57,7 +57,7 @@ function calculateFairhold(responseData: ResponseData) {
     housePriceIndex: responseData.hpi,
     gasBillYearly: responseData.gasBillYearly,
     property: property,
-    forecastParameters: DEFAULT_FORECAST_PARAMETERS,
+    forecastParameters: createForecastParameters(responseData.maintenancePercentage),
   });
   console.log(household);
   return household;
