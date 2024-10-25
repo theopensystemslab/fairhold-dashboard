@@ -118,6 +118,7 @@ describe("getHouseholdData", () => {
       houseAge: mockInput.houseAge,
       houseBedrooms: mockInput.houseBedrooms,
       houseSize: mockInput.houseSize,
+      maintenancePercentage: mockInput.maintenancePercentage,
       averagePrice: parseFloat(mockPricesPaid.averagePrice.toFixed(2)),
       itl3: mockITL3,
       gdhi: mockGDHI,
