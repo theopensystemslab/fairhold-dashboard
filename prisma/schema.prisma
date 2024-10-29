@@ -29,11 +29,11 @@ model GDHI {
 }
 
 model HPI {
-  id       Int     @id @default(autoincrement())
-  region   String? @db.VarChar(250)
-  itl3     String? @db.VarChar(250)
-  ladCode  String? @map("ladcode") @db.VarChar(250)
-  hpi2000 Float? @map("hpi_2000")
+  id      Int     @id @default(autoincrement())
+  region  String? @db.VarChar(250)
+  itl3    String? @db.VarChar(250)
+  ladCode String? @map("ladcode") @db.VarChar(250)
+  hpi2000 Float?  @map("hpi_2000")
 
   @@map("hpi")
 }

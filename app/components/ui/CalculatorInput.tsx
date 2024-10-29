@@ -2,126 +2,168 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
 import { Household } from "@/app/models/Household";
 import Dashboard from "./Dashboard";
-import {
-  calculationSchema,
-  Calculation,
-} from "@/app/schemas/calculationSchema";
+import { formSchema, formType } from "@/app/schemas/formSchema";
 
-import RadioButton from "./RadioButton";
-import InputField from "./InputField";
-
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { ClipLoader } from "react-spinners";
-
-const houseTypes = {
-  Detached: "D",
-  Semidetached: "S",
-  Terrace: "T",
-  Flat: "F",
-}; // variables associated to the house types
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormDescription,
+  FormControl,
+  FormMessage,
+} from "@/components/ui/form";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 const CalculatorInput = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<Calculation>({
-    resolver: zodResolver(calculationSchema),
+  const methods = useForm<formType>({
+    resolver: zodResolver(formSchema),
     defaultValues: {
-      houseType: "D", // Default value for house type
+      houseType: "D",
     },
   });
 
-  // create different view states: one for form and one for graph dashboard
   const [view, setView] = useState("form");
   const [data, setData] = useState<Household | null>(null);
 
-  const onSubmit = async (data: Calculation) => {
+  const onSubmit = async (data: formType) => {
     setView("loading");
     const response = await fetch("/api", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data), // pass the form data to the API
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
     });
-
     const processedData = await response.json();
-
-    // saved processedData & switch to dashboard view
     setData(processedData);
     setView("dashboard");
   };
 
   if (view === "form") {
     return (
-      <div className="flex -centeritems justify-center text-black mt-5">
-        <div className=" w-1/2  border-black border-2 rounded-lg ">
-          <div className="bg-black text-white h-48 flex items-center justify-center">
-            <h1 className="text-6xl">Fairhold Calculator</h1>
-          </div>
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className=" flex flex-col m-5"
-          >
-            <h2 className="mb-1 font-bold">House postcode</h2>
-            <InputField
-              id="housePostcode"
-              type="text"
-              placeholder="set the postcode, e.g. SE17 1PE"
-              register={register}
-              error={errors.housePostcode?.message}
+      <div className="flex items-center justify-center text-black mt-5">
+        <Form {...methods}>
+          <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-8">
+            <FormField
+              control={methods.control}
+              name="housePostcode"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Property postcode</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Enter the property postcode, e.g. SE17 1PE"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription>Postcode of the property.</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
 
-            <h2 className="mb-1 font-bold">House size</h2>
-            <InputField
-              type="number"
-              placeholder="Provide the house size in m square, e.g. 66"
-              id="houseSize"
-              register={register}
-              error={errors.houseSize?.message}
+            <FormField
+              control={methods.control}
+              name="houseSize"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>House size</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Enter the house size in square meters, e.g. 80"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription>The size of the house.</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
 
-            <h2 className="mb-1 font-bold">House type</h2>
-            <div className="flex">
-              {Object.entries(houseTypes).map(([label, value]) => (
-                <RadioButton
-                  key={label}
-                  label={label}
-                  id={label}
-                  value={value}
-                  register={register}
-                  error={errors.houseType?.message}
-                />
-              ))}
-            </div>
+            <FormField
+              control={methods.control}
+              name="houseAge"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>House age</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Enter the house age, e.g. 1 for a new house"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription>How old is the house.</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-            <h2 className="mb-1 font-bold">House age</h2>
-            <InputField
-              type="number"
-              placeholder="Provide the house age in years. For a new build, insert age 1"
-              id="houseAge"
-              register={register}
-              error={errors.houseAge?.message}
+            <FormField
+              control={methods.control}
+              name="houseBedrooms"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>House bedrooms</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Enter the number of bedrooms in the house, e.g. 2"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    How many bedrooms in the house.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-            <h2 className="mb-1 font-bold">Number of bedrooms</h2>
-            <InputField
-              type="number"
-              placeholder="Provide the number of bedrooms e.g. 2"
-              id="houseBedrooms"
-              register={register}
-              error={errors.houseBedrooms?.message}
+
+            <FormField
+              control={methods.control}
+              name="houseType" // Name in the Calculation schema for the new radio field
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>House type</FormLabel>
+                  <FormControl>
+                    <RadioGroup
+                      value={field.value}
+                      onValueChange={(value) => field.onChange(value)} // Bind selection to field
+                    >
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="D" id="option-one" />
+                        <Label htmlFor="option-one">Detached</Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="S" id="option-two" />
+                        <Label htmlFor="option-two">Semi detached</Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="T" id="option-three" />
+                        <Label htmlFor="option-tree">Terrace</Label>
+                      </div>
+
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="F" id="option-four" />
+                        <Label htmlFor="option-four">Flat</Label>
+                      </div>
+                    </RadioGroup>
+                  </FormControl>
+                  <FormDescription>
+                    Select an option for the house type.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-            <button
-              className="text-white bg-black w-1/3 rounded-xl"
-              type="submit"
-            >
-              Calculate
-            </button>
+
+            <Button type="submit">Submit</Button>
           </form>
-        </div>
+        </Form>
       </div>
     );
   } else if (view === "loading") {
