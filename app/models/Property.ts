@@ -1,5 +1,5 @@
 import * as math from "mathjs";
-import { BED_WEIGHTS_AND_CAPS } from "./constants";
+import { BED_WEIGHTS_AND_CAPS, MAINTENANCE_LEVELS } from "./constants";
 /**
  * Number of decimal places to use when rounding numerical values
  */
@@ -13,6 +13,7 @@ type PropertyParams = Pick<
   | "numberOfBedrooms"
   | "age"
   | "size"
+  | "maintenancePercentage"
   | "newBuildPricePerMetre"
   | "averageMarketPrice"
   | "itl3"
@@ -21,6 +22,8 @@ type PropertyParams = Pick<
 export const HOUSE_TYPES = ["D", "S", "T", "F"] as const;
 
 export type HouseType = (typeof HOUSE_TYPES)[number];
+
+export type MaintenanceSpend = (typeof MAINTENANCE_LEVELS)[number]
 
 export class Property {
   postcode: string;
@@ -31,6 +34,7 @@ export class Property {
    * Size of the house in squares meters
    */
   size: number;
+  maintenancePercentage: MaintenanceSpend;
   /**
    * Average build price per metre of a new house
    */
@@ -61,6 +65,7 @@ export class Property {
     this.numberOfBedrooms = params.numberOfBedrooms;
     this.age = params.age;
     this.size = params.size;
+    this.maintenancePercentage = params.maintenancePercentage;
     this.newBuildPricePerMetre = params.newBuildPricePerMetre;
     this.averageMarketPrice = params.averageMarketPrice;
     this.itl3 = params.itl3;

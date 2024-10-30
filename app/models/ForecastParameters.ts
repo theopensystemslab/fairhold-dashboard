@@ -9,7 +9,7 @@ export interface ForecastParameters {
 }
 
 export const DEFAULT_FORECAST_PARAMETERS: ForecastParameters = {
-  maintenanceCostPercentage: 0.0125, // percentage maintenance cost
+  maintenanceCostPercentage: 0.02, // percentage maintenance cost
   incomeGrowthPerYear: 0.04, // 4% income growth per year
   constructionPriceGrowthPerYear: 0.025, // 2.5%
   rentGrowthPerYear: 0.03, // 3%
