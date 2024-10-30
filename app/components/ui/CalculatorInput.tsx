@@ -21,18 +21,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-const maintenance = {
-  "Low (1.5%)": "0.015",
-  "Medium (2.0%)": "0.02",
-  "High (3.75%)": "0.0375",
-}; // variables associated with maintenance spend levels
-
 const CalculatorInput = () => {
   const methods = useForm<formType>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       houseType: "D", // Default value for house type
-      maintenanceSpend: "0.02",
+      maintenancePercentage: "0.015",
     },
   });
 
@@ -162,6 +156,39 @@ const CalculatorInput = () => {
                   </FormControl>
                   <FormDescription>
                     Select an option for the house type.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={methods.control}
+              name="maintenancePercentage" // Name in the Calculation schema for the new radio field
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Maintenance spend percentage</FormLabel>
+                  <FormControl>
+                    <RadioGroup
+                      value={field.value}
+                      onValueChange={(value) => field.onChange(value)} // Bind selection to field
+                    >
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="0.015" id="option-one" />
+                        <Label htmlFor="option-one">Low (1.5%)</Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="0.02" id="option-two" />
+                        <Label htmlFor="option-two">Medium (2%)</Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="0.0375" id="option-three" />
+                        <Label htmlFor="option-three">High (3.75%)</Label>
+                      </div>
+                    </RadioGroup>
+                  </FormControl>
+                  <FormDescription>
+                    Select a level for maintenance spend, as a percentage of house cost. 
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
