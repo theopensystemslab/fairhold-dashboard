@@ -8,7 +8,13 @@ type ValidPostcode = Extract<ReturnType<typeof parsePostcode>, { valid: true }>;
 
 const HouseTypeEnum = z.enum(HOUSE_TYPES);
 
-const MaintenanceEnum = z.enum(MAINTENANCE_LEVELS);
+export const maintenancePercentageSchema = z.number().refine(
+  (value): value is typeof MAINTENANCE_LEVELS[number] => 
+    MAINTENANCE_LEVELS.includes(value as typeof MAINTENANCE_LEVELS[number]),
+  {
+    message: `Maintenance percentage must be one of: ${MAINTENANCE_LEVELS.join(', ')}`
+  }
+);
 
 /**
  * Describes the form the user will interact with in the frontend
@@ -31,12 +37,7 @@ export const calculationSchema = z.object({
       message: `houseType is required and must be one of ${HOUSE_TYPES}`,
     }
   ),
-  maintenancePercentage: MaintenanceEnum.refine(
-    (value) => MaintenanceEnum.options.includes(value),
-    {
-      message: `maintenancePercentage is required and must be one of ${MAINTENANCE_LEVELS}`,
-    }
-  ),
+  maintenancePercentage: maintenancePercentageSchema,
 });
 
 export type Calculation = z.infer<typeof calculationSchema>;
