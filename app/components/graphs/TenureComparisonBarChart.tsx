@@ -1,24 +1,37 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
-import {
-  Chart,
-  BarElement,
-  BarController,
-  CategoryScale,
-  LinearScale,
-  Tooltip,
-  Legend,
-} from "chart.js";
+import { TrendingUp } from "lucide-react";
+import { PolarAngleAxis, PolarGrid, Radar, RadarChart } from "recharts";
 
-Chart.register(
-  BarElement,
-  BarController,
-  CategoryScale,
-  LinearScale,
-  Tooltip,
-  Legend
-);
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
+
+export const description = "A radar chart with lines only";
+
+const chartConfig = {
+  land: {
+    label: "Land",
+    color: "hsl(var(--chart-1))",
+  },
+  house: {
+    label: "House",
+    color: "hsl(var(--chart-2))",
+  },
+} satisfies ChartConfig;
+
+import React from "react";
 
 // Define type for DataInput
 type DataInput = {
@@ -40,84 +53,84 @@ interface StackedBarChartProps {
 const TenureComparisonBarChart: React.FC<StackedBarChartProps> = ({ data }) => {
   console.log("TenureComparisonBarChart data: ", data);
 
-  const ref = useRef<HTMLCanvasElement>(null);
-  const chartRef = useRef<Chart | null>(null);
+  const chartData = [
+    {
+      tenure: "market: purchase",
+      land: data[0].marketPurchase,
+      house: data[1].marketPurchase,
+    },
+    {
+      tenure: "market: rent",
+      land: data[0].marketRent,
+      house: data[1].marketRent,
+    },
+    {
+      tenure: "social rent",
+      land: data[0].socialRent,
+      house: data[1].socialRent,
+    },
+    {
+      tenure: "fairhold: land purchase",
+      land: data[0].fairholdLandPurchase,
+      house: data[1].fairholdLandPurchase,
+    },
+    {
+      tenure: "fairhold: land rent",
+      land: data[0].fairholdLandRent,
+      house: data[1].fairholdLandRent,
+    },
+  ];
 
-  useEffect(() => {
-    if (!ref.current) return;
-
-    // Transform the data into a format suitable for Chart.js
-    const categories = [
-      "marketPurchase",
-      "marketRent",
-      "socialRent",
-      "fairholdLandPurchase",
-      "fairholdLandRent",
-    ];
-    const labels = categories;
-    const landData = categories.map(
-      (category) => (data[0] as DataInput)[category] as number
-    );
-    const houseData = categories.map(
-      (category) => (data[1] as DataInput)[category] as number
-    );
-
-    const chartData = {
-      labels: labels,
-      datasets: [
-        {
-          label: "Land",
-          data: landData,
-          backgroundColor: "#1f77b4",
-        },
-        {
-          label: "House",
-          data: houseData,
-          backgroundColor: "#ff7f0e",
-        },
-      ],
-    };
-
-    // Clear the canvas before re-drawing
-    if (chartRef.current) {
-      chartRef.current.destroy();
-    }
-
-    const newChartInstance = new Chart(ref.current, {
-      type: "bar",
-      data: chartData,
-      options: {
-        responsive: true,
-        scales: {
-          x: {
-            stacked: true,
-            title: {
-              display: true,
-              text: "Tenure type",
-            },
-          },
-          y: {
-            stacked: true,
-            title: {
-              display: true,
-              text: "Monthly payments",
-            },
-          },
-        },
-      },
-    });
-
-    chartRef.current = newChartInstance;
-
-    // Cleanup function to destroy the chart instance when the component unmounts
-    return () => {
-      if (chartRef.current) {
-        chartRef.current.destroy();
-      }
-    };
-  }, [data]);
-
-  return <canvas ref={ref}></canvas>;
+  return (
+    <Card>
+      <CardHeader className="items-center pb-4">
+        <CardTitle>Monthly payment</CardTitle>
+        <CardDescription>
+          Monthly payment for both land and house by tenure type
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="pb-0">
+        <ChartContainer
+          config={chartConfig}
+          className="mx-auto aspect-square max-h-[400px]"
+        >
+          <RadarChart data={chartData}>
+            <ChartTooltip
+              cursor={false}
+              content={<ChartTooltipContent indicator="line" />}
+            />
+            <PolarAngleAxis
+              dataKey="tenure"
+              tick={{ width: 80, textAnchor: "middle" }}
+            />
+            <PolarGrid radialLines={false} />
+            <Radar
+              dataKey="land"
+              fill="var(--color-land)"
+              fillOpacity={0}
+              stroke="var(--color-land)"
+              strokeWidth={2}
+            />
+            <Radar
+              dataKey="house"
+              fill="var(--color-house)"
+              fillOpacity={0}
+              stroke="var(--color-house)"
+              strokeWidth={2}
+            />
+          </RadarChart>
+        </ChartContainer>
+      </CardContent>
+      <CardFooter className="flex-col gap-2 text-sm">
+        <div className="flex items-center gap-2 font-medium leading-none">
+          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+        </div>
+        <div className="flex items-center gap-2 leading-none text-muted-foreground">
+          January - June 2024
+        </div>
+      </CardFooter>
+    </Card>
+  );
 };
 
 export default TenureComparisonBarChart;
