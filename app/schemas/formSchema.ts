@@ -1,10 +1,9 @@
 import { z } from "zod";
 import { fix as fixPostcode } from "postcode";
 import { HOUSE_TYPES } from "../models/Property";
-import { MAINTENANCE_LEVELS } from "../models/constants";
+import { maintenancePercentageSchema } from "../schemas/calculationSchema";
 
 const HouseTypeEnum = z.enum(HOUSE_TYPES);
-const MaintenanceEnum = z.enum(MAINTENANCE_LEVELS);
 
 /**
  * Describes the form the user will interact with in the frontend
@@ -25,11 +24,7 @@ export const formSchema = z.object({
       message: `houseType is required and must be one of ${HOUSE_TYPES}`,
     }
   ),
-  maintenancePercentage: MaintenanceEnum.refine(
-    (value) => MaintenanceEnum.options.includes(value),
-    {
-      message: `maintenancePercentage is required and must be one of ${MAINTENANCE_LEVELS}`,
-    }),
+  maintenancePercentage: maintenancePercentageSchema,
 });
 
 export type formType = z.infer<typeof formSchema>;
