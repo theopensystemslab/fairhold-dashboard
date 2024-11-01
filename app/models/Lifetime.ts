@@ -18,7 +18,7 @@ export interface LifetimeParams {
     constructionPriceGrowthPerYear: number;
     rentGrowthPerYear: number;
     yearsForecast: number;
-    maintenanceCostPercentage: number;
+    maintenancePercentage: number;
     incomeGrowthPerYear: number;
     affordabilityThresholdIncomePercentage: number;
     incomeYearly: number;
@@ -86,7 +86,7 @@ export class Lifetime {
         let marketRentHouseYearlyIterative =
             marketRentYearlyIterative - marketRentLandYearlyIterative;
         let maintenanceCostIterative = 
-            params.maintenanceCostPercentage * newBuildPriceIterative;
+            params.maintenancePercentage * newBuildPriceIterative;
 
         for (let i = 0; i < params.yearsForecast - 1; i++) {
             incomeYearlyIterative = 
@@ -110,7 +110,7 @@ export class Lifetime {
             marketRentHouseYearlyIterative =
                 marketRentYearlyIterative - marketRentLandYearlyIterative;
             maintenanceCostIterative =
-                newBuildPriceIterative * params.maintenanceCostPercentage;
+                newBuildPriceIterative * params.maintenancePercentage;
 
             if (i < params.marketPurchase.houseMortgage.termYears - 1) {
                 newbuildHouseMortgageYearlyIterative = params.marketPurchase.houseMortgage.yearlyPaymentBreakdown[i].yearlyPayment;
