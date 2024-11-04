@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev && pnpm dev:db",
+    "dev": "npm run dev:db && next dev",
     "dev:db": "docker compose --env-file .env.local up -d",
     "backup": "docker compose --env-file .env.production run --rm dbtools bash /scripts/backup.sh",
     "restore": "docker compose --env-file .env.local run --rm dbtools bash /scripts/restore.sh",
