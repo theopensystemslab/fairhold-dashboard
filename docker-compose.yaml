@@ -1,16 +1,36 @@
 version: '3.8'
-
 services:
-  backup:
-    image: postgres:latest
+  postgres:
+    image: postgres:17
+    env_file: 
+      - .env.local
+    environment:
+      POSTGRES_DB: ${POSTGRES_DATABASE}
+    ports:
+      - "5400:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  dbtools:
+    image: postgres:17
     volumes:
       - ./backups:/backups
-    command: >
-      bash -c "PGPASSWORD=\$POSTGRES_PASSWORD PGSSLMODE=require pg_dump 
-      -h \"\$POSTGRES_HOST\" 
-      -U \"\$POSTGRES_USER\" 
-      -d \"\$POSTGRES_DATABASE\" 
-      -F c -b -v -w 
-      -f \"/backups/\$(date +'%Y-%m-%d_%H-%M-%S').dump\""
+      - ./scripts:/scripts
+    environment:
+      POSTGRES_URL: ${POSTGRES_URL}
+      POSTGRES_DATABASE: ${POSTGRES_DATABASE}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    depends_on:
+      postgres:
+        condition: service_healthy
     profiles:
-      - backup
+      - tools
+
+volumes:
+  postgres_data:
