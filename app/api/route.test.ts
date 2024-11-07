@@ -33,6 +33,7 @@ describe("POST API Route", () => {
       houseAge: 3,
       houseBedrooms: 2,
       houseType: "D",
+      maintenancePercentage: "0.02",
     });
 
     const householdData = {
@@ -82,6 +83,7 @@ describe("POST API Route", () => {
       houseAge: 3,
       houseBedrooms: 2,
       houseType: "D",
+      maintenancePercentage: "0.02",
     });
 
     const errorMessage = "Service error";

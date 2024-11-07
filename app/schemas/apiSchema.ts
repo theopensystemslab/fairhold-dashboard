@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { parse as parsePostcode } from "postcode";
 import { HOUSE_TYPES } from "../models/Property";
+import { MAINTENANCE_LEVELS } from "../models/constants";
 
 // Type not exported by postcode lib directly
 export type ValidPostcode = Extract<
@@ -9,6 +10,7 @@ export type ValidPostcode = Extract<
 >;
 
 const HouseTypeEnum = z.enum(HOUSE_TYPES);
+const MaintenanceEnum = z.enum(MAINTENANCE_LEVELS);
 
 export const apiSchema = z.object({
   housePostcode: z.custom<ValidPostcode>(),
@@ -21,6 +23,12 @@ export const apiSchema = z.object({
     (value) => HouseTypeEnum.options.includes(value),
     {
       message: `houseType is required and must be one of ${HOUSE_TYPES}`,
+    }
+  ),
+  maintenancePercentage: MaintenanceEnum.refine(
+    (value) => MaintenanceEnum.options.includes(value),
+    {
+      message: `maintenancePercentage is required and must be one of ${MAINTENANCE_LEVELS}`,
     }
   ),
 });
