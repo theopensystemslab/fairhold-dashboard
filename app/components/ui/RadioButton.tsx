@@ -2,7 +2,7 @@ import React from "react";
 import { UseFormRegister, Path } from "react-hook-form";
 import { Calculation } from "@/app/schemas/calculationSchema";
 
-interface radioButtonProps {
+interface RadioButtonProps {
   id: string;
   value: string;
   label: string;
@@ -11,7 +11,7 @@ interface radioButtonProps {
   error?: string;
 }
 
-const RadioButton: React.FC<radioButtonProps> = ({
+const RadioButton: React.FC<RadioButtonProps> = ({
   id,
   value,
   label,
