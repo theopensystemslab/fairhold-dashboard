@@ -34,3 +34,53 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+
+## Architecture
+
+```mermaid
+flowchart LR
+    classDef todo stroke-dasharray: 5 5
+
+    subgraph "fairhold-data"
+        S1[(Source 1)] <---> Script
+        S2[(Source 2)] <---> Script
+        S3[(Source 3)] <---> Script
+    end
+
+    subgraph "DB tools"
+        LD[(Local disk)] --> UpdateData
+        LD <--> Backup
+        LD --> Restore
+    end
+
+    subgraph "Local development"
+        NextLocal[Next.js App]
+        PrismaLocal[Prisma]
+        LocalDB[(Database)]
+        PrismaLocal <--> NextLocal
+        LocalDB <--> PrismaLocal
+    end
+    
+    subgraph "CI/CD"
+        GitHub["GitHub actions"]
+    end
+
+
+    subgraph "Production (Vercel)"
+        NextProd[Next.js App]
+        PrismaProd[Prisma]
+        ProdDB[(Database)]
+        PrismaProd <--> NextProd
+        ProdDB <--> PrismaProd
+    end
+
+    Script -- Writes to --> LD
+
+    Restore -- .env.local --> LocalDB
+    Backup <-- .env.production --> ProdDB
+    UpdateData:::todo -- .env.production --> ProdDB
+    
+    PrismaLocal -- "Migration files" --> GitHub
+    GitHub -- "Merge to main" --> ProdDB
+```
