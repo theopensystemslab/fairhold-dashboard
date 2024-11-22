@@ -46,7 +46,7 @@
     "react-hook-form": "^7.53.1",
     "react-spinners": "^0.14.1",
     "react": "^18",
-    "recharts": "^2.13.2",
+    "recharts": "^2.13.3",
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",
     "ts-node": "^10.9.2",
