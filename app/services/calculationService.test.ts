@@ -51,7 +51,7 @@ describe("getHouseholdData", () => {
     houseAge: number;
     houseBedrooms: number;
     houseSize: number;
-    maintenancePercentage: "0.015" | "0.02" | "0.0375";
+    maintenancePercentage: 0.015 | 0.02 | 0.0375;
   }
 
   const mockInput: MockInputType = {
@@ -60,7 +60,7 @@ describe("getHouseholdData", () => {
     houseAge: 20,
     houseBedrooms: 3,
     houseSize: 100,
-    maintenancePercentage: "0.02"
+    maintenancePercentage: 0.02
   };
 
   beforeEach(() => {
@@ -118,6 +118,7 @@ describe("getHouseholdData", () => {
       houseAge: mockInput.houseAge,
       houseBedrooms: mockInput.houseBedrooms,
       houseSize: mockInput.houseSize,
+      maintenancePercentage: mockInput.maintenancePercentage,
       averagePrice: parseFloat(mockPricesPaid.averagePrice.toFixed(2)),
       itl3: mockITL3,
       gdhi: mockGDHI,

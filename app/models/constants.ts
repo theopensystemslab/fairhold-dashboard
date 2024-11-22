@@ -31,4 +31,4 @@ export const NATIONAL_AVERAGES: nationalAverageType = {
   earningsWeekly: 316.4,
 };
 
-export const MAINTENANCE_LEVELS = ["0.015", "0.02", "0.0375"] as const;
+export const MAINTENANCE_LEVELS = [0.015, 0.02, 0.0375] as const;

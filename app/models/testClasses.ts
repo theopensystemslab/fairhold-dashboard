@@ -1,7 +1,7 @@
 import { ValidPostcode } from "../schemas/apiSchema";
-import { DEFAULT_FORECAST_PARAMETERS } from "./ForecastParameters";
+import { createForecastParameters } from "./ForecastParameters";
 import { Household } from "./Household";
-import { HouseType, Property } from "./Property";
+import { HouseType, MaintenancePercentage, Property } from "./Property";
 import { MONTHS_PER_YEAR } from "./constants";
 import { socialRentAdjustmentTypes } from "../data/socialRentAdjustmentsRepo";
 
@@ -13,6 +13,7 @@ export interface ResponseData {
   buildPrice: number;
   houseAge: number;
   houseSize: number;
+  maintenancePercentage: MaintenancePercentage;
   averagePrice: number;
   itl3: string;
   gdhi: number;
@@ -30,6 +31,9 @@ function calculateFairhold(responseData: ResponseData) {
   if (!responseData.itl3 || responseData.itl3.length === 0) {
     throw new Error("itl3 data is missing or empty");
   }
+  if (!responseData.maintenancePercentage) {
+    throw new Error("maintenancePercentage data is missing or empty");
+  }
 
   // define the property object
   const property = new Property({
@@ -38,6 +42,7 @@ function calculateFairhold(responseData: ResponseData) {
     numberOfBedrooms: responseData.houseBedrooms,
     age: responseData.houseAge,
     size: responseData.houseSize,
+    maintenancePercentage: responseData.maintenancePercentage,
     newBuildPricePerMetre: responseData.buildPrice,
     averageMarketPrice: responseData.averagePrice,
     itl3: responseData.itl3,
@@ -52,7 +57,7 @@ function calculateFairhold(responseData: ResponseData) {
     housePriceIndex: responseData.hpi,
     gasBillYearly: responseData.gasBillYearly,
     property: property,
-    forecastParameters: DEFAULT_FORECAST_PARAMETERS,
+    forecastParameters: createForecastParameters(responseData.maintenancePercentage),
   });
   console.log(household);
   return household;

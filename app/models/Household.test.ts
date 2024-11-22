@@ -153,6 +153,7 @@ beforeEach(() => {
     numberOfBedrooms: 2,
     age: 10,
     size: 88,
+    maintenancePercentage: 0.02,
     newBuildPricePerMetre: 2120,
     averageMarketPrice: 218091.58,
     itl3: "TLG24",

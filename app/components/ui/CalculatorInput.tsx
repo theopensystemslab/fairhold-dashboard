@@ -26,7 +26,7 @@ const CalculatorInput = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       houseType: "D", // Default value for house type
-      maintenancePercentage: "0.015",
+      maintenancePercentage: 0.015,
     },
   });
 
@@ -170,8 +170,8 @@ const CalculatorInput = () => {
                   <FormLabel>Maintenance spend percentage</FormLabel>
                   <FormControl>
                     <RadioGroup
-                      value={field.value}
-                      onValueChange={(value) => field.onChange(value)} // Bind selection to field
+                      value={String(field.value)} // Convert number to string for RadioGroup
+                      onValueChange={(value) => field.onChange(Number(value))} // Convert back to number for form
                     >
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="0.015" id="option-one" />
