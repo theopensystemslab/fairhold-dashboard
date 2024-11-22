@@ -1,5 +1,10 @@
 import * as math from "mathjs";
 
+// Fairhold formula constants
+const MULTIPLIER = -1.1
+const OFFSET = 0.7
+const PLATEAU = 0.15
+
 type ConstructorParams = Pick<Fairhold, "affordability" | "landPriceOrRent">;
 
 export class Fairhold {
@@ -16,7 +21,7 @@ export class Fairhold {
   }
 
   private calculateFairholdDiscount() {
-    const discountLand = math.max(-1.1 * this.affordability + 0.7, 0.15)
+    const discountLand = math.max(MULTIPLIER * this.affordability + OFFSET, PLATEAU)
     return discountLand;
   }
 
