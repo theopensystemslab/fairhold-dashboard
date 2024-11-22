@@ -1,10 +1,9 @@
 import * as math from "mathjs";
-import { BED_WEIGHTS_AND_CAPS, MAINTENANCE_LEVELS } from "./constants";
+import { BED_WEIGHTS_AND_CAPS, MAINTENANCE_LEVELS, HOUSE_BREAKDOWN_PERCENTAGES } from "./constants";
 /**
  * Number of decimal places to use when rounding numerical values
  */
 const PRECISION = 2;
-const DEPRECIATION_FACTOR = -32938;
 
 type PropertyParams = Pick<
   Property,
@@ -86,12 +85,16 @@ export class Property {
   }
 
   private calculateDepreciatedBuildPrice() {
-    let depreciatedBuildPrice =
-      this.newBuildPrice + DEPRECIATION_FACTOR * math.log(this.age);
-    depreciatedBuildPrice = parseFloat(
-      depreciatedBuildPrice.toFixed(PRECISION)
-    );
+    let depreciatedBuildPrice = 0;
 
+    for (const { percentageOfHouse, depreciationPercentageYearly } of Object.values(HOUSE_BREAKDOWN_PERCENTAGES)) {
+      const newComponentValue = this.newBuildPrice * percentageOfHouse
+      
+      const depreciatedComponentValue = newComponentValue * (1 - (depreciationPercentageYearly * this.age)) // Subtract yearly depreciation amount
+        + (MAINTENANCE_LEVELS[0] * percentageOfHouse * this.age * newComponentValue) // Assuming low spend for depreciatedBuildPrice
+      
+        depreciatedBuildPrice += math.max(depreciatedComponentValue, 0) // Add depreciatedComponentValue to depreciatedBuildPrice, or 0 if value is negative
+    }
     return depreciatedBuildPrice;
   }
 
