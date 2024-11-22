@@ -10,19 +10,18 @@ it("can be instantiated", () => {
 
 it("correctly calculates the fairhold formula below the threshold", () => {
   const fairhold = new Fairhold({
-    affordability: 0.05,
+    affordability: 0.15,
     landPriceOrRent: 100,
   });
-  expect(fairhold.discountLand).toBeCloseTo(0.6877641290737884);
+  expect(fairhold.discountLand).toBeCloseTo(0.535);
 });
 
 it("correctly calculates the fairhold formula above the threshold", () => {
   const fairhold = new Fairhold({
-    affordability: 0.05,
+    affordability: 0.5,
     landPriceOrRent: 100,
-    plateau: 3,
   });
-  expect(fairhold.discountLand).toBeCloseTo(0.68776);
+  expect(fairhold.discountLand).toBeCloseTo(0.15);
 });
 
 it("correctly deals with negative values of landPriceOrRent", () => {
