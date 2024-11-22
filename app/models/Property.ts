@@ -1,5 +1,6 @@
 import * as math from "mathjs";
 import { BED_WEIGHTS_AND_CAPS, MAINTENANCE_LEVELS, HOUSE_BREAKDOWN_PERCENTAGES } from "./constants";
+import { houseBreakdownType, componentBreakdownType } from "./constants";
 /**
  * Number of decimal places to use when rounding numerical values
  */
@@ -81,27 +82,32 @@ export class Property {
   private calculateNewBuildPrice() {
     let newBuildPrice = this.newBuildPricePerMetre * this.size;
     newBuildPrice = parseFloat(newBuildPrice.toFixed(PRECISION));
-
     return newBuildPrice;
   }
 
   private calculateDepreciatedBuildPrice() {
+    if (this.age === 0) return this.newBuildPrice; // If newbuild, return newBuildPrice and don't depreciate
+    
     let depreciatedBuildPrice = 0;
 
-    if (this.age === 0) {
-      depreciatedBuildPrice = this.newBuildPrice
-    } else { 
-      for (const { percentageOfHouse, depreciationPercentageYearly } of Object.values(HOUSE_BREAKDOWN_PERCENTAGES)) {
-        const newComponentValue = this.newBuildPrice * percentageOfHouse
+    for (const [key, value] of Object.entries(HOUSE_BREAKDOWN_PERCENTAGES) as [keyof houseBreakdownType, componentBreakdownType][]) {
+      const newComponentValue = parseFloat((this.newBuildPrice * value.percentageOfHouse).toFixed(PRECISION))
+      
+      // Calculate depreciation
+      const depreciationFactor = parseFloat((1 - (value.depreciationPercentageYearly * this.age)).toFixed(PRECISION));
+
+      // Calculate maintenance spend (which counters depreciation)
+      const maintenanceAddition = (key === 'foundations' || key === 'structureEnvelope') ? 0 : 
+        MAINTENANCE_LEVELS[0] * this.newBuildPrice * this.age * value.percentOfMaintenanceYearly;
         
-        const depreciatedComponentValue = newComponentValue * (1 - (depreciationPercentageYearly * this.age)) // Subtract yearly depreciation amount
-          + (MAINTENANCE_LEVELS[0] * percentageOfHouse * this.age * newComponentValue) // Assuming low spend for depreciatedBuildPrice
-        
-          depreciatedBuildPrice += math.max(depreciatedComponentValue, 0) // Add depreciatedComponentValue to depreciatedBuildPrice, or 0 if value is negative
-      }
+      // Use both depreciationFactor and maintenanceAddition to calculate final depreciatedComponentValue
+      const depreciatedComponentValue = parseFloat(((newComponentValue * depreciationFactor) + maintenanceAddition).toFixed(PRECISION));
+
+      depreciatedBuildPrice += math.max(depreciatedComponentValue, 0) // Add depreciatedComponentValue to depreciatedBuildPrice, or 0 if value is negative
     }
+    depreciatedBuildPrice = parseFloat(depreciatedBuildPrice.toFixed(PRECISION))
     return depreciatedBuildPrice;
-  }
+  };
 
   private calculateBedWeightedAveragePrice() {
     const bedWeights = BED_WEIGHTS_AND_CAPS.weight;
