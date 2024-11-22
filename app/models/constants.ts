@@ -38,7 +38,9 @@ export type componentBreakdownType = {
   /** Component value as percentage of total house value */
   percentageOfHouse: number, 
   /** Percentage of the component's total value that is written-down yearly */
-  depreciationPercentageYearly: number
+  depreciationPercentageYearly: number,
+  /** Percentage of the yearly maintenance spend allocated to component */
+  percentOfMaintenanceYearly: number
 }
 
 export type houseBreakdownType = {
@@ -61,63 +63,78 @@ export type houseBreakdownType = {
 
 export const HOUSE_BREAKDOWN_PERCENTAGES: houseBreakdownType = {
   foundations: {
-    percentageOfHouse: .2049,
+    percentageOfHouse: .21,
     depreciationPercentageYearly: 0,
+    percentOfMaintenanceYearly: 0
   },
   structureEnvelope: {
-    percentageOfHouse: .2459, 
-    depreciationPercentageYearly: 0
+    percentageOfHouse: .25, 
+    depreciationPercentageYearly: 0,
+    percentOfMaintenanceYearly: 0
   },
   cladding: {
-    percentageOfHouse: .041, 
-    depreciationPercentageYearly: .0249
+    percentageOfHouse: .04, 
+    depreciationPercentageYearly: .0249,
+    percentOfMaintenanceYearly: .074
   },
   roofing: {
-    percentageOfHouse: .041, 
-    depreciationPercentageYearly: .0237
+    percentageOfHouse: .04, 
+    depreciationPercentageYearly: .0237,
+    percentOfMaintenanceYearly: .074
   },
   windows: {
-    percentageOfHouse: .041, 
-    depreciationPercentageYearly: .023
+    percentageOfHouse: .04, 
+    depreciationPercentageYearly: .023,
+    percentOfMaintenanceYearly: .074
   },
   internalLinings: {
-    percentageOfHouse: .041, 
-    depreciationPercentageYearly: .032
+    percentageOfHouse: .04, 
+    depreciationPercentageYearly: .032,
+    percentOfMaintenanceYearly: .074
   },
   bathroomFixtures: {
-    percentageOfHouse: .041, 
-    depreciationPercentageYearly: .05
+    percentageOfHouse: .04, 
+    depreciationPercentageYearly: .05,
+    percentOfMaintenanceYearly: .074
   },
   fitout: {
-    percentageOfHouse: .0492, 
-    depreciationPercentageYearly: .0417
+    percentageOfHouse: .05, 
+    depreciationPercentageYearly: .0417,
+    percentOfMaintenanceYearly: .093
   },
   kitchenUnits: {
-    percentageOfHouse: .041, 
-    depreciationPercentageYearly: .0556
+    percentageOfHouse: .04, 
+    depreciationPercentageYearly: .0556,
+    percentOfMaintenanceYearly: .074
   },
   electricalAppliances: {
-    percentageOfHouse: .041, 
-    depreciationPercentageYearly: .0833
+    percentageOfHouse: .04, 
+    depreciationPercentageYearly: .0833,
+    percentOfMaintenanceYearly: .074
   },
   electricalServices: {
-    percentageOfHouse: .041, 
-    depreciationPercentageYearly: .0493
+    percentageOfHouse: .04, 
+    depreciationPercentageYearly: .0493,
+    percentOfMaintenanceYearly: .074
   },
   ventilationServices: {
-    percentageOfHouse: .041, 
-    depreciationPercentageYearly: .0667
+    percentageOfHouse: .04, 
+    depreciationPercentageYearly: .0667,
+    percentOfMaintenanceYearly: .074
   },
   waterAndHeatingServices: {
-    percentageOfHouse: .082, 
-    depreciationPercentageYearly: .0357
+    percentageOfHouse: .08, 
+    depreciationPercentageYearly: .0357,
+    percentOfMaintenanceYearly: .148
   },
   floorCoverings: {
-    percentageOfHouse: .0205, 
-    depreciationPercentageYearly: .039
+    percentageOfHouse: .02, 
+    depreciationPercentageYearly: .039,
+    percentOfMaintenanceYearly: .037
   },
   landscaping: {
-    percentageOfHouse: .0287, 
-    depreciationPercentageYearly: .0343
+    percentageOfHouse: .03, 
+    depreciationPercentageYearly: .0343,
+    percentOfMaintenanceYearly: .056
   },
 }
