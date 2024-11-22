@@ -71,7 +71,7 @@ const UpfrontComparisonBarChart: React.FC<StackedBarChartProps> = ({
     <Card>
       <CardHeader>
         <CardTitle>Tenure comparison</CardTitle>
-        <CardDescription>Monthly cost in £</CardDescription>
+        <CardDescription>Total upfront cost £</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
