@@ -36,3 +36,92 @@ export const NATIONAL_AVERAGES: nationalAverageType = {
  * figures from our own model
  */
 export const MAINTENANCE_LEVELS = [0.015, 0.02, 0.0375] as const;
+
+/** Type for storing component values and depreciation*/
+export type componentBreakdownType = {
+  /** Component value as percentage of total house value */
+  percentageOfHouse: number, 
+  /** Percentage of the component's total value that is written-down yearly */
+  depreciationPercentageYearly: number
+}
+
+export type houseBreakdownType = {
+  foundations: componentBreakdownType,
+  structureEnvelope: componentBreakdownType,
+  cladding: componentBreakdownType,
+  roofing: componentBreakdownType,
+  windows: componentBreakdownType,
+  internalLinings: componentBreakdownType,
+  bathroomFixtures: componentBreakdownType,
+  fitout: componentBreakdownType,
+  kitchenUnits: componentBreakdownType,
+  electricalAppliances: componentBreakdownType,
+  electricalServices: componentBreakdownType,
+  ventilationServices: componentBreakdownType,
+  waterAndHeatingServices: componentBreakdownType,
+  floorCoverings: componentBreakdownType,
+  landscaping: componentBreakdownType,
+}
+
+export const HOUSE_BREAKDOWN_PERCENTAGES: houseBreakdownType = {
+  foundations: {
+    percentageOfHouse: .2049,
+    depreciationPercentageYearly: 0,
+  },
+  structureEnvelope: {
+    percentageOfHouse: .2459, 
+    depreciationPercentageYearly: 0
+  },
+  cladding: {
+    percentageOfHouse: .041, 
+    depreciationPercentageYearly: .0249
+  },
+  roofing: {
+    percentageOfHouse: .041, 
+    depreciationPercentageYearly: .0237
+  },
+  windows: {
+    percentageOfHouse: .041, 
+    depreciationPercentageYearly: .023
+  },
+  internalLinings: {
+    percentageOfHouse: .041, 
+    depreciationPercentageYearly: .032
+  },
+  bathroomFixtures: {
+    percentageOfHouse: .041, 
+    depreciationPercentageYearly: .05
+  },
+  fitout: {
+    percentageOfHouse: .0492, 
+    depreciationPercentageYearly: .0417
+  },
+  kitchenUnits: {
+    percentageOfHouse: .041, 
+    depreciationPercentageYearly: .0556
+  },
+  electricalAppliances: {
+    percentageOfHouse: .041, 
+    depreciationPercentageYearly: .0833
+  },
+  electricalServices: {
+    percentageOfHouse: .041, 
+    depreciationPercentageYearly: .0493
+  },
+  ventilationServices: {
+    percentageOfHouse: .041, 
+    depreciationPercentageYearly: .0667
+  },
+  waterAndHeatingServices: {
+    percentageOfHouse: .082, 
+    depreciationPercentageYearly: .0357
+  },
+  floorCoverings: {
+    percentageOfHouse: .0205, 
+    depreciationPercentageYearly: .039
+  },
+  landscaping: {
+    percentageOfHouse: .0287, 
+    depreciationPercentageYearly: .0343
+  },
+}
