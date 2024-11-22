@@ -62,7 +62,7 @@ export class Property {
     this.postcode = params.postcode;
     this.houseType = params.houseType;
     this.numberOfBedrooms = params.numberOfBedrooms;
-    this.age = params.age;
+    this.age = params.age - 1; // Subtract 1 because years should be indexed to 0
     this.size = params.size;
     this.maintenancePercentage = params.maintenancePercentage;
     this.newBuildPricePerMetre = params.newBuildPricePerMetre;
@@ -87,13 +87,17 @@ export class Property {
   private calculateDepreciatedBuildPrice() {
     let depreciatedBuildPrice = 0;
 
-    for (const { percentageOfHouse, depreciationPercentageYearly } of Object.values(HOUSE_BREAKDOWN_PERCENTAGES)) {
-      const newComponentValue = this.newBuildPrice * percentageOfHouse
-      
-      const depreciatedComponentValue = newComponentValue * (1 - (depreciationPercentageYearly * this.age)) // Subtract yearly depreciation amount
-        + (MAINTENANCE_LEVELS[0] * percentageOfHouse * this.age * newComponentValue) // Assuming low spend for depreciatedBuildPrice
-      
-        depreciatedBuildPrice += math.max(depreciatedComponentValue, 0) // Add depreciatedComponentValue to depreciatedBuildPrice, or 0 if value is negative
+    if (this.age === 0) {
+      depreciatedBuildPrice = this.newBuildPrice
+    } else { 
+      for (const { percentageOfHouse, depreciationPercentageYearly } of Object.values(HOUSE_BREAKDOWN_PERCENTAGES)) {
+        const newComponentValue = this.newBuildPrice * percentageOfHouse
+        
+        const depreciatedComponentValue = newComponentValue * (1 - (depreciationPercentageYearly * this.age)) // Subtract yearly depreciation amount
+          + (MAINTENANCE_LEVELS[0] * percentageOfHouse * this.age * newComponentValue) // Assuming low spend for depreciatedBuildPrice
+        
+          depreciatedBuildPrice += math.max(depreciatedComponentValue, 0) // Add depreciatedComponentValue to depreciatedBuildPrice, or 0 if value is negative
+      }
     }
     return depreciatedBuildPrice;
   }
