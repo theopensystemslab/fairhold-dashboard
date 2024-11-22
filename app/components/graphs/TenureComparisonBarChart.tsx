@@ -1,8 +1,6 @@
 "use client";
 
-import { TrendingUp } from "lucide-react";
-import { PolarAngleAxis, PolarGrid, Radar, RadarChart } from "recharts";
-
+import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 import {
   Card,
   CardContent,
@@ -14,11 +12,11 @@ import {
 import {
   ChartConfig,
   ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-
-export const description = "A radar chart with lines only";
 
 const chartConfig = {
   land: {
@@ -41,6 +39,7 @@ type DataInput = {
   socialRent: number;
   fairholdLandPurchase: number;
   fairholdLandRent: number;
+  affordabilityMonthly: number;
   [key: string]: string | number;
 };
 
@@ -51,8 +50,6 @@ interface StackedBarChartProps {
 
 // Implementation of the Chart.js Stacked Bar Chart
 const TenureComparisonBarChart: React.FC<StackedBarChartProps> = ({ data }) => {
-  console.log("TenureComparisonBarChart data: ", data);
-
   const chartData = [
     {
       tenure: "market: purchase",
@@ -83,50 +80,41 @@ const TenureComparisonBarChart: React.FC<StackedBarChartProps> = ({ data }) => {
 
   return (
     <Card>
-      <CardHeader className="items-center pb-4">
-        <CardTitle>Monthly payment</CardTitle>
-        <CardDescription>
-          Monthly payment for both land and house by tenure type
-        </CardDescription>
+      <CardHeader>
+        <CardTitle>Tenure comparison</CardTitle>
+        <CardDescription>Monthly cost in £</CardDescription>
       </CardHeader>
-      <CardContent className="pb-0">
-        <ChartContainer
-          config={chartConfig}
-          className="mx-auto aspect-square max-h-[400px]"
-        >
-          <RadarChart data={chartData}>
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent indicator="line" />}
-            />
-            <PolarAngleAxis
+      <CardContent>
+        <ChartContainer config={chartConfig}>
+          <BarChart accessibilityLayer data={chartData}>
+            <CartesianGrid vertical={false} />
+            <XAxis
               dataKey="tenure"
-              tick={{ width: 80, textAnchor: "middle" }}
+              tickLine={false}
+              tickMargin={10}
+              axisLine={false}
+              tickFormatter={(value) => value}
             />
-            <PolarGrid radialLines={false} />
-            <Radar
+            <ChartTooltip content={<ChartTooltipContent hideLabel />} />
+            <ChartLegend content={<ChartLegendContent />} />
+            <Bar
               dataKey="land"
+              stackId="a"
               fill="var(--color-land)"
-              fillOpacity={0}
-              stroke="var(--color-land)"
-              strokeWidth={2}
+              radius={[0, 0, 4, 4]}
             />
-            <Radar
+            <Bar
               dataKey="house"
+              stackId="a"
               fill="var(--color-house)"
-              fillOpacity={0}
-              stroke="var(--color-house)"
-              strokeWidth={2}
+              radius={[4, 4, 0, 0]}
             />
-          </RadarChart>
+          </BarChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className="flex-col gap-2 text-sm">
-        <div className="flex items-center gap-2 font-medium leading-none">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-        </div>
-        <div className="flex items-center gap-2 leading-none text-muted-foreground">
-          January - June 2024
+      <CardFooter className="flex-col items-start gap-2 text-sm">
+        <div className="leading-none text-muted-foreground">
+          Showing the montly cost by tenure type.
         </div>
       </CardFooter>
     </Card>

@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import ErrorBoundary from '../ErrorBoundary';
+import ErrorBoundary from "../ErrorBoundary";
 import { Household } from "@/app/models/Household";
 import TenureComparisonBarChart from "./TenureComparisonBarChart";
 
@@ -39,6 +39,10 @@ const TenureComparisonWrapper: React.FC<TenureComparisonWrapperProps> = ({
             ?.monthlyPayment || 0,
         fairholdLandRent:
           household.tenure.fairholdLandRent?.discountedLandRentMonthly || 0,
+        affordabilityMonthly:
+          (household.incomeYearly / 12) *
+            household.forecastParameters
+              .affordabilityThresholdIncomePercentage || 0,
       },
       {
         category: "Monthly Costs House",
@@ -52,6 +56,10 @@ const TenureComparisonWrapper: React.FC<TenureComparisonWrapperProps> = ({
         fairholdLandRent:
           household.tenure.fairholdLandPurchase?.depreciatedHouseMortgage
             ?.monthlyPayment || 0,
+        affordabilityMonthly:
+          (household.incomeYearly / 12) *
+            household.forecastParameters
+              .affordabilityThresholdIncomePercentage || 0,
       },
     ];
   };
