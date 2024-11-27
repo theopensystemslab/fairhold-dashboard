@@ -116,11 +116,13 @@ export class Lifetime {
             maintenanceCostIterative =
                 newBuildPriceIterative * params.maintenancePercentage;
 
+            // If the mortgage term ongoing (if `i` is less than the term), calculate yearly mortgage payments
             if (i < params.marketPurchase.houseMortgage.termYears - 1) {
                 newbuildHouseMortgageYearlyIterative = params.marketPurchase.houseMortgage.yearlyPaymentBreakdown[i].yearlyPayment;
                 depreciatedHouseMortgageYearlyIterative = params.fairholdLandPurchase.depreciatedHouseMortgage.yearlyPaymentBreakdown[i].yearlyPayment;
                 fairholdLandMortgageYearlyIterative = params.fairholdLandPurchase.discountedLandMortgage.yearlyPaymentBreakdown[i].yearlyPayment
                 marketLandMortgageYearlyIterative = params.marketPurchase.landMortgage.yearlyPaymentBreakdown[i].yearlyPayment;
+            // If the mortgage term has ended, yearly payment is 0
             } else {
                 newbuildHouseMortgageYearlyIterative = 0;
                 depreciatedHouseMortgageYearlyIterative = 0;
