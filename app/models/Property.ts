@@ -91,7 +91,7 @@ export class Property {
     return newBuildPrice;
   }
 
-  private calculateDepreciatedBuildPrice() {
+  public calculateDepreciatedBuildPrice() {
     if (this.age === 0) return this.newBuildPrice; // If newbuild, return newBuildPrice and don't depreciate
     
     let depreciatedBuildPrice = 0;
