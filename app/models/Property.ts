@@ -37,7 +37,7 @@ export class Property {
   numberOfBedrooms: number;
   age: number;
   /**
-   * Size of the house in squares meters
+   * Size of the house in square meters
    */
   size: number;
   maintenancePercentage: MaintenancePercentage;
@@ -48,7 +48,8 @@ export class Property {
   averageMarketPrice: number;
   itl3: string;
   /**
-   *  Price of the house if it was new
+   *  Price of the house if it was new, used for residual land value calculations
+   * and for valuing the house alone in marketPurchase
    */
   newBuildPrice: number;
   /**

@@ -9,6 +9,7 @@ import { ForecastParameters } from "./ForecastParameters";
 import { socialRentAdjustmentTypes } from "../data/socialRentAdjustmentsRepo";
 import { Lifetime, LifetimeParams } from "./Lifetime"; 
 
+/** Assumed number of heads per-house */
 const HOUSE_MULTIPLIER = 2.4;
 
 type ConstructorParams = Pick<
@@ -21,6 +22,7 @@ type ConstructorParams = Pick<
   housePriceIndex: number;
 };
 
+/** The 'parent' class; when instantiated, it instantiates all other relevant classes, including `Property` */
 export class Household {
   public incomePerPersonYearly: number;
   public gasBillYearly: number;
@@ -93,17 +95,17 @@ export class Household {
 
     const fairholdLandRent = new FairholdLandRent({
       averageRentYearly: averageRentYearly,
-      averagePrice: this.property.averageMarketPrice, // average price of the property
+      averagePrice: this.property.averageMarketPrice, 
       newBuildPrice: this.property.newBuildPrice,
-      depreciatedBuildPrice: this.property.depreciatedBuildPrice, // depreciated building price
-      landPrice: this.property.landPrice, // land price
-      incomeYearly: this.incomeYearly, // income
+      depreciatedBuildPrice: this.property.depreciatedBuildPrice, 
+      landPrice: this.property.landPrice,
+      incomeYearly: this.incomeYearly,
       forecastParameters: this.forecastParameters,
 
       fairhold: new Fairhold({
         affordability: marketRent.affordability,
         landPriceOrRent: averageRentYearly,
-      }), // fairhold object
+      }), 
 
       marketPurchase: marketPurchase
     });
