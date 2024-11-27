@@ -35,6 +35,9 @@ export interface LifetimeData {
     marketHouseRentYearly: number;
     // we will need the below for newbuilds & retrofits, and oldbuilds
     // gasBillYearly: number;
+    depreciatedHouseResaleValue: number;
+    fairholdLandPurchaseResaleValue: number;
+    houseAge: number;
     [key: number]: number;
 }
 /** 
@@ -93,6 +96,9 @@ export class Lifetime {
             marketRentYearlyIterative - marketRentLandYearlyIterative;
         let maintenanceCostIterative = 
             params.maintenancePercentage * newBuildPriceIterative;
+        let depreciatedHouseResaleValueIterative = params.property.depreciatedBuildPrice;
+        let fairholdLandPurchaseResaleValueIterative = params.fairholdLandPurchase.discountedLandPrice;
+        let houseAgeIterative = params.property.age;
 
         for (let i = 0; i < params.yearsForecast - 1; i++) {
             incomeYearlyIterative = 
@@ -117,6 +123,18 @@ export class Lifetime {
                 marketRentYearlyIterative - marketRentLandYearlyIterative;
             maintenanceCostIterative =
                 newBuildPriceIterative * params.maintenancePercentage;
+            
+            /* A new instance of the `Property` class is needed here in order to
+            re-calculate the depreciated house value as the house gets older*/
+                const iterativeProperty = new Property({ 
+                ...params.property,
+                age: houseAgeIterative 
+            });
+            /* Use the `calculateDepreciatedBuildPrice()` method on the new `Property` class 
+            to calculate an updated depreciated house value */
+            depreciatedHouseResaleValueIterative = iterativeProperty.calculateDepreciatedBuildPrice()            
+            fairholdLandPurchaseResaleValueIterative = (1 + params.constructionPriceGrowthPerYear) // TODO: replace variable name with cpiGrowthPerYear
+            houseAgeIterative += 1
 
             // If the mortgage term ongoing (if `i` is less than the term), calculate yearly mortgage payments
             if (i < params.marketPurchase.houseMortgage.termYears - 1) {
@@ -151,6 +169,9 @@ export class Lifetime {
                 maintenanceCost: maintenanceCostIterative,
                 marketLandRentYearly: marketRentLandYearlyIterative,
                 marketHouseRentYearly: marketRentHouseYearlyIterative,
+                depreciatedHouseResaleValue: depreciatedHouseResaleValueIterative,
+                fairholdLandPurchaseResaleValue: fairholdLandPurchaseResaleValueIterative,
+                houseAge: houseAgeIterative,
             });
         }
         return lifetime;
