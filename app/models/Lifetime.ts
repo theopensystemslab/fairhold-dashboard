@@ -37,7 +37,6 @@ export interface LifetimeData {
     // gasBillYearly: number;
     depreciatedHouseResaleValue: number;
     fairholdLandPurchaseResaleValue: number;
-    houseAge: number;
     [key: number]: number;
 }
 /** 
@@ -58,18 +57,6 @@ export class Lifetime {
     */
     private calculateLifetime(params: LifetimeParams): LifetimeData[] {
         const lifetime: LifetimeData[] = [];
-
-        // // initialise properties; all properties with default value of 0 will be updated in the loop
-        // this.incomeYearly = params.incomeYearly;
-        // this.affordabilityThresholdIncome = params.incomeYearly * params.affordabilityThresholdIncomePercentage;
-        // this.newbuildHouseMortgageYearly = 0; 
-        // this.depreciatedHouseMortgageYearly = 0;
-        // this.fairholdLandMortgageYearly = 0; 
-        // this.marketLandMortgageYearly = 0; 
-        // this.fairholdLandRentYearly = 0; 
-        // this.maintenanceCost = params.property.newBuildPrice * params.maintenanceCostPercentage;
-        // this.marketLandRentYearly = 0; 
-        // this.marketHouseRentYearly = 0; 
 
         // initialise mortgage values
         let newbuildHouseMortgageYearlyIterative;
@@ -98,7 +85,6 @@ export class Lifetime {
             params.maintenancePercentage * newBuildPriceIterative;
         let depreciatedHouseResaleValueIterative = params.property.depreciatedBuildPrice;
         let fairholdLandPurchaseResaleValueIterative = params.fairholdLandPurchase.discountedLandPrice;
-        let houseAgeIterative = params.property.age;
 
         for (let i = 0; i < params.yearsForecast - 1; i++) {
             incomeYearlyIterative = 
