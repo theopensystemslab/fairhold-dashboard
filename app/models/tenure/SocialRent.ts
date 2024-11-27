@@ -15,9 +15,9 @@ export class SocialRent {
   /** adjustment factors that take into account the increase of living cost  */
   socialRentAdjustments;
   housePriceIndex;
-  adjustedSocialRentMonthly: number; //adjusted social rent monthly
-  socialRentMonthlyLand: number; // social rent to pay the land
-  socialRentMonthlyHouse: number; // social rent monthly House
+  adjustedSocialRentMonthly: number; 
+  socialRentMonthlyLand: number; 
+  socialRentMonthlyHouse: number; 
   constructor(params: SocialRentParams) {
     this.socialRentAverageEarning = params.socialRentAverageEarning;
     this.socialRentAdjustments = params.socialRentAdjustments;
