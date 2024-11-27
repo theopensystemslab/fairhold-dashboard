@@ -35,6 +35,8 @@ export interface LifetimeData {
     marketHouseRentYearly: number;
     // we will need the below for newbuilds & retrofits, and oldbuilds
     // gasBillYearly: number;
+    depreciatedHouseResaleValue: number;
+    fairholdLandPurchaseResaleValue: number;
     [key: number]: number;
 }
 /** 
@@ -55,18 +57,6 @@ export class Lifetime {
     */
     private calculateLifetime(params: LifetimeParams): LifetimeData[] {
         const lifetime: LifetimeData[] = [];
-
-        // // initialise properties; all properties with default value of 0 will be updated in the loop
-        // this.incomeYearly = params.incomeYearly;
-        // this.affordabilityThresholdIncome = params.incomeYearly * params.affordabilityThresholdIncomePercentage;
-        // this.newbuildHouseMortgageYearly = 0; 
-        // this.depreciatedHouseMortgageYearly = 0;
-        // this.fairholdLandMortgageYearly = 0; 
-        // this.marketLandMortgageYearly = 0; 
-        // this.fairholdLandRentYearly = 0; 
-        // this.maintenanceCost = params.property.newBuildPrice * params.maintenanceCostPercentage;
-        // this.marketLandRentYearly = 0; 
-        // this.marketHouseRentYearly = 0; 
 
         // initialise mortgage values
         let newbuildHouseMortgageYearlyIterative;
@@ -93,6 +83,8 @@ export class Lifetime {
             marketRentYearlyIterative - marketRentLandYearlyIterative;
         let maintenanceCostIterative = 
             params.maintenancePercentage * newBuildPriceIterative;
+        let depreciatedHouseResaleValueIterative = params.property.depreciatedBuildPrice;
+        let fairholdLandPurchaseResaleValueIterative = params.fairholdLandPurchase.discountedLandPrice;
 
         for (let i = 0; i < params.yearsForecast - 1; i++) {
             incomeYearlyIterative = 
@@ -117,6 +109,8 @@ export class Lifetime {
                 marketRentYearlyIterative - marketRentLandYearlyIterative;
             maintenanceCostIterative =
                 newBuildPriceIterative * params.maintenancePercentage;
+            depreciatedHouseResaleValueIterative = 0// TODO
+            fairholdLandPurchaseResaleValueIterative = 0// TODO
 
             // If the mortgage term ongoing (if `i` is less than the term), calculate yearly mortgage payments
             if (i < params.marketPurchase.houseMortgage.termYears - 1) {
@@ -151,6 +145,8 @@ export class Lifetime {
                 maintenanceCost: maintenanceCostIterative,
                 marketLandRentYearly: marketRentLandYearlyIterative,
                 marketHouseRentYearly: marketRentHouseYearlyIterative,
+                depreciatedHouseResaleValue: depreciatedHouseResaleValueIterative,
+                fairholdLandPurchaseResaleValue: fairholdLandPurchaseResaleValueIterative
             });
         }
         return lifetime;
