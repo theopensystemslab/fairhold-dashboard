@@ -17,7 +17,8 @@ type MortgageBreakdown = {
   remainingBalance: number;
 }[];
 
-/** The `Mortgage` class is instantiated each time a mortgage needs to be calculated,
+/** 
+ * The `Mortgage` class is instantiated each time a mortgage needs to be calculated,
  * meaning per-type of property, eg land or house, per-tenure
  */
 export class Mortgage {
