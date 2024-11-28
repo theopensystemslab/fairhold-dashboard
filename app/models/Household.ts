@@ -18,6 +18,7 @@ type ConstructorParams = Pick<
   averageRentYearly: number;
   socialRentAverageEarning: number;
   socialRentAdjustments: socialRentAdjustmentTypes;
+  /** The housePriceIndex shown here is used to calculate relative property values and should be from 1999. */
   housePriceIndex: number;
 };
 
