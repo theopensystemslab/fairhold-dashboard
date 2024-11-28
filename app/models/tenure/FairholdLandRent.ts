@@ -16,7 +16,8 @@ interface FairholdLandRentParams {
   marketPurchase: MarketPurchase;
 }
 
-/** `FairholdLandRent` needs different params to `FairholdLandPurchase`,
+/** 
+ * `FairholdLandRent` needs different params to `FairholdLandPurchase`,
  * which is why they are separate classes that both instantiate an instance of `Fairhold`. 
  * Where `FairholdLandRent` uses other classes (eg `MarketPurchase`, `ForecastParameters`), they are passed in*/
 export class FairholdLandRent {

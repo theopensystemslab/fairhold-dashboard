@@ -15,15 +15,16 @@ type ConstructorParams = Pick<Fairhold, "affordability" | "landPriceOrRent">;
 export class Fairhold {
   /** Affordability is calculated as monthly housing cost / GDHI */
   public affordability: number;
-  /** Depending on whether calculating `FairholdLandPurchase` or `FairholdLandRent`,
+  /** 
+   * Depending on whether calculating `FairholdLandPurchase` or `FairholdLandRent`,
    * pass the relevant figure (open market residual land value or estimated portion of monthly market rent
    * that goes towards location)
    */
   public landPriceOrRent: number;
-  /** The Fairhold discount is a multiplier, so Fairhold prices are `discountLand * open market value`
-   */
+  /** The Fairhold discount is a multiplier, so Fairhold prices are `discountLand * open market value`*/
   public discountLand: number;
-  /** When the class is instantiated for `FairholdLandPurchase`, this is the discounted up-front land purchase price;
+  /** 
+   * When the class is instantiated for `FairholdLandPurchase`, this is the discounted up-front land purchase price;
    * when instantiated for `FairholdLandPurchase`, this is the discounted monthly community ground rent
   */
   public discountedLandPriceOrRent: number;
@@ -35,7 +36,8 @@ export class Fairhold {
     this.discountedLandPriceOrRent = this.calculateDiscountedPriceOrRent();
   }
 
-  /** Our formula is linear; the more expensive an area is, the lower the generated price multiplier is;
+  /** 
+   * Our formula is linear; the more expensive an area is, the lower the generated price multiplier is;
    * it plateaus at .15 of market rate
     */
   private calculateFairholdDiscount() {
@@ -43,7 +45,8 @@ export class Fairhold {
     return discountLand;
   }
 
-  /** Multiplies market land price or rent by the discountLand multiplier;
+  /** 
+   * Multiplies market land price or rent by the discountLand multiplier;
    * in the event that land values are effectively negative, land price will be £1
    */
   private calculateDiscountedPriceOrRent() {

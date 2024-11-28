@@ -8,7 +8,8 @@ export interface ForecastParameters {
   affordabilityThresholdIncomePercentage: number;
 }
 
-/** Parameters for forecasting changing costs over time,
+/** 
+ * Parameters for forecasting changing costs over time,
  * all values except years are percentages represented in decimal form
  */
 export const DEFAULT_FORECAST_PARAMETERS: ForecastParameters = {

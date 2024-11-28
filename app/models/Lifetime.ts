@@ -37,7 +37,8 @@ export interface LifetimeData {
     // gasBillYearly: number;
     [key: number]: number;
 }
-/** The `Lifetime` class calculates yearly spend on housing over a lifetime (set by `yearsForecast`).
+/** 
+ * The `Lifetime` class calculates yearly spend on housing over a lifetime (set by `yearsForecast`).
  * Instead of storing lifetime data within each tenure class itself,
  * `Lifetime` is stored in its own class (to prevent excess duplication of properties like `incomeYearly`).
  */
@@ -48,7 +49,8 @@ export class Lifetime {
         this.lifetimeData = this.calculateLifetime(params);
     }
 
-    /** The function loops through and calculates all values for period set by yearsForecast,
+    /** 
+     * The function loops through and calculates all values for period set by yearsForecast,
      * pushing the results to the lifetime array (one object per-year)
     */
     private calculateLifetime(params: LifetimeParams): LifetimeData[] {
