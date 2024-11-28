@@ -9,8 +9,7 @@ import { ForecastParameters } from "./ForecastParameters";
 import { socialRentAdjustmentTypes } from "../data/socialRentAdjustmentsRepo";
 import { Lifetime, LifetimeParams } from "./Lifetime"; 
 
-/** Assumed number of heads per-house */
-const HOUSE_MULTIPLIER = 2.4;
+const HEADS_PER_HOUSEHOLD = 2.4;
 
 type ConstructorParams = Pick<
   Household,
@@ -43,7 +42,7 @@ export class Household {
     this.gasBillYearly = params.gasBillYearly;
     this.property = params.property;
     this.forecastParameters = params.forecastParameters;
-    this.incomeYearly = HOUSE_MULTIPLIER * params.incomePerPersonYearly;
+    this.incomeYearly = HEADS_PER_HOUSEHOLD * params.incomePerPersonYearly;
     this.tenure = this.calculateTenures(params);
     this.lifetime = this.calculateLifetime(params);
   }
