@@ -91,15 +91,16 @@ export class Property {
     let depreciatedBuildPrice = 0;
 
     for (const [key, value] of Object.entries(HOUSE_BREAKDOWN_PERCENTAGES) as [keyof houseBreakdownType, componentBreakdownType][]) {
-      const newComponentValue = parseFloat((this.newBuildPrice * value.percentageOfHouse).toFixed(PRECISION))
+      // New component is calculated as a percentage of newBuildPrice
+      const newComponentValue = this.newBuildPrice * value.percentageOfHouse
       
       // Calculate depreciation
-      const depreciationFactor = parseFloat((1 - (value.depreciationPercentageYearly * this.age)).toFixed(PRECISION));
+      const depreciationFactor = 1 - (value.depreciationPercentageYearly * this.age);
 
       // Calculate maintenance spend (which counters depreciation)
       const maintenanceAddition = (key === 'foundations' || key === 'structureEnvelope') ? 0 : 
         MAINTENANCE_LEVELS[0] * this.newBuildPrice * this.age * value.percentOfMaintenanceYearly;
-        
+
       // Use both depreciationFactor and maintenanceAddition to calculate final depreciatedComponentValue
       const depreciatedComponentValue = parseFloat(((newComponentValue * depreciationFactor) + maintenanceAddition).toFixed(PRECISION));
 
@@ -108,6 +109,38 @@ export class Property {
     depreciatedBuildPrice = parseFloat(depreciatedBuildPrice.toFixed(PRECISION))
     return depreciatedBuildPrice;
   };
+
+  public calculateComponentValue(
+    componentKey: keyof houseBreakdownType,
+    newBuildPrice: number,
+    age: number,
+    maintenanceLevel: number
+  ) {
+    const component = HOUSE_BREAKDOWN_PERCENTAGES[componentKey];
+    
+    // Calculate new component value
+    const newComponentValue = newBuildPrice * component.percentageOfHouse;
+    
+    // Calculate depreciation
+    const depreciationFactor = 1 - (component.depreciationPercentageYearly * age);
+    
+    // Calculate maintenance (0 for foundations and structure)
+    const maintenanceAddition = 
+      (componentKey === 'foundations' || componentKey === 'structureEnvelope') 
+        ? 0 
+        : maintenanceLevel * newBuildPrice * age * component.percentOfMaintenanceYearly;
+    
+    // Calculate final value
+    const depreciatedComponentValue = 
+      (newComponentValue * depreciationFactor) + maintenanceAddition;
+    
+    return {
+      newComponentValue,
+      depreciationFactor,
+      maintenanceAddition,
+      depreciatedComponentValue: Math.max(depreciatedComponentValue, 0)
+    };
+  }
 
   private calculateBedWeightedAveragePrice() {
     const bedWeights = BED_WEIGHTS_AND_CAPS.weight;
