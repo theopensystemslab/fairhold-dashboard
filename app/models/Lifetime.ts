@@ -1,4 +1,3 @@
-// imports (eg constants)
 import { MarketPurchase } from "./tenure/MarketPurchase";
 import { MarketRent } from "./tenure/MarketRent";
 import { FairholdLandPurchase } from "./tenure/FairholdLandPurchase";
@@ -7,7 +6,6 @@ import { Fairhold } from "./Fairhold";
 import { Property } from "./Property";
 import { MONTHS_PER_YEAR } from "./constants";
 
-// interfaces and types
 export interface LifetimeParams {
     marketPurchase: MarketPurchase;
     marketRent: MarketRent;
@@ -39,14 +37,22 @@ export interface LifetimeData {
     // gasBillYearly: number;
     [key: number]: number;
 }
-
+/** 
+ * The `Lifetime` class calculates yearly spend on housing over a lifetime (set by `yearsForecast`).
+ * Instead of storing lifetime data within each tenure class itself,
+ * `Lifetime` is stored in its own class (to prevent excess duplication of properties like `incomeYearly`).
+ */
 export class Lifetime {
     public lifetimeData: LifetimeData[];
 
     constructor(params: LifetimeParams) {
         this.lifetimeData = this.calculateLifetime(params);
     }
-    
+
+    /** 
+     * The function loops through and calculates all values for period set by yearsForecast,
+     * pushing the results to the lifetime array (one object per-year)
+    */
     private calculateLifetime(params: LifetimeParams): LifetimeData[] {
         const lifetime: LifetimeData[] = [];
 
@@ -112,11 +118,13 @@ export class Lifetime {
             maintenanceCostIterative =
                 newBuildPriceIterative * params.maintenancePercentage;
 
+            // If the mortgage term ongoing (if `i` is less than the term), calculate yearly mortgage payments
             if (i < params.marketPurchase.houseMortgage.termYears - 1) {
                 newbuildHouseMortgageYearlyIterative = params.marketPurchase.houseMortgage.yearlyPaymentBreakdown[i].yearlyPayment;
                 depreciatedHouseMortgageYearlyIterative = params.fairholdLandPurchase.depreciatedHouseMortgage.yearlyPaymentBreakdown[i].yearlyPayment;
                 fairholdLandMortgageYearlyIterative = params.fairholdLandPurchase.discountedLandMortgage.yearlyPaymentBreakdown[i].yearlyPayment
                 marketLandMortgageYearlyIterative = params.marketPurchase.landMortgage.yearlyPaymentBreakdown[i].yearlyPayment;
+            // If the mortgage term has ended, yearly payment is 0
             } else {
                 newbuildHouseMortgageYearlyIterative = 0;
                 depreciatedHouseMortgageYearlyIterative = 0;
