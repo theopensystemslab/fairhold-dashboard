@@ -61,6 +61,11 @@ export type houseBreakdownType = {
   landscaping: componentBreakdownType,
 }
 
+/** 
+ * Object (key = component, value = another object with `percentageOfHouse`, `deprecationPercentageYearly` and `percentOfMaintenanceYearly`). Contains a breakdown of a house by component, and the percentage of total value it constitutes:
+ * foundations 21%, structure 25%, cladding 4%, roofing 4%, windows 4%, internal linings 4%, bathroom 4%, fitout 5%,
+ * kitchen units 4%, electrical appliances 4%, electrical services 4%, ventilation services 4%, water and heating services 8%,
+ * floor coverings 2%, landscaping 3%*/
 export const HOUSE_BREAKDOWN_PERCENTAGES: houseBreakdownType = {
   foundations: {
     percentageOfHouse: .21,
