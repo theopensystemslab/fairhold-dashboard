@@ -1,6 +1,5 @@
-import * as math from "mathjs";
 import { BED_WEIGHTS_AND_CAPS, MAINTENANCE_LEVELS, HOUSE_BREAKDOWN_PERCENTAGES } from "./constants";
-import { houseBreakdownType, componentBreakdownType } from "./constants";
+import { houseBreakdownType } from "./constants";
 /**
  * Number of decimal places to use when rounding numerical values
  */
@@ -24,6 +23,13 @@ export const HOUSE_TYPES = ["D", "S", "T", "F"] as const;
 export type HouseType = (typeof HOUSE_TYPES)[number];
 
 export type MaintenancePercentage = (typeof MAINTENANCE_LEVELS)[number]
+
+export type ComponentCalculation = {
+  newComponentValue: number;
+  depreciationFactor: number;
+  maintenanceAddition: number;
+  depreciatedComponentValue: number;
+}
 
 export class Property {
   postcode: string;
@@ -89,32 +95,28 @@ export class Property {
     
     let depreciatedBuildPrice = 0;
 
-    for (const [key, value] of Object.entries(HOUSE_BREAKDOWN_PERCENTAGES) as [keyof houseBreakdownType, componentBreakdownType][]) {
-      // New component is calculated as a percentage of newBuildPrice
-      const newComponentValue = this.newBuildPrice * value.percentageOfHouse
-      
-      // Calculate depreciation
-      const depreciationFactor = 1 - (value.depreciationPercentageYearly * this.age);
+  // Calculate for each component using the public method
+  for (const key of Object.keys(HOUSE_BREAKDOWN_PERCENTAGES) as (keyof houseBreakdownType)[]) {
+    const result = this.calculateComponentValue(
+      key, 
+      this.newBuildPrice, 
+      this.age, 
+      MAINTENANCE_LEVELS[0]
+    );
 
-      // Calculate maintenance spend (which counters depreciation)
-      const maintenanceAddition = (key === 'foundations' || key === 'structureEnvelope') ? 0 : 
-        MAINTENANCE_LEVELS[0] * this.newBuildPrice * this.age * value.percentOfMaintenanceYearly;
-
-      // Use both depreciationFactor and maintenanceAddition to calculate final depreciatedComponentValue
-      const depreciatedComponentValue = parseFloat(((newComponentValue * depreciationFactor) + maintenanceAddition).toFixed(PRECISION));
-
-      depreciatedBuildPrice += math.max(depreciatedComponentValue, 0) // Add depreciatedComponentValue to depreciatedBuildPrice, or 0 if value is negative
-    }
+    depreciatedBuildPrice += result.depreciatedComponentValue;
+  }
     depreciatedBuildPrice = parseFloat(depreciatedBuildPrice.toFixed(PRECISION))
-    return depreciatedBuildPrice;
-  };
+
+  return depreciatedBuildPrice;
+}
 
   public calculateComponentValue(
     componentKey: keyof houseBreakdownType,
     newBuildPrice: number,
     age: number,
     maintenanceLevel: number
-  ) {
+  ): ComponentCalculation {
     const component = HOUSE_BREAKDOWN_PERCENTAGES[componentKey];
     
     // Calculate new component value
@@ -130,14 +132,16 @@ export class Property {
         : maintenanceLevel * newBuildPrice * age * component.percentOfMaintenanceYearly;
     
     // Calculate final value
-    const depreciatedComponentValue = 
+    let depreciatedComponentValue = 
       (newComponentValue * depreciationFactor) + maintenanceAddition;
-    
+
+    depreciatedComponentValue < 0 ? depreciatedComponentValue = 0 : depreciatedComponentValue
+
     return {
       newComponentValue,
       depreciationFactor,
       maintenanceAddition,
-      depreciatedComponentValue: Math.max(depreciatedComponentValue, 0)
+      depreciatedComponentValue
     };
   }
 
