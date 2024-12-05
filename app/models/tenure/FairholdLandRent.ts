@@ -6,11 +6,10 @@ import { MarketPurchase } from "./MarketPurchase";
 
 interface FairholdLandRentParams {
   averageRentYearly: number;
-  averagePrice: number;
   newBuildPrice: number;
   depreciatedBuildPrice: number;
-  landPrice: number;
   incomeYearly: number;
+  landToTotalRatio: number;
   fairhold: Fairhold;
   forecastParameters: ForecastParameters;
   marketPurchase: MarketPurchase;
@@ -48,13 +47,9 @@ export class FairholdLandRent {
   private calculateDiscountedLandRentMonthly({
     incomeYearly,
     averageRentYearly,
-    landPrice,
-    averagePrice,
+    landToTotalRatio,
   }: FairholdLandRentParams) {
     const marketRentAffordability = incomeYearly / averageRentYearly;
-    /*TODO: landToTotalRatio is calculated elsewhere too, eg when instantiating socialRent in Property... 
-    can we just calculate it once?*/
-    const landToTotalRatio = landPrice / averagePrice;
     const averageRentLandMonthly =
       (averageRentYearly / MONTHS_PER_YEAR) * landToTotalRatio;
 
