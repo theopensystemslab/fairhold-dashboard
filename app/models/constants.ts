@@ -37,33 +37,30 @@ export const NATIONAL_AVERAGES: NationalAverage = {
  */
 export const MAINTENANCE_LEVELS = [0.015, 0.02, 0.0375] as const;
 
-/** Type for storing component values and depreciation*/
-export type ComponentBreakdown = {
-  /** Component value as percentage of total house value */
-  percentageOfHouse: number, 
-  /** Percentage of the component's total value that is written-down yearly */
-  depreciationPercentageYearly: number,
-  /** Percentage of the yearly maintenance spend allocated to component */
-  percentOfMaintenanceYearly: number
+type Component = 
+  | "foundations" 
+  | "structureEnvelope" 
+  | "cladding"
+  | "roofing"
+  | "windows" 
+  | "internalLinings"
+  | "bathroomFixtures"
+  | "fitout"
+  | "kitchenUnits"
+  | "electricalAppliances"
+  | "electricalServices"
+  | "ventilationServices"
+  | "waterAndHeatingServices"
+  | "floorCoverings"
+  | "landscaping";
+
+interface ComponentBreakdown {
+  percentageOfHouse: number;
+  depreciationPercentageYearly: number;
+  percentOfMaintenanceYearly: number;
 }
 
-export type HouseBreakdown = {
-  foundations: ComponentBreakdown,
-  structureEnvelope: ComponentBreakdown,
-  cladding: ComponentBreakdown,
-  roofing: ComponentBreakdown,
-  windows: ComponentBreakdown,
-  internalLinings: ComponentBreakdown,
-  bathroomFixtures: ComponentBreakdown,
-  fitout: ComponentBreakdown,
-  kitchenUnits: ComponentBreakdown,
-  electricalAppliances: ComponentBreakdown,
-  electricalServices: ComponentBreakdown,
-  ventilationServices: ComponentBreakdown,
-  waterAndHeatingServices: ComponentBreakdown,
-  floorCoverings: ComponentBreakdown,
-  landscaping: ComponentBreakdown,
-}
+export type HouseBreakdown = Record<Component, ComponentBreakdown>;
 
 /** 
  * Object (key = component, value = another object with `percentageOfHouse`, `deprecationPercentageYearly` and `percentOfMaintenanceYearly`). Contains a breakdown of a house by component, and the percentage of total value it constitutes:
