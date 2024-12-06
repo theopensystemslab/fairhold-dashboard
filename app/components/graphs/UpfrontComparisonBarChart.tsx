@@ -35,11 +35,8 @@ import React from "react";
 type DataInput = {
   category: string;
   marketPurchase: number;
-  marketRent: number;
-  socialRent: number;
   fairholdLandPurchase: number;
   fairholdLandRent: number;
-  affordabilityMonthly: number;
   [key: string]: string | number;
 };
 
@@ -49,22 +46,14 @@ interface StackedBarChartProps {
 }
 
 // Implementation of the Chart.js Stacked Bar Chart
-const TenureComparisonBarChart: React.FC<StackedBarChartProps> = ({ data }) => {
+const UpfrontComparisonBarChart: React.FC<StackedBarChartProps> = ({
+  data,
+}) => {
   const chartData = [
     {
       tenure: "market: purchase",
       land: data[0].marketPurchase,
       house: data[1].marketPurchase,
-    },
-    {
-      tenure: "market: rent",
-      land: data[0].marketRent,
-      house: data[1].marketRent,
-    },
-    {
-      tenure: "social rent",
-      land: data[0].socialRent,
-      house: data[1].socialRent,
     },
     {
       tenure: "fairhold: land purchase",
@@ -82,7 +71,7 @@ const TenureComparisonBarChart: React.FC<StackedBarChartProps> = ({ data }) => {
     <Card>
       <CardHeader>
         <CardTitle>Tenure comparison</CardTitle>
-        <CardDescription>Monthly cost in £</CardDescription>
+        <CardDescription>Total upfront cost £</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
@@ -114,11 +103,11 @@ const TenureComparisonBarChart: React.FC<StackedBarChartProps> = ({ data }) => {
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
         <div className="leading-none text-muted-foreground">
-          Showing the montly cost by tenure type.
+          Showing the upfront cost.
         </div>
       </CardFooter>
     </Card>
   );
 };
 
-export default TenureComparisonBarChart;
+export default UpfrontComparisonBarChart;
