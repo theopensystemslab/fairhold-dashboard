@@ -1,9 +1,3 @@
-/*
-  Warnings:
-
-  - You are about to drop the `buildprices` table. If the table is not empty, all the data it contains will be lost.
-
-*/
 -- Alter table
 ALTER TABLE "buildprices" RENAME TO "build_prices";
 
