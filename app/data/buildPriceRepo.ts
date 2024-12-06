@@ -9,8 +9,7 @@ const getBuildPriceByHouseType = async (houseType: string): Promise<number> => {
       select: { priceMid: true },
     });
 
-    // Cast to string as 'not: null' clause in Prisma query does not type narrow
-    return buildPrice as number;
+    return buildPrice;
   } catch (error) {
     throw new Error(
       `Data error: Unable to get buildPrice for houseType ${houseType}`
