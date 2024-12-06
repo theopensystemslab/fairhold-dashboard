@@ -10,7 +10,7 @@ datasource db {
 
 model BuildPrices {
   id                   Int     @id @default(autoincrement())
-  houseTypeDescription String? @map("housetypedescription") @db.VarChar(250)
+  houseTypeDescription String? @map("house_type_description") @db.VarChar(250)
   houseType            String? @map("housetype") @db.VarChar(1)
   priceRange           String? @map("pricerange") @db.VarChar(50)
   priceMid             Float?  @map("pricemid")
