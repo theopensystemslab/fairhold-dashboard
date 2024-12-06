@@ -32,8 +32,6 @@ yarn-error.log*
 .env*.local
 .env*
 next.config.mjs
-env.local
-env.production
 
 # vercel
 .vercel
