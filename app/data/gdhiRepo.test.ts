@@ -31,7 +31,6 @@ describe("gdhiRepo", () => {
       where: {
         AND: {
           itl3: { equals: itl3 },
-          gdhi2020: { not: null },
         },
       },
       select: { gdhi2020: true },
