@@ -2,11 +2,10 @@ import { MONTHS_PER_YEAR } from "../constants";
 import { ForecastParameters,  DEFAULT_FORECAST_PARAMETERS } from '../ForecastParameters'; 
 interface MarketRentParams {
   averageRentYearly: number;
-  averagePrice: number;
   newBuildPrice: number;
   depreciatedBuildPrice: number;
-  landPrice: number;
   incomeYearly: number;
+  landToTotalRatio: number;
   forecastParameters: ForecastParameters;
 }
 
@@ -37,14 +36,11 @@ export class MarketRent {
   }
 
   private calculateAverageRentLandAndHouse({
-    landPrice,
-    averagePrice,
+    landToTotalRatio,
     incomeYearly,
     averageRentYearly,
   }: MarketRentParams) {
     const averageRentMonthly = averageRentYearly / MONTHS_PER_YEAR;
-    // TODO: landToTotalRatio is calculated multiple times in multiple places, can we just do it once?
-    const landToTotalRatio = landPrice / averagePrice;
     const averageRentLandMonthly = averageRentMonthly * landToTotalRatio;
     const averageRentHouseMonthly = averageRentMonthly - averageRentLandMonthly;
     const affordability = averageRentYearly / incomeYearly;

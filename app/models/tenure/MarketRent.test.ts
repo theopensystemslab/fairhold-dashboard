@@ -11,10 +11,9 @@ beforeEach(() => {
   tenureMarketRent = new MarketRent({
     averageRentYearly: 20000,
     incomeYearly: 45816,
-    averagePrice: 218091.58,
     newBuildPrice: 186560,
     depreciatedBuildPrice: 110717.45,
-    landPrice: 31531.579,
+    landToTotalRatio: 0.1446,
     forecastParameters: forecastParameters,
   });
 });

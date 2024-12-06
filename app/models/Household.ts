@@ -65,11 +65,10 @@ export class Household {
 
     const marketRent = new MarketRent({
       averageRentYearly: averageRentYearly,
-      averagePrice: this.property.averageMarketPrice,
       newBuildPrice: this.property.newBuildPrice,
       depreciatedBuildPrice: this.property.depreciatedBuildPrice,
-      landPrice: this.property.landPrice,
       incomeYearly: this.incomeYearly,
+      landToTotalRatio: this.property.landToTotalRatio,
       forecastParameters: this.forecastParameters,
     });
 
@@ -95,11 +94,10 @@ export class Household {
 
     const fairholdLandRent = new FairholdLandRent({
       averageRentYearly: averageRentYearly,
-      averagePrice: this.property.averageMarketPrice, 
       newBuildPrice: this.property.newBuildPrice,
       depreciatedBuildPrice: this.property.depreciatedBuildPrice, 
-      landPrice: this.property.landPrice,
       incomeYearly: this.incomeYearly,
+      landToTotalRatio: this.property.landToTotalRatio,
       forecastParameters: this.forecastParameters,
 
       fairhold: new Fairhold({
