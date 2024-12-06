@@ -136,7 +136,8 @@ export class Property {
     let depreciatedComponentValue = 
       (newComponentValue * depreciationFactor) + maintenanceAddition;
 
-    depreciatedComponentValue < 0 ? depreciatedComponentValue = 0 : depreciatedComponentValue
+    // Do not depreciate below 0
+    if (depreciatedComponentValue < 0) depreciatedComponentValue = 0
 
     return {
       newComponentValue,
