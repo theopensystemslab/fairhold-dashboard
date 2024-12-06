@@ -1,6 +1,5 @@
 import { Property } from "./Property";
-import { HOUSE_BREAKDOWN_PERCENTAGES, MAINTENANCE_LEVELS } from './constants';
-
+import { HOUSE_BREAKDOWN_PERCENTAGES, MAINTENANCE_LEVELS, HouseBreakdown } from './constants';
 describe('Property', () => {
   beforeEach(() => {
     property = new Property({
@@ -26,7 +25,6 @@ describe('Property', () => {
     expect(property.newBuildPrice).toBeCloseTo(186560);
   });
 
-  // 
   it("correctly calculates the bedWeightedAveragePrice", () => {
     expect(property.bedWeightedAveragePrice).toBeCloseTo(219135);
   });
@@ -40,7 +38,8 @@ describe('Property', () => {
   });
   
   it("correctly calculates the values even for number of bedroooms exceeding the max ", () => {
-    property = new Property({
+    // Any bedroom size bigger than 6 beds should be treated as 6 beds, so this compares one instantiated with 20 beds with one instantiated with 6
+    const propertyBig = new Property({
       postcode: "WV8 1HG",
       houseType: "T",
       numberOfBedrooms: 20,
@@ -51,7 +50,20 @@ describe('Property', () => {
       averageMarketPrice: 218091.58,
       itl3: "TLG24",
     });
-    expect(property).toBeInstanceOf(Property);
+
+    const propertySmall = new Property({
+      postcode: "WV8 1HG",
+      houseType: "T",
+      numberOfBedrooms: 6,
+      age: 11,
+      size: 88,
+      maintenancePercentage: 0.02,
+      newBuildPricePerMetre: 2120,
+      averageMarketPrice: 218091.58,
+      itl3: "TLG24",
+    });
+
+    expect(propertyBig.bedWeightedAveragePrice).toEqual(propertySmall.bedWeightedAveragePrice);
   });
 
   it("correctly returns newBuildPrice if newbuild", () => {
@@ -71,88 +83,57 @@ describe('Property', () => {
   });
 
   describe('depreciation calculations (existing build)', () => {
-
-    it("correctly calculates newComponentValue for foundations", () => {
+    test.each([
+      ['foundations', 0, 0], // component, depreciationPercentageYearly, percentOfMaintenanceYearly
+      ['internalLinings', 0.032, 0.074],
+      ['electricalAppliances', 0.0833, 0.074],
+      ['ventilationServices', 0.0667, 0.074]
+    ])('correctly calculates all values for %s', (component, depreciationRate, maintenanceRate) => {
       const result = property.calculateComponentValue(
-        'foundations',
+        component as keyof HouseBreakdown, 
         property.newBuildPrice,
         property.age,
         MAINTENANCE_LEVELS[0]
       );
-
-      const expectedNewComponentValue = 
-        property.newBuildPrice * 
-        HOUSE_BREAKDOWN_PERCENTAGES.foundations.percentageOfHouse;
-
+   
+      const breakdown = HOUSE_BREAKDOWN_PERCENTAGES[component as keyof HouseBreakdown];
+   
+      // New component value
+      const expectedNewComponentValue = property.newBuildPrice * breakdown.percentageOfHouse;
       expect(result.newComponentValue).toBe(expectedNewComponentValue);
-      expect(result.maintenanceAddition).toBe(0); // Foundations should have no maintenance
-    });
-
-    it("correctly calculates depreciationFactor for internal linings", () => {
-      const result = property.calculateComponentValue(
-        'internalLinings',
-        property.newBuildPrice,
-        property.age,
-        MAINTENANCE_LEVELS[0]
-      );
-
-      const expectedDepreciationFactor = 
-        1 - (HOUSE_BREAKDOWN_PERCENTAGES.internalLinings.depreciationPercentageYearly * property.age);
-
+   
+      // Depreciation factor
+      const expectedDepreciationFactor = 1 - (depreciationRate * property.age);
       expect(result.depreciationFactor).toBe(expectedDepreciationFactor);
-    });
-
-    it("correctly calculates maintenanceAddition for electrical appliances", () => {
-      const result = property.calculateComponentValue(
-        'electricalAppliances',
-        property.newBuildPrice,
-        property.age,
-        MAINTENANCE_LEVELS[0]
-      );
-
+   
+      // Maintenance addition
       const expectedMaintenanceAddition = 
-        MAINTENANCE_LEVELS[0] * 
-        property.newBuildPrice * 
-        property.age * 
-        HOUSE_BREAKDOWN_PERCENTAGES.electricalAppliances.percentOfMaintenanceYearly;
-
+        MAINTENANCE_LEVELS[0] * property.newBuildPrice * property.age * maintenanceRate;
       expect(result.maintenanceAddition).toBe(expectedMaintenanceAddition);
-    });
-
-    it("correctly calculates depreciatedComponentValue for ventilation services", () => {
-      const result = property.calculateComponentValue(
-        'ventilationServices',
-        property.newBuildPrice,
-        property.age,
-        MAINTENANCE_LEVELS[0]
-      );
-
-      const component = HOUSE_BREAKDOWN_PERCENTAGES.ventilationServices;
-      const newComponentValue = property.newBuildPrice * component.percentageOfHouse;
-      const depreciationFactor = 1 - (component.depreciationPercentageYearly * property.age);
-      const maintenanceAddition = 
-        MAINTENANCE_LEVELS[0] * 
-        property.newBuildPrice * 
-        property.age * 
-        component.percentOfMaintenanceYearly;
-
+   
+      // Final depreciated value
       const expectedValue = Math.max(
-        (newComponentValue * depreciationFactor) + maintenanceAddition,
+        (expectedNewComponentValue * expectedDepreciationFactor) + expectedMaintenanceAddition,
         0
       );
-
       expect(result.depreciatedComponentValue).toBe(expectedValue);
     });
+   });
 
-    it("ensures depreciatedComponentValue never goes below 0", () => {
-      const result = property.calculateComponentValue(
-        'ventilationServices',
-        property.newBuildPrice,
-        100, // High age to test possible negative values
-        MAINTENANCE_LEVELS[0]
-      );
+  test.each([
+    [10, "age 10"],
+    [50, "age 50"],
+    [100, "age 100"],
+    [200, "extreme age 200"]
+  ])("ensures depreciatedComponentValue never goes below 0 at %s", (age) => {
+  const result = property.calculateComponentValue(
+    'ventilationServices', 
+    property.newBuildPrice,
+    age,
+    MAINTENANCE_LEVELS[0]
+  );
 
-      expect(result.depreciatedComponentValue).toBeGreaterThanOrEqual(0);
+    expect(result.depreciatedComponentValue).toBeGreaterThanOrEqual(0);
     });
 
     it('should calculate correct depreciation for a 10-year-old house', () => {
@@ -179,5 +160,4 @@ describe('Property', () => {
 
       expect(property.depreciatedBuildPrice).toBeCloseTo(Number(expectedDepreciatedPrice.toFixed(2)));
     });
-  });
 });
