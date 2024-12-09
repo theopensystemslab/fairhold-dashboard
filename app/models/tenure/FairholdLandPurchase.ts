@@ -12,13 +12,18 @@ interface FairholdLandPurchaseParams {
   marketPurchase: MarketPurchase;
 }
 
+/** 
+ * `FairholdLandPurchase` needs different params to FairholdLandRent,
+ * which is why they are separate classes that both instantiate an instance of Fairhold. 
+ * Where `FairholdLandRent` uses other classes (eg `MarketPurchase`, `ForecastParameters`), they are passed in*/
 export class FairholdLandPurchase {
   params: FairholdLandPurchaseParams;
   discountedLandPrice: number;
   discountedLandMortgage: Mortgage;
   depreciatedHouseMortgage: Mortgage;
+  /** All tenure classes have an `interestPaid` property, summed from `Mortgage.totalInterest` (if more than one `Mortgage` class) */
   interestPaid: number;
-  /** interest saved relative to market purchase, pounds */
+  /** Interest saved relative to `MarketPurchase`, pounds */
   interestSaved: number;
 
   constructor(params: FairholdLandPurchaseParams) {

@@ -16,14 +16,17 @@ interface FairholdLandRentParams {
   marketPurchase: MarketPurchase;
 }
 
+/** 
+ * `FairholdLandRent` needs different params to `FairholdLandPurchase`,
+ * which is why they are separate classes that both instantiate an instance of `Fairhold`. 
+ * Where `FairholdLandRent` uses other classes (eg `MarketPurchase`, `ForecastParameters`), they are passed in*/
 export class FairholdLandRent {
   params: FairholdLandRentParams;
-  /** Mortgage on the depreciated value of the house */
   depreciatedHouseMortgage: Mortgage;
-  /** discounted value of the monthly land rent according to fairhold */
   discountedLandRentMonthly: number;
+  /** All tenure classes have an `interestPaid` property, summed from `Mortgage.totalInterest` (if more than one `Mortgage` class) */
   interestPaid: number;
-  /** interest saved relative to market purchase, pounds */
+  /** Interest saved relative to `MarketPurchase`, pounds */
   interestSaved: number;
 
   constructor(params: FairholdLandRentParams) {
@@ -49,6 +52,8 @@ export class FairholdLandRent {
     averagePrice,
   }: FairholdLandRentParams) {
     const marketRentAffordability = incomeYearly / averageRentYearly;
+    /*TODO: landToTotalRatio is calculated elsewhere too, eg when instantiating socialRent in Property... 
+    can we just calculate it once?*/
     const landToTotalRatio = landPrice / averagePrice;
     const averageRentLandMonthly =
       (averageRentYearly / MONTHS_PER_YEAR) * landToTotalRatio;

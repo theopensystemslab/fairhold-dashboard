@@ -43,6 +43,7 @@ export class MarketRent {
     averageRentYearly,
   }: MarketRentParams) {
     const averageRentMonthly = averageRentYearly / MONTHS_PER_YEAR;
+    // TODO: landToTotalRatio is calculated multiple times in multiple places, can we just do it once?
     const landToTotalRatio = landPrice / averagePrice;
     const averageRentLandMonthly = averageRentMonthly * landToTotalRatio;
     const averageRentHouseMonthly = averageRentMonthly - averageRentLandMonthly;
