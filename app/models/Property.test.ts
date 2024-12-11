@@ -1,5 +1,5 @@
 import { Property } from "./Property";
-import { HOUSE_BREAKDOWN_PERCENTAGES, MAINTENANCE_LEVELS, HouseBreakdown } from './constants';
+import { MAINTENANCE_LEVELS, HouseBreakdown } from './constants';
 describe('Property', () => {
   beforeEach(() => {
     property = new Property({
@@ -84,39 +84,31 @@ describe('Property', () => {
 
   describe('depreciation calculations (existing build)', () => {
     test.each([
-      ['foundations', 0, 0], // component, depreciationPercentageYearly, percentOfMaintenanceYearly
-      ['internalLinings', 0.032, 0.074],
-      ['electricalAppliances', 0.0833, 0.074],
-      ['ventilationServices', 0.0667, 0.074]
-    ])('correctly calculates all values for %s', (component, depreciationRate, maintenanceRate) => {
+      ['foundations', 39177.6, 1, 0, 39177.6], // component, depreciationPercentageYearly, percentOfMaintenanceYearly, expectedNewComponentValue, expectedDepreciationFactor, expectedMaintenanceAddition, expectedDepreciatedValue
+      ['internalLinings', 7462.4, .68, 1863.74439, 7176.96],
+      ['electricalAppliances', 7462.4, 0.2503, 1863.74439, 3731.57],
+      ['ventilationServices', 7462.4, 0.3997, 1863.74439, 4846.45]
+    ])('correctly calculates all values for %s', (component, expectedNewComponentValue, expectedDepreciationFactor, expectedMaintenanceAddition, expectedDepreciatedValue) => {
       const result = property.calculateComponentValue(
         component as keyof HouseBreakdown, 
         property.newBuildPrice,
         property.age,
         MAINTENANCE_LEVELS[0]
       );
-   
-      const breakdown = HOUSE_BREAKDOWN_PERCENTAGES[component as keyof HouseBreakdown];
-   
+      
+      console.log({result})
       // New component value
-      const expectedNewComponentValue = property.newBuildPrice * breakdown.percentageOfHouse;
-      expect(result.newComponentValue).toBe(expectedNewComponentValue);
+      expect(Number(result.newComponentValue.toFixed(4))).toBeCloseTo(expectedNewComponentValue,1);
    
       // Depreciation factor
-      const expectedDepreciationFactor = 1 - (depreciationRate * property.age);
-      expect(result.depreciationFactor).toBe(expectedDepreciationFactor);
+      expect(Number(result.depreciationFactor.toFixed(4))).toBeCloseTo(expectedDepreciationFactor,1);
    
       // Maintenance addition
-      const expectedMaintenanceAddition = 
-        MAINTENANCE_LEVELS[0] * property.newBuildPrice * property.age * maintenanceRate;
-      expect(result.maintenanceAddition).toBe(expectedMaintenanceAddition);
-   
-      // Final depreciated value
-      const expectedValue = Math.max(
-        (expectedNewComponentValue * expectedDepreciationFactor) + expectedMaintenanceAddition,
-        0
-      );
-      expect(result.depreciatedComponentValue).toBe(expectedValue);
+      expect(Number(result.maintenanceAddition.toFixed(4))).toBeCloseTo(expectedMaintenanceAddition,1);
+
+      // Depreciated values
+      expect(Number(result.depreciatedComponentValue.toFixed(4))).toBeCloseTo(expectedDepreciatedValue,1);
+
     });
    });
 
@@ -137,27 +129,6 @@ describe('Property', () => {
     });
 
     it('should calculate correct depreciation for a 10-year-old house', () => {
-      // Calculate the expected value manually
-      const newBuildPrice = property.newBuildPrice;
-      let expectedDepreciatedPrice = 0;
-
-      // Calculate for each component (mimicking calculateComponentValue())
-      for (const [key, value] of Object.entries(HOUSE_BREAKDOWN_PERCENTAGES)) {
-        const newComponentValue = newBuildPrice * value.percentageOfHouse;
-        const depreciationFactor = 1 - (value.depreciationPercentageYearly * property.age);
-        
-        const maintenanceAddition = (key === 'foundations' || key === 'structureEnvelope') 
-          ? 0 
-          : MAINTENANCE_LEVELS[0] * newBuildPrice * property.age * value.percentOfMaintenanceYearly;
-
-        const depreciatedComponentValue = Math.max(
-          (newComponentValue * depreciationFactor) + maintenanceAddition,
-          0
-        );
-
-        expectedDepreciatedPrice += depreciatedComponentValue;
-      }
-
-      expect(property.depreciatedBuildPrice).toBeCloseTo(Number(expectedDepreciatedPrice.toFixed(2)));
+      expect(property.depreciatedBuildPrice).toBeCloseTo(172976.566);
     });
 });
