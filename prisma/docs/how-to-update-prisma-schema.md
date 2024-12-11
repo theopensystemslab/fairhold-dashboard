@@ -15,6 +15,8 @@ Run `npm run prisma:migrate` - this will apply to the change to your local dev d
 > For example when renaming a column Prisma may drop and recreate the column (thus losing data). Manually writing the correct SQL in the generated migration file (e.g. `ALTER table UPDATE column`) allows us to work around this. You'll then need to run `npm run prisma:migrate` to apply your changes.
 >
 > Docs: https://www.prisma.io/docs/orm/prisma-migrate/workflows/development-and-production#customizing-migrations
+> 
+> Even though you run it with `create-only`, you will _still_ get the warning `√ We need to reset the "public" schema at "localhost:5400"...Do you want to continue? All data will be lost.` and you'll have to proceed with `yes`. 
 
 1. Update Prisma client
 Run `npm run prisma:generate` to update your local client. You should now be able to both interact with the updated Prisma client as well as view the change in your local dev database.
