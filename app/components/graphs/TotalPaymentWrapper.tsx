@@ -1,8 +1,8 @@
 "use client";
 import React from "react";
-import ErrorBoundary from '../ErrorBoundary';
+import ErrorBoundary from "../ErrorBoundary";
 import { Household } from "@/app/models/Household";
-import TotalPaymentBarChart from "./TotalPaymentBarChart";
+import TotalPaymentPieChart from "./TotalPaymentPieChart";
 import { LifetimeData } from "@/app/models/Lifetime";
 
 interface TotalPaymentWrapperProps {
@@ -19,9 +19,9 @@ const TotalPaymentWrapper: React.FC<TotalPaymentWrapperProps> = ({
     keys: (keyof LifetimeData)[]
   ): number => {
     if (!lifetime || !Array.isArray(lifetime)) return 0;
-  
+
     let totalSum = 0;
-  
+
     for (const entry of lifetime) {
       let entrySum = 0;
       for (const key of keys) {
@@ -29,29 +29,29 @@ const TotalPaymentWrapper: React.FC<TotalPaymentWrapperProps> = ({
       }
       totalSum += entrySum;
     }
-  
+
     return totalSum;
   };
 
   const chartData = [
     {
       paymentType: "Total Payments",
-      marketPurchase: sumLifetimeValues(
-        household.lifetime.lifetimeData,
-        ["newbuildHouseMortgageYearly", "marketLandMortgageYearly"]
-      ),
-      marketRent: sumLifetimeValues(
-        household.lifetime.lifetimeData, 
-        ["marketHouseRentYearly", "marketLandRentYearly",
+      marketPurchase: sumLifetimeValues(household.lifetime.lifetimeData, [
+        "newbuildHouseMortgageYearly",
+        "marketLandMortgageYearly",
       ]),
-      fairholdLandPurchase: sumLifetimeValues(
-        household.lifetime.lifetimeData, 
-        ["depreciatedHouseMortgageYearly", "fairholdLandMortgageYearly"]
-      ),
-      fairholdLandRent: sumLifetimeValues(
-        household.lifetime.lifetimeData, 
-        ["depreciatedHouseMortgageYearly", "fairholdLandRentYearly"]
-      ),
+      marketRent: sumLifetimeValues(household.lifetime.lifetimeData, [
+        "marketHouseRentYearly",
+        "marketLandRentYearly",
+      ]),
+      fairholdLandPurchase: sumLifetimeValues(household.lifetime.lifetimeData, [
+        "depreciatedHouseMortgageYearly",
+        "fairholdLandMortgageYearly",
+      ]),
+      fairholdLandRent: sumLifetimeValues(household.lifetime.lifetimeData, [
+        "depreciatedHouseMortgageYearly",
+        "fairholdLandRentYearly",
+      ]),
     },
   ];
 
@@ -59,7 +59,7 @@ const TotalPaymentWrapper: React.FC<TotalPaymentWrapperProps> = ({
     <ErrorBoundary>
       <div>
         <h2>Total Payments Chart</h2>
-        <TotalPaymentBarChart data={chartData} />
+        <TotalPaymentPieChart data={chartData} />
       </div>
     </ErrorBoundary>
   );

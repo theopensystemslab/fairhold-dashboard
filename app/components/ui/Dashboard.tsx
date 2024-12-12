@@ -1,5 +1,6 @@
 import React from "react";
 import TenureComparisonWrapper from "../graphs/TenureComparisonWrapper";
+import UpfrontComparisonWrapper from "../graphs/UpfrontComparisonWrapper";
 import TotalPaymentWrapper from "../graphs/TotalPaymentWrapper";
 import LifetimeMarketPurchaseWrapper from "../graphs/LifetimeMarketPurchaseWrapper";
 import LifetimeMarketRentWrapper from "../graphs/LifetimeMarketRentWrapper";
@@ -16,6 +17,7 @@ const Dashboard: React.FC<DashboardProps> = ({ data }) => {
     <div>
       <h1>Dashboard</h1>
       {/* Render multiple graph components here */}
+      <UpfrontComparisonWrapper household={data} />
       <TenureComparisonWrapper household={data} />
       <TotalPaymentWrapper household={data} />
       <LifetimeMarketPurchaseWrapper household={data} />
