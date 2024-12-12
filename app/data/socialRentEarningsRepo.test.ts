@@ -18,7 +18,7 @@ describe("socialRentEarningsRepo", () => {
     const mockEarnings = 500; // Example average earnings
 
     // Mock the Prisma client response
-    (prisma.socialRent.aggregate as jest.Mock).mockResolvedValueOnce({
+    (prisma.socialRentEarnings.aggregate as jest.Mock).mockResolvedValueOnce({
       _avg: { earningsPerWeek: mockEarnings },
     });
 
@@ -26,7 +26,7 @@ describe("socialRentEarningsRepo", () => {
       await socialRentEarningsRepo.getSocialRentEarningsByITL3(itl3);
 
     expect(result).toBe(mockEarnings);
-    expect(prisma.socialRent.aggregate).toHaveBeenCalledWith({
+    expect(prisma.socialRentEarnings.aggregate).toHaveBeenCalledWith({
       where: {
         itl3: {
           startsWith: itl3.substring(0, 3),
@@ -42,7 +42,7 @@ describe("socialRentEarningsRepo", () => {
     const itl3 = "XYZ123";
 
     // Mock the Prisma client response to return null for earningsPerWeek
-    (prisma.socialRent.aggregate as jest.Mock).mockResolvedValueOnce({
+    (prisma.socialRentEarnings.aggregate as jest.Mock).mockResolvedValueOnce({
       _avg: { earningsPerWeek: null },
     });
 
@@ -57,7 +57,7 @@ describe("socialRentEarningsRepo", () => {
     const itl3 = "XYZ123";
 
     // Mock the Prisma client to throw an error
-    (prisma.socialRent.aggregate as jest.Mock).mockRejectedValueOnce(
+    (prisma.socialRentEarnings.aggregate as jest.Mock).mockRejectedValueOnce(
       new Error("Database error")
     );
 
