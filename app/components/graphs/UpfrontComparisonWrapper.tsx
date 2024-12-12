@@ -27,17 +27,23 @@ const UpfrontComparisonWrapper: React.FC<UpfrontComparisonWrapperProps> = ({
   const formatData = (household: Household) => {
     return [
       {
-        category: "Land price",
+        category: "LandPrice",
         marketPurchase: household.property.landPrice || 0,
         fairholdLandPurchase:
           household.tenure.fairholdLandPurchase?.discountedLandPrice || 0,
         fairholdLandRent: 0,
       },
       {
-        category: "House price",
+        category: "NewHouse price",
         marketPurchase:
           household.property.averageMarketPrice -
             household.property.landPrice || 0,
+        fairholdLandPurchase: 0,
+        fairholdLandRent: 0,
+      },
+      {
+        category: "DepreciatedHouse price",
+        marketPurchase: 0,
         fairholdLandPurchase: household.property.depreciatedBuildPrice || 0,
         fairholdLandRent: household.property.depreciatedBuildPrice || 0,
       },

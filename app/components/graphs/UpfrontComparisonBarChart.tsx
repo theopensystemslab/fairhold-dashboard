@@ -23,9 +23,13 @@ const chartConfig = {
     label: "Land",
     color: "hsl(var(--chart-1))",
   },
-  house: {
-    label: "House",
+  newHouse: {
+    label: "NewHouse",
     color: "hsl(var(--chart-2))",
+  },
+  depreciatedHouse: {
+    label: "DepreciatedHouse",
+    color: "hsl(var(--chart-3))",
   },
 } satisfies ChartConfig;
 
@@ -53,17 +57,17 @@ const UpfrontComparisonBarChart: React.FC<StackedBarChartProps> = ({
     {
       tenure: "market: purchase",
       land: data[0].marketPurchase,
-      house: data[1].marketPurchase,
+      newHouse: data[1].marketPurchase,
     },
     {
       tenure: "fairhold: land purchase",
       land: data[0].fairholdLandPurchase,
-      house: data[1].fairholdLandPurchase,
+      depreciatedHouse: data[2].fairholdLandPurchase,
     },
     {
       tenure: "fairhold: land rent",
       land: data[0].fairholdLandRent,
-      house: data[1].fairholdLandRent,
+      depreciatedHouse: data[2].fairholdLandRent,
     },
   ];
 
@@ -93,9 +97,15 @@ const UpfrontComparisonBarChart: React.FC<StackedBarChartProps> = ({
               radius={[0, 0, 4, 4]}
             />
             <Bar
-              dataKey="house"
+              dataKey="newHouse"
               stackId="a"
-              fill="var(--color-house)"
+              fill="var(--color-newHouse)"
+              radius={[4, 4, 0, 0]}
+            />
+            <Bar
+              dataKey="depreciatedHouse"
+              stackId="a"
+              fill="var(--color-depreciatedHouse)"
               radius={[4, 4, 0, 0]}
             />
           </BarChart>
