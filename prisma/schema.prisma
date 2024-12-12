@@ -81,9 +81,9 @@ model SocialRentAdjustments {
 
 model SocialRentEarnings {
   id              Int     @id @default(autoincrement())
-  county          String? @db.VarChar(250)
-  itl3            String? @db.VarChar(250)
-  earningsPerWeek Float?  @map("earnings_per_week")
+  county          String @db.VarChar(250)
+  itl3            String @db.VarChar(250)
+  earningsPerWeek Float  @map("earnings_per_week")
 
   @@map("social_rent_earnings")
 }
