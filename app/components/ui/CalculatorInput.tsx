@@ -28,13 +28,31 @@ const CalculatorInput = () => {
 
   const searchParams = useSearchParams();
   const urlPostcode = searchParams.get("postcode");
+  const urlHouseSize = searchParams.get("houseSize");
+  const urlHouseAge = searchParams.get("houseAge");
+  const urlHouseBedrooms = searchParams.get("houseBedrooms");
+  const urlHouseType = searchParams.get("houseType");
+  const urlMaintenancePercentage = searchParams.get("maintenancePercentage");
 
   const methods = useForm<formType>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      houseType: "D", // Default value for house type
-      maintenancePercentage: 0.015,
+      houseType:
+        urlHouseType === "D" ||
+        urlHouseType === "F" ||
+        urlHouseType === "T" ||
+        urlHouseType === "S"
+          ? urlHouseType
+          : "D", // Default value for house type
+      maintenancePercentage: [0.015, 0.02, 0.0375].includes(
+        Number(urlMaintenancePercentage)
+      )
+        ? (Number(urlMaintenancePercentage) as 0.015 | 0.02 | 0.0375) // Type assertion
+        : 0.015,
       housePostcode: urlPostcode || "",
+      houseSize: Number(urlHouseSize) || undefined,
+      houseAge: Number(urlHouseAge) || undefined,
+      houseBedrooms: Number(urlHouseBedrooms) || undefined,
     },
   });
 
