@@ -3,7 +3,7 @@ import { socialRentEarningsRepo } from "./socialRentEarningsRepo"; // Adjust the
 import prisma from "./db"; // Your Prisma setup file
 
 jest.mock("./db", () => ({
-  socialRent: {
+  socialRentEarnings: {
     aggregate: jest.fn(), // Mock the aggregate method
   },
 }));
