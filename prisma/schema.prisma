@@ -50,13 +50,13 @@ model ItlLookup {
 
 model PricesPaid {
   id                    Int     @id @default(autoincrement())
-  transactionIdentifier String? @map("transactionidentifier") @db.VarChar(250)
-  price                 Float?
-  postcode              String? @db.VarChar(250)
-  propertyType          String? @map("propertytype") @db.VarChar(250)
-  newBuild              String? @map("newbuild") @db.VarChar(250)
+  transactionIdentifier String @map("transaction_identifier") @db.VarChar(250)
+  price                 Float
+  postcode              String @db.VarChar(250)
+  propertyType          String @map("property_type") @db.VarChar(250)
+  newBuild              String @map("newbuild") @db.VarChar(250)
 
-  @@map("pricespaid")
+  @@map("prices_paid")
 }
 
 model Rent {
