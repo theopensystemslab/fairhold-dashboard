@@ -10,12 +10,12 @@ datasource db {
 
 model BuildPrices {
   id                   Int     @id @default(autoincrement())
-  houseTypeDescription String? @map("house_type_description") @db.VarChar(250)
-  houseType            String? @map("housetype") @db.VarChar(1)
-  priceRange           String? @map("pricerange") @db.VarChar(50)
-  priceMid             Float?  @map("pricemid")
+  houseTypeDescription String @map("house_type_description") @db.VarChar(250)
+  houseType            String @map("house_type") @db.VarChar(1)
+  priceRange           String @map("price_range") @db.VarChar(50)
+  priceMid             Float  @map("price_mid")
 
-  @@map("buildprices")
+  @@map("build_prices")
 }
 
 model GDHI {
