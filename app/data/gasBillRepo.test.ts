@@ -18,14 +18,14 @@ describe("gasBillRepo", () => {
     const mockGasBill = 150; // Example gas bill amount
 
     (prisma.gasBills.findFirstOrThrow as jest.Mock).mockResolvedValueOnce({
-      bill: mockGasBill,
+      kwh_cost_pence: mockGasBill,
     });
 
     const result = await gasBillRepo.getGasBillByITL3(itl);
     expect(result).toBe(mockGasBill);
     expect(prisma.gasBills.findFirstOrThrow).toHaveBeenCalledWith({
-      where: { itl: { startsWith: itl.substring(0, 3) } },
-      select: { bill: true },
+      where: { itl1: { startsWith: itl.substring(0, 3) } },
+      select: { kwh_cost_pence: true },
     });
   });
 
