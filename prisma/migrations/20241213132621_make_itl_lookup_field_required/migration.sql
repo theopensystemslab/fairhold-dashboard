@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "itl_lookup" ALTER COLUMN "postcode" SET NOT NULL,
+ALTER COLUMN "district" SET NOT NULL,
+ALTER COLUMN "areacode" SET NOT NULL,
+ALTER COLUMN "itl3" SET NOT NULL;

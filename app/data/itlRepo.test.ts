@@ -27,9 +27,6 @@ describe("itlRepo", () => {
     expect(prisma.itlLookup.findFirstOrThrow).toHaveBeenCalledWith({
       where: {
         postcode: postcodeDistrict,
-        itl3: {
-          not: null,
-        },
       },
       select: {
         itl3: true,
