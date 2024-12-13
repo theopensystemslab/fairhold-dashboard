@@ -61,10 +61,10 @@ model PricesPaid {
 
 model Rent {
   id              Int     @id @default(autoincrement())
-  itl3            String? @db.VarChar(250)
-  ladCode         String? @map("ladcode") @db.VarChar(250)
-  region          String? @db.VarChar(250)
-  monthlyMeanRent Float?  @map("monthlymeanrent")
+  itl3            String @db.VarChar(250)
+  ladCode         String @map("lad_code") @db.VarChar(250)
+  region          String @db.VarChar(250)
+  monthlyMeanRent Float  @map("monthly_mean_rent")
 
   @@map("rent")
 }
