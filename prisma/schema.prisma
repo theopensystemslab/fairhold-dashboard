@@ -39,10 +39,10 @@ model HPI {
 }
 
 model ItlLookup {
-  postcode String?
-  district String?
-  areacode String?
-  itl3     String?
+  postcode String
+  district String
+  areacode String
+  itl3     String
   id       Int     @id @default(autoincrement())
 
   @@map("itl_lookup")
