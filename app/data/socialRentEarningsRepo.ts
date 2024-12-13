@@ -2,7 +2,7 @@ import prisma from "./db";
 
 const getSocialRentEarningsByITL3 = async (itl3: string): Promise<number> => {
     try {
-        const result = await prisma.socialRent.aggregate({ 
+        const result = await prisma.socialRentEarnings.aggregate({ 
             where: {
               itl3: {
                 startsWith: itl3.substring(0, 3),
