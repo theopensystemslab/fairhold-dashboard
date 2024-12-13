@@ -70,13 +70,13 @@ model Rent {
 }
 
 model SocialRentAdjustments {
-  year       String? @db.VarChar(10)
-  inflation  Float?
-  additional Float?
-  total      Float?
+  year       String @db.VarChar(10)
+  inflation  Float
+  additional Float
+  total      Float
   id         Int     @id @default(autoincrement())
 
-  @@map("soc_rent_adjustments")
+  @@map("social_rent_adjustments")
 }
 
 model SocialRentEarnings {
