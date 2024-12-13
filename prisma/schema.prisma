@@ -76,7 +76,7 @@ model SocialRentAdjustments {
   total      Float?
   id         Int     @id @default(autoincrement())
 
-  @@map("soc_rent_adjustments")
+  @@map("social_rent_adjustments")
 }
 
 model SocialRent {

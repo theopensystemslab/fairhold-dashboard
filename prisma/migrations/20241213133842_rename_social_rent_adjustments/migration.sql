@@ -1,0 +1,1 @@
+ALTER TABLE "soc_rent_adjustments" RENAME TO "social_rent_adjustments";
