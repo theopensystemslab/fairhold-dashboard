@@ -20,10 +20,10 @@ model BuildPrices {
 
 model GDHI {
   id       Int     @id @default(autoincrement())
-  itlLevel String? @map("itllevel") @db.VarChar(250)
-  itl3     String? @db.VarChar(250)
-  region   String? @db.VarChar(250)
-  gdhi2020 Float?  @map("gdhi_2020")
+  itlLevel String  @map("itl_level") @db.VarChar(250)
+  itl3     String  @db.VarChar(250)
+  region   String  @db.VarChar(250)
+  gdhi2020 Float  @map("gdhi_2020")
 
   @@map("gdhi")
 }
