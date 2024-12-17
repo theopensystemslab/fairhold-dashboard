@@ -5,6 +5,7 @@ const getHPIByITL3 = async (itl3: string): Promise<number> => {
     const {
       _avg: { hpi2000: averageHpi },
     } = await prisma.hPI.aggregate({
+      // TODO: Should there be a relationship on ITL3?
       where: {
         itl3: {
           endsWith: itl3,
@@ -20,8 +21,7 @@ const getHPIByITL3 = async (itl3: string): Promise<number> => {
       throw new Error(`Data error: Unable to find hpi2000 for itl3 ${itl3}`);
     }
 
-
-    return averageHpi as number;
+    return averageHpi;
   } catch (error) {
     throw Error(`Data error: Unable to find hpi2000 for itl3 ${itl3}`);
   }
