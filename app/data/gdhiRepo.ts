@@ -10,7 +10,6 @@ const getGDHIByITL3 = async (itl3: string): Promise<number> => {
       },
       select: { gdhi: true },
     });
-    console.log('Result:', gdhi); 
     return gdhi;
   } catch (error) {
     throw Error(`Data error: Unable to find gdhi for itl3 ${itl3}`);
