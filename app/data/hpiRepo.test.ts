@@ -1,6 +1,5 @@
-// __tests__/hpiRepo.test.ts
-import { hpi1999Repo } from "./hpiRepo"; // Adjust the import according to your file structure
-import prisma from "./db"; // Your Prisma setup file
+import { hpi1999Repo } from "./hpiRepo";
+import prisma from "./db";
 
 jest.mock("./db", () => ({
   hPI: {
