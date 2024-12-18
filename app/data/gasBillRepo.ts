@@ -2,14 +2,14 @@ import prisma from "./db";
 
 const getGasBillByITL3 = async (itl: string): Promise<number> => {
     try {
-        const { bill } = await prisma.gasBills.findFirstOrThrow({
+        const { kwhCostPence } = await prisma.gasBills.findFirstOrThrow({
             where: {
-                itl: { startsWith: itl.substring(0, 3) },
+                itl1: { startsWith: itl.substring(0, 3) },
             },
-            select: { bill: true },
+            select: { kwhCostPence: true },
         });
 
-        return bill as number;
+        return kwhCostPence;
     } catch (error) {
         throw Error(`Data error: Unable to find gas_bills_2020 for itl3 ${itl}`);
     }

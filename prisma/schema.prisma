@@ -88,9 +88,9 @@ model SocialRentEarnings {
 
 model GasBills {
   id     Int    @id
-  region String @map("Region") @db.VarChar
-  itl    String @db.VarChar
-  bill   Float
+  region String @map("region") @db.VarChar
+  itl1    String @db.VarChar
+  kwhCostPence   Float @map("kwh_cost_pence")
 
   @@map("gas_bills")
 }
