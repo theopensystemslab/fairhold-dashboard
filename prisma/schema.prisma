@@ -22,7 +22,7 @@ model GDHI {
   id       Int     @id @default(autoincrement())
   itl3     String  @db.VarChar(250)
   region   String  @db.VarChar(250)
-  gdhi2020 Float  @map("gdhi_2020")
+  gdhi Float 
 
   @@map("gdhi")
 }

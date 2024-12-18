@@ -19,11 +19,11 @@ describe("gdhiRepo", () => {
 
     // Mock the Prisma client response
     (prisma.gDHI.findFirstOrThrow as jest.Mock).mockResolvedValueOnce({
-      gdhi2020: mockGDHI,
+      gdhi: mockGDHI,
     });
 
     // Call the function
-    const result = await gdhiRepo.getGDHI2020ByITL3(itl3);
+    const result = await gdhiRepo.getGDHIByITL3(itl3);
 
     // Assertions
     expect(result).toBe(mockGDHI);
@@ -33,7 +33,7 @@ describe("gdhiRepo", () => {
           itl3: { equals: itl3 },
         },
       },
-      select: { gdhi2020: true },
+      select: { gdhi: true },
     });
   });
 
@@ -46,8 +46,8 @@ describe("gdhiRepo", () => {
     );
 
     // Call the function and expect an error
-    await expect(gdhiRepo.getGDHI2020ByITL3(itl3)).rejects.toThrow(
-      `Data error: Unable to find gdhi2020 for itl3 ${itl3}`
+    await expect(gdhiRepo.getGDHIByITL3(itl3)).rejects.toThrow(
+      `Data error: Unable to find gdhi for itl3 ${itl3}`
     );
   });
 
@@ -60,8 +60,8 @@ describe("gdhiRepo", () => {
     );
 
     // Call the function and expect an error
-    await expect(gdhiRepo.getGDHI2020ByITL3(itl3)).rejects.toThrow(
-      `Data error: Unable to find gdhi2020 for itl3 ${itl3}`
+    await expect(gdhiRepo.getGDHIByITL3(itl3)).rejects.toThrow(
+      `Data error: Unable to find gdhi for itl3 ${itl3}`
     );
   });
 });
