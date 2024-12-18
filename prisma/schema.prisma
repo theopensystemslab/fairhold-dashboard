@@ -92,7 +92,7 @@ model GasBills {
   id     Int    @id
   region String @map("region") @db.VarChar
   itl1    String @db.VarChar
-  kwh_cost_pence   Float
+  kwhCostPence   Float @map("kwh_cost_pence")
 
   @@map("gas_bills")
 }
