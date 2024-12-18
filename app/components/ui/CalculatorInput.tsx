@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Household } from "@/app/models/Household";
 import Dashboard from "./Dashboard";
 import { formSchema, formType } from "@/app/schemas/formSchema";
+import { useSearchParams } from "next/navigation";
 
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { ClipLoader } from "react-spinners";
@@ -22,16 +23,38 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 const CalculatorInput = () => {
+  const [view, setView] = useState("form");
+  const [data, setData] = useState<Household | null>(null);
+
+  const searchParams = useSearchParams();
+  const urlPostcode = searchParams.get("postcode");
+  const urlHouseSize = searchParams.get("houseSize");
+  const urlHouseAge = searchParams.get("houseAge");
+  const urlHouseBedrooms = searchParams.get("houseBedrooms");
+  const urlHouseType = searchParams.get("houseType");
+  const urlMaintenancePercentage = searchParams.get("maintenancePercentage");
+
   const methods = useForm<formType>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      houseType: "D", // Default value for house type
-      maintenancePercentage: 0.015,
+      houseType:
+        urlHouseType === "D" ||
+        urlHouseType === "F" ||
+        urlHouseType === "T" ||
+        urlHouseType === "S"
+          ? urlHouseType
+          : "D", // Default value for house type
+      maintenancePercentage: [0.015, 0.02, 0.0375].includes(
+        Number(urlMaintenancePercentage)
+      )
+        ? (Number(urlMaintenancePercentage) as 0.015 | 0.02 | 0.0375) // Type assertion
+        : 0.015,
+      housePostcode: urlPostcode || "",
+      houseSize: Number(urlHouseSize) || undefined,
+      houseAge: Number(urlHouseAge) || undefined,
+      houseBedrooms: Number(urlHouseBedrooms) || undefined,
     },
   });
-
-  const [view, setView] = useState("form");
-  const [data, setData] = useState<Household | null>(null);
 
   const onSubmit = async (data: formType) => {
     setView("loading");
@@ -188,7 +211,8 @@ const CalculatorInput = () => {
                     </RadioGroup>
                   </FormControl>
                   <FormDescription>
-                    Select a level for maintenance spend, as a percentage of house cost. 
+                    Select a level for maintenance spend, as a percentage of
+                    house cost.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
