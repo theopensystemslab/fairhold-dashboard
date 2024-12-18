@@ -38,7 +38,7 @@ model HPI {
 
 model ItlLookup {
   postcode String
-  district String
+  region String
   areacode String
   itl3     String
   id       Int     @id @default(autoincrement())
