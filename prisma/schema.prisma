@@ -23,7 +23,7 @@ model GDHI {
   itlLevel String  @map("itl_level") @db.VarChar(250)
   itl3     String  @db.VarChar(250)
   region   String  @db.VarChar(250)
-  gdhi2020 Float  @map("gdhi_2020")
+  gdhi Float  @map("gdhi")
 
   @@map("gdhi")
 }
