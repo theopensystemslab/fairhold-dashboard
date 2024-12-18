@@ -31,7 +31,7 @@ model HPI {
   id      Int     @id @default(autoincrement())
   region  String @db.VarChar(250)
   itl3    String @db.VarChar(250)
-  hpi2000 Float  @map("hpi_2000")
+  hpi1999 Float  @map("hpi_1999")
 
   @@map("hpi")
 }
