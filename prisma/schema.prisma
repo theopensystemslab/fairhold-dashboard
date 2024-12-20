@@ -48,7 +48,6 @@ model ItlLookup {
 
 model PricesPaid {
   id                    Int     @id @default(autoincrement())
-  transactionIdentifier String @map("transaction_identifier") @db.VarChar(250)
   price                 Float
   postcode              String @db.VarChar(250)
   propertyType          String @map("property_type") @db.VarChar(250)
