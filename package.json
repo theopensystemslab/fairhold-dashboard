@@ -39,7 +39,7 @@
     "clsx": "^2.1.1",
     "dotenv-cli": "^7.4.2",
     "lucide-react": "^0.460.0",
-    "mathjs": "^13.1.1",
+    "mathjs": "^14.0.1",
     "next": "^15.1.2",
     "postcode": "^5.1.0",
     "react": "^18",
