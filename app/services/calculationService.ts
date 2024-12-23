@@ -25,7 +25,7 @@ export const getHouseholdData = async (input: Calculation) => {
 
     const itl3 = await itlService.getByPostcodeDistrict(postcodeDistrict);
     const gdhi = await gdhiService.getByITL3(itl3);
-    const gasBillYearly = await gasBillService.getByITL3(itl3);
+    const kwhCostPence = await gasBillService.getByITL3(itl3);
     const hpi = await hpiService.getByITL3(itl3);
     const buildPrice = await buildPriceService.getBuildPriceByHouseType(input.houseType);
 
@@ -59,7 +59,7 @@ export const getHouseholdData = async (input: Calculation) => {
       socialRentAverageEarning,
       numberOfTransactions,
       granularityPostcode,
-      gasBillYearly,
+      kwhCostPence,
     };
 
   } catch (err) {

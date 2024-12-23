@@ -8,12 +8,13 @@ import { SocialRent } from "./tenure/SocialRent";
 import { ForecastParameters } from "./ForecastParameters";
 import { socialRentAdjustmentTypes } from "../data/socialRentAdjustmentsRepo";
 import { Lifetime, LifetimeParams } from "./Lifetime"; 
+import { KWH_M2_YR_EXISTING_BUILDS, KWH_M2_YR_NEWBUILDS_RETROFIT } from "./constants" ;
 
 const HEADS_PER_HOUSEHOLD = 2.4;
 
 type ConstructorParams = Pick<
   Household,
-  "incomePerPersonYearly" | "gasBillYearly" | "property" | "forecastParameters"
+  "incomePerPersonYearly" | "kwhCostPence" | "property" | "forecastParameters"
 > & {
   averageRentYearly: number;
   socialRentAverageEarning: number;
@@ -25,7 +26,7 @@ type ConstructorParams = Pick<
 /** The 'parent' class; when instantiated, it instantiates all other relevant classes, including `Property` */
 export class Household {
   public incomePerPersonYearly: number;
-  public gasBillYearly: number;
+  public kwhCostPence: number;
   public property: Property;
   public forecastParameters: ForecastParameters;
   public incomeYearly: number;
@@ -37,15 +38,19 @@ export class Household {
     fairholdLandRent: FairholdLandRent;
   };
   public lifetime: Lifetime;
+  public gasBillExistingBuildYearly: number;
+  public gasBillNewBuildOrRetrofitYearly: number;
 
   constructor(params: ConstructorParams) {
     this.incomePerPersonYearly = params.incomePerPersonYearly;
-    this.gasBillYearly = params.gasBillYearly;
+    this.kwhCostPence = params.kwhCostPence;
     this.property = params.property;
     this.forecastParameters = params.forecastParameters;
     this.incomeYearly = HEADS_PER_HOUSEHOLD * params.incomePerPersonYearly;
     this.tenure = this.calculateTenures(params);
     this.lifetime = this.calculateLifetime(params);
+    this.gasBillExistingBuildYearly = this.calculateGasBillExistingBuild(params);
+    this.gasBillNewBuildOrRetrofitYearly = this.calculateGasBillNewBuildOrRetrofit(params);
   }
 
   private calculateTenures({
@@ -119,6 +124,7 @@ export class Household {
 
     private calculateLifetime(params: ConstructorParams): Lifetime {
       const lifetimeParams: LifetimeParams = {
+        household: this,
         marketPurchase: this.tenure.marketPurchase,
         marketRent: this.tenure.marketRent,
         fairholdLandPurchase: this.tenure.fairholdLandPurchase,
@@ -134,5 +140,15 @@ export class Household {
         incomeYearly: this.incomeYearly,
       };
       return new Lifetime(lifetimeParams);
+    }
+
+    private calculateGasBillExistingBuild(params: ConstructorParams) {
+      const gasBillExistingBuildYearly = this.kwhCostPence * params.property.size * KWH_M2_YR_EXISTING_BUILDS[params.property.houseType] / 100
+      return gasBillExistingBuildYearly
+    }
+
+    private calculateGasBillNewBuildOrRetrofit(params: ConstructorParams) {
+      const gasBillNewBuildOrRetrofitYearly = this.kwhCostPence * params.property.size * KWH_M2_YR_NEWBUILDS_RETROFIT[params.property.houseType] / 100
+      return gasBillNewBuildOrRetrofitYearly
     }
   }

@@ -165,7 +165,7 @@ beforeEach(() => {
     socialRentAverageEarning: 295.4,
     socialRentAdjustments: socialRentAdjustments,
     housePriceIndex: 75434.35,
-    gasBillYearly: 800,
+    kwhCostPence: 6,
     property: property,
     forecastParameters: DEFAULT_FORECAST_PARAMETERS,
   });

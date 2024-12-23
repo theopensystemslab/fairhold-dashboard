@@ -21,7 +21,7 @@ export interface ResponseData {
   socialRentAverageEarning: number;
   socialRentAdjustments: socialRentAdjustmentTypes;
   hpi: number;
-  gasBillYearly: number;
+  kwhCostPence: number;
 }
 
 function calculateFairhold(responseData: ResponseData) {
@@ -55,7 +55,7 @@ function calculateFairhold(responseData: ResponseData) {
     socialRentAverageEarning: responseData.socialRentAverageEarning,
     socialRentAdjustments: responseData.socialRentAdjustments,
     housePriceIndex: responseData.hpi,
-    gasBillYearly: responseData.gasBillYearly,
+    kwhCostPence: responseData.kwhCostPence,
     property: property,
     forecastParameters: createForecastParameters(responseData.maintenancePercentage),
   });
