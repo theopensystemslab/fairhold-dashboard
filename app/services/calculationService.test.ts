@@ -124,9 +124,9 @@ describe("getHouseholdData", () => {
       averageRentMonthly: mockAverageRentMonthly,
       socialRentAdjustments: mockSocialRentAdjustments,
       socialRentAverageEarning: mockSocialRentAverageEarning,
-      numberOfTransactions: mockPricesPaidSummary.numberOfTransactions,
-      granularityPostcode: mockPricesPaidSummary.granularityPostcode,
-      gasBillYearly: mockGasBillYearly,
+      numberOfTransactions: mockPricesPaid.numberOfTransactions,
+      granularityPostcode: mockPricesPaid.granularityPostcode,
+      kwhCostPence: mockGasBillYearly,
     });
   });
 

@@ -147,3 +147,24 @@ export const HOUSE_BREAKDOWN_PERCENTAGES: houseBreakdownType = {
     percentOfMaintenanceYearly: .056
   },
 }
+export type billsByHouseType = { // TODO: fix type syntax!
+  F: number;
+  T: number;
+  S: number;
+  D: number;
+}
+
+/* Figures are from LETI / Studio PDP */
+export const KWH_M2_YR_EXISTING_BUILDS = {
+  F: 118,
+  T: 110,
+  S: 168,
+  D: 167
+}
+
+export const KWH_M2_YR_NEWBUILDS_RETROFIT = {
+  F: 26,
+  T: 20,
+  S: 51,
+  D: 55
+}
