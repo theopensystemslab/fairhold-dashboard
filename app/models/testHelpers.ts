@@ -353,11 +353,10 @@ export const createTestMarketPurchase = (overrides = {}) => {
 export const createTestMarketRent = (overrides = {}) => {
   return new MarketRent({
     averageRentYearly: 18000,
-    averagePrice: 500000,
     newBuildPrice: 200000,
     depreciatedBuildPrice: 150000,
-    landPrice: 300000,
     incomeYearly: 30000,
+    landToTotalRatio: .6,
     forecastParameters: DEFAULT_FORECAST_PARAMETERS,
     ...overrides
   })
@@ -403,12 +402,11 @@ export const createTestFairholdLandPurchase = (overrides = {}) => {
 export const createTestFairholdLandRent = (overrides = {}) => {
   return new FairholdLandRent({
     averageRentYearly: 18000,
-    averagePrice: 500000,
     newBuildPrice: 200000,
     depreciatedBuildPrice: 150000,
-    landPrice: 300000,
     incomeYearly: 30000,
     fairhold: createTestFairholdForLandRent(),
+    landToTotalRatio: .6,
     forecastParameters: DEFAULT_FORECAST_PARAMETERS,
     marketPurchase: createTestMarketPurchase(),
     ...overrides
