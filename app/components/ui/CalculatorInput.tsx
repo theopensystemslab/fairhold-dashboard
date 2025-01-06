@@ -44,10 +44,10 @@ const CalculatorInput = () => {
         urlHouseType === "S"
           ? urlHouseType
           : "D", // Default value for house type
-      maintenancePercentage: [0.015, 0.02, 0.0375].includes(
+      maintenancePercentage: [0.015, 0.019, 0.025].includes(
         Number(urlMaintenancePercentage)
       )
-        ? (Number(urlMaintenancePercentage) as 0.015 | 0.02 | 0.0375) // Type assertion
+        ? (Number(urlMaintenancePercentage) as 0.015 | 0.019 | 0.025) // Type assertion
         : 0.015,
       housePostcode: urlPostcode || "",
       houseSize: Number(urlHouseSize) || undefined,

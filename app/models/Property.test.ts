@@ -8,7 +8,7 @@ describe('Property', () => {
       numberOfBedrooms: 2,
       age: 10,
       size: 88,
-      maintenancePercentage: 0.02,
+      maintenancePercentage: 0.015,
       newBuildPricePerMetre: 2120,
       averageMarketPrice: 219135,
       itl3: "TLJ12",
@@ -45,7 +45,7 @@ describe('Property', () => {
       numberOfBedrooms: 20,
       age: 11,
       size: 88,
-      maintenancePercentage: 0.02,
+      maintenancePercentage: 0.015,
       newBuildPricePerMetre: 2120,
       averageMarketPrice: 218091.58,
       itl3: "TLG24",
@@ -57,7 +57,7 @@ describe('Property', () => {
       numberOfBedrooms: 6,
       age: 11,
       size: 88,
-      maintenancePercentage: 0.02,
+      maintenancePercentage: 0.015,
       newBuildPricePerMetre: 2120,
       averageMarketPrice: 218091.58,
       itl3: "TLG24",
@@ -71,23 +71,22 @@ describe('Property', () => {
       postcode: "WV8 1HG",
       houseType: "T",
       numberOfBedrooms: 20,
-      age: 1,
+      age: 0,
       size: 88,
-      maintenancePercentage: 0.02,
+      maintenancePercentage: 0.015,
       newBuildPricePerMetre: 2120,
       averageMarketPrice: 218091.58,
       itl3: "TLG24",
     });
-
     expect(property.depreciatedBuildPrice).toBe(property.newBuildPrice);
   });
 
-  describe('depreciation calculations (existing build)', () => {
+  describe('depreciation calculations (existing build)', () => { 
     test.each([
-      ['foundations', 39177.6, 1, 0, 39177.6], // component, depreciationPercentageYearly, percentOfMaintenanceYearly, expectedNewComponentValue, expectedDepreciationFactor, expectedMaintenanceAddition, expectedDepreciatedValue
-      ['internalLinings', 7462.4, .68, 1863.74439, 7176.96],
-      ['electricalAppliances', 7462.4, 0.2503, 1863.74439, 3731.57],
-      ['ventilationServices', 7462.4, 0.3997, 1863.74439, 4846.45]
+      ['foundations', 39177.6, 1, 0, 39177.6],
+      ['internalLinings', 7462.4, .68, 2070.816, 7145.248],
+      ['electricalAppliances', 7462.4, 0.167, 2070.816, 3317.04],
+      ['ventilationServices', 7462.4, 0.333, 2070.816, 4555.8]
     ])('correctly calculates all values for %s', (component, expectedNewComponentValue, expectedDepreciationFactor, expectedMaintenanceAddition, expectedDepreciatedValue) => {
       const result = property.calculateComponentValue(
         component as keyof HouseBreakdown, 
@@ -128,7 +127,7 @@ describe('Property', () => {
     expect(result.depreciatedComponentValue).toBeGreaterThanOrEqual(0);
     });
 
-    it('should calculate correct depreciation for a 10-year-old house', () => {
-      expect(property.depreciatedBuildPrice).toBeCloseTo(172976.566);
+    it('should calculate correct depreciation for a 10-year-old house', () => { 
+      expect(property.depreciatedBuildPrice).toBeCloseTo(171467.3);
     });
 });

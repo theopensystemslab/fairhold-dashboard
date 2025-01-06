@@ -35,7 +35,7 @@ export const NATIONAL_AVERAGES: NationalAverage = {
  * Maintenance levels are percentages (represented as decimals),
  * figures from our own model
  */
-export const MAINTENANCE_LEVELS = [0.015, 0.02, 0.0375] as const;
+export const MAINTENANCE_LEVELS = [0.015, 0.019, 0.025] as const;
 
 type Component = 
   | "foundations" 
@@ -56,6 +56,7 @@ type Component =
 
 interface ComponentBreakdown {
   percentageOfHouse: number;
+  /** This is the percentage of the component value that depreciates yearly, not total house value. */
   depreciationPercentageYearly: number;
   percentOfMaintenanceYearly: number;
 }
