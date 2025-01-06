@@ -37,6 +37,7 @@ export interface LifetimeData {
     // gasBillYearly: number;
     depreciatedHouseResaleValue: number;
     fairholdLandPurchaseResaleValue: number;
+    houseAge: number;
     [key: number]: number;
 }
 /** 
@@ -85,6 +86,7 @@ export class Lifetime {
             params.maintenancePercentage * newBuildPriceIterative;
         let depreciatedHouseResaleValueIterative = params.property.depreciatedBuildPrice;
         let fairholdLandPurchaseResaleValueIterative = params.fairholdLandPurchase.discountedLandPrice;
+        let houseAgeIterative = params.property.age
 
         for (let i = 0; i < params.yearsForecast - 1; i++) {
             incomeYearlyIterative = 
