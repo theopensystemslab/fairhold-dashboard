@@ -101,6 +101,7 @@ const CalculatorInput = () => {
                     <Input
                       placeholder="Enter the house size in square meters, e.g. 80"
                       {...field}
+                      value={field.value ?? ""}
                     />
                   </FormControl>
                   <FormDescription>The size of the house.</FormDescription>
@@ -119,6 +120,7 @@ const CalculatorInput = () => {
                     <Input
                       placeholder="Enter the house age, e.g. 1 for a new house"
                       {...field}
+                      value={field.value ?? ""}
                     />
                   </FormControl>
                   <FormDescription>How old is the house.</FormDescription>
@@ -137,6 +139,7 @@ const CalculatorInput = () => {
                     <Input
                       placeholder="Enter the number of bedrooms in the house, e.g. 2"
                       {...field}
+                      value={field.value ?? ""}
                     />
                   </FormControl>
                   <FormDescription>
