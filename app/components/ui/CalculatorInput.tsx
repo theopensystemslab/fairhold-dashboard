@@ -25,6 +25,7 @@ import { Label } from "@/components/ui/label";
 const CalculatorInput = () => {
   const [view, setView] = useState("form");
   const [data, setData] = useState<Household | null>(null);
+  const [formData, setFormData] = useState<formType | null>(null);
 
   const searchParams = useSearchParams();
   const urlPostcode = searchParams.get("postcode");
@@ -63,6 +64,7 @@ const CalculatorInput = () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     });
+    setFormData(data);
     const processedData = await response.json();
     setData(processedData);
     setView("dashboard");
@@ -71,7 +73,7 @@ const CalculatorInput = () => {
   if (view === "form") {
     return (
       <div className="flex flex-col items-center justify-center text-black mt-5">
-        <div className="text-2xl text-bold">
+        <div className="text-2xl text-bold mb-8">
           {" "}
           Calculate how Fairhold can work for you
         </div>
@@ -238,7 +240,12 @@ const CalculatorInput = () => {
       </div>
     );
   } else if (view === "dashboard") {
-    return <Dashboard data={data as Household} />;
+    return (
+      <Dashboard
+        processedData={data as Household}
+        inputData={formData as formType}
+      />
+    );
   }
 };
 
