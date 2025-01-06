@@ -11,11 +11,14 @@ interface MarketPurchaseParams {
   forecastParameters: ForecastParameters;
 }
 
+// TODO: decide on language to use (eg freeholdPurchase?)
 export class MarketPurchase {
   params: MarketPurchaseParams;
+  /** Uses the summed mortgages to calculate percentage of GDHI spent on housing monthly */
   public affordability: number;
   public houseMortgage: Mortgage;
   public landMortgage: Mortgage;
+  /** All tenure classes have an `interestPaid` property, summed from `Mortgage.totalInterest` (if more than one Mortgage class) */
   public interestPaid: number;
 
   constructor(params: MarketPurchaseParams) {

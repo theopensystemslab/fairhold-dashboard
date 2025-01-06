@@ -9,7 +9,7 @@ import { ForecastParameters } from "./ForecastParameters";
 import { socialRentAdjustmentTypes } from "../data/socialRentAdjustmentsRepo";
 import { Lifetime, LifetimeParams } from "./Lifetime"; 
 
-const HOUSE_MULTIPLIER = 2.4;
+const HEADS_PER_HOUSEHOLD = 2.4;
 
 type ConstructorParams = Pick<
   Household,
@@ -18,9 +18,11 @@ type ConstructorParams = Pick<
   averageRentYearly: number;
   socialRentAverageEarning: number;
   socialRentAdjustments: socialRentAdjustmentTypes;
+  /** The housePriceIndex shown here is used to calculate relative property values and should be from 1999. */
   housePriceIndex: number;
 };
 
+/** The 'parent' class; when instantiated, it instantiates all other relevant classes, including `Property` */
 export class Household {
   public incomePerPersonYearly: number;
   public gasBillYearly: number;
@@ -41,7 +43,7 @@ export class Household {
     this.gasBillYearly = params.gasBillYearly;
     this.property = params.property;
     this.forecastParameters = params.forecastParameters;
-    this.incomeYearly = HOUSE_MULTIPLIER * params.incomePerPersonYearly;
+    this.incomeYearly = HEADS_PER_HOUSEHOLD * params.incomePerPersonYearly;
     this.tenure = this.calculateTenures(params);
     this.lifetime = this.calculateLifetime(params);
   }
@@ -93,17 +95,17 @@ export class Household {
 
     const fairholdLandRent = new FairholdLandRent({
       averageRentYearly: averageRentYearly,
-      averagePrice: this.property.averageMarketPrice, // average price of the property
+      averagePrice: this.property.averageMarketPrice, 
       newBuildPrice: this.property.newBuildPrice,
-      depreciatedBuildPrice: this.property.depreciatedBuildPrice, // depreciated building price
-      landPrice: this.property.landPrice, // land price
-      incomeYearly: this.incomeYearly, // income
+      depreciatedBuildPrice: this.property.depreciatedBuildPrice, 
+      landPrice: this.property.landPrice,
+      incomeYearly: this.incomeYearly,
       forecastParameters: this.forecastParameters,
 
       fairhold: new Fairhold({
         affordability: marketRent.affordability,
         landPriceOrRent: averageRentYearly,
-      }), // fairhold object
+      }), 
 
       marketPurchase: marketPurchase
     });
