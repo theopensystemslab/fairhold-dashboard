@@ -1,5 +1,5 @@
 import { BED_WEIGHTS_AND_CAPS, MAINTENANCE_LEVELS, HOUSE_BREAKDOWN_PERCENTAGES } from "./constants";
-import { HouseBreakdown } from "./constants";
+import { houseBreakdownType } from "./constants";
 /**
  * Number of decimal places to use when rounding numerical values
  */
@@ -96,7 +96,7 @@ export class Property {
     let depreciatedBuildPrice = 0;
 
   // Calculate for each component using the public method
-  for (const key of Object.keys(HOUSE_BREAKDOWN_PERCENTAGES) as (keyof HouseBreakdown)[]) {
+  for (const key of Object.keys(HOUSE_BREAKDOWN_PERCENTAGES) as (keyof houseBreakdownType)[]) {
     const result = this.calculateComponentValue(
       key, 
       this.newBuildPrice, 
@@ -112,7 +112,7 @@ export class Property {
 }
 
   public calculateComponentValue(
-    componentKey: keyof HouseBreakdown,
+    componentKey: keyof houseBreakdownType,
     newBuildPrice: number,
     age: number,
     maintenanceLevel: number
@@ -135,8 +135,7 @@ export class Property {
     let depreciatedComponentValue = 
       (newComponentValue * depreciationFactor) + maintenanceAddition;
 
-    // Do not depreciate below 0
-    if (depreciatedComponentValue < 0) depreciatedComponentValue = 0
+    depreciatedComponentValue < 0 ? depreciatedComponentValue = 0 : depreciatedComponentValue
 
     return {
       newComponentValue,
