@@ -59,7 +59,7 @@ describe('Property', () => {
       postcode: "WV8 1HG",
       houseType: "T",
       numberOfBedrooms: 20,
-      age: 1,
+      age: 0,
       size: 88,
       maintenancePercentage: 0.02,
       newBuildPricePerMetre: 2120,
