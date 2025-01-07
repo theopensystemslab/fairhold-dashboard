@@ -30,7 +30,8 @@ it("correctly calculates the split between interest and principal", () => {
   expect(breakdown[0].cumulativePaid).toBeCloseTo(16313.56);
   expect(breakdown[0].remainingBalance).toBeCloseTo(88144.3);
 
-  expect(breakdown.length).toBe(25);})
+  expect(breakdown.length).toBe(25);
+})
 
 it("correctly calculates the total interest paid", () => {
   expect(mortgage.totalInterest).toBeCloseTo(67839.31)
