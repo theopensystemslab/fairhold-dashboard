@@ -1,5 +1,8 @@
 import { z } from "zod";
-import { parse as parsePostcode, fix as fixPostcode } from "postcode";
+import {
+  parse as parsePostcode,
+  isValid as isValidPostcode,
+} from "postcode";
 import { HOUSE_TYPES } from "../models/Property";
 import { MAINTENANCE_LEVELS } from "../models/constants";
 
@@ -23,7 +26,7 @@ export const calculationSchema = z.object({
   housePostcode: z
     .string()
     .min(1, "housePostcode is required")
-    .refine(fixPostcode, "Invalid postcode")
+    .refine(isValidPostcode, "Invalid postcode")
     .transform(parsePostcode)
     .refine((postcode): postcode is ValidPostcode => postcode.valid),
   houseSize: z.coerce.number().positive("houseSize must be a positive integer"),
