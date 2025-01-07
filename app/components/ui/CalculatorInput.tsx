@@ -72,11 +72,8 @@ const CalculatorInput = () => {
 
   if (view === "form") {
     return (
-      <div className="flex flex-col items-center justify-center text-black mt-5">
-        <div className="text-2xl text-bold mb-8">
-          {" "}
-          Calculate how Fairhold can work for you
-        </div>
+      <div className="flex flex-col items-center justify-center max-w-xl mx-auto px-10">
+        <div className="h1-style"> Calculate how Fairhold can work for you</div>
         <Form {...methods}>
           <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-8">
             <div className="grid grid-cols-2 gap-4">
@@ -85,7 +82,9 @@ const CalculatorInput = () => {
                 name="housePostcode"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Property postcode</FormLabel>
+                    <FormLabel className="h3-style">
+                      Property postcode
+                    </FormLabel>
                     <FormControl>
                       <Input
                         placeholder="Enter the property postcode, e.g. SE17 1PE"
@@ -103,7 +102,7 @@ const CalculatorInput = () => {
                 name="houseSize"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>House size</FormLabel>
+                    <FormLabel className="h3-style">House size</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="Enter the house size in square meters, e.g. 80"
@@ -122,7 +121,7 @@ const CalculatorInput = () => {
                 name="houseAge"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>House age</FormLabel>
+                    <FormLabel className="h3-style">House age</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="Enter the house age, e.g. 1 for a new house"
@@ -141,7 +140,7 @@ const CalculatorInput = () => {
                 name="houseBedrooms"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>House bedrooms</FormLabel>
+                    <FormLabel className="h3-style">House bedrooms</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="Enter the number of bedrooms in the house, e.g. 2"
@@ -162,7 +161,7 @@ const CalculatorInput = () => {
               name="houseType" // Name in the Calculation schema for the new radio field
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>House type</FormLabel>
+                  <FormLabel className="h3-style">House type</FormLabel>
                   <FormControl>
                     <RadioGroup
                       value={field.value}
@@ -201,7 +200,9 @@ const CalculatorInput = () => {
               name="maintenancePercentage" // Name in the Calculation schema for the new radio field
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Maintenance spend percentage</FormLabel>
+                  <FormLabel className="h3-style">
+                    Maintenance spend percentage
+                  </FormLabel>
                   <FormControl>
                     <RadioGroup
                       value={String(field.value)} // Convert number to string for RadioGroup
