@@ -162,21 +162,21 @@ const CalculatorInput = () => {
                       onValueChange={(value) => field.onChange(value)} // Bind selection to field
                     >
                       <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="D" id="option-one" />
-                        <Label htmlFor="option-one">Detached</Label>
+                        <RadioGroupItem value="D" id="radio-option-D" />
+                        <Label htmlFor="radio-option-D">Detached</Label>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="S" id="option-two" />
-                        <Label htmlFor="option-two">Semi detached</Label>
+                        <RadioGroupItem value="S" id="radio-option-S" />
+                        <Label htmlFor="radio-option-S">Semi detached</Label>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="T" id="option-three" />
-                        <Label htmlFor="option-tree">Terrace</Label>
+                        <RadioGroupItem value="T" id="radio-option-T" />
+                        <Label htmlFor="radio-option-T">Terrace</Label>
                       </div>
 
                       <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="F" id="option-four" />
-                        <Label htmlFor="option-four">Flat</Label>
+                        <RadioGroupItem value="F" id="radio-option-F" />
+                        <Label htmlFor="radio-option-F">Flat</Label>
                       </div>
                     </RadioGroup>
                   </FormControl>
@@ -200,16 +200,16 @@ const CalculatorInput = () => {
                       onValueChange={(value) => field.onChange(Number(value))} // Convert back to number for form
                     >
                       <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="0.015" id="option-one" />
-                        <Label htmlFor="option-one">Low (1.5%)</Label>
+                        <RadioGroupItem value="0.015" id="radio-option-low" />
+                        <Label htmlFor="radio-option-low">Low (1.5%)</Label>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="0.02" id="option-two" />
-                        <Label htmlFor="option-two">Medium (2%)</Label>
+                        <RadioGroupItem value="0.02" id="radio-option-medium" />
+                        <Label htmlFor="radio-option-medium">Medium (2%)</Label>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="0.0375" id="option-three" />
-                        <Label htmlFor="option-three">High (3.75%)</Label>
+                        <RadioGroupItem value="0.0375" id="radio-option-high" />
+                        <Label htmlFor="radio-option-high">High (3.75%)</Label>
                       </div>
                     </RadioGroup>
                   </FormControl>
