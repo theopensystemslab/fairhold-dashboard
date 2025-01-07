@@ -35,7 +35,7 @@ const FormEdit: React.FC<Props> = ({ formData }) => {
   return (
     <Accordion type="single" collapsible className="inline-block">
       <AccordionItem value="item-1">
-        <div className="flex space-x-4 items-center bg-black  px-2">
+        <div className="flex space-x-4 items-center px-2">
           <AccordionTrigger>EDIT</AccordionTrigger>
           <span>{mapHouseType(formData.houseType)}</span>
           <span>
@@ -46,9 +46,7 @@ const FormEdit: React.FC<Props> = ({ formData }) => {
           <span>{formData.houseBedrooms} bedrooms</span>
           <span>{formData.maintenancePercentage * 100}% maintenance</span>
         </div>
-        <AccordionContent>
-          Yes. It adheres to the WAI-ARIA design pattern.
-        </AccordionContent>
+        <AccordionContent>Redirect to form content...</AccordionContent>
       </AccordionItem>
     </Accordion>
   );
