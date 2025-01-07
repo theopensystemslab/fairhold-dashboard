@@ -7,8 +7,6 @@ const mortgage = new Mortgage({
   initialDeposit: 0.1,
 });
 
-console.log({mortgage})
-
 it("can be instantiated", () => {
   expect(mortgage).toBeDefined();
 });
@@ -27,7 +25,6 @@ it("correctly calculates the total mortgage cost", () => {
 
 it("correctly calculates the split between interest and principal", () => {
   const breakdown = mortgage.yearlyPaymentBreakdown;
-  console.log({breakdown})
   
   expect(breakdown[0].yearlyPayment).toBeCloseTo(16313.56); // Higher figure because it includes the deposit
   expect(breakdown[0].cumulativePaid).toBeCloseTo(16313.56);
