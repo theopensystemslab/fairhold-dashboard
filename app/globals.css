@@ -91,3 +91,20 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+.snap-container {
+  height: 100vh;
+  overflow: hidden;
+}
+
+.snap-scroll {
+  height: 100%;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+}
+
+.snap-scroll > * {
+  scroll-snap-align: start;
+  height: 100vh;
+}

@@ -1,10 +1,10 @@
 import React from "react";
-import TenureComparisonWrapper from "../graphs/TenureComparisonWrapper";
-import TotalPaymentWrapper from "../graphs/TotalPaymentWrapper";
-import LifetimeMarketPurchaseWrapper from "../graphs/LifetimeMarketPurchaseWrapper";
-import LifetimeMarketRentWrapper from "../graphs/LifetimeMarketRentWrapper";
-import LifetimeFairholdLandPurchaseWrapper from "../graphs/LifetimeFairholdLandPurchaseWrapper";
-import LifetimeFairholdLandRentWrapper from "../graphs/LifetimeFairholdLandRentWrapper";
+import GraphCard1 from "./GraphCard1";
+import GraphCard2 from "./GraphCard2";
+import GraphCard3 from "./GraphCard3";
+import GraphCard4 from "./GraphCard4";
+import GraphCard5 from "./GraphCard5";
+import GraphCard6 from "./GraphCard6";
 import { Household } from "@/app/models/Household";
 
 interface DashboardProps {
@@ -12,16 +12,35 @@ interface DashboardProps {
 }
 
 const Dashboard: React.FC<DashboardProps> = ({ data }) => {
+  const handleNext = () => {
+    const container = document.querySelector(".snap-scroll") as HTMLElement;
+    if (container) {
+      container.scrollBy({
+        top: window.innerHeight, // Scroll by one viewport height
+        behavior: "smooth", // Smooth scrolling
+      });
+    }
+  };
+
   return (
-    <div>
-      <h1>Dashboard</h1>
-      {/* Render multiple graph components here */}
-      <TenureComparisonWrapper household={data} />
-      <TotalPaymentWrapper household={data} />
-      <LifetimeMarketPurchaseWrapper household={data} />
-      <LifetimeMarketRentWrapper household={data} />
-      <LifetimeFairholdLandPurchaseWrapper household={data} />
-      <LifetimeFairholdLandRentWrapper household={data} />{" "}
+    <div className="snap-container">
+      <div className="snap-scroll">
+        <GraphCard1 household={data} />
+        <GraphCard2 household={data} />
+        <GraphCard3 household={data} />
+        <GraphCard4 household={data} />
+        <GraphCard5 household={data} />
+        <GraphCard6 household={data} />
+      </div>
+
+      <div className="fixed bottom-4 right-4">
+        <button
+          onClick={handleNext}
+          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 };
