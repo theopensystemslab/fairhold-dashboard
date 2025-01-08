@@ -81,7 +81,7 @@ const CalculatorInput = () => {
           ways of owning or renting.
         </div>
         <Form {...methods}>
-          <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-8">
+          <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
               control={methods.control}
               name="houseType" // Name in the Calculation schema for the new radio field
