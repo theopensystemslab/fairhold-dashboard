@@ -1,4 +1,4 @@
-import { ValidPostcode } from "../schemas/apiSchema";
+import { ValidPostcode } from './../schemas/calculationSchema';
 import { createForecastParameters } from "./ForecastParameters";
 import { Household } from "./Household";
 import { HouseType, MaintenancePercentage, Property } from "./Property";

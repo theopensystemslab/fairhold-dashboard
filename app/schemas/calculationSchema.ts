@@ -7,7 +7,7 @@ import { HOUSE_TYPES } from "../models/Property";
 import { MAINTENANCE_LEVELS } from "../models/constants";
 
 // Type not exported by postcode lib directly
-type ValidPostcode = Extract<ReturnType<typeof parsePostcode>, { valid: true }>;
+export type ValidPostcode = Extract<ReturnType<typeof parsePostcode>, { valid: true }>;
 
 const HouseTypeEnum = z.enum(HOUSE_TYPES);
 
