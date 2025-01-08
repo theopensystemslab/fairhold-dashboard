@@ -95,6 +95,14 @@ body {
   background: rgb(46, 46, 46);
   color: white;
   font-size: 14px;
+  transition:
+    transform 0.3s ease,
+    background-color 0.3s ease;
+}
+
+.calculate-button-style:hover {
+  transform: scale(1.05);
+  background: rgb(46, 46, 46) !important;
 }
 /* 
 article,
