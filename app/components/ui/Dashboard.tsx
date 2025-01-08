@@ -26,12 +26,17 @@ const Dashboard: React.FC<DashboardProps> = ({ data }) => {
   return (
     <div className="snap-container">
       <div className="snap-scroll" ref={scrollContainerRef}>
-        <GraphCard title="How much would a Fairhold home cost?" />
-        <GraphCard title="How much would it cost every month?" />
-        <GraphCard title="How would the cost change over my life?" />
-        <GraphCard title="How much could I sell it for?" />
-        <GraphCard title="What difference would Fairhold make to me, my community, and the world?" />
-        <GraphCard title="What would you choose?" />
+        <GraphCard title="How much would a Fairhold home cost?">
+          <span className="text-red-500">Not much</span>
+        </GraphCard>
+
+        <GraphCard title="How much would it cost every month?">
+          <span className="text-red-500">in theory less than Freehold</span>
+        </GraphCard>
+        <GraphCard title="How would the cost change over my life?"></GraphCard>
+        <GraphCard title="How much could I sell it for?"></GraphCard>
+        <GraphCard title="What difference would Fairhold make to me, my community, and the world?"></GraphCard>
+        <GraphCard title="What would you choose?"></GraphCard>
       </div>
 
       <div className="fixed bottom-4 right-4">
