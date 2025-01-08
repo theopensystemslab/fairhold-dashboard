@@ -14,7 +14,7 @@ const GraphCard2: React.FC<Props> = ({ household }) => {
   return (
     <div className="h-screen snap-start">
       <span className="text-2xl text-black">
-        How much would a Fairhold home cost?
+        How much would it cost every month?
       </span>
     </div>
   );
