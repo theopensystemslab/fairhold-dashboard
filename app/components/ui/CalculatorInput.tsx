@@ -21,6 +21,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { APIError } from "@/app/lib/exceptions";
 
 type View = "form" | "loading" | "dashboard";
 
@@ -68,9 +69,30 @@ const CalculatorInput = () => {
       body: JSON.stringify(data),
     });
     const processedData = await response.json();
+    if (!response.ok) return handleErrors(processedData.error);
+
     setData(processedData);
     setView("dashboard");
   };
+
+  const handleErrors = (error: APIError) => {
+    switch (error.code) {
+      case "ITL3_NOT_FOUND":
+      case "INSUFFICIENT_PRICES_PAID_DATA":
+        methods.setError(
+          "housePostcode", 
+          { message: 
+            "Insufficient data for this postcode. Please try again with a different postcode" 
+          }
+        );
+        break;
+      case "UNHANDLED_EXCEPTION":
+      default:
+        console.error(error)
+    };
+    
+    setView("form");
+  }
 
   if (view === "form") {
     return (
