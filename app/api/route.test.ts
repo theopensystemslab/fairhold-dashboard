@@ -2,7 +2,6 @@ import { POST } from "../api/route";
 import * as calculationService from "../services/calculationService";
 import calculateFairhold from "../models/testClasses";
 import { NextResponse } from "next/server";
-import { calculationSchema, Calculation } from "../schemas/calculationSchema";
 
 // Mock dependencies
 jest.mock("../services/calculationService");
@@ -18,7 +17,7 @@ const callResponse = (res: unknown) => {
 };
 
 describe("POST API Route", () => {
-  const mockRequest = (data: Calculation | string) => ({
+  const mockRequest = (data: unknown) => ({
     json: jest.fn().mockResolvedValueOnce(data),
   });
 
@@ -27,14 +26,14 @@ describe("POST API Route", () => {
   });
 
   it("should return processed data for valid apiSchema input", async () => {
-    const validApiInput = calculationSchema.parse({
+    const validApiInput = {
       housePostcode: "SE17 1PE",
       houseSize: 100,
       houseAge: 3,
       houseBedrooms: 2,
       houseType: "D",
       maintenancePercentage: 0.02,
-    });
+    };
 
     const householdData = {
       /* mock household data */
@@ -54,9 +53,21 @@ describe("POST API Route", () => {
     const res = await POST(req as unknown as Request);
 
     // Assertions
-    expect(calculationService.getHouseholdData).toHaveBeenCalledWith(
-      validApiInput
-    );
+    expect(calculationService.getHouseholdData).toHaveBeenCalledWith({
+      ...validApiInput,
+      // Parsed postcode object
+      housePostcode: {
+        area: "SE",
+        district: "SE17",
+        incode: "1PE",
+        outcode: "SE17",
+        postcode: "SE17 1PE",
+        sector: "SE17 1",
+        subDistrict: null,
+        unit: "PE",
+        valid: true,
+      },
+    });
     expect(calculateFairhold).toHaveBeenCalledWith(householdData);
     expect(res).toEqual(NextResponse.json(processedData));
   });
@@ -77,14 +88,14 @@ describe("POST API Route", () => {
   });
 
   it("should handle service errors", async () => {
-    const validApiInput = calculationSchema.parse({
+    const validApiInput = {
       housePostcode: "SE17 1PE",
       houseSize: 100,
       houseAge: 3,
       houseBedrooms: 2,
       houseType: "D",
       maintenancePercentage: 0.02,
-    });
+    };
 
     const errorMessage = "Service error";
 
@@ -98,9 +109,21 @@ describe("POST API Route", () => {
     callResponse(res);
 
     // Assertions
-    expect(calculationService.getHouseholdData).toHaveBeenCalledWith(
-      validApiInput
-    );
+    expect(calculationService.getHouseholdData).toHaveBeenCalledWith({
+      ...validApiInput,
+      // Parsed postcode object
+      housePostcode: { 
+        area: "SE",
+        district: "SE17",
+        incode: "1PE",
+        outcode: "SE17",
+        postcode: "SE17 1PE",
+        sector: "SE17 1",
+        subDistrict: null,
+        unit: "PE",
+        valid: true,
+      },
+    });
     expect(NextResponse.json).toHaveBeenCalledWith(
       { error: errorMessage },
       { status: 500 }
