@@ -73,7 +73,13 @@ const CalculatorInput = () => {
   if (view === "form") {
     return (
       <div className="flex flex-col items-center justify-center max-w-xl mx-auto px-10">
-        <div className="h1-style"> Calculate how Fairhold can work for you</div>
+        <div className="h1-style">
+          Calculate how Fairhold could work for you
+        </div>
+        <div className="subheadstyle">
+          Compare the estimated cost of a Fairhold home in your area with other
+          ways of owning or renting.
+        </div>
         <Form {...methods}>
           <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-8">
             <div className="grid grid-cols-2 gap-4">
@@ -82,9 +88,7 @@ const CalculatorInput = () => {
                 name="housePostcode"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="h3-style">
-                      Property postcode
-                    </FormLabel>
+                    <FormLabel className="h3-style">Postcode</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="Enter the property postcode, e.g. SE17 1PE"
@@ -102,7 +106,9 @@ const CalculatorInput = () => {
                 name="houseSize"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="h3-style">House size</FormLabel>
+                    <FormLabel className="h3-style">
+                      How big is the house?
+                    </FormLabel>
                     <FormControl>
                       <Input
                         placeholder="Enter the house size in square meters, e.g. 80"
@@ -121,7 +127,9 @@ const CalculatorInput = () => {
                 name="houseAge"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="h3-style">House age</FormLabel>
+                    <FormLabel className="h3-style">
+                      How old is the building?
+                    </FormLabel>
                     <FormControl>
                       <Input
                         placeholder="Enter the house age, e.g. 1 for a new house"
@@ -140,7 +148,9 @@ const CalculatorInput = () => {
                 name="houseBedrooms"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="h3-style">House bedrooms</FormLabel>
+                    <FormLabel className="h3-style">
+                      Number of bedrooms
+                    </FormLabel>
                     <FormControl>
                       <Input
                         placeholder="Enter the number of bedrooms in the house, e.g. 2"
@@ -232,7 +242,7 @@ const CalculatorInput = () => {
               )}
             />
 
-            <Button type="submit">Submit</Button>
+            <Button type="submit">Calculate</Button>
           </form>
         </Form>
       </div>
