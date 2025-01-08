@@ -72,7 +72,7 @@ const CalculatorInput = () => {
 
   if (view === "form") {
     return (
-      <div className="flex flex-col items-center justify-center max-w-xl mx-auto px-10">
+      <div className="flex flex-col justify-center max-w-xl mx-auto px-10">
         <div className="h1-style">
           Calculate how Fairhold could work for you
         </div>
@@ -297,6 +297,27 @@ const CalculatorInput = () => {
                 </FormItem>
               )}
             />
+
+            <div className="grid grid-cols-2 gap-2">
+              <div className="flex flex-col">
+                <span className="h3-style inaccessible-input-style">
+                  Mortgage interest rate
+                </span>
+                <span className="inaccessible-input-style">6%</span>
+              </div>
+              <div className="flex flex-col">
+                <span className="h3-style inaccessible-input-style">
+                  Mortgage term
+                </span>
+                <span className="inaccessible-input-style">25 years</span>
+              </div>
+              <div className="flex flex-col">
+                <span className="h3-style inaccessible-input-style">
+                  Mortgage deposit
+                </span>
+                <span className="inaccessible-input-style">25 years</span>
+              </div>
+            </div>
 
             <Button type="submit" className="calculate-button-style">
               Calculate

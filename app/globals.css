@@ -75,6 +75,13 @@ body {
   font-size: 12px;
 }
 
+.inaccessible-input-style {
+  color: rgb(150, 150, 150);
+  font-size: 12px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
 .radio-button-style {
   background: rgb(255, 255, 255);
   font-size: 12px;
