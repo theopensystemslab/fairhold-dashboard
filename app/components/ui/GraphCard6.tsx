@@ -13,7 +13,7 @@ const GraphCard6: React.FC<Props> = ({ household }) => {
   }
   return (
     <div className="h-screen snap-start">
-      <span className="text-2xl text-black">What would you choose??</span>
+      <span className="text-2xl text-black">What would you choose?</span>
     </div>
   );
 };
