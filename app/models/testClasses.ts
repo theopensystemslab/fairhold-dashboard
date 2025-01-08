@@ -59,7 +59,7 @@ function calculateFairhold(responseData: ResponseData) {
     property: property,
     forecastParameters: createForecastParameters(responseData.maintenancePercentage),
   });
-  console.log(household);
+  
   return household;
 }
 
