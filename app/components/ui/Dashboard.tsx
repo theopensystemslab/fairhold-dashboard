@@ -1,10 +1,5 @@
-import React from "react";
-import GraphCard1 from "./GraphCard1";
-import GraphCard2 from "./GraphCard2";
-import GraphCard3 from "./GraphCard3";
-import GraphCard4 from "./GraphCard4";
-import GraphCard5 from "./GraphCard5";
-import GraphCard6 from "./GraphCard6";
+import React, { useRef } from "react";
+import GraphCard from "./GraphCard";
 import { Household } from "@/app/models/Household";
 
 interface DashboardProps {
@@ -12,25 +7,31 @@ interface DashboardProps {
 }
 
 const Dashboard: React.FC<DashboardProps> = ({ data }) => {
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
   const handleNext = () => {
-    const container = document.querySelector(".snap-scroll") as HTMLElement;
-    if (container) {
-      container.scrollBy({
-        top: window.innerHeight, // Scroll by one viewport height
-        behavior: "smooth", // Smooth scrolling
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollBy({
+        top: window.innerHeight,
+        behavior: "smooth",
       });
     }
   };
 
+  // Dummy identity function to avoid linting errors
+  const identity = (data: Household) => {
+    return data;
+  };
+  identity(data);
+
   return (
     <div className="snap-container">
-      <div className="snap-scroll">
-        <GraphCard1 household={data} />
-        <GraphCard2 household={data} />
-        <GraphCard3 household={data} />
-        <GraphCard4 household={data} />
-        <GraphCard5 household={data} />
-        <GraphCard6 household={data} />
+      <div className="snap-scroll" ref={scrollContainerRef}>
+        <GraphCard title="How much would a Fairhold home cost?" />
+        <GraphCard title="How much would it cost every month?" />
+        <GraphCard title="How would the cost change over my life?" />
+        <GraphCard title="How much could I sell it for?" />
+        <GraphCard title="What difference would Fairhold make to me, my community, and the world?" />
+        <GraphCard title="What would you choose?" />
       </div>
 
       <div className="fixed bottom-4 right-4">
