@@ -1,4 +1,4 @@
-import { BED_WEIGHTS_AND_CAPS, MAINTENANCE_LEVELS, HOUSE_BREAKDOWN_PERCENTAGES } from "./constants";
+import { MAINTENANCE_LEVELS, HOUSE_BREAKDOWN_PERCENTAGES } from "./constants";
 import { houseBreakdownType } from "./constants";
 /**
  * Number of decimal places to use when rounding numerical values
@@ -53,16 +53,14 @@ export class Property {
    */
   newBuildPrice: number;
   /**
-   * Price of the house according to the depreciation regression
+   * Since Fairhold treats homes as consumer durables, we need to depreciate homes over time.
+   * The calculations use our custom depreciation method
    */
   depreciatedBuildPrice: number;
-  /**
-   * Price of the house weighted by the number of bedrooms
-   */
-  bedWeightedAveragePrice: number;
   landPrice: number;
   /**
-   * Ratio of the land price to the total price
+   * This shows the % of the market price that land accounts for (`land value / market value`)
+   * Used to break other rental tenure costs into land vs house
    */
   landToTotalRatio: number;
 
@@ -80,9 +78,8 @@ export class Property {
     // Computed properties, order is significant
     this.newBuildPrice = this.calculateNewBuildPrice();
     this.depreciatedBuildPrice = this.calculateDepreciatedBuildPrice();
-    this.bedWeightedAveragePrice = this.calculateBedWeightedAveragePrice();
     this.landPrice = this.averageMarketPrice - this.newBuildPrice;
-    this.landToTotalRatio = this.landPrice / this.bedWeightedAveragePrice;
+    this.landToTotalRatio = this.landPrice / this.averageMarketPrice;
   }
 
   private calculateNewBuildPrice() {
@@ -143,29 +140,5 @@ export class Property {
       maintenanceAddition,
       depreciatedComponentValue
     };
-  }
-
-  private calculateBedWeightedAveragePrice() {
-    const bedWeights = BED_WEIGHTS_AND_CAPS.weight;
-    let bedWeight;
-
-    if (
-      this.numberOfBedrooms <
-      BED_WEIGHTS_AND_CAPS.numberOfBedrooms[
-        BED_WEIGHTS_AND_CAPS.numberOfBedrooms.length - 1
-      ]
-    ) {
-      // assign the weight based on the number of beds
-      bedWeight = BED_WEIGHTS_AND_CAPS.weight[this.numberOfBedrooms];
-    } else {
-      // assign the last value if out of scale
-      bedWeight = BED_WEIGHTS_AND_CAPS.weight[bedWeights.length - 1];
-    }
-
-    bedWeight = parseFloat(
-      (bedWeight * this.averageMarketPrice).toFixed(PRECISION)
-    );
-
-    return bedWeight;
   }
 }
