@@ -1,7 +1,7 @@
 import { FairholdLandPurchase } from "./tenure/FairholdLandPurchase";
 import { FairholdLandRent } from "./tenure/FairholdLandRent";
 import { MarketRent } from "./tenure/MarketRent";
-// import { SocialRent } from "./tenure/SocialRent";
+import { SocialRent } from "./tenure/SocialRent";
 
 import { Fairhold } from "./Fairhold";
 import { DEFAULT_FORECAST_PARAMETERS } from "./ForecastParameters"; // TODO: should this be saved to constants.ts instead?
@@ -166,7 +166,7 @@ const socialRentAdjustments: socialRentAdjustmentTypes = [
  * forecastParameters: DEFAULT_FORECAST_PARAMETERS,`
  * @returns 
  */
-export const createTestHousehold = (overrides = {}) => { // TODO: write tests for instantiating household; commenting out the function for now because of test coverage issue
+export const createTestHousehold = (overrides = {}) => { 
   return new Household ({
     averageRentYearly: 1200,
     socialRentAverageEarning: 354.1,
@@ -218,7 +218,7 @@ export const createTestProperty = (overrides = {}) => {
  * initialDeposit: 0.1,` 
  * @returns 
  */
-// export const createTestMarketLandMortgage = (overrides = {}) => { TODO: write tests; commenting out the function for now because of test coverage issue
+// export const createTestMarketLandMortgage = (overrides = {}) => { 
 //     return new Mortgage({
 //       propertyValue: 300000,
 //       interestRate: 0.035, 
@@ -423,16 +423,16 @@ export const createTestFairholdLandRent = (overrides = {}) => {
  * landToTotalRatio: .6,`
  * @returns 
  */
-// export const createTestSocialRent = (overrides = {}) => { TODO: write tests; commenting out the function for now because of test coverage issue
-//   return new SocialRent({
-//     numberOfBedrooms: 2,
-//     socialRentAverageEarning: 354.1,
-//     socialRentAdjustments: socialRentAdjustments,
-//     housePriceIndex: 100000,
-//     landToTotalRatio: .6,
-//     ...overrides
-//   })
-// }
+export const createTestSocialRent = (overrides = {}) => {
+  return new SocialRent({
+    numberOfBedrooms: 2,
+    socialRentAverageEarning: 354.1,
+    socialRentAdjustments: socialRentAdjustments,
+    housePriceIndex: 100000,
+    landToTotalRatio: .6,
+    ...overrides
+  })
+}
 
 /**
  * Creates a simplified instance of the `Lifetime` class, which includes instances of all tenure classes and `Property` too. Uses straightforward property values for testing. 

@@ -1,23 +1,18 @@
 import { MarketRent } from "./MarketRent";
-import { DEFAULT_FORECAST_PARAMETERS, ForecastParameters } from "../ForecastParameters";
+import { createTestMarketRent } from "../testHelpers";
 
-let tenureMarketRent: MarketRent;
-
-beforeEach(() => {
-  const forecastParameters: ForecastParameters = {
-    ...DEFAULT_FORECAST_PARAMETERS,
-  };
-
-  tenureMarketRent = new MarketRent({
-    averageRentYearly: 20000,
-    incomeYearly: 45816,
-    newBuildPrice: 186560,
-    depreciatedBuildPrice: 110717.45,
-    landToTotalRatio: 0.1446,
-    forecastParameters: forecastParameters,
-  });
-});
+const marketRent = createTestMarketRent();
 
 it("can be instantiated", () => {
-  expect(tenureMarketRent).toBeInstanceOf(MarketRent);
+  expect(marketRent).toBeInstanceOf(MarketRent);
 });
+
+it("correctly calculates split for land and house", () => {
+  expect(marketRent.averageRentLandMonthly).toBeCloseTo(900);
+  expect(marketRent.averageRentHouseMonthly).toBeCloseTo(600);
+});
+
+it("correctly calculates rent affordability", () => {
+  expect(marketRent.affordability).toBeCloseTo(.6);
+})
+
