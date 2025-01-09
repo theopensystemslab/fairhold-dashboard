@@ -22,7 +22,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { APIError } from "@/app/lib/exceptions";
 import { BackgroundAssumptions } from "./BackgroundAssumptions";
-import { Drawer } from "./Drawer";
+import { MaintenanceExplainerDrawer } from "./MaintenanceExplainerDrawer";
 
 type View = "form" | "loading" | "dashboard";
 
@@ -318,7 +318,7 @@ const CalculatorInput = () => {
                       </div>
                     </RadioGroup>
                   </FormControl>
-                  <Drawer title="Hello there" description="lorem ipsum" buttonTitle="What is this?" />
+                  <MaintenanceExplainerDrawer/>
                   <FormMessage />
                 </FormItem>
               )}
@@ -362,7 +362,7 @@ const CalculatorInput = () => {
         <ClipLoader color="black" size={50} />
       </div>
     );
-  }
+  };
   
   if (view === "dashboard" && data) {
     const formValues = form.getValues();

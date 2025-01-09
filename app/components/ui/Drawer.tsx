@@ -15,7 +15,7 @@ interface Props {
   description: string;
 }
 
-export const Drawer: React.FC<Props> = ({ buttonTitle, title, description }) => (
+export const Drawer: React.FC<React.PropsWithChildren<Props>> = ({ buttonTitle, title, description, children }) => (
   <Sheet>
     <SheetTrigger className="text-gray-400 text-xs underline flex">
       <QuestionMarkCircledIcon/>
@@ -26,6 +26,7 @@ export const Drawer: React.FC<Props> = ({ buttonTitle, title, description }) => 
         <SheetTitle>{ title }</SheetTitle>
         <SheetDescription>{ description }</SheetDescription>
       </SheetHeader>
+      { children }
     </SheetContent>
   </Sheet>
 );
