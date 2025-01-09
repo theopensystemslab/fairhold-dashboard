@@ -22,8 +22,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
+type View = "form" | "loading" | "dashboard";
+
 const CalculatorInput = () => {
-  const [view, setView] = useState("form");
+  const [view, setView] = useState<View>("form");
   const [data, setData] = useState<Household | null>(null);
 
   const searchParams = useSearchParams();
@@ -326,12 +328,15 @@ const CalculatorInput = () => {
         </Form>
       </div>
     );
-  } else if (view === "loading") {
+  }
+  
+  if (view === "loading") {
     return (
       <div className="flex items-center justify-center h-screen text-black mt-5">
         <ClipLoader color="black" size={50} />
       </div>
     );
+
   } else if (view === "dashboard") {
     return (
       <Dashboard
@@ -339,6 +344,7 @@ const CalculatorInput = () => {
         inputData={form.getValues()}
       />
     );
+
   }
 };
 
