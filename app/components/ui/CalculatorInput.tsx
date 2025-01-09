@@ -14,7 +14,6 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormDescription,
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
@@ -23,6 +22,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { APIError } from "@/app/lib/exceptions";
 import { BackgroundAssumptions } from "./BackgroundAssumptions";
+import { Drawer } from "./Drawer";
 
 type View = "form" | "loading" | "dashboard";
 
@@ -270,6 +270,7 @@ const CalculatorInput = () => {
                   <FormLabel className="h3-style">
                     How much will you spend on maintenance and improvements?
                   </FormLabel>
+
                   <FormControl>
                     <RadioGroup
                       value={String(field.value)} // Convert number to string for RadioGroup
@@ -317,7 +318,7 @@ const CalculatorInput = () => {
                       </div>
                     </RadioGroup>
                   </FormControl>
-                  <FormDescription>What is this?</FormDescription>
+                  <Drawer title="Hello there" description="lorem ipsum" buttonTitle="What is this?" />
                   <FormMessage />
                 </FormItem>
               )}
@@ -361,7 +362,9 @@ const CalculatorInput = () => {
         <ClipLoader color="black" size={50} />
       </div>
     );
-  } else if (view === "dashboard" && data) {
+  }
+  
+  if (view === "dashboard" && data) {
     const formValues = form.getValues();
     return <Dashboard processedData={data} inputData={formValues} />;
   }
