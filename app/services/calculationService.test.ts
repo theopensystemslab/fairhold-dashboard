@@ -10,7 +10,7 @@ import { socialRentAdjustmentsService } from "./socialRentAdjustmentsService";
 import { socialRentEarningsService } from "./socialRentEarningsService";
 import { rentService } from "./rentService";
 import { parse } from "postcode";
-import { ValidPostcode } from "../schemas/apiSchema";
+import { ValidPostcode } from "../schemas/calculationSchema";
 
 jest.mock("./itlService");
 jest.mock("./gdhiService");

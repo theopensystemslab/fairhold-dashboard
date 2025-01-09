@@ -1,5 +1,5 @@
 import { BED_WEIGHTS_AND_CAPS, MAINTENANCE_LEVELS, HOUSE_BREAKDOWN_PERCENTAGES } from "./constants";
-import { HouseBreakdown } from "./constants";
+import { houseBreakdownType } from "./constants";
 /**
  * Number of decimal places to use when rounding numerical values
  */
@@ -70,7 +70,7 @@ export class Property {
     this.postcode = params.postcode;
     this.houseType = params.houseType;
     this.numberOfBedrooms = params.numberOfBedrooms;
-    this.age = params.age - 1; // Subtract 1 because years should be indexed to 0
+    this.age = params.age // TODO: update frontend so that newbuild = 0
     this.size = params.size;
     this.maintenancePercentage = params.maintenancePercentage;
     this.newBuildPricePerMetre = params.newBuildPricePerMetre;
@@ -91,13 +91,12 @@ export class Property {
     return newBuildPrice;
   }
 
-  private calculateDepreciatedBuildPrice() {
-    if (this.age === 0) return this.newBuildPrice; // If newbuild, return newBuildPrice and don't depreciate
-    
+  public calculateDepreciatedBuildPrice() {
+    if (this.age === 0) return this.newBuildPrice;
     let depreciatedBuildPrice = 0;
 
   // Calculate for each component using the public method
-  for (const key of Object.keys(HOUSE_BREAKDOWN_PERCENTAGES) as (keyof HouseBreakdown)[]) {
+  for (const key of Object.keys(HOUSE_BREAKDOWN_PERCENTAGES) as (keyof houseBreakdownType)[]) {
     const result = this.calculateComponentValue(
       key, 
       this.newBuildPrice, 
@@ -113,7 +112,7 @@ export class Property {
 }
 
   public calculateComponentValue(
-    componentKey: keyof HouseBreakdown,
+    componentKey: keyof houseBreakdownType,
     newBuildPrice: number,
     age: number,
     maintenanceLevel: number
@@ -136,8 +135,7 @@ export class Property {
     let depreciatedComponentValue = 
       (newComponentValue * depreciationFactor) + maintenanceAddition;
 
-    // Do not depreciate below 0
-    if (depreciatedComponentValue < 0) depreciatedComponentValue = 0
+    depreciatedComponentValue < 0 ? depreciatedComponentValue = 0 : depreciatedComponentValue
 
     return {
       newComponentValue,

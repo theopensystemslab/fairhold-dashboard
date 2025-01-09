@@ -37,37 +37,40 @@ export const NATIONAL_AVERAGES: NationalAverage = {
  */
 export const MAINTENANCE_LEVELS = [0.015, 0.02, 0.0375] as const;
 
-type Component = 
-  | "foundations" 
-  | "structureEnvelope" 
-  | "cladding"
-  | "roofing"
-  | "windows" 
-  | "internalLinings"
-  | "bathroomFixtures"
-  | "fitout"
-  | "kitchenUnits"
-  | "electricalAppliances"
-  | "electricalServices"
-  | "ventilationServices"
-  | "waterAndHeatingServices"
-  | "floorCoverings"
-  | "landscaping";
-
-interface ComponentBreakdown {
-  percentageOfHouse: number;
-  depreciationPercentageYearly: number;
-  percentOfMaintenanceYearly: number;
+/** Type for storing component values and depreciation*/
+export type componentBreakdownType = {
+  /** Component value as percentage of total house value */
+  percentageOfHouse: number, 
+  /** Percentage of the component's total value that is written-down yearly */
+  depreciationPercentageYearly: number,
+  /** Percentage of the yearly maintenance spend allocated to component */
+  percentOfMaintenanceYearly: number
 }
 
-export type HouseBreakdown = Record<Component, ComponentBreakdown>;
+export type houseBreakdownType = {
+  foundations: componentBreakdownType,
+  structureEnvelope: componentBreakdownType,
+  cladding: componentBreakdownType,
+  roofing: componentBreakdownType,
+  windows: componentBreakdownType,
+  internalLinings: componentBreakdownType,
+  bathroomFixtures: componentBreakdownType,
+  fitout: componentBreakdownType,
+  kitchenUnits: componentBreakdownType,
+  electricalAppliances: componentBreakdownType,
+  electricalServices: componentBreakdownType,
+  ventilationServices: componentBreakdownType,
+  waterAndHeatingServices: componentBreakdownType,
+  floorCoverings: componentBreakdownType,
+  landscaping: componentBreakdownType,
+}
 
 /** 
  * Object (key = component, value = another object with `percentageOfHouse`, `deprecationPercentageYearly` and `percentOfMaintenanceYearly`). Contains a breakdown of a house by component, and the percentage of total value it constitutes:
  * foundations 21%, structure 25%, cladding 4%, roofing 4%, windows 4%, internal linings 4%, bathroom 4%, fitout 5%,
  * kitchen units 4%, electrical appliances 4%, electrical services 4%, ventilation services 4%, water and heating services 8%,
  * floor coverings 2%, landscaping 3%*/
-export const HOUSE_BREAKDOWN_PERCENTAGES: HouseBreakdown = {
+export const HOUSE_BREAKDOWN_PERCENTAGES: houseBreakdownType = {
   foundations: {
     percentageOfHouse: .21,
     depreciationPercentageYearly: 0,

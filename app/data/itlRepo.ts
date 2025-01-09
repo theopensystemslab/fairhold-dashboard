@@ -13,8 +13,7 @@ const getItl3ByPostcodeDistrict = async (
       },
     });
 
-    // Cast to string as 'not: null' clause in Prisma query does not type narrow
-    return itl3 as string;
+    return itl3;
   } catch (error) {
     throw new Error(
       `Data error: Unable get get itl3 for postcode district ${postcodeDistrict}`
