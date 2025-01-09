@@ -1,3 +1,4 @@
+import { APIError } from "../lib/exceptions";
 import prisma from "./db";
 
 const MINIMUM_NUMBER_OF_POSTCODES = 30;
@@ -32,7 +33,11 @@ const getPricesPaidByPostcodeAndHouseType = async (
     });
 
     if (!summary) {
-      throw new Error("Unable to find sufficient transaction data");
+    throw new APIError({
+      status: 500,
+      message: "Unable to find sufficient transaction data",
+      code: "INSUFFICIENT_PRICES_PAID_DATA",
+    });
     }
 
     return {

@@ -46,7 +46,7 @@ describe("itlRepo", () => {
     await expect(
       itlRepo.getItl3ByPostcodeDistrict(postcodeDistrict)
     ).rejects.toThrow(
-      `Data error: Unable get get itl3 for postcode district ${postcodeDistrict}`
+      `Data error: Unable get itl3 for postcode district ${postcodeDistrict}`
     );
   });
 });
