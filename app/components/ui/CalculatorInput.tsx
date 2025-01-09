@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Household } from "@/app/models/Household";
 import Dashboard from "./Dashboard";
-import { formSchema, formType } from "@/app/schemas/formSchema";
+import { formSchema, FormFontend } from "@/app/schemas/formSchema";
 import { useSearchParams } from "next/navigation";
 
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -36,7 +36,7 @@ const CalculatorInput = () => {
   const urlHouseType = searchParams.get("houseType");
   const urlMaintenancePercentage = searchParams.get("maintenancePercentage");
 
-  const form = useForm<formType>({
+  const form = useForm<FormFontend>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       houseType:
@@ -60,7 +60,7 @@ const CalculatorInput = () => {
     },
   });
 
-  const onSubmit = async (data: formType) => {
+  const onSubmit = async (data: FormFontend) => {
     setView("loading");
     const response = await fetch("/api", {
       method: "POST",
@@ -336,8 +336,14 @@ const CalculatorInput = () => {
         <ClipLoader color="black" size={50} />
       </div>
     );
-  } else if (view === "dashboard") {
-    return <Dashboard processedData={data} inputData={form.getValues()} />;
+  } else if (view === "dashboard" && data) {
+    const formValues = form.getValues();
+    return (
+      <Dashboard
+        processedData={data}
+        inputData={formSchema.parse(formValues)}
+      />
+    );
   }
 };
 

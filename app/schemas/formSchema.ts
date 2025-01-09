@@ -27,4 +27,4 @@ export const formSchema = z.object({
   maintenancePercentage: maintenancePercentageSchema,
 });
 
-export type formType = z.infer<typeof formSchema>;
+export type FormFontend = z.infer<typeof formSchema>;
