@@ -206,7 +206,7 @@ const CalculatorInput = () => {
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="e.g. 80 for 80 square meters"
+                        placeholder="e.g. 80 for 80 square metres"
                         {...field}
                         value={field.value ?? ""}
                         className="inputfield-style"
@@ -228,7 +228,7 @@ const CalculatorInput = () => {
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="e.g. 1 for a new house"
+                        placeholder="e.g. 0 for a new house"
                         {...field}
                         value={field.value ?? ""}
                         className="inputfield-style"
@@ -249,7 +249,7 @@ const CalculatorInput = () => {
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder=" e.g. 2 for twp bedrooms"
+                        placeholder=" e.g. 2 for two bedrooms"
                         {...field}
                         value={field.value ?? ""}
                         className="inputfield-style"
@@ -327,19 +327,19 @@ const CalculatorInput = () => {
                 <span className="h3-style inaccessible-input-style">
                   Mortgage interest rate
                 </span>
-                <span className="inaccessible-input-style">6%</span>
+                <span className="inaccessible-input-style">6%</span> {/* TODO: should we hook these up to the actual variables used so we don't have to maintain them in two places? */}
               </div>
               <div className="flex flex-col">
                 <span className="h3-style inaccessible-input-style">
                   Mortgage term
                 </span>
-                <span className="inaccessible-input-style">25 years</span>
+                <span className="inaccessible-input-style">30 years</span>
               </div>
               <div className="flex flex-col">
                 <span className="h3-style inaccessible-input-style">
                   Mortgage deposit
                 </span>
-                <span className="inaccessible-input-style">25 years</span>
+                <span className="inaccessible-input-style">15%</span>
               </div>
             </div>
 
