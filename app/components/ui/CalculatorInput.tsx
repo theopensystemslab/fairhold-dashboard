@@ -52,9 +52,9 @@ const CalculatorInput = () => {
       housePostcode: urlPostcode || "",
       // Apply defaults if provided
       // Type-safe to account for exactOptionalPropertyTypes propert in tsconfig.json
-      ...(urlHouseSize && { houseSize: Number(urlHouseSize )}),
-      ...(urlHouseAge && { houseAge: Number(urlHouseAge )}),
-      ...(urlHouseBedrooms && { houseBedrooms: Number(urlHouseBedrooms )}),
+      ...(urlHouseSize && { houseSize: Number(urlHouseSize) }),
+      ...(urlHouseAge && { houseAge: Number(urlHouseAge) }),
+      ...(urlHouseBedrooms && { houseBedrooms: Number(urlHouseBedrooms) }),
     },
   });
 
