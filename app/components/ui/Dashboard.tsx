@@ -17,11 +17,8 @@ const Dashboard: React.FC<DashboardProps> = ({ data }) => {
     }
   };
 
-  // Dummy identity function to avoid linting errors
-  const identity = (data: Household) => {
-    return data;
-  };
-  identity(data);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const someUnusedVariable = data;
 
   return (
     <div className="snap-container">
