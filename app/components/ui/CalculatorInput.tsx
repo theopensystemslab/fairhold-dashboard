@@ -329,22 +329,15 @@ const CalculatorInput = () => {
       </div>
     );
   }
-  
+
   if (view === "loading") {
     return (
       <div className="flex items-center justify-center h-screen text-black mt-5">
         <ClipLoader color="black" size={50} />
       </div>
     );
-
   } else if (view === "dashboard") {
-    return (
-      <Dashboard
-        processedData={data as Household}
-        inputData={form.getValues()}
-      />
-    );
-
+    return <Dashboard processedData={data} inputData={form.getValues()} />;
   }
 };
 

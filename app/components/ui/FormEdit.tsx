@@ -13,23 +13,12 @@ interface Props {
   formData: formType;
 }
 
-function mapHouseType(houseType: HouseType) {
-  if (houseType === "D") {
-    return "Detached";
-  }
-
-  if (houseType === "S") {
-    return "Semi-detached";
-  }
-
-  if (houseType === "T") {
-    return "Terrace";
-  }
-
-  if (houseType === "F") {
-    return "Flat";
-  }
-}
+const houseTypeDisplayNames: Record<HouseType, string> = {
+  D: "Detached",
+  S: "Semi-detached",
+  T: "Terrace",
+  F: "Flat",
+};
 
 const FormEdit: React.FC<Props> = ({ formData }) => {
   return (
@@ -37,7 +26,7 @@ const FormEdit: React.FC<Props> = ({ formData }) => {
       <AccordionItem value="item-1">
         <div className="flex space-x-4 items-center px-2">
           <AccordionTrigger>EDIT</AccordionTrigger>
-          <span>{mapHouseType(formData.houseType)}</span>
+          <span>{houseTypeDisplayNames[formData.houseType]}</span>
           <span>
             {formData.houseSize} m<sup>2</sup>
           </span>

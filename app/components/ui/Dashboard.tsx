@@ -1,11 +1,11 @@
 import React, { useRef, useState } from "react";
 import GraphCard from "./GraphCard";
 import { Household } from "@/app/models/Household";
-import { formType } from "@/app/schemas/formSchema";
+import type { formSchema } from "@/app/schemas/formSchema";
 
 interface DashboardProps {
   processedData: Household;
-  inputData: formType; // Add this property
+  inputData: typeof formSchema;
 }
 
 const Dashboard: React.FC<DashboardProps> = ({ inputData }) => {
