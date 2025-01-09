@@ -57,6 +57,20 @@ model PricesPaid {
   @@map("prices_paid")
 }
 
+model PricesPaidSummary {
+  id               Int   @id @default(autoincrement())
+  postcode         String
+  propertyType     String @map("property_type") @db.VarChar(250)
+  granularityLevel String @map("granularity_level") @db.VarChar(250)
+  averagePrice     Float @map("average_price")
+  transactionCount Int @map("transaction_count")
+
+  @@unique([postcode, propertyType, granularityLevel])
+  @@index([postcode, propertyType])
+
+  @@map("prices_paid_summary")
+}
+
 model Rent {
   id              Int     @id @default(autoincrement())
   itl3            String @db.VarChar(250)
