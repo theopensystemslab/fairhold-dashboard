@@ -26,7 +26,7 @@ export const MaintenanceExplainerDrawer = () => (
       </div>
       <div>
         <b>High 2.5%</b>
-        <p>I will keep things nice, and also improve the property at some point during my time there.For example, extending the house or doing an energy retrofit project.</p>
+        <p>I will keep things nice, and also improve the property at some point during my time there. For example, extending the house or doing an energy retrofit project.</p>
       </div>
       <div>
         <a href="#" className="text-white">Find out more about how we have modelled building depreciation</a>
