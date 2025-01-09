@@ -24,3 +24,10 @@ it("can be instantiated with number of bedrooms above the threshold", () => {
   expect(largeBedSocialRent).toBeInstanceOf(SocialRent);
   expect(largeBedSocialRent.adjustedSocialRentMonthly).toBeCloseTo(650.4);
 });
+
+it("correctly uses the social rent cap where formula rent is too high", () => {
+  const expensiveSocialRent = createTestSocialRent({
+    housePriceIndex: 800000
+  })
+  expect(expensiveSocialRent.adjustedSocialRentMonthly).toBeCloseTo(692.454)
+})
