@@ -1,4 +1,5 @@
 import prisma from "./db";
+import { APIError } from "../lib/exceptions";
 
 const getItl3ByPostcodeDistrict = async (
   postcodeDistrict: string
@@ -15,10 +16,11 @@ const getItl3ByPostcodeDistrict = async (
 
     return itl3;
   } catch (error) {
-    throw new Error(
-      `Data error: Unable get get itl3 for postcode district ${postcodeDistrict}`
-    );
-
+    throw new APIError({
+      status: 500,
+      message: `Data error: Unable get itl3 for postcode district ${postcodeDistrict}`,
+      code: "ITL3_NOT_FOUND"
+    });
   }
 };
 

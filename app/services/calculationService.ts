@@ -10,6 +10,7 @@ import { socialRentEarningsService } from "./socialRentEarningsService";
 import { rentService } from "./rentService"
 
 import { Calculation } from "../schemas/calculationSchema";
+import { APIError } from "../lib/exceptions";
 
 const prisma = new PrismaClient();
 
@@ -63,6 +64,8 @@ export const getHouseholdData = async (input: Calculation) => {
     };
 
   } catch (err) {
+    if (err instanceof APIError) throw err;
+    
     throw Error(
       `Service error: Unable to generate household. Message: ${(err as Error).message}`
     );

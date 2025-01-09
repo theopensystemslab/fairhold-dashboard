@@ -1,4 +1,3 @@
-// __tests__/householdData.test.ts
 import { getHouseholdData } from "./calculationService";
 import { itlService } from "./itlService";
 import { gdhiService } from "./gdhiService";
@@ -22,19 +21,17 @@ jest.mock("./socialRentAdjustmentsService");
 jest.mock("./socialRentEarningsService");
 jest.mock("./rentService");
 
-// Mock the Prisma client
 jest.mock("../data/db", () => {
   return {
     __esModule: true,
     default: {
-      $disconnect: jest.fn().mockResolvedValue(undefined), // Mock disconnect to resolve successfully
+      $disconnect: jest.fn().mockResolvedValue(undefined),
       socialRent: {
-        aggregate: jest.fn().mockReturnValue(Promise.resolve([])), // Mock aggregate method
+        aggregate: jest.fn().mockReturnValue(Promise.resolve([])),
       },
-      pricesPaid: {
-        aggregate: jest.fn().mockReturnValue(Promise.resolve([])), // Mock aggregate for pricesPaid as well
+      pricesPaidSummary: {
+        findFirst: jest.fn().mockReturnValue(Promise.resolve([])),
       },
-      // Add any other Prisma model methods that need to be mocked
     },
   };
 });
@@ -73,7 +70,7 @@ describe("getHouseholdData", () => {
     const mockGasBillYearly = 1200;
     const mockHPI = 1.05;
     const mockBuildPrice = 250000;
-    const mockPricesPaid = {
+    const mockPricesPaidSummary = {
       averagePrice: 280000,
       numberOfTransactions: 50,
       granularityPostcode: "SE17",
@@ -98,7 +95,7 @@ describe("getHouseholdData", () => {
     ).mockResolvedValueOnce(mockBuildPrice);
     (
       pricesPaidService.getPricesPaidByPostcodeAndHouseType as jest.Mock
-    ).mockResolvedValueOnce(mockPricesPaid);
+    ).mockResolvedValueOnce(mockPricesPaidSummary);
     (rentService.getByITL3 as jest.Mock).mockResolvedValueOnce(
       mockAverageRentMonthly
     );
@@ -119,7 +116,7 @@ describe("getHouseholdData", () => {
       houseBedrooms: mockInput.houseBedrooms,
       houseSize: mockInput.houseSize,
       maintenancePercentage: mockInput.maintenancePercentage,
-      averagePrice: parseFloat(mockPricesPaid.averagePrice.toFixed(2)),
+      averagePrice: parseFloat(mockPricesPaidSummary.averagePrice.toFixed(2)),
       itl3: mockITL3,
       gdhi: mockGDHI,
       hpi: mockHPI,
@@ -127,8 +124,8 @@ describe("getHouseholdData", () => {
       averageRentMonthly: mockAverageRentMonthly,
       socialRentAdjustments: mockSocialRentAdjustments,
       socialRentAverageEarning: mockSocialRentAverageEarning,
-      numberOfTransactions: mockPricesPaid.numberOfTransactions,
-      granularityPostcode: mockPricesPaid.granularityPostcode,
+      numberOfTransactions: mockPricesPaidSummary.numberOfTransactions,
+      granularityPostcode: mockPricesPaidSummary.granularityPostcode,
       gasBillYearly: mockGasBillYearly,
     });
   });
