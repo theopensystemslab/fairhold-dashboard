@@ -36,7 +36,7 @@ export interface LifetimeData {
     marketLandRentYearly: number;
     marketHouseRentYearly: number;
     gasBillExistingBuildYearly: number;
-    gasBillNewbuildOrRetrofitYearly: number;
+    gasBillNewBuildOrRetrofitYearly: number;
     depreciatedHouseResaleValue: number;
     fairholdLandPurchaseResaleValue: number;
     houseAge: number;
@@ -134,8 +134,8 @@ export class Lifetime {
             depreciatedHouseResaleValue: depreciatedHouseResaleValueIterative,
             fairholdLandPurchaseResaleValue: fairholdLandPurchaseResaleValueIterative,
             houseAge: houseAgeIterative,
-            gasBillExistingBuild: gasBillExistingBuildIterative,
-            gasBillNewBuildOrRetrofit: gasBillNewBuildOrRetrofitIterative
+            gasBillExistingBuildYearly: gasBillExistingBuildIterative,
+            gasBillNewBuildOrRetrofitYearly: gasBillNewBuildOrRetrofitIterative
         });
 
         // The 0th round has already been calculated and pushed above
@@ -218,7 +218,7 @@ export class Lifetime {
                 fairholdLandPurchaseResaleValue: fairholdLandPurchaseResaleValueIterative,
                 houseAge: houseAgeIterative,
                 gasBillExistingBuildYearly: gasBillExistingBuildIterative,
-                gasBillNewbuildOrRetrofitYearly: gasBillNewBuildOrRetrofitIterative
+                gasBillNewBuildOrRetrofitYearly: gasBillNewBuildOrRetrofitIterative
             });
         }
         return lifetime;

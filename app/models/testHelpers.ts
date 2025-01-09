@@ -441,6 +441,7 @@ export const createTestSocialRent = (overrides = {}) => {
  */
 export const createTestLifetime = (overrides = {}) => {
   return new Lifetime({
+    household: createTestHousehold(),
     marketPurchase: createTestMarketPurchase(),
     marketRent: createTestMarketRent(),
     fairholdLandPurchase: createTestFairholdLandPurchase(),
