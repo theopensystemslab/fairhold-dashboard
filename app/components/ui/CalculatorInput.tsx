@@ -25,7 +25,6 @@ import { Label } from "@/components/ui/label";
 const CalculatorInput = () => {
   const [view, setView] = useState("form");
   const [data, setData] = useState<Household | null>(null);
-  const [formData, setFormData] = useState<formType | null>(null);
 
   const searchParams = useSearchParams();
   const urlPostcode = searchParams.get("postcode");
@@ -64,7 +63,6 @@ const CalculatorInput = () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     });
-    setFormData(data);
     const processedData = await response.json();
     setData(processedData);
     setView("dashboard");
@@ -336,7 +334,7 @@ const CalculatorInput = () => {
     return (
       <Dashboard
         processedData={data as Household}
-        inputData={formData as formType}
+        inputData={methods.getValues()}
       />
     );
   }
