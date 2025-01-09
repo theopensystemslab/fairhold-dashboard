@@ -79,7 +79,7 @@ const CalculatorInput = () => {
     switch (error.code) {
       case "ITL3_NOT_FOUND":
       case "INSUFFICIENT_PRICES_PAID_DATA":
-        methods.setError(
+        form.setError(
           "housePostcode", 
           { message: 
             "Insufficient data for this postcode. Please try again with a different postcode" 
