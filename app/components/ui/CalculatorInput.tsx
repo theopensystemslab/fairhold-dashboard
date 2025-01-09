@@ -22,6 +22,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { APIError } from "@/app/lib/exceptions";
+import { BackgroundAssumptions } from "./BackgroundAssumptions";
 
 type View = "form" | "loading" | "dashboard";
 
@@ -343,11 +344,13 @@ const CalculatorInput = () => {
               </div>
             </div>
 
-            <Button type="submit" className="calculate-button-style">
+            <Button type="submit" className="calculate-button-style px-20">
               Calculate
             </Button>
           </form>
         </Form>
+        <hr className="my-8 text-gray-300"/>
+        <BackgroundAssumptions/>
       </div>
     );
   }
