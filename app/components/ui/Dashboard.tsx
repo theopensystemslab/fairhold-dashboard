@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import GraphCard from "./GraphCard";
 import { Household } from "@/app/models/Household";
 
@@ -8,12 +8,25 @@ interface DashboardProps {
 
 const Dashboard: React.FC<DashboardProps> = ({ data }) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [currentPage, setCurrentPage] = useState(0);
+  const totalPages = 6;
+
   const handleNext = () => {
     if (scrollContainerRef.current) {
       scrollContainerRef.current.scrollBy({
         top: window.innerHeight,
         behavior: "smooth",
       });
+    }
+    setCurrentPage((prev) => Math.min(prev + 1, totalPages - 1));
+  };
+
+  const handleScroll = () => {
+    if (scrollContainerRef.current) {
+      const scrollTop = scrollContainerRef.current.scrollTop;
+      const pageHeight = window.innerHeight;
+      const newPage = Math.round(scrollTop / pageHeight);
+      setCurrentPage(newPage);
     }
   };
 
@@ -22,7 +35,11 @@ const Dashboard: React.FC<DashboardProps> = ({ data }) => {
 
   return (
     <div className="snap-container">
-      <div className="snap-scroll" ref={scrollContainerRef}>
+      <div
+        className="snap-scroll"
+        ref={scrollContainerRef}
+        onScroll={handleScroll}
+      >
         <GraphCard title="How much would a Fairhold home cost?">
           <span className="text-red-500">Not much</span>
         </GraphCard>
@@ -35,15 +52,16 @@ const Dashboard: React.FC<DashboardProps> = ({ data }) => {
         <GraphCard title="What difference would Fairhold make to me, my community, and the world?"></GraphCard>
         <GraphCard title="What would you choose?"></GraphCard>
       </div>
-
-      <div className="fixed bottom-4 right-4">
-        <button
-          onClick={handleNext}
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-        >
-          Next
-        </button>
-      </div>
+      {currentPage < totalPages - 1 && (
+        <div className="fixed bottom-4 right-4">
+          <button
+            onClick={handleNext}
+            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 };
