@@ -29,5 +29,6 @@ it("correctly deals with negative values of landPriceOrRent", () => {
     affordability: 0.05,
     landPriceOrRent: -100,
   });
-  expect(fairhold.discountedLandPriceOrRent).toBeCloseTo(1);
+  const result = fairhold["calculateDiscountedPriceOrRent"](); // Use bracket notation for private method testing
+  expect(result).toBe(1);
 });

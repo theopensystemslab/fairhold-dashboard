@@ -1,12 +1,14 @@
 import React, { useRef, useState } from "react";
 import GraphCard from "./GraphCard";
 import { Household } from "@/app/models/Household";
+import { FormFrontend } from "@/app/schemas/formSchema";
 
 interface DashboardProps {
-  data: Household;
+  processedData: Household;
+  inputData: FormFrontend;
 }
 
-const Dashboard: React.FC<DashboardProps> = ({ data }) => {
+const Dashboard: React.FC<DashboardProps> = ({ inputData }) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [currentPage, setCurrentPage] = useState(0);
   const totalPages = 6;
@@ -31,7 +33,7 @@ const Dashboard: React.FC<DashboardProps> = ({ data }) => {
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const someUnusedVariable = data;
+  const someUnusedVariable = inputData;
 
   return (
     <div className="snap-container">

@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Household } from "@/app/models/Household";
 import Dashboard from "./Dashboard";
-import { formSchema, formType } from "@/app/schemas/formSchema";
+import { formSchema, FormFrontend } from "@/app/schemas/formSchema";
 import { useSearchParams } from "next/navigation";
 
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -36,7 +36,7 @@ const CalculatorInput = () => {
   const urlHouseType = searchParams.get("houseType");
   const urlMaintenancePercentage = searchParams.get("maintenancePercentage");
 
-  const methods = useForm<formType>({
+  const form = useForm<FormFrontend>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       houseType:
@@ -54,13 +54,13 @@ const CalculatorInput = () => {
       housePostcode: urlPostcode || "",
       // Apply defaults if provided
       // Type-safe to account for exactOptionalPropertyTypes propert in tsconfig.json
-      ...(urlHouseSize && { houseSize: Number(urlHouseSize )}),
-      ...(urlHouseAge && { houseAge: Number(urlHouseAge )}),
-      ...(urlHouseBedrooms && { houseBedrooms: Number(urlHouseBedrooms )}),
+      ...(urlHouseSize && { houseSize: Number(urlHouseSize) }),
+      ...(urlHouseAge && { houseAge: Number(urlHouseAge) }),
+      ...(urlHouseBedrooms && { houseBedrooms: Number(urlHouseBedrooms) }),
     },
   });
 
-  const onSubmit = async (data: formType) => {
+  const onSubmit = async (data: FormFrontend) => {
     setView("loading");
     const response = await fetch("/api", {
       method: "POST",
@@ -74,175 +74,271 @@ const CalculatorInput = () => {
 
   if (view === "form") {
     return (
-      <div className="flex items-center justify-center text-black mt-5">
-        <Form {...methods}>
-          <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-8">
+      <div className="flex flex-col justify-center max-w-xl mx-auto px-10">
+        <div className="h1-style">
+          Calculate how Fairhold could work for you
+        </div>
+        <div className="subheadstyle">
+          Compare the estimated cost of a Fairhold home in your area with other
+          ways of owning or renting.
+        </div>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
-              control={methods.control}
-              name="housePostcode"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Property postcode</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Enter the property postcode, e.g. SE17 1PE"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormDescription>Postcode of the property.</FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={methods.control}
-              name="houseSize"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>House size</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Enter the house size in square meters, e.g. 80"
-                      {...field}
-                      value={field.value ?? ""}
-                    />
-                  </FormControl>
-                  <FormDescription>The size of the house.</FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={methods.control}
-              name="houseAge"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>House age</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Enter the house age, e.g. 1 for a new house"
-                      {...field}
-                      value={field.value ?? ""}
-                    />
-                  </FormControl>
-                  <FormDescription>How old is the house.</FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={methods.control}
-              name="houseBedrooms"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>House bedrooms</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Enter the number of bedrooms in the house, e.g. 2"
-                      {...field}
-                      value={field.value ?? ""}
-                    />
-                  </FormControl>
-                  <FormDescription>
-                    How many bedrooms in the house.
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={methods.control}
+              control={form.control}
               name="houseType" // Name in the Calculation schema for the new radio field
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>House type</FormLabel>
+                  <FormLabel className="h3-style">House type</FormLabel>
                   <FormControl>
                     <RadioGroup
                       value={field.value}
                       onValueChange={(value) => field.onChange(value)} // Bind selection to field
+                      className="flex space-x-auto"
                     >
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="D" id="radio-option-D" />
-                        <Label htmlFor="radio-option-D">Detached</Label>
+                      <div className="flex items-center space-x-2 ">
+                        <RadioGroupItem
+                          value="D"
+                          id="radio-option-D"
+                          className="radio-button-style"
+                        />
+                        <Label
+                          htmlFor="radio-option-D"
+                          className="radio-label-style"
+                        >
+                          Detached{" "}
+                        </Label>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="S" id="radio-option-S" />
-                        <Label htmlFor="radio-option-S">Semi detached</Label>
+                        <RadioGroupItem
+                          value="S"
+                          id="radio-option-S"
+                          className="radio-button-style"
+                        />
+                        <Label
+                          htmlFor="radio-option-S"
+                          className="radio-label-style"
+                        >
+                          Semi detached
+                        </Label>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="T" id="radio-option-T" />
-                        <Label htmlFor="radio-option-T">Terrace</Label>
+                        <RadioGroupItem
+                          value="T"
+                          id="radio-option-T"
+                          className="radio-button-style"
+                        />
+                        <Label
+                          htmlFor="radio-option-T"
+                          className="radio-label-style"
+                        >
+                          Terrace
+                        </Label>
                       </div>
 
                       <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="F" id="radio-option-F" />
-                        <Label htmlFor="radio-option-F">Flat</Label>
+                        <RadioGroupItem
+                          value="F"
+                          id="radio-option-F"
+                          className="radio-button-style"
+                        />
+                        <Label
+                          htmlFor="radio-option-F"
+                          className="radio-label-style"
+                        >
+                          Flat
+                        </Label>
                       </div>
                     </RadioGroup>
                   </FormControl>
-                  <FormDescription>
-                    Select an option for the house type.
-                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
+            <div className="grid grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="housePostcode"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="h3-style">Postcode</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="e.g. SE17 1PE"
+                        {...field}
+                        className="inputfield-style"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="houseSize"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="h3-style">
+                      How big is the house?
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="e.g. 80 for 80 square meters"
+                        {...field}
+                        value={field.value ?? ""}
+                        className="inputfield-style"
+                      />
+                    </FormControl>
+
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="houseAge"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="h3-style">
+                      How old is the building?
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="e.g. 1 for a new house"
+                        {...field}
+                        value={field.value ?? ""}
+                        className="inputfield-style"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="houseBedrooms"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="h3-style">
+                      Number of bedrooms
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder=" e.g. 2 for twp bedrooms"
+                        {...field}
+                        value={field.value ?? ""}
+                        className="inputfield-style"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
             <FormField
-              control={methods.control}
+              control={form.control}
               name="maintenancePercentage" // Name in the Calculation schema for the new radio field
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Maintenance spend percentage</FormLabel>
+                  <FormLabel className="h3-style">
+                    How much will you spend on maintenance and improvements?
+                  </FormLabel>
                   <FormControl>
                     <RadioGroup
                       value={String(field.value)} // Convert number to string for RadioGroup
                       onValueChange={(value) => field.onChange(Number(value))} // Convert back to number for form
+                      className="flex space-x-4"
                     >
                       <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="0.015" id="radio-option-low" />
-                        <Label htmlFor="radio-option-low">Low (1.5%)</Label>
+                        <RadioGroupItem
+                          value="0.015"
+                          id="radio-option-low"
+                          className="radio-button-style"
+                        />
+                        <Label
+                          htmlFor="radio-option-low"
+                          className="radio-label-style"
+                        >
+                          Low (1.5%)
+                        </Label>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="0.02" id="radio-option-medium" />
-                        <Label htmlFor="radio-option-medium">Medium (2%)</Label>
+                        <RadioGroupItem
+                          value="0.02"
+                          id="radio-option-medium"
+                          className="radio-button-style"
+                        />
+                        <Label
+                          htmlFor="radio-option-medium"
+                          className="radio-label-style"
+                        >
+                          Medium (2%)
+                        </Label>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="0.0375" id="radio-option-high" />
-                        <Label htmlFor="radio-option-high">High (3.75%)</Label>
+                        <RadioGroupItem
+                          value="0.0375"
+                          id="radio-option-high"
+                          className="radio-button-style"
+                        />
+                        <Label
+                          htmlFor="radio-option-high"
+                          className="radio-label-style"
+                        >
+                          High (3.75%)
+                        </Label>
                       </div>
                     </RadioGroup>
                   </FormControl>
-                  <FormDescription>
-                    Select a level for maintenance spend, as a percentage of
-                    house cost.
-                  </FormDescription>
+                  <FormDescription>What is this?</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
-            <Button type="submit">Submit</Button>
+            <div className="grid grid-cols-2 gap-2">
+              <div className="flex flex-col">
+                <span className="h3-style inaccessible-input-style">
+                  Mortgage interest rate
+                </span>
+                <span className="inaccessible-input-style">6%</span>
+              </div>
+              <div className="flex flex-col">
+                <span className="h3-style inaccessible-input-style">
+                  Mortgage term
+                </span>
+                <span className="inaccessible-input-style">25 years</span>
+              </div>
+              <div className="flex flex-col">
+                <span className="h3-style inaccessible-input-style">
+                  Mortgage deposit
+                </span>
+                <span className="inaccessible-input-style">25 years</span>
+              </div>
+            </div>
+
+            <Button type="submit" className="calculate-button-style">
+              Calculate
+            </Button>
           </form>
         </Form>
       </div>
     );
   }
-  
+
   if (view === "loading") {
     return (
       <div className="flex items-center justify-center h-screen text-black mt-5">
         <ClipLoader color="black" size={50} />
       </div>
     );
-  }
-  
-  if (view === "dashboard" && data) {
-    return <Dashboard data={data} />;
+  } else if (view === "dashboard" && data) {
+    const formValues = form.getValues();
+    return <Dashboard processedData={data} inputData={formValues} />;
   }
 };
 
