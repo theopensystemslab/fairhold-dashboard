@@ -18,7 +18,7 @@ const getItl3ByPostcodeDistrict = async (
   } catch (error) {
     throw new APIError({
       status: 500,
-      message: `Data error: Unable get get itl3 for postcode district ${postcodeDistrict}`,
+      message: `Data error: Unable get itl3 for postcode district ${postcodeDistrict}`,
       code: "ITL3_NOT_FOUND"
     });
   }
