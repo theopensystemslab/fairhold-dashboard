@@ -14,7 +14,7 @@ interface DashboardProps {
 const Dashboard: React.FC<DashboardProps> = ({ inputData, processedData }) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [currentPage, setCurrentPage] = useState(0);
-  const totalPages = 6;
+  const totalPages = 5;
 
   const handleNext = () => {
     if (scrollContainerRef.current) {
@@ -23,7 +23,17 @@ const Dashboard: React.FC<DashboardProps> = ({ inputData, processedData }) => {
         behavior: "smooth",
       });
     }
-    setCurrentPage((prev) => Math.min(prev + 1, totalPages - 1));
+    setCurrentPage(currentPage + 1);
+  };
+
+  const handlePrevious = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollBy({
+        top: - window.innerHeight,
+        behavior: "smooth",
+      });
+    }
+    setCurrentPage(currentPage - 1);
   };
 
   const handleScroll = () => {
@@ -45,6 +55,16 @@ const Dashboard: React.FC<DashboardProps> = ({ inputData, processedData }) => {
         ref={scrollContainerRef}
         onScroll={handleScroll}
       >
+        {currentPage > 0 && (
+          <div className="fixed top-4 right-4">
+            <button
+              onClick={handlePrevious}
+              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            >
+              Previous
+            </button>
+          </div>
+        )}
         <HowMuchFHCost data={processedData} />
 
         <GraphCard title="How much would it cost every month?">
@@ -55,7 +75,7 @@ const Dashboard: React.FC<DashboardProps> = ({ inputData, processedData }) => {
         <WhatDifference />
         <WhatWouldYouChoose />
       </div>
-      {currentPage < totalPages - 1 && (
+      {currentPage < totalPages && (
         <div className="fixed bottom-4 right-4">
           <button
             onClick={handleNext}
