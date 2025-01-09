@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { FormFontend } from "@/app/schemas/formSchema";
+import { FormFrontend } from "@/app/schemas/formSchema";
 import {
   Accordion,
   AccordionContent,
@@ -10,7 +10,7 @@ import {
 import { HouseType } from "../../models/Property";
 
 interface Props {
-  formData: FormFontend;
+  formData: FormFrontend;
 }
 
 const houseTypeDisplayNames: Record<HouseType, string> = {

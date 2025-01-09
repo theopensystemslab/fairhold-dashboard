@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Household } from "@/app/models/Household";
 import Dashboard from "./Dashboard";
-import { formSchema, FormFontend } from "@/app/schemas/formSchema";
+import { formSchema, FormFrontend } from "@/app/schemas/formSchema";
 import { useSearchParams } from "next/navigation";
 
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -36,7 +36,7 @@ const CalculatorInput = () => {
   const urlHouseType = searchParams.get("houseType");
   const urlMaintenancePercentage = searchParams.get("maintenancePercentage");
 
-  const form = useForm<FormFontend>({
+  const form = useForm<FormFrontend>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       houseType:
@@ -60,7 +60,7 @@ const CalculatorInput = () => {
     },
   });
 
-  const onSubmit = async (data: FormFontend) => {
+  const onSubmit = async (data: FormFrontend) => {
     setView("loading");
     const response = await fetch("/api", {
       method: "POST",
@@ -227,7 +227,7 @@ const CalculatorInput = () => {
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder=" e.g. 2 fpr twp bedrooms"
+                        placeholder=" e.g. 2 for twp bedrooms"
                         {...field}
                         value={field.value ?? ""}
                         className="inputfield-style"

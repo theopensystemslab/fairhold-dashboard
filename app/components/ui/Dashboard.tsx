@@ -1,11 +1,11 @@
 import React, { useRef, useState } from "react";
 import GraphCard from "./GraphCard";
 import { Household } from "@/app/models/Household";
-import { FormFontend } from "@/app/schemas/formSchema";
+import { FormFrontend } from "@/app/schemas/formSchema";
 
 interface DashboardProps {
   processedData: Household;
-  inputData: FormFontend;
+  inputData: FormFrontend;
 }
 
 const Dashboard: React.FC<DashboardProps> = ({ inputData }) => {
