@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import GraphCard from "./GraphCard";
 import { Household } from "@/app/models/Household";
 import { FormFrontend } from "@/app/schemas/formSchema";
+import { WhatWouldYouChoose } from "../Dashboard/Cards/WhatWouldYouChoose";
 
 interface DashboardProps {
   processedData: Household;
@@ -52,7 +53,7 @@ const Dashboard: React.FC<DashboardProps> = ({ inputData }) => {
         <GraphCard title="How would the cost change over my life?"></GraphCard>
         <GraphCard title="How much could I sell it for?"></GraphCard>
         <GraphCard title="What difference would Fairhold make to me, my community, and the world?"></GraphCard>
-        <GraphCard title="What would you choose?"></GraphCard>
+        <WhatWouldYouChoose/>
       </div>
       {currentPage < totalPages - 1 && (
         <div className="fixed bottom-4 right-4">

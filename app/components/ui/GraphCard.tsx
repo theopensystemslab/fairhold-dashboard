@@ -6,9 +6,9 @@ type Props = React.PropsWithChildren<{
 
 const GraphCard: React.FC<Props> = ({ title, children }) => {
   return (
-    <div className="h-screen snap-start">
-      <span className="text-2xl text-black">{title}</span>
-      {children && <div className="mt-4">{children}</div>}
+    <div className="h-screen snap-start p-20">
+      <h1 className="text-2xl text-black">{title}</h1>
+      {children && <div className="mt-4 h-full">{children}</div>}
     </div>
   );
 };
