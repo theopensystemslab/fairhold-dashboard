@@ -22,23 +22,21 @@ interface CarouselProps {
 export const Carousel: React.FC<CarouselProps> = ({ scrollContainerRef, currentPage }) => {
   const totalPages = 5;
 
-  const handleNext = () => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollBy({
-        top: window.innerHeight,
-        behavior: "smooth",
-      });
-    }
-  };
+  const scrollTo = (index: number) => {
+    if (!scrollContainerRef.current) return;
+    
+    const current = scrollContainerRef.current.scrollTop;
+    const target = index * window.innerHeight;
+    const distance = target - current;
+    
+    scrollContainerRef.current.scrollBy({
+      top: distance,
+      behavior: "smooth",
+    });
+  }
 
-  const handlePrevious = () => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollBy({
-        top: - window.innerHeight,
-        behavior: "smooth",
-      });
-    }
-  };
+  const handleNext = () => scrollTo(currentPage + 1);
+  const handlePrevious = () => scrollTo(currentPage - 1);
 
   return (
     <div className="flex flex-col justify-between fixed right-4 top-0 h-full items-center py-6">
@@ -47,10 +45,10 @@ export const Carousel: React.FC<CarouselProps> = ({ scrollContainerRef, currentP
       </div>
       <div className="flex flex-col items-center">
         {Array.from({ length: totalPages + 1 }, (_, index) => (
-          <button key={index} onClick={() => console.log("todo - scroll")}>
+          <button key={index} onClick={() => scrollTo(index)}>
             <DotFilledIcon 
               className={cn(
-                "text-gray-300 w-8 h-8 -m-2", 
+                "text-gray-300 w-8 h-8 -m-1", 
                 { "text-gray-950": 
                   index === currentPage 
                 }
