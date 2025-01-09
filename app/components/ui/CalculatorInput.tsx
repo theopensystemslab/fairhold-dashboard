@@ -34,7 +34,7 @@ const CalculatorInput = () => {
   const urlHouseType = searchParams.get("houseType");
   const urlMaintenancePercentage = searchParams.get("maintenancePercentage");
 
-  const methods = useForm<formType>({
+  const form = useForm<formType>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       houseType:
@@ -80,10 +80,10 @@ const CalculatorInput = () => {
           Compare the estimated cost of a Fairhold home in your area with other
           ways of owning or renting.
         </div>
-        <Form {...methods}>
-          <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-4">
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
-              control={methods.control}
+              control={form.control}
               name="houseType" // Name in the Calculation schema for the new radio field
               render={({ field }) => (
                 <FormItem>
@@ -155,7 +155,7 @@ const CalculatorInput = () => {
             />
             <div className="grid grid-cols-2 gap-4">
               <FormField
-                control={methods.control}
+                control={form.control}
                 name="housePostcode"
                 render={({ field }) => (
                   <FormItem>
@@ -173,7 +173,7 @@ const CalculatorInput = () => {
               />
 
               <FormField
-                control={methods.control}
+                control={form.control}
                 name="houseSize"
                 render={({ field }) => (
                   <FormItem>
@@ -195,7 +195,7 @@ const CalculatorInput = () => {
               />
 
               <FormField
-                control={methods.control}
+                control={form.control}
                 name="houseAge"
                 render={({ field }) => (
                   <FormItem>
@@ -216,7 +216,7 @@ const CalculatorInput = () => {
               />
 
               <FormField
-                control={methods.control}
+                control={form.control}
                 name="houseBedrooms"
                 render={({ field }) => (
                   <FormItem>
@@ -238,7 +238,7 @@ const CalculatorInput = () => {
             </div>
 
             <FormField
-              control={methods.control}
+              control={form.control}
               name="maintenancePercentage" // Name in the Calculation schema for the new radio field
               render={({ field }) => (
                 <FormItem>
@@ -336,7 +336,7 @@ const CalculatorInput = () => {
     return (
       <Dashboard
         processedData={data as Household}
-        inputData={methods.getValues()}
+        inputData={form.getValues()}
       />
     );
   }
