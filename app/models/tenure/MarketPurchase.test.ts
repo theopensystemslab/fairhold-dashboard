@@ -1,23 +1,22 @@
 import { MarketPurchase } from "./MarketPurchase";
-import { DEFAULT_FORECAST_PARAMETERS, ForecastParameters } from "../ForecastParameters";
+import { Mortgage } from "../Mortgage";
+import { createTestMarketPurchase } from "../testHelpers";
 
-let tenureMarketPurchase: MarketPurchase;
-
-beforeEach(() => {
-  const forecastParameters: ForecastParameters = {
-    ...DEFAULT_FORECAST_PARAMETERS,
-  };
-
-  tenureMarketPurchase = new MarketPurchase({
-    incomeYearly: 45816,
-    averagePrice: 218091.58,
-    newBuildPrice: 186560,
-    depreciatedBuildPrice: 110717.45,
-    landPrice: 31531.579,
-    forecastParameters: forecastParameters,
-  });
-});
+const marketPurchase = createTestMarketPurchase();
 
 it("can be instantiated", () => {
-  expect(tenureMarketPurchase).toBeInstanceOf(MarketPurchase);
+  expect(marketPurchase).toBeInstanceOf(MarketPurchase);
 });
+
+it("instantiates instances of the Mortgage class", () => {
+  expect(marketPurchase.houseMortgage).toBeInstanceOf(Mortgage);
+  expect(marketPurchase.landMortgage).toBeInstanceOf(Mortgage)
+})
+
+it("correctly calculates affordability", () => {
+  expect(marketPurchase.affordability).toBeCloseTo(1.019)
+})
+
+it("correctly calculates interest paid", () => {
+  expect(marketPurchase.interestPaid).toBeCloseTo(492312.3)
+})

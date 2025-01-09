@@ -1,36 +1,22 @@
-import { Fairhold } from "../Fairhold";
-import { DEFAULT_FORECAST_PARAMETERS, ForecastParameters } from "../ForecastParameters";
+import { Mortgage } from "../Mortgage";
 import { FairholdLandPurchase } from "./FairholdLandPurchase";
-import { MarketPurchase } from "./MarketPurchase"
+import { createTestFairholdLandPurchase } from "../testHelpers";
 
-let tenureFairholdLandPurchase: FairholdLandPurchase;
-
-beforeEach(() => {
-  // partial MarketPurchase object with only necessary properties for test (instead of mocking a whole MarketPurchase object)
-  const partialMarketPurchase: Pick<MarketPurchase, 'interestPaid'> = {
-    interestPaid: 200000, 
-  };
-
-  const forecastParameters: ForecastParameters = {
-    ...DEFAULT_FORECAST_PARAMETERS,
-  };
-
-  tenureFairholdLandPurchase = new FairholdLandPurchase({
-    //incomeYearly: 45816,
-    //averagePrice: 218091.58,
-    newBuildPrice: 186560,
-    depreciatedBuildPrice: 110717.45,
-    //landPrice: 31531.579,
-    affordability: 0.2,
-    fairhold: new Fairhold({
-      affordability: 0.2,
-      landPriceOrRent: 31531.579,
-    }),
-    forecastParameters: forecastParameters,
-    marketPurchase: partialMarketPurchase as MarketPurchase
-  });
-});
+const fairholdLandPurchase = createTestFairholdLandPurchase();
 
 it("can be instantiated", () => {
-  expect(tenureFairholdLandPurchase).toBeInstanceOf(FairholdLandPurchase);
+  expect(fairholdLandPurchase).toBeInstanceOf(FairholdLandPurchase);
 });
+
+it("correctly instantiates to instances of the Mortgage class", () => {
+  expect(fairholdLandPurchase.discountedLandMortgage).toBeInstanceOf(Mortgage)
+  expect(fairholdLandPurchase.depreciatedHouseMortgage).toBeInstanceOf(Mortgage)
+});
+
+it("correctly calculates interest paid", () => {
+  expect(fairholdLandPurchase.interestPaid).toBeCloseTo(192001.8)
+})
+
+it("correctly calculates interest saved", () => {
+  expect(fairholdLandPurchase.interestSaved).toBeCloseTo(300310.5)
+})

@@ -11,6 +11,7 @@ interface SocialRentParams {
 }
 
 export class SocialRent {
+  /** It might look like smurf naming but we used this to avoid confusion with other average income figures */
   socialRentAverageEarning: number;
   /** adjustment factors that take into account the increase of living cost  */
   socialRentAdjustments;
@@ -28,13 +29,13 @@ export class SocialRent {
       socialRentMonthlyHouse,
     } = this.calculateSocialRent(params);
     this.adjustedSocialRentMonthly = adjustedSocialRentMonthly;
-    this.socialRentMonthlyHouse = socialRentMonthlyHouse;
     this.socialRentMonthlyLand = socialRentMonthlyLand;
+    this.socialRentMonthlyHouse = socialRentMonthlyHouse;
   }
 
   private calculateSocialRent(params: SocialRentParams) {
     let bedWeight; // initialize the bedWeight variable
-    let rentCapWeekly; // initialize the rent Cap values
+    let rentCapWeekly; // initialize the rent cap values
     const bedWeightsAndCaps = BED_WEIGHTS_AND_CAPS;
     const numberOfBedrooms = params.numberOfBedrooms;
 
@@ -83,7 +84,7 @@ export class SocialRent {
     const socialRentMonthlyLand =
       adjustedSocialRentMonthly * params.landToTotalRatio; // set the rent value paid for the land
     const socialRentMonthlyHouse =
-      adjustedSocialRentMonthly - this.socialRentMonthlyLand; // set the rent value paid or the house
+      adjustedSocialRentMonthly - socialRentMonthlyLand; // set the rent value paid or the house
     return {
       adjustedSocialRentMonthly,
       socialRentMonthlyLand,
