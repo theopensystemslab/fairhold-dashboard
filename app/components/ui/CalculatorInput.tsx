@@ -338,12 +338,7 @@ const CalculatorInput = () => {
     );
   } else if (view === "dashboard" && data) {
     const formValues = form.getValues();
-    return (
-      <Dashboard
-        processedData={data}
-        inputData={formSchema.parse(formValues)}
-      />
-    );
+    return <Dashboard processedData={data} inputData={formValues} />;
   }
 };
 
