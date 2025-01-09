@@ -64,6 +64,15 @@ body {
   font-size: 12px;
 }
 
+.inputfield-style:focus,
+.inputfield-style:not(:placeholder-shown) {
+  color: rgb(var(--text-default-rgb));
+}
+
+.inputfield-style:focus::placeholder {
+  color: transparent;
+}
+
 .inaccessible-input-style {
   color: rgb(var(--text-inaccessible-rgb));
   font-size: 12px;
