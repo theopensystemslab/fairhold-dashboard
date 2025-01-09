@@ -15,14 +15,14 @@ describe("gasBillRepo", () => {
 
   it("should return the gas bill for a valid ITL", async () => {
     const itl = "12345XYZ"; // Example ITL
-    const mockGasBill = 150; // Example gas bill amount
+    const mockGasPrice = 150; // Example gas bill amount
 
     (prisma.gasBills.findFirstOrThrow as jest.Mock).mockResolvedValueOnce({
-      kwhCostPence: mockGasBill,
+      kwhCostPence: mockGasPrice,
     });
 
-    const result = await gasBillRepo.getGasBillByITL3(itl);
-    expect(result).toBe(mockGasBill);
+    const result = await gasBillRepo.getGasPriceByITL3(itl);
+    expect(result).toBe(mockGasPrice);
     expect(prisma.gasBills.findFirstOrThrow).toHaveBeenCalledWith({
       where: { itl1: { startsWith: itl.substring(0, 3) } },
       select: { kwhCostPence: true },
@@ -36,8 +36,8 @@ describe("gasBillRepo", () => {
       new Error("No records found")
     );
 
-    await expect(gasBillRepo.getGasBillByITL3(itl)).rejects.toThrow(
-      `Data error: Unable to find gas_bills_2020 for itl3 ${itl}`
+    await expect(gasBillRepo.getGasPriceByITL3(itl)).rejects.toThrow(
+      `Data error: Unable to find gas_price for itl3 ${itl}`
     );
   });
 
@@ -48,8 +48,8 @@ describe("gasBillRepo", () => {
       new Error("Database error")
     );
 
-    await expect(gasBillRepo.getGasBillByITL3(itl)).rejects.toThrow(
-      `Data error: Unable to find gas_bills_2020 for itl3 ${itl}`
+    await expect(gasBillRepo.getGasPriceByITL3(itl)).rejects.toThrow(
+      `Data error: Unable to find gas_price for itl3 ${itl}`
     );
   });
 });

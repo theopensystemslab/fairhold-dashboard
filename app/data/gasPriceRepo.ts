@@ -1,6 +1,6 @@
 import prisma from "./db";
 
-const getGasBillByITL3 = async (itl: string): Promise<number> => {
+const getGasPriceByITL3 = async (itl: string): Promise<number> => {
     try {
         const { kwhCostPence } = await prisma.gasBills.findFirstOrThrow({
             where: {
@@ -11,11 +11,11 @@ const getGasBillByITL3 = async (itl: string): Promise<number> => {
 
         return kwhCostPence;
     } catch (error) {
-        throw Error(`Data error: Unable to find gas_bills_2020 for itl3 ${itl}`);
+        throw Error(`Data error: Unable to find gas_price for itl3 ${itl}`);
     }
 };
 
 export const gasBillRepo = {
-    getGasBillByITL3,
+    getGasPriceByITL3,
   };
   

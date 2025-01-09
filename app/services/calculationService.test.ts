@@ -67,7 +67,7 @@ describe("getHouseholdData", () => {
   it("should return household data correctly", async () => {
     const mockITL3 = "ITL3-123";
     const mockGDHI = 30000;
-    const mockGasBillYearly = 1200;
+    const mockGasPriceYearly = 1200;
     const mockHPI = 1.05;
     const mockBuildPrice = 250000;
     const mockPricesPaidSummary = {
@@ -87,7 +87,7 @@ describe("getHouseholdData", () => {
     );
     (gdhiService.getByITL3 as jest.Mock).mockResolvedValueOnce(mockGDHI);
     (gasBillService.getByITL3 as jest.Mock).mockResolvedValueOnce(
-      mockGasBillYearly
+      mockGasPriceYearly
     );
     (hpiService.getByITL3 as jest.Mock).mockResolvedValueOnce(mockHPI);
     (
@@ -126,7 +126,7 @@ describe("getHouseholdData", () => {
       socialRentAverageEarning: mockSocialRentAverageEarning,
       numberOfTransactions: mockPricesPaidSummary.numberOfTransactions,
       granularityPostcode: mockPricesPaidSummary.granularityPostcode,
-      kwhCostPence: mockGasBillYearly,
+      kwhCostPence: mockGasPriceYearly,
     });
   });
 
