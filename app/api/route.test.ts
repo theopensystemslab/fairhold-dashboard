@@ -82,7 +82,9 @@ describe("POST API Route", () => {
 
     // Assertions for the expected error response
     expect(NextResponse.json).toHaveBeenCalledWith(
-      expect.objectContaining({ error: expect.any(String) }),
+      expect.objectContaining({
+        error: expect.objectContaining({ code: "UNHANDLED_EXCEPTION" }),
+      }),
       { status: 500 }
     );
   });
@@ -112,7 +114,7 @@ describe("POST API Route", () => {
     expect(calculationService.getHouseholdData).toHaveBeenCalledWith({
       ...validApiInput,
       // Parsed postcode object
-      housePostcode: { 
+      housePostcode: {
         area: "SE",
         district: "SE17",
         incode: "1PE",
@@ -125,7 +127,12 @@ describe("POST API Route", () => {
       },
     });
     expect(NextResponse.json).toHaveBeenCalledWith(
-      { error: errorMessage },
+      {
+        error: {
+          code: "UNHANDLED_EXCEPTION",
+          message: "Service error",
+        },
+      },
       { status: 500 }
     );
   });
