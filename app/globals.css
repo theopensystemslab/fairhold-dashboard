@@ -3,12 +3,15 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 242, 242, 240;
-  --background-end-rgb: 242, 242, 240;
-  --text-default-rgb: 46, 46, 46;
-  --background-input-field-rgb: 255, 255, 255;
-  --text-inaccessible-rgb: 171, 164, 164;
+  --foreground-rgb: 0 0 0;
+  --background: 0 0 10;
+  --foreground: 0 0 100;
+  --muted-foreground: 0 0 100;
+  --background-start-rgb: 242 242 240;
+  --background-end-rgb: 242 242 240;
+  --text-default-rgb: 46 46 46;
+  --background-input-field-rgb: 255 255 255;
+  --text-inaccessible-rgb: 171 164 164;
 }
 
 @layer utilities {
