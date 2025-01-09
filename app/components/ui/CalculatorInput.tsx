@@ -50,9 +50,11 @@ const CalculatorInput = () => {
         ? (Number(urlMaintenancePercentage) as 0.015 | 0.02 | 0.0375) // Type assertion
         : 0.015,
       housePostcode: urlPostcode || "",
-      houseSize: Number(urlHouseSize) || undefined,
-      houseAge: Number(urlHouseAge) || undefined,
-      houseBedrooms: Number(urlHouseBedrooms) || undefined,
+      // Apply defaults if provided
+      // Type-safe to account for exactOptionalPropertyTypes propert in tsconfig.json
+      ...(urlHouseSize && { houseSize: Number(urlHouseSize )}),
+      ...(urlHouseAge && { houseAge: Number(urlHouseAge )}),
+      ...(urlHouseBedrooms && { houseBedrooms: Number(urlHouseBedrooms )}),
     },
   });
 
