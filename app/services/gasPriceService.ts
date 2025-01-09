@@ -1,9 +1,9 @@
-import { gasBillRepo } from "../data/gasBillRepo";
+import { gasPriceRepo } from "../data/gasPriceRepo";
 
 const getByITL3 = async (itl3: string) => {
-  return await gasBillRepo.getGasPriceByITL3(itl3);
+  return await gasPriceRepo.getGasPriceByITL3(itl3);
 };
 
-export const gasBillService = {
+export const gasPriceService = {
   getByITL3,
 };

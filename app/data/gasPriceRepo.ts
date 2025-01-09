@@ -2,7 +2,7 @@ import prisma from "./db";
 
 const getGasPriceByITL3 = async (itl: string): Promise<number> => {
     try {
-        const { kwhCostPence } = await prisma.gasBills.findFirstOrThrow({
+        const { kwhCostPence } = await prisma.gasPrice.findFirstOrThrow({
             where: {
                 itl1: { startsWith: itl.substring(0, 3) },
             },
@@ -15,7 +15,7 @@ const getGasPriceByITL3 = async (itl: string): Promise<number> => {
     }
 };
 
-export const gasBillRepo = {
+export const gasPriceRepo = {
     getGasPriceByITL3,
   };
   

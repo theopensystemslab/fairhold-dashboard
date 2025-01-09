@@ -1,10 +1,10 @@
-// __tests__/gasBillService.test.ts
-import { gasBillService } from "../services/gasBillService"; // Adjust path according to your structure
-import { gasBillRepo } from "../data/gasBillRepo"; // Adjust path according to your structure
+// __tests__/gasPriceService.test.ts
+import { gasPriceService } from "../services/gasPriceService"; // Adjust path according to your structure
+import { gasPriceRepo } from "../data/gasPriceRepo"; // Adjust path according to your structure
 
-jest.mock("../data/gasBillRepo");
+jest.mock("../data/gasPriceRepo");
 
-describe("gasBillService.getByITL3", () => {
+describe("gasPriceService.getByITL3", () => {
   const mockGasPrice = 1200;
 
   beforeEach(() => {
@@ -14,27 +14,27 @@ describe("gasBillService.getByITL3", () => {
   it("should return gas bill for a valid ITL3", async () => {
     // Arrange
     const itl3 = "ITL3-123";
-    (gasBillRepo.getGasPriceByITL3 as jest.Mock).mockResolvedValueOnce(
+    (gasPriceRepo.getGasPriceByITL3 as jest.Mock).mockResolvedValueOnce(
       mockGasPrice
     );
 
     // Act
-    const result = await gasBillService.getByITL3(itl3);
+    const result = await gasPriceService.getByITL3(itl3);
 
     // Assert
-    expect(gasBillRepo.getGasPriceByITL3).toHaveBeenCalledWith(itl3);
+    expect(gasPriceRepo.getGasPriceByITL3).toHaveBeenCalledWith(itl3);
     expect(result).toBe(mockGasPrice);
   });
 
   it("should throw an error when the repo fails", async () => {
     // Arrange
     const errorMessage = "Failed to fetch gas bill";
-    (gasBillRepo.getGasPriceByITL3 as jest.Mock).mockRejectedValueOnce(
+    (gasPriceRepo.getGasPriceByITL3 as jest.Mock).mockRejectedValueOnce(
       new Error(errorMessage)
     );
 
     // Act & Assert
-    await expect(gasBillService.getByITL3("ITL3-123")).rejects.toThrow(
+    await expect(gasPriceService.getByITL3("ITL3-123")).rejects.toThrow(
       errorMessage
     );
   });

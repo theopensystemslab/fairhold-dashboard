@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { buildPriceService } from "./buildPriceService";
-import { gasBillService } from "./gasBillService";
+import { gasPriceService } from "./gasPriceService";
 import { gdhiService } from "./gdhiService";
 import { hpiService } from "./hpiService";
 import { itlService } from "./itlService";
@@ -26,7 +26,7 @@ export const getHouseholdData = async (input: Calculation) => {
 
     const itl3 = await itlService.getByPostcodeDistrict(postcodeDistrict);
     const gdhi = await gdhiService.getByITL3(itl3);
-    const kwhCostPence = await gasBillService.getByITL3(itl3);
+    const kwhCostPence = await gasPriceService.getByITL3(itl3);
     const hpi = await hpiService.getByITL3(itl3);
     const buildPrice = await buildPriceService.getBuildPriceByHouseType(input.houseType);
 
