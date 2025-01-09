@@ -26,7 +26,6 @@ describe('Property', () => {
     expect(property.newBuildPrice).toBeCloseTo(186560);
   });
 
-  // 
   it("correctly calculates the bedWeightedAveragePrice", () => {
     expect(property.bedWeightedAveragePrice).toBeCloseTo(219135);
   });
