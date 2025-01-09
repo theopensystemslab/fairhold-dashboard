@@ -173,7 +173,7 @@ export const createTestHousehold = (overrides = {}) => {
     socialRentAdjustments: socialRentAdjustments,
     housePriceIndex: 100000,
     incomePerPersonYearly: 30000,
-    gasBillYearly: 700,
+    kwhCostPence: 7,
     property: createTestProperty(),
     forecastParameters: DEFAULT_FORECAST_PARAMETERS,
     ...overrides
