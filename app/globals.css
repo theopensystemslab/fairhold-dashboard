@@ -4,7 +4,7 @@
 
 :root {
   --foreground-rgb: 0 0 0;
-  --background: 0 0 100;
+  --background: 60 7 100;
   --foreground: 0 0 10;
   --muted: 100 100 100;
   --background-start-rgb: 242 242 240;
@@ -37,7 +37,6 @@
 
 body {
   margin: 0;
-  background: rgb(var(--background-start-rgb));
   font-size: 18px;
   color: rgb(var(--text-default-rgb));
 }
@@ -130,4 +129,8 @@ body {
 .snap-scroll > * {
   scroll-snap-align: start;
   height: 100vh;
+}
+
+main {
+  background: #f2f2f0;
 }
