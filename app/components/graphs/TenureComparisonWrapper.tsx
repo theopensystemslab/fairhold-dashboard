@@ -69,7 +69,6 @@ const TenureComparisonWrapper: React.FC<TenureComparisonWrapperProps> = ({
   return (
     <ErrorBoundary>
       <div>
-        <h2>Tenure Comparison Chart</h2>
         <TenureComparisonBarChart data={formattedData} />
       </div>
     </ErrorBoundary>

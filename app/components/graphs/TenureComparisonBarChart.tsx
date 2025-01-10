@@ -4,10 +4,8 @@ import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import {
   ChartConfig,
@@ -19,9 +17,9 @@ import {
 } from "@/components/ui/chart";
 
 const chartConfig = {
-  land: {
-    label: "Land",
-    color: "hsl(var(--chart-1))",
+  freehold: {
+    label: "Freehold",
+    color: "rgb(var(--freehold-land-color-rgb))",
   },
   house: {
     label: "House",
@@ -88,10 +86,7 @@ const TenureComparisonBarChart: React.FC<StackedBarChartProps> = ({ data }) => {
 
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>Tenure comparison</CardTitle>
-        <CardDescription>Monthly cost in £</CardDescription>
-      </CardHeader>
+      <CardHeader></CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
           <BarChart accessibilityLayer data={chartData}>
@@ -105,8 +100,7 @@ const TenureComparisonBarChart: React.FC<StackedBarChartProps> = ({ data }) => {
             />
             <ChartTooltip content={<ChartTooltipContent hideLabel />} />
             <ChartLegend content={<ChartLegendContent />} />
-            <Bar dataKey="land" stackId="a" fill="var(--color-land)" />
-            <Bar dataKey="house" stackId="a" fill="var(--color-house)" />
+            <Bar dataKey="freehold" fill="var(--color-freehold)" />
           </BarChart>
         </ChartContainer>
       </CardContent>
