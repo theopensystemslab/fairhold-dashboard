@@ -51,9 +51,9 @@ const CalculatorInput = () => {
         urlHouseType === "S"
           ? urlHouseType
           : "D", // Default value for house type
-      maintenancePercentage: (MAINTENANCE_LEVELS as readonly number[]).includes(Number(urlMaintenancePercentage))
-        ? Number(urlMaintenancePercentage) as z.infer<typeof maintenancePercentageSchema> 
-        : MAINTENANCE_LEVELS[1],
+        maintenancePercentage: urlMaintenancePercentage && (MAINTENANCE_LEVELS as readonly number[]).includes(Number(urlMaintenancePercentage))
+          ? Number(urlMaintenancePercentage) as z.infer<typeof maintenancePercentageSchema>
+          : MAINTENANCE_LEVELS[1],
       housePostcode: urlPostcode || "",
       // Apply defaults if provided
       // Type-safe to account for exactOptionalPropertyTypes propert in tsconfig.json
