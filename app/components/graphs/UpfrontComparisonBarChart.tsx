@@ -86,9 +86,9 @@ const UpfrontComparisonBarChart: React.FC<StackedBarChartProps> = ({
                   case "freehold":
                     return "Freehold";
                   case "fairhold: land purchase":
-                    return "Fairhold Purchase";
+                    return "Fairhold - Land Purchase";
                   case "fairhold: land rent":
-                    return "Fairhold Rent";
+                    return "Fairhold - Land Rent";
                   default:
                     return value;
                 }
