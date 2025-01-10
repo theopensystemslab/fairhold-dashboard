@@ -10,8 +10,8 @@ interface DashboardProps {
 export const HowMuchPerMonth: React.FC<DashboardProps> = ({ data }) => {
   return (
     <GraphCard
-      title="How much would a Fairhold home cost?"
-      subtitle="The up-front cost of a home, compared with conventional home ownership."
+      title="How much would it cost every month?"
+      subtitle="Monthly cost of housing, not including energy bills."
     >
       <div className="flex flex-col h-full w-3/4 justify-between">
         <TenureComparisonWrapper household={data} />
