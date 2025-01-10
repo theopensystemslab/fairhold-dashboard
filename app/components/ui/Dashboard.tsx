@@ -4,13 +4,14 @@ import { Household } from "@/app/models/Household";
 import { FormFrontend } from "@/app/schemas/formSchema";
 import { WhatWouldYouChoose } from "../Dashboard/Cards/WhatWouldYouChoose";
 import { WhatDifference } from "../Dashboard/Cards/WhatDifference";
+import { HowMuchFHCost } from "../Dashboard/Cards/HowMuchFHCost";
 
 interface DashboardProps {
   processedData: Household;
   inputData: FormFrontend;
 }
 
-const Dashboard: React.FC<DashboardProps> = ({ inputData }) => {
+const Dashboard: React.FC<DashboardProps> = ({ inputData, processedData }) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [currentPage, setCurrentPage] = useState(0);
   const totalPages = 6;
@@ -44,17 +45,15 @@ const Dashboard: React.FC<DashboardProps> = ({ inputData }) => {
         ref={scrollContainerRef}
         onScroll={handleScroll}
       >
-        <GraphCard title="How much would a Fairhold home cost?">
-          <span className="text-red-500">Not much</span>
-        </GraphCard>
+        <HowMuchFHCost data={processedData} />
 
         <GraphCard title="How much would it cost every month?">
           <span className="text-red-500">in theory less than Freehold</span>
         </GraphCard>
         <GraphCard title="How would the cost change over my life?"></GraphCard>
         <GraphCard title="How much could I sell it for?"></GraphCard>
-        <WhatDifference/>
-        <WhatWouldYouChoose/>
+        <WhatDifference />
+        <WhatWouldYouChoose />
       </div>
       {currentPage < totalPages - 1 && (
         <div className="fixed bottom-4 right-4">
