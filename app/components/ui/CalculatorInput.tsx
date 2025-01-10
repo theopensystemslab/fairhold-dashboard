@@ -6,7 +6,9 @@ import { Household } from "@/app/models/Household";
 import Dashboard from "./Dashboard";
 import { formSchema, FormFrontend } from "@/app/schemas/formSchema";
 import { useSearchParams } from "next/navigation";
-import { DEFAULT_INTEREST_RATE, DEFAULT_MORTGAGE_TERM, DEFAULT_INITIAL_DEPOSIT } from "../../models/constants"
+import { DEFAULT_INTEREST_RATE, DEFAULT_MORTGAGE_TERM, DEFAULT_INITIAL_DEPOSIT, MAINTENANCE_LEVELS } from "../../models/constants"
+import { z } from "zod";
+import { maintenancePercentageSchema } from "@/app/schemas/calculationSchema";
 
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { ClipLoader } from "react-spinners";
@@ -49,11 +51,9 @@ const CalculatorInput = () => {
         urlHouseType === "S"
           ? urlHouseType
           : "D", // Default value for house type
-      maintenancePercentage: [0.015, 0.02, 0.0375].includes(
-        Number(urlMaintenancePercentage)
-      )
-        ? (Number(urlMaintenancePercentage) as 0.015 | 0.02 | 0.0375) // Type assertion
-        : 0.015,
+      maintenancePercentage: (MAINTENANCE_LEVELS as readonly number[]).includes(Number(urlMaintenancePercentage))
+        ? Number(urlMaintenancePercentage) as z.infer<typeof maintenancePercentageSchema> 
+        : MAINTENANCE_LEVELS[0],
       housePostcode: urlPostcode || "",
       // Apply defaults if provided
       // Type-safe to account for exactOptionalPropertyTypes propert in tsconfig.json
@@ -280,7 +280,7 @@ const CalculatorInput = () => {
                     >
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem
-                          value="0.015"
+                          value={MAINTENANCE_LEVELS[0].toString()}
                           id="radio-option-low"
                           className="radio-button-style"
                         />
@@ -288,12 +288,12 @@ const CalculatorInput = () => {
                           htmlFor="radio-option-low"
                           className="radio-label-style"
                         >
-                          Low (1.5%)
+                          Low ({MAINTENANCE_LEVELS[0] * 100}%)
                         </Label>
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem
-                          value="0.02"
+                          value={MAINTENANCE_LEVELS[1].toString()}
                           id="radio-option-medium"
                           className="radio-button-style"
                         />
@@ -301,12 +301,12 @@ const CalculatorInput = () => {
                           htmlFor="radio-option-medium"
                           className="radio-label-style"
                         >
-                          Medium (2%)
+                          Medium ({MAINTENANCE_LEVELS[1] * 100}%)
                         </Label>
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem
-                          value="0.0375"
+                          value={MAINTENANCE_LEVELS[2].toString()}
                           id="radio-option-high"
                           className="radio-button-style"
                         />
@@ -314,7 +314,7 @@ const CalculatorInput = () => {
                           htmlFor="radio-option-high"
                           className="radio-label-style"
                         >
-                          High (3.75%)
+                          High ({MAINTENANCE_LEVELS[2] * 100}%)
                         </Label>
                       </div>
                     </RadioGroup>

@@ -13,7 +13,7 @@ export interface ForecastParameters {
  * all values except years are percentages represented in decimal form
  */
 export const DEFAULT_FORECAST_PARAMETERS: ForecastParameters = {
-  maintenancePercentage: 0.02, 
+  maintenancePercentage: 0.019, 
   incomeGrowthPerYear: 0.04,
   constructionPriceGrowthPerYear: 0.025, 
   rentGrowthPerYear: 0.03, 

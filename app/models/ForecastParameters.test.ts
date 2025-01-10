@@ -1,3 +1,4 @@
+import { MAINTENANCE_LEVELS } from "./constants";
 import { createForecastParameters, DEFAULT_FORECAST_PARAMETERS } from "./ForecastParameters";
 
 it("can create default forecast parameters", () => {
@@ -19,9 +20,8 @@ it("correctly sets maintenance percentage while keeping defaults", () => {
 });
 
 it("handles different maintenance percentage values", () => {
-  const testCases = [0.015, 0.02, 0.0375];
   
-  testCases.forEach(maintenance => {
+  MAINTENANCE_LEVELS.forEach(maintenance => {
     const params = createForecastParameters(maintenance);
     expect(params.maintenancePercentage).toBe(maintenance);
   });
