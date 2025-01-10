@@ -52,29 +52,37 @@ interface StackedBarChartProps {
 const TenureComparisonBarChart: React.FC<StackedBarChartProps> = ({ data }) => {
   const chartData = [
     {
-      tenure: "market: purchase",
+      tenure: "Freehold",
       land: data[0].marketPurchase,
       house: data[1].marketPurchase,
+      freehold: data[0].marketPurchase + data[1].marketPurchase,
     },
     {
-      tenure: "market: rent",
+      tenure: "Private Rent",
       land: data[0].marketRent,
       house: data[1].marketRent,
+      privateRent: data[0].marketRent + data[1].marketRent,
     },
+
     {
-      tenure: "social rent",
-      land: data[0].socialRent,
-      house: data[1].socialRent,
-    },
-    {
-      tenure: "fairhold: land purchase",
+      tenure: "Fairhold - Land Purchase",
       land: data[0].fairholdLandPurchase,
       house: data[1].fairholdLandPurchase,
+      fairholdPurchase:
+        data[0].fairholdLandPurchase + data[1].fairholdLandPurchase,
     },
     {
-      tenure: "fairhold: land rent",
+      tenure: "Fairhold - Land Rent",
       land: data[0].fairholdLandRent,
       house: data[1].fairholdLandRent,
+      fairholdrent: data[0].fairholdLandRent + data[1].fairholdLandRent,
+    },
+
+    {
+      tenure: "Social Rent",
+      land: data[0].socialRent,
+      house: data[1].socialRent,
+      socialRent: data[0].socialRent + data[1].socialRent,
     },
   ];
 
@@ -97,18 +105,8 @@ const TenureComparisonBarChart: React.FC<StackedBarChartProps> = ({ data }) => {
             />
             <ChartTooltip content={<ChartTooltipContent hideLabel />} />
             <ChartLegend content={<ChartLegendContent />} />
-            <Bar
-              dataKey="land"
-              stackId="a"
-              fill="var(--color-land)"
-              radius={[0, 0, 4, 4]}
-            />
-            <Bar
-              dataKey="house"
-              stackId="a"
-              fill="var(--color-house)"
-              radius={[4, 4, 0, 0]}
-            />
+            <Bar dataKey="land" stackId="a" fill="var(--color-land)" />
+            <Bar dataKey="house" stackId="a" fill="var(--color-house)" />
           </BarChart>
         </ChartContainer>
       </CardContent>

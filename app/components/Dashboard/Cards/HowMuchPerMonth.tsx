@@ -1,5 +1,5 @@
 import GraphCard from "../../ui/GraphCard";
-import UpfrontComparisonWrapper from "../../graphs/UpfrontComparisonWrapper";
+import TenureComparisonWrapper from "../../graphs/TenureComparisonWrapper";
 import { Drawer } from "../../ui/Drawer";
 import { Household } from "@/app/models/Household";
 
@@ -14,7 +14,7 @@ export const HowMuchPerMonth: React.FC<DashboardProps> = ({ data }) => {
       subtitle="The up-front cost of a home, compared with conventional home ownership."
     >
       <div className="flex flex-col h-full w-3/4 justify-between">
-        <UpfrontComparisonWrapper household={data} />
+        <TenureComparisonWrapper household={data} />
         <Drawer
           buttonTitle="Find out more about how we estimated these"
           title="How we estimated these figures"
