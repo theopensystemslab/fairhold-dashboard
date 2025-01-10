@@ -1,6 +1,7 @@
 "use client";
 
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+import React from "react";
+import { Bar, BarChart, CartesianGrid, XAxis, LabelList } from "recharts";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
   ChartConfig,
@@ -10,6 +11,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import { formatValue } from "@/app/lib/format";
 
 const chartConfig = {
   freehold: {
@@ -21,8 +23,6 @@ const chartConfig = {
     color: "rgb(var(--private-rent-color-rgb))",
   },
 } satisfies ChartConfig;
-
-import React from "react";
 
 // Define type for DataInput
 type DataInput = {
@@ -99,7 +99,15 @@ const TenureComparisonBarChart: React.FC<StackedBarChartProps> = ({ data }) => {
             />
             <ChartTooltip content={<ChartTooltipContent hideLabel />} />
             <ChartLegend content={<ChartLegendContent />} />
-            <Bar dataKey="monthly" strokeWidth={2} activeIndex={2} />
+            <Bar dataKey="monthly" strokeWidth={2} activeIndex={2}>
+              <LabelList
+                dataKey="monthly"
+                position="center"
+                formatter={formatValue}
+                fill="white"
+                fontSize={12}
+              />
+            </Bar>
           </BarChart>
         </ChartContainer>
       </CardContent>
