@@ -1,6 +1,6 @@
 "use client";
 
-import { Bar, BarChart, CartesianGrid, XAxis, Label } from "recharts";
+import { Bar, BarChart, CartesianGrid, XAxis, Label, LabelList } from "recharts";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
   ChartConfig,
@@ -29,6 +29,7 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 import React from "react";
+import { formatValue } from "@/app/lib/format";
 
 type DataInput = {
   category: string;
@@ -58,7 +59,6 @@ const UpfrontComparisonBarChart: React.FC<StackedBarChartProps> = ({
     },
     {
       tenure: "fairhold: land rent",
-      fairholdLand: data[0].fairholdLandRent,
       fairholdHouse: data[2].fairholdLandRent,
     },
   ];
@@ -73,8 +73,6 @@ const UpfrontComparisonBarChart: React.FC<StackedBarChartProps> = ({
             <XAxis
               dataKey="tenure"
               tickLine={false}
-              tickMargin={10}
-              axisLine={false}
               tickFormatter={(value) => {
                 switch (value) {
                   case "freehold":
@@ -99,25 +97,56 @@ const UpfrontComparisonBarChart: React.FC<StackedBarChartProps> = ({
             <ChartTooltip content={<ChartTooltipContent hideLabel />} />
             <Bar
               dataKey="freeholdLand"
-              stackId="a"
+              stackId="stack"
               fill="var(--color-freeholdLand)"
-            />
+            >
+              <LabelList
+                dataKey="freeholdLand"
+                position="center"
+                formatter={formatValue}
+                fill="white"
+                fontSize={12}
+              />
+            </Bar>
             <Bar
               dataKey="freeholdHouse"
-              stackId="a"
+              stackId="stack"
               fill="var(--color-freeholdHouse)"
-            />
-
+            >
+              <LabelList
+                dataKey="freeholdHouse"
+                position="center"
+                formatter={formatValue}
+                fill="white"
+                fontSize={12}
+              />
+              </Bar>
             <Bar
               dataKey="fairholdLand"
-              stackId="a"
+              stackId="stack"
               fill="var(--color-fairholdLand)"
-            />
+            >
+              <LabelList
+                dataKey="fairholdLand"
+                position="center"
+                formatter={formatValue}
+                fill="white"
+                fontSize={12}
+              />
+              </Bar>
             <Bar
               dataKey="fairholdHouse"
-              stackId="a"
+              stackId="stack"
               fill="var(--color-fairholdHouse)"
-            />
+            >
+              <LabelList
+                dataKey="fairholdHouse"
+                position="center"
+                formatter={formatValue}
+                fill="white"
+                fontSize={12}
+              />
+            </Bar>
           </BarChart>
         </ChartContainer>
       </CardContent>
