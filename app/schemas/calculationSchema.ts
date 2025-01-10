@@ -3,7 +3,7 @@ import {
   parse as parsePostcode,
   isValid as isValidPostcode,
 } from "postcode";
-import { HOUSE_TYPES } from "../models/Property";
+import { HOUSE_TYPES, MaintenancePercentage } from "../models/Property";
 import { MAINTENANCE_LEVELS } from "../models/constants";
 
 // Type not exported by postcode lib directly
@@ -12,8 +12,8 @@ export type ValidPostcode = Extract<ReturnType<typeof parsePostcode>, { valid: t
 const HouseTypeEnum = z.enum(HOUSE_TYPES);
 
 export const maintenancePercentageSchema = z.number().refine(
-  (value): value is typeof MAINTENANCE_LEVELS[number] => 
-    MAINTENANCE_LEVELS.includes(value as typeof MAINTENANCE_LEVELS[number]),
+  (value): value is MaintenancePercentage =>
+    (MAINTENANCE_LEVELS as readonly number[]).includes(value),
   {
     message: `Maintenance percentage must be one of: ${MAINTENANCE_LEVELS.join(', ')}`
   }
