@@ -39,7 +39,7 @@ export const Carousel: React.FC<CarouselProps> = ({ scrollContainerRef, currentP
   const handlePrevious = () => scrollTo(currentPage - 1);
 
   return (
-    <div className="flex flex-col justify-between fixed right-4 top-0 h-full items-center py-6">
+    <div className={"flex flex-col justify-between absolute right-4 top-0 h-full items-center py-6"}>
       <div className={cn("invisible", { "visible": currentPage > 0 })}>
         <NavigationIcon Icon={ArrowUpIcon} onClick={handlePrevious} />
       </div>
