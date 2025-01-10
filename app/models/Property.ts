@@ -98,7 +98,7 @@ export class Property {
       key, 
       this.newBuildPrice, 
       this.age, 
-      MAINTENANCE_LEVELS[0]
+      this.maintenancePercentage
     );
 
     depreciatedBuildPrice += result.depreciatedComponentValue;

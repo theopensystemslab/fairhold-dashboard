@@ -47,10 +47,10 @@ export class Household {
     this.property = params.property;
     this.forecastParameters = params.forecastParameters;
     this.incomeYearly = HEADS_PER_HOUSEHOLD * params.incomePerPersonYearly;
-    this.tenure = this.calculateTenures(params);
-    this.lifetime = this.calculateLifetime(params);
     this.gasBillExistingBuildYearly = this.calculateGasBillExistingBuild(params);
     this.gasBillNewBuildOrRetrofitYearly = this.calculateGasBillNewBuildOrRetrofit(params);
+    this.tenure = this.calculateTenures(params);
+    this.lifetime = this.calculateLifetime(params);
   }
 
   private calculateTenures({
