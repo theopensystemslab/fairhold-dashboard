@@ -6,6 +6,7 @@ import { Household } from "@/app/models/Household";
 import Dashboard from "./Dashboard";
 import { formSchema, FormFrontend } from "@/app/schemas/formSchema";
 import { useSearchParams } from "next/navigation";
+import { DEFAULT_INTEREST_RATE, DEFAULT_MORTGAGE_TERM, DEFAULT_INITIAL_DEPOSIT } from "../../models/constants"
 
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { ClipLoader } from "react-spinners";
@@ -327,19 +328,19 @@ const CalculatorInput = () => {
                 <span className="h3-style inaccessible-input-style">
                   Mortgage interest rate
                 </span>
-                <span className="inaccessible-input-style">6%</span> {/* TODO: should we hook these up to the actual variables used so we don't have to maintain them in two places? */}
+                <span className="inaccessible-input-style">{DEFAULT_INTEREST_RATE * 100}%</span>
               </div>
               <div className="flex flex-col">
                 <span className="h3-style inaccessible-input-style">
                   Mortgage term
                 </span>
-                <span className="inaccessible-input-style">30 years</span>
+                <span className="inaccessible-input-style">{DEFAULT_MORTGAGE_TERM} years</span>
               </div>
               <div className="flex flex-col">
                 <span className="h3-style inaccessible-input-style">
                   Mortgage deposit
                 </span>
-                <span className="inaccessible-input-style">15%</span>
+                <span className="inaccessible-input-style">{DEFAULT_INITIAL_DEPOSIT * 100}%</span>
               </div>
             </div>
 

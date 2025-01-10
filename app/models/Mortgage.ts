@@ -1,9 +1,4 @@
-import { MONTHS_PER_YEAR } from "./constants";
-
-const DEFAULT_INTEREST_RATE = 0.06;
-const DEFAULT_MORTGAGE_TERM = 30;
-const DEFAULT_INITIAL_DEPOSIT = 0.15;
-
+import { MONTHS_PER_YEAR, DEFAULT_INTEREST_RATE, DEFAULT_MORTGAGE_TERM, DEFAULT_INITIAL_DEPOSIT } from "./constants";
 interface MortgageParams {
   propertyValue: number;
   interestRate?: number;

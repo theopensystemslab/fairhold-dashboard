@@ -1,6 +1,10 @@
 export const MONTHS_PER_YEAR = 12;
 export const WEEKS_PER_MONTH = 4.2;
 
+export const DEFAULT_INTEREST_RATE = 0.06;
+export const DEFAULT_MORTGAGE_TERM = 30;
+export const DEFAULT_INITIAL_DEPOSIT = 0.15;
+
 export type BedWeightsAndCaps = {
   numberOfBedrooms: number[];
   weight: number[];
