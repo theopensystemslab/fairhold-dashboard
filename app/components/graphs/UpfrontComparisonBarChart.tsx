@@ -21,7 +21,7 @@ import {
 const chartConfig = {
   land: {
     label: "Land",
-    color: "hsl(var(--chart-1))",
+    color: "rgb(var(--freehold-land-color-rgb))",
   },
   newHouse: {
     label: "NewHouse",
