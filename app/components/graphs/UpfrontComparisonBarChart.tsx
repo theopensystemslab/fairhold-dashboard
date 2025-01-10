@@ -30,7 +30,6 @@ const chartConfig = {
 
 import React from "react";
 
-// Define type for DataInput
 type DataInput = {
   category: string;
   marketPurchase: number;
@@ -39,12 +38,10 @@ type DataInput = {
   [key: string]: string | number;
 };
 
-// Define the props type for StackedBarChart
 interface StackedBarChartProps {
   data: DataInput[];
 }
 
-// Implementation of the Chart.js Stacked Bar Chart
 const UpfrontComparisonBarChart: React.FC<StackedBarChartProps> = ({
   data,
 }) => {
@@ -68,10 +65,7 @@ const UpfrontComparisonBarChart: React.FC<StackedBarChartProps> = ({
 
   return (
     <Card>
-      <CardHeader>
-        {/* <CardTitle>Tenure comparison</CardTitle>
-        <CardDescription>Total upfront cost £</CardDescription> */}
-      </CardHeader>
+      <CardHeader></CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
           <BarChart accessibilityLayer data={chartData}>
@@ -103,7 +97,6 @@ const UpfrontComparisonBarChart: React.FC<StackedBarChartProps> = ({
             </XAxis>
 
             <ChartTooltip content={<ChartTooltipContent hideLabel />} />
-            {/* <ChartLegend content={<ChartLegendContent />} /> */}
             <Bar
               dataKey="freeholdLand"
               stackId="a"
@@ -128,11 +121,6 @@ const UpfrontComparisonBarChart: React.FC<StackedBarChartProps> = ({
           </BarChart>
         </ChartContainer>
       </CardContent>
-      {/* <CardFooter className="flex-col items-start gap-2 text-sm">
-        <div className="leading-none text-muted-foreground">
-          Showing the upfront cost.
-        </div>
-      </CardFooter> */}
     </Card>
   );
 };
