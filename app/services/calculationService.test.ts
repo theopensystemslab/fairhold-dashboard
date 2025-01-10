@@ -10,6 +10,8 @@ import { socialRentEarningsService } from "./socialRentEarningsService";
 import { rentService } from "./rentService";
 import { parse } from "postcode";
 import { ValidPostcode } from "../schemas/calculationSchema";
+import { z } from "zod";
+import { maintenancePercentageSchema } from "../schemas/calculationSchema";
 
 jest.mock("./itlService");
 jest.mock("./gdhiService");
@@ -48,7 +50,7 @@ describe("getHouseholdData", () => {
     houseAge: number;
     houseBedrooms: number;
     houseSize: number;
-    maintenancePercentage: 0.015 | 0.019 | 0.025;
+    maintenancePercentage: z.infer<typeof maintenancePercentageSchema>;
   }
 
   const mockInput: MockInputType = {
