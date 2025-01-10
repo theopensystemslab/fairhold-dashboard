@@ -4,9 +4,9 @@
 
 :root {
   --foreground-rgb: 0 0 0;
-  --background: 0 0 10;
-  --foreground: 0 0 100;
-  --muted-foreground: 0 0 100;
+  --background: 0 0 100;
+  --foreground: 0 0 10;
+  --muted: 100 100 100;
   --background-start-rgb: 242 242 240;
   --background-end-rgb: 242 242 240;
   --text-default-rgb: 46 46 46;
