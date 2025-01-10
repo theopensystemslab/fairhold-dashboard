@@ -6,6 +6,7 @@ import { Household } from "@/app/models/Household";
 import Dashboard from "./Dashboard";
 import { formSchema, FormFrontend } from "@/app/schemas/formSchema";
 import { useSearchParams } from "next/navigation";
+import { DEFAULT_INTEREST_RATE, DEFAULT_MORTGAGE_TERM, DEFAULT_INITIAL_DEPOSIT } from "../../models/constants"
 
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { ClipLoader } from "react-spinners";
@@ -207,7 +208,7 @@ const CalculatorInput = () => {
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="e.g. 80 for 80 square meters"
+                        placeholder="e.g. 80 for 80 square metres"
                         {...field}
                         value={field.value ?? ""}
                         className="inputfield-style"
@@ -229,7 +230,7 @@ const CalculatorInput = () => {
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="e.g. 1 for a new house"
+                        placeholder="e.g. 0 for a new house"
                         {...field}
                         value={field.value ?? ""}
                         className="inputfield-style"
@@ -250,7 +251,7 @@ const CalculatorInput = () => {
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder=" e.g. 2 for twp bedrooms"
+                        placeholder=" e.g. 2 for two bedrooms"
                         {...field}
                         value={field.value ?? ""}
                         className="inputfield-style"
@@ -329,19 +330,19 @@ const CalculatorInput = () => {
                 <span className="h3-style inaccessible-input-style">
                   Mortgage interest rate
                 </span>
-                <span className="inaccessible-input-style">6%</span>
+                <span className="inaccessible-input-style">{DEFAULT_INTEREST_RATE * 100}%</span>
               </div>
               <div className="flex flex-col">
                 <span className="h3-style inaccessible-input-style">
                   Mortgage term
                 </span>
-                <span className="inaccessible-input-style">25 years</span>
+                <span className="inaccessible-input-style">{DEFAULT_MORTGAGE_TERM} years</span>
               </div>
               <div className="flex flex-col">
                 <span className="h3-style inaccessible-input-style">
                   Mortgage deposit
                 </span>
-                <span className="inaccessible-input-style">25 years</span>
+                <span className="inaccessible-input-style">{DEFAULT_INITIAL_DEPOSIT * 100}%</span>
               </div>
             </div>
 
