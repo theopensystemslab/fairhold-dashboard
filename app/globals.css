@@ -14,9 +14,10 @@
   --text-inaccessible-rgb: 171 164 164;
 
   --freehold-land-color-rgb: 66 75 179;
-  --freehold-house-color-rgb: 166 75 179;
+  --freehold-house-color-rgb: 131 164 255;
   --fairhold-land-color-rgb: 74 179 91;
-  --fairhold-house-color-rgb: 74 179 91 0.5;
+  --fairhold-house-color-rgb: 159 211 166;
+  --fairhold-house-alpha: 0.5;
   --private-rent-color-rgb: 74 179 91 0.5;
   --affordable-rent-color-rgb: 255 97 118 0.5;
   --social-rent-color-rgb: 255, 97, 118;

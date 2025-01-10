@@ -19,17 +19,21 @@ import {
 } from "@/components/ui/chart";
 
 const chartConfig = {
-  land: {
+  freeholdLand: {
     label: "Land",
     color: "rgb(var(--freehold-land-color-rgb))",
   },
-  newHouse: {
-    label: "NewHouse",
-    color: "hsl(var(--chart-2))",
+  freeholdHouse: {
+    label: "House",
+    color: "rgb(var(--freehold-house-color-rgb))",
   },
-  depreciatedHouse: {
-    label: "DepreciatedHouse",
-    color: "hsl(var(--chart-3))",
+  fairholdLand: {
+    label: "Land",
+    color: "rgb(var(--fairhold-land-color-rgb))",
+  },
+  fairholdHouse: {
+    label: "House",
+    color: "rgb(var(--fairhold-house-color-rgb))",
   },
 } satisfies ChartConfig;
 
@@ -55,19 +59,19 @@ const UpfrontComparisonBarChart: React.FC<StackedBarChartProps> = ({
 }) => {
   const chartData = [
     {
-      tenure: "market: purchase",
-      land: data[0].marketPurchase,
-      newHouse: data[1].marketPurchase,
+      tenure: "freehold",
+      freeholdLand: data[0].marketPurchase,
+      freeholdHouse: data[1].marketPurchase,
     },
     {
       tenure: "fairhold: land purchase",
-      land: data[0].fairholdLandPurchase,
-      depreciatedHouse: data[2].fairholdLandPurchase,
+      fairholdLand: data[0].fairholdLandPurchase,
+      fairholdHouse: data[2].fairholdLandPurchase,
     },
     {
       tenure: "fairhold: land rent",
-      land: data[0].fairholdLandRent,
-      depreciatedHouse: data[2].fairholdLandRent,
+      fairholdLand: data[0].fairholdLandRent,
+      fairholdHouse: data[2].fairholdLandRent,
     },
   ];
 
@@ -91,22 +95,25 @@ const UpfrontComparisonBarChart: React.FC<StackedBarChartProps> = ({
             <ChartTooltip content={<ChartTooltipContent hideLabel />} />
             <ChartLegend content={<ChartLegendContent />} />
             <Bar
-              dataKey="land"
+              dataKey="freeholdLand"
               stackId="a"
-              fill="var(--color-land)"
-              radius={[0, 0, 4, 4]}
+              fill="var(--color-freeholdLand)"
             />
             <Bar
-              dataKey="newHouse"
+              dataKey="freeholdHouse"
               stackId="a"
-              fill="var(--color-newHouse)"
-              radius={[4, 4, 0, 0]}
+              fill="var(--color-freeholdHouse)"
+            />
+
+            <Bar
+              dataKey="fairholdLand"
+              stackId="a"
+              fill="var(--color-fairholdLand)"
             />
             <Bar
-              dataKey="depreciatedHouse"
+              dataKey="fairholdHouse"
               stackId="a"
-              fill="var(--color-depreciatedHouse)"
-              radius={[4, 4, 0, 0]}
+              fill="var(--color-fairholdHouse)"
             />
           </BarChart>
         </ChartContainer>
