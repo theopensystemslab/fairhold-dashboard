@@ -1,12 +1,7 @@
 "use client";
 
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
   ChartConfig,
   ChartContainer,
@@ -53,34 +48,38 @@ const TenureComparisonBarChart: React.FC<StackedBarChartProps> = ({ data }) => {
       tenure: "Freehold",
       land: data[0].marketPurchase,
       house: data[1].marketPurchase,
-      freehold: data[0].marketPurchase + data[1].marketPurchase,
+      monthly: data[0].marketPurchase + data[1].marketPurchase,
+      fill: "rgb(var(--freehold-land-color-rgb))",
     },
     {
       tenure: "Private Rent",
       land: data[0].marketRent,
       house: data[1].marketRent,
-      privateRent: data[0].marketRent + data[1].marketRent,
+      monthly: data[0].marketRent + data[1].marketRent,
+      fill: "rgb(var(--private-rent-color-rgb))",
     },
 
     {
       tenure: "Fairhold - Land Purchase",
       land: data[0].fairholdLandPurchase,
       house: data[1].fairholdLandPurchase,
-      fairholdPurchase:
-        data[0].fairholdLandPurchase + data[1].fairholdLandPurchase,
+      monthly: data[0].fairholdLandPurchase + data[1].fairholdLandPurchase,
+      fill: "rgb(var(--fairhold-land-color-rgb))",
     },
     {
       tenure: "Fairhold - Land Rent",
       land: data[0].fairholdLandRent,
       house: data[1].fairholdLandRent,
-      fairholdrent: data[0].fairholdLandRent + data[1].fairholdLandRent,
+      monthly: data[0].fairholdLandRent + data[1].fairholdLandRent,
+      fill: "rgb(var(--fairhold-house-color-rgb))",
     },
 
     {
       tenure: "Social Rent",
       land: data[0].socialRent,
       house: data[1].socialRent,
-      socialRent: data[0].socialRent + data[1].socialRent,
+      monthly: data[0].socialRent + data[1].socialRent,
+      fill: "rgb(var(--social-rent-color-rgb))",
     },
   ];
 
@@ -100,16 +99,10 @@ const TenureComparisonBarChart: React.FC<StackedBarChartProps> = ({ data }) => {
             />
             <ChartTooltip content={<ChartTooltipContent hideLabel />} />
             <ChartLegend content={<ChartLegendContent />} />
-            <Bar dataKey="freehold" fill="var(--color-freehold)" />
-            <Bar dataKey="privateRent" fill="var(--color-privateRent)" />
+            <Bar dataKey="monthly" strokeWidth={2} radius={8} activeIndex={2} />
           </BarChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className="flex-col items-start gap-2 text-sm">
-        <div className="leading-none text-muted-foreground">
-          Showing the montly cost by tenure type.
-        </div>
-      </CardFooter>
     </Card>
   );
 };
