@@ -55,7 +55,6 @@ const UpfrontComparisonWrapper: React.FC<UpfrontComparisonWrapperProps> = ({
   return (
     <ErrorBoundary>
       <div>
-        <h2>Tenure Comparison Chart</h2>
         <UpfrontComparisonBarChart data={formattedData} />
       </div>
     </ErrorBoundary>

@@ -1,19 +1,10 @@
 "use client";
 
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Bar, BarChart, CartesianGrid, XAxis, Label } from "recharts";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
   ChartConfig,
   ChartContainer,
-  ChartLegend,
-  ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
@@ -78,8 +69,8 @@ const UpfrontComparisonBarChart: React.FC<StackedBarChartProps> = ({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Tenure comparison</CardTitle>
-        <CardDescription>Total upfront cost £</CardDescription>
+        {/* <CardTitle>Tenure comparison</CardTitle>
+        <CardDescription>Total upfront cost £</CardDescription> */}
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
@@ -90,10 +81,29 @@ const UpfrontComparisonBarChart: React.FC<StackedBarChartProps> = ({
               tickLine={false}
               tickMargin={10}
               axisLine={false}
-              tickFormatter={(value) => value}
-            />
+              tickFormatter={(value) => {
+                switch (value) {
+                  case "freehold":
+                    return "Freehold";
+                  case "fairhold: land purchase":
+                    return "Fairhold Purchase";
+                  case "fairhold: land rent":
+                    return "Fairhold Rent";
+                  default:
+                    return value;
+                }
+              }}
+            >
+              <Label
+                value="Tenure Types"
+                position="bottom"
+                offset={20}
+                className="label-class"
+              />
+            </XAxis>
+
             <ChartTooltip content={<ChartTooltipContent hideLabel />} />
-            <ChartLegend content={<ChartLegendContent />} />
+            {/* <ChartLegend content={<ChartLegendContent />} /> */}
             <Bar
               dataKey="freeholdLand"
               stackId="a"
@@ -118,11 +128,11 @@ const UpfrontComparisonBarChart: React.FC<StackedBarChartProps> = ({
           </BarChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className="flex-col items-start gap-2 text-sm">
+      {/* <CardFooter className="flex-col items-start gap-2 text-sm">
         <div className="leading-none text-muted-foreground">
           Showing the upfront cost.
         </div>
-      </CardFooter>
+      </CardFooter> */}
     </Card>
   );
 };
