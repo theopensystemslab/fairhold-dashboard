@@ -1,3 +1,5 @@
+import { HouseType } from "./Property";
+
 export const MONTHS_PER_YEAR = 12;
 export const WEEKS_PER_MONTH = 4.2;
 
@@ -147,15 +149,11 @@ export const HOUSE_BREAKDOWN_PERCENTAGES: houseBreakdownType = {
     percentOfMaintenanceYearly: .056
   },
 }
-export type billsByHouseType = { // TODO: fix type syntax!
-  F: number;
-  T: number;
-  S: number;
-  D: number;
-}
+
+export type BillsByHouseType = Record<HouseType, number>
 
 /* Figures are from LETI / Studio PDP */
-export const KWH_M2_YR_EXISTING_BUILDS = {
+export const KWH_M2_YR_EXISTING_BUILDS: BillsByHouseType = {
   F: 118,
   T: 110,
   S: 168,
