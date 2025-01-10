@@ -6,6 +6,7 @@ import { WhatWouldYouChoose } from "../Dashboard/Cards/WhatWouldYouChoose";
 import { WhatDifference } from "../Dashboard/Cards/WhatDifference";
 import { HowMuchFHCost } from "../Dashboard/Cards/HowMuchFHCost";
 import { Carousel } from "./Carousel";
+import { HowMuchPerMonth } from "../Dashboard/Cards/HowMuchPerMonth";
 
 interface DashboardProps {
   processedData: Household;
@@ -36,9 +37,7 @@ const Dashboard: React.FC<DashboardProps> = ({ inputData, processedData }) => {
         onScroll={handleScroll}
       >
         <HowMuchFHCost data={processedData} />
-        <GraphCard title="How much would it cost every month?">
-          <span className="text-red-500">in theory less than Freehold</span>
-        </GraphCard>
+        <HowMuchPerMonth data={processedData} />
         <GraphCard title="How would the cost change over my life?"></GraphCard>
         <GraphCard title="How much could I sell it for?"></GraphCard>
         <WhatDifference />
