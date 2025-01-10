@@ -41,7 +41,7 @@ export const NATIONAL_AVERAGES: NationalAverage = {
  * Maintenance levels are percentages (represented as decimals),
  * figures from our own model
  */
-export const MAINTENANCE_LEVELS = [0.015, 0.02, 0.0375] as const;
+export const MAINTENANCE_LEVELS = [0.015, 0.019, 0.025] as const;
 
 /** Type for storing component values and depreciation*/
 export type componentBreakdownType = {
