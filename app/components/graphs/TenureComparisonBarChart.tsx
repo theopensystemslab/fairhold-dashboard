@@ -21,9 +21,9 @@ const chartConfig = {
     label: "Freehold",
     color: "rgb(var(--freehold-land-color-rgb))",
   },
-  house: {
-    label: "House",
-    color: "hsl(var(--chart-2))",
+  privateRent: {
+    label: "Private Rent",
+    color: "rgb(var(--private-rent-color-rgb))",
   },
 } satisfies ChartConfig;
 
@@ -101,6 +101,7 @@ const TenureComparisonBarChart: React.FC<StackedBarChartProps> = ({ data }) => {
             <ChartTooltip content={<ChartTooltipContent hideLabel />} />
             <ChartLegend content={<ChartLegendContent />} />
             <Bar dataKey="freehold" fill="var(--color-freehold)" />
+            <Bar dataKey="privateRent" fill="var(--color-privateRent)" />
           </BarChart>
         </ChartContainer>
       </CardContent>
