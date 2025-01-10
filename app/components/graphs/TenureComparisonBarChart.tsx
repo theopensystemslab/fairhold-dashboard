@@ -99,7 +99,7 @@ const TenureComparisonBarChart: React.FC<StackedBarChartProps> = ({ data }) => {
             />
             <ChartTooltip content={<ChartTooltipContent hideLabel />} />
             <ChartLegend content={<ChartLegendContent />} />
-            <Bar dataKey="monthly" strokeWidth={2} radius={8} activeIndex={2} />
+            <Bar dataKey="monthly" strokeWidth={2} activeIndex={2} />
           </BarChart>
         </ChartContainer>
       </CardContent>
