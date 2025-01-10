@@ -1,3 +1,4 @@
+import { Household } from "./Household"
 import { MarketPurchase } from "./tenure/MarketPurchase";
 import { MarketRent } from "./tenure/MarketRent";
 import { FairholdLandPurchase } from "./tenure/FairholdLandPurchase";
@@ -7,6 +8,7 @@ import { Property } from "./Property";
 import { MONTHS_PER_YEAR } from "./constants";
 
 export interface LifetimeParams {
+    household: Household;
     marketPurchase: MarketPurchase;
     marketRent: MarketRent;
     fairholdLandPurchase: FairholdLandPurchase;
@@ -33,8 +35,8 @@ export interface LifetimeData {
     maintenanceCost: number;
     marketLandRentYearly: number;
     marketHouseRentYearly: number;
-    // we will need the below for newbuilds & retrofits, and oldbuilds
-    // gasBillYearly: number;
+    gasBillExistingBuildYearly: number;
+    gasBillNewBuildOrRetrofitYearly: number;
     depreciatedHouseResaleValue: number;
     fairholdLandPurchaseResaleValue: number;
     houseAge: number;
@@ -90,12 +92,16 @@ export class Lifetime {
         /** The percentage (`ForecastParameters.maintenancePercentage`) is kept steady, and is multiplied by the `newBuildPriceIterative` as it inflates  */
         let maintenanceCostIterative = 
             params.maintenancePercentage * newBuildPriceIterative;
+
         /** Each loop a new `Property` instance is created, this is updated by running the `calculateDepreciatedBuildPrice()` method on `iterativeProperty` */
         let depreciatedHouseResaleValueIterative = params.property.depreciatedBuildPrice;
         /** Resale value increases with `ForecastParameters.constructionPriceGrowthPerYear` */
         let fairholdLandPurchaseResaleValueIterative = params.fairholdLandPurchase.discountedLandPrice;
         /** Initialises as user input house age and increments by one */
         let houseAgeIterative = params.property.age;
+
+        let gasBillExistingBuildIterative = params.household.gasBillExistingBuildYearly;
+        let gasBillNewBuildOrRetrofitIterative = params.household.gasBillNewBuildOrRetrofitYearly;
         
         // Initialise mortgage variables
         /** Assuming a constant interest rate, this figures stays the same until the mortgage term (`marketPurchase.houseMortgage.termYears`) is reached */
@@ -128,6 +134,8 @@ export class Lifetime {
             depreciatedHouseResaleValue: depreciatedHouseResaleValueIterative,
             fairholdLandPurchaseResaleValue: fairholdLandPurchaseResaleValueIterative,
             houseAge: houseAgeIterative,
+            gasBillExistingBuildYearly: gasBillExistingBuildIterative,
+            gasBillNewBuildOrRetrofitYearly: gasBillNewBuildOrRetrofitIterative
         });
 
         // The 0th round has already been calculated and pushed above
@@ -154,6 +162,10 @@ export class Lifetime {
                 marketRentYearlyIterative - marketRentLandYearlyIterative;
             maintenanceCostIterative =
                 newBuildPriceIterative * params.maintenancePercentage;
+            gasBillExistingBuildIterative = 
+                gasBillExistingBuildIterative * (1 + params.constructionPriceGrowthPerYear) // TODO: when other branch merged, should be CPI
+            gasBillNewBuildOrRetrofitIterative = 
+                gasBillNewBuildOrRetrofitIterative * (1 + params.constructionPriceGrowthPerYear)
             
             /** 
              * A new instance of the `Property` class is needed each loop in order to
@@ -205,6 +217,8 @@ export class Lifetime {
                 depreciatedHouseResaleValue: depreciatedHouseResaleValueIterative,
                 fairholdLandPurchaseResaleValue: fairholdLandPurchaseResaleValueIterative,
                 houseAge: houseAgeIterative,
+                gasBillExistingBuildYearly: gasBillExistingBuildIterative,
+                gasBillNewBuildOrRetrofitYearly: gasBillNewBuildOrRetrofitIterative
             });
         }
         return lifetime;

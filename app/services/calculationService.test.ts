@@ -1,7 +1,7 @@
 import { getHouseholdData } from "./calculationService";
 import { itlService } from "./itlService";
 import { gdhiService } from "./gdhiService";
-import { gasBillService } from "./gasBillService";
+import { gasPriceService } from "./gasPriceService";
 import { hpiService } from "./hpiService";
 import { buildPriceService } from "./buildPriceService";
 import { pricesPaidService } from "./pricesPaidService";
@@ -13,7 +13,7 @@ import { ValidPostcode } from "../schemas/calculationSchema";
 
 jest.mock("./itlService");
 jest.mock("./gdhiService");
-jest.mock("./gasBillService");
+jest.mock("./gasPriceService");
 jest.mock("./hpiService");
 jest.mock("./buildPriceService");
 jest.mock("./pricesPaidService");
@@ -67,7 +67,7 @@ describe("getHouseholdData", () => {
   it("should return household data correctly", async () => {
     const mockITL3 = "ITL3-123";
     const mockGDHI = 30000;
-    const mockGasBillYearly = 1200;
+    const mockGasPriceYearly = 1200;
     const mockHPI = 1.05;
     const mockBuildPrice = 250000;
     const mockPricesPaidSummary = {
@@ -86,8 +86,8 @@ describe("getHouseholdData", () => {
       mockITL3
     );
     (gdhiService.getByITL3 as jest.Mock).mockResolvedValueOnce(mockGDHI);
-    (gasBillService.getByITL3 as jest.Mock).mockResolvedValueOnce(
-      mockGasBillYearly
+    (gasPriceService.getByITL3 as jest.Mock).mockResolvedValueOnce(
+      mockGasPriceYearly
     );
     (hpiService.getByITL3 as jest.Mock).mockResolvedValueOnce(mockHPI);
     (
@@ -126,7 +126,7 @@ describe("getHouseholdData", () => {
       socialRentAverageEarning: mockSocialRentAverageEarning,
       numberOfTransactions: mockPricesPaidSummary.numberOfTransactions,
       granularityPostcode: mockPricesPaidSummary.granularityPostcode,
-      gasBillYearly: mockGasBillYearly,
+      kwhCostPence: mockGasPriceYearly,
     });
   });
 

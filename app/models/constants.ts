@@ -1,3 +1,5 @@
+import { HouseType } from "./Property";
+
 export const MONTHS_PER_YEAR = 12;
 export const WEEKS_PER_MONTH = 4.2;
 
@@ -146,4 +148,21 @@ export const HOUSE_BREAKDOWN_PERCENTAGES: houseBreakdownType = {
     depreciationPercentageYearly: .0343,
     percentOfMaintenanceYearly: .056
   },
+}
+
+export type BillsByHouseType = Record<HouseType, number>
+
+/* Figures are from LETI / Studio PDP */
+export const KWH_M2_YR_EXISTING_BUILDS: BillsByHouseType = {
+  F: 118,
+  T: 110,
+  S: 168,
+  D: 167
+}
+
+export const KWH_M2_YR_NEWBUILDS_RETROFIT = {
+  F: 26,
+  T: 20,
+  S: 51,
+  D: 55
 }
