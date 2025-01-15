@@ -12,19 +12,19 @@ import { formatValue } from "@/app/lib/format";
 const chartConfig = {
   noMaintenance: {
     label: "No Maintenance",
-    color: "rgb(var(--no-maintenance-color-rgb))", // TODO: UPDATE COLOURS
+    color: "rgb(var(--fairhold-land-color-rgb))", 
   },
   lowMaintenance: {
     label: "Low Maintenance",
-    color: "rgb(var(--low-maintenance-color-rgb))",
+    color: "rgb(var(--fairhold-land-color-rgb))",
   },
   mediumMaintenance: {
     label: "Medium Maintenance",
-    color: "rgb(var(--medium-maintenance-color-rgb))",
+    color: "rgb(var(--fairhold-land-color-rgb))",
   },
   highMaintenance: {
     label: "High Maintenance",
-    color: "rgb(var(--high-maintenance-color-rgb))",
+    color: "rgb(var(--fairhold-land-color-rgb))",
   },
 } satisfies ChartConfig;
 

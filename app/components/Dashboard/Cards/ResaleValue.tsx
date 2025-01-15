@@ -1,20 +1,43 @@
+import { useState } from "react";
 import GraphCard from "../../ui/GraphCard";
-import ResaleValuesWrapper from "../../graphs/ResaleValuesWrapper";
+import ResaleValueWrapper from "../../graphs/ResaleValueWrapper";
 import { Drawer } from "../../ui/Drawer";
 import { Household } from "@/app/models/Household";
+import TenureSelector from "../../ui/TenureSelector";
 
 interface DashboardProps {
   data: Household;
 }
 
-export const ResaleValues: React.FC<DashboardProps> = ({ data }) => {
+export const ResaleValue: React.FC<DashboardProps> = ({ data }) => {
+  const [selectedTenure, setSelectedTenure] = useState<'landPurchase' | 'landRent'>('landPurchase');
+
   return (
     <GraphCard
       title="How much could I sell it for?"
       subtitle="Estimated sale price at any time"
     >
       <div className="flex flex-col h-full w-3/4 justify-between">
-        <ResaleValuesWrapper household={data} />
+        <div className="flex gap-2 mb-4">
+          <TenureSelector 
+            isSelected={selectedTenure === 'landPurchase'}
+            onClick={() => setSelectedTenure('landPurchase')}
+          >
+            Fairhold Land Purchase
+          </TenureSelector>
+          <TenureSelector 
+            isSelected={selectedTenure === 'landRent'}
+            onClick={() => setSelectedTenure('landRent')}
+          >
+            Fairhold Land Rent
+          </TenureSelector>
+        </div>
+        
+        <ResaleValueWrapper 
+          household={data}
+          tenure={selectedTenure}
+        />
+        
         <Drawer
           buttonTitle="Find out more about how we estimated these"
           title="How we estimated these figures"

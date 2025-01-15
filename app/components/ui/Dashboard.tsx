@@ -6,6 +6,7 @@ import { WhatWouldYouChoose } from "../Dashboard/Cards/WhatWouldYouChoose";
 import { WhatDifference } from "../Dashboard/Cards/WhatDifference";
 import { HowMuchFHCost } from "../Dashboard/Cards/HowMuchFHCost";
 import { Carousel } from "./Carousel";
+import { ResaleValue } from "../Dashboard/Cards/ResaleValue";
 
 interface DashboardProps {
   processedData: Household;
@@ -40,7 +41,7 @@ const Dashboard: React.FC<DashboardProps> = ({ inputData, processedData }) => {
           <span className="text-red-500">in theory less than Freehold</span>
         </GraphCard>
         <GraphCard title="How would the cost change over my life?"></GraphCard>
-        <GraphCard title="How much could I sell it for?"></GraphCard>
+        <ResaleValue data={processedData}/>
         <WhatDifference />
         <WhatWouldYouChoose />
       </div>
