@@ -1,29 +1,36 @@
 import React from 'react';
-import { LineChart, Line, CartesianGrid, XAxis, YAxis, Label, Legend } from 'recharts';
+import { LineChart, Line, CartesianGrid, XAxis, YAxis, Label, TooltipProps } from 'recharts';
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
-  ChartTooltipContent,
 } from "@/components/ui/chart";
 import { formatValue } from "@/app/lib/format";
 
+type CustomTooltipProps = TooltipProps<number, string> & {
+  payload?: Array<{
+    name: keyof Omit<DataPoint, 'year'>;
+    value: number;
+    stroke: string;
+  }>;
+};
+
 const chartConfig = {
   noMaintenance: {
-    label: "No Maintenance",
+    label: "No maintenance",
     color: "rgb(var(--fairhold-land-color-rgb))", 
   },
   lowMaintenance: {
-    label: "Low Maintenance",
+    label: "Low maintenance",
     color: "rgb(var(--fairhold-land-color-rgb))",
   },
   mediumMaintenance: {
-    label: "Medium Maintenance",
+    label: "Medium maintenance",
     color: "rgb(var(--fairhold-land-color-rgb))",
   },
   highMaintenance: {
-    label: "High Maintenance",
+    label: "High maintenance",
     color: "rgb(var(--fairhold-land-color-rgb))",
   },
 } satisfies ChartConfig;
@@ -39,11 +46,13 @@ export interface DataPoint {
 interface ResaleValueLineChartProps {
   data: DataPoint[];
   selectedMaintenance: 'noMaintenance' | 'lowMaintenance' | 'mediumMaintenance' | 'highMaintenance';
+  maxY: number;
 }
 
 const ResaleValueLineChart: React.FC<ResaleValueLineChartProps> = ({
   data,
-  selectedMaintenance
+  selectedMaintenance,
+  maxY
 }) => {
   const renderLine = (dataKey: keyof Omit<DataPoint, 'year'>) => (
     <Line
@@ -55,6 +64,33 @@ const ResaleValueLineChart: React.FC<ResaleValueLineChartProps> = ({
       dot={false}
     />
   );
+  const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="bg-white p-3 border rounded shadow">
+          <p className="font-medium mb-2">Year {label}</p>
+          {payload.map((entry) => (
+            <div key={entry.name} className="flex items-center gap-2 mb-1">
+              <svg width="20" height="2" className="flex-shrink-0">
+                <line
+                  x1="0"
+                  y1="1"
+                  x2="20"
+                  y2="1"
+                  stroke={entry.stroke}
+                  strokeWidth="2"
+                  strokeDasharray={entry.name === selectedMaintenance ? "0" : "5 5"}
+                />
+              </svg>
+              <span>{chartConfig[entry.name as keyof typeof chartConfig].label}:</span>
+              <span className="font-medium">{formatValue(entry.value ?? 0)}</span>
+            </div>
+          ))}
+        </div>
+      );
+    }
+    return null;
+  };
 
   return (
     <Card>
@@ -80,6 +116,7 @@ const ResaleValueLineChart: React.FC<ResaleValueLineChartProps> = ({
             <YAxis
               tickFormatter={formatValue}
               tickLine={false}
+              domain={[0, maxY]}
             >
               <Label
                 value="Resale Value (£)"
@@ -89,12 +126,11 @@ const ResaleValueLineChart: React.FC<ResaleValueLineChartProps> = ({
                 className="label-class"
               />
             </YAxis>
-            <ChartTooltip content={<ChartTooltipContent />} />
-            <Legend />
-            {renderLine('noMaintenance')}
-            {renderLine('lowMaintenance')}
-            {renderLine('mediumMaintenance')}
+            <ChartTooltip content={<CustomTooltip />} />
             {renderLine('highMaintenance')}
+            {renderLine('mediumMaintenance')}
+            {renderLine('lowMaintenance')}
+            {renderLine('noMaintenance')}
           </LineChart>
         </ChartContainer>
       </CardContent>
