@@ -7,8 +7,6 @@ import Dashboard from "./Dashboard";
 import { formSchema, FormFrontend } from "@/app/schemas/formSchema";
 import { useSearchParams } from "next/navigation";
 import { DEFAULT_INTEREST_RATE, DEFAULT_MORTGAGE_TERM, DEFAULT_INITIAL_DEPOSIT, MAINTENANCE_LEVELS } from "../../models/constants"
-import { z } from "zod";
-import { maintenancePercentageSchema } from "@/app/schemas/calculationSchema";
 
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { ClipLoader } from "react-spinners";
@@ -39,7 +37,7 @@ const CalculatorInput = () => {
   const urlHouseAge = searchParams.get("houseAge");
   const urlHouseBedrooms = searchParams.get("houseBedrooms");
   const urlHouseType = searchParams.get("houseType");
-  const urlMaintenancePercentage = searchParams.get("maintenancePercentage");
+  const urlMaintenanceLevel = searchParams.get("maintenancePercentage");
 
   const form = useForm<FormFrontend>({
     resolver: zodResolver(formSchema),
@@ -51,9 +49,13 @@ const CalculatorInput = () => {
         urlHouseType === "S"
           ? urlHouseType
           : "D", // Default value for house type
-        maintenancePercentage: urlMaintenancePercentage && (MAINTENANCE_LEVELS as readonly number[]).includes(Number(urlMaintenancePercentage))
-          ? Number(urlMaintenancePercentage) as z.infer<typeof maintenancePercentageSchema>
-          : MAINTENANCE_LEVELS[1],
+        maintenanceLevel: 
+          urlMaintenanceLevel === "high"  ||
+          urlMaintenanceLevel === "medium"  ||
+          urlMaintenanceLevel === "low"  ||
+          urlMaintenanceLevel === "none"
+            ? urlMaintenanceLevel
+            : "low",
       housePostcode: urlPostcode || "",
       // Apply defaults if provided
       // Type-safe to account for exactOptionalPropertyTypes propert in tsconfig.json
@@ -265,7 +267,7 @@ const CalculatorInput = () => {
 
             <FormField
               control={form.control}
-              name="maintenancePercentage" // Name in the Calculation schema for the new radio field
+              name="maintenanceLevel" // Name in the Calculation schema for the new radio field
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="h3-style">
@@ -280,7 +282,7 @@ const CalculatorInput = () => {
                     >
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem
-                          value={MAINTENANCE_LEVELS[1].toString()}
+                          value={MAINTENANCE_LEVELS.low.toString()}
                           id="radio-option-low"
                           className="radio-button-style"
                         />
@@ -288,12 +290,12 @@ const CalculatorInput = () => {
                           htmlFor="radio-option-low"
                           className="radio-label-style"
                         >
-                          Low ({MAINTENANCE_LEVELS[1] * 100}%)
+                          Low ({MAINTENANCE_LEVELS.low * 100}%)
                         </Label>
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem
-                          value={MAINTENANCE_LEVELS[2].toString()}
+                          value={MAINTENANCE_LEVELS.medium.toString()}
                           id="radio-option-medium"
                           className="radio-button-style"
                         />
@@ -301,12 +303,12 @@ const CalculatorInput = () => {
                           htmlFor="radio-option-medium"
                           className="radio-label-style"
                         >
-                          Medium ({MAINTENANCE_LEVELS[2] * 100}%)
+                          Medium ({MAINTENANCE_LEVELS.medium * 100}%)
                         </Label>
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem
-                          value={MAINTENANCE_LEVELS[3].toString()}
+                          value={MAINTENANCE_LEVELS.high.toString()}
                           id="radio-option-high"
                           className="radio-button-style"
                         />
@@ -314,7 +316,7 @@ const CalculatorInput = () => {
                           htmlFor="radio-option-high"
                           className="radio-label-style"
                         >
-                          High ({MAINTENANCE_LEVELS[3] * 100}%)
+                          High ({MAINTENANCE_LEVELS.high * 100}%)
                         </Label>
                       </div>
                     </RadioGroup>
