@@ -44,6 +44,8 @@ export interface LifetimeData {
     depreciatedHouseResaleValueMediumMaintenance: number;
     depreciatedHouseResaleValueHighMaintenance: number;
     fairholdLandPurchaseResaleValue: number;
+    socialRentMonthlyLand: number;
+    socialRentMonthlyHouse: number;
     houseAge: number;
     [key: number]: number;
 }
@@ -109,6 +111,9 @@ export class Lifetime {
 
         /** Resale value increases with `ForecastParameters.constructionPriceGrowthPerYear` */
         let fairholdLandPurchaseResaleValueIterative = params.fairholdLandPurchase.discountedLandPrice;
+        let socialRentMonthlyLandIterative = params.household.tenure.socialRent.socialRentMonthlyLand; 
+        let socialRentMonthlyHouseIterative = params.household.tenure.socialRent.socialRentMonthlyHouse;
+        
         /** Initialises as user input house age and increments by one */
         let houseAgeIterative = params.property.age;
 
@@ -150,6 +155,8 @@ export class Lifetime {
             depreciatedHouseResaleValueMediumMaintenance: depreciatedHouseResaleValueMediumMaintenanceIterative,
             depreciatedHouseResaleValueHighMaintenance: depreciatedHouseResaleValueHighMaintenanceIterative,
             fairholdLandPurchaseResaleValue: fairholdLandPurchaseResaleValueIterative,
+            socialRentMonthlyHouse: socialRentMonthlyHouseIterative,
+            socialRentMonthlyLand: socialRentMonthlyLandIterative,
             houseAge: houseAgeIterative,
             gasBillExistingBuildYearly: gasBillExistingBuildIterative,
             gasBillNewBuildOrRetrofitYearly: gasBillNewBuildOrRetrofitIterative
@@ -243,6 +250,10 @@ export class Lifetime {
                 affordability: marketRentAffordabilityIterative,
                 landPriceOrRent: marketRentLandYearlyIterative,
             }).discountedLandPriceOrRent;
+
+            // Increase monthly social rent by the average inflation adjustment (2.83%)
+            socialRentMonthlyHouseIterative *= 1.0283;
+            socialRentMonthlyLandIterative *= 1.0283;
             
             lifetime.push({
                 incomeYearly: incomeYearlyIterative,
@@ -262,6 +273,8 @@ export class Lifetime {
                 depreciatedHouseResaleValueMediumMaintenance: depreciatedHouseResaleValueMediumMaintenanceIterative,
                 depreciatedHouseResaleValueHighMaintenance: depreciatedHouseResaleValueHighMaintenanceIterative,
                 fairholdLandPurchaseResaleValue: fairholdLandPurchaseResaleValueIterative,
+                socialRentMonthlyHouse: socialRentMonthlyHouseIterative,
+                socialRentMonthlyLand: socialRentMonthlyLandIterative,
                 houseAge: houseAgeIterative,
                 gasBillExistingBuildYearly: gasBillExistingBuildIterative,
                 gasBillNewBuildOrRetrofitYearly: gasBillNewBuildOrRetrofitIterative
