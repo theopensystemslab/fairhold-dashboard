@@ -1,5 +1,7 @@
+import { MaintenanceLevel } from "./constants";
+
 export interface ForecastParameters {
-  maintenancePercentage: number;
+  maintenanceLevel: MaintenanceLevel;
   incomeGrowthPerYear: number;
   rentGrowthPerYear: number;
   constructionPriceGrowthPerYear: number;
@@ -13,7 +15,7 @@ export interface ForecastParameters {
  * all values except years are percentages represented in decimal form
  */
 export const DEFAULT_FORECAST_PARAMETERS: ForecastParameters = {
-  maintenancePercentage: 0.019, 
+  maintenanceLevel: "low", 
   incomeGrowthPerYear: 0.04,
   constructionPriceGrowthPerYear: 0.025, 
   rentGrowthPerYear: 0.03, 
@@ -26,14 +28,14 @@ export const DEFAULT_FORECAST_PARAMETERS: ForecastParameters = {
 
 /**
  * Creates forecast parameters
- * @param maintenancePercentage - Maintenance spend value, user input from form
+ * @param maintenanceLevel - Maintenance spend value, user input from form
  * @returns ForecastParameters with updated maintenance spend (overwrites default)
  */
-export function createForecastParameters(maintenancePercentage: number): ForecastParameters {
+export function createForecastParameters(maintenanceLevel: MaintenanceLevel): ForecastParameters {
   
   // Create new parameters, spreading defaults but overwriting maintenance
   return {
     ...DEFAULT_FORECAST_PARAMETERS,
-    maintenancePercentage,
+    maintenanceLevel,
   };
 }

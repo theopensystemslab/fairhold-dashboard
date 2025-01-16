@@ -134,7 +134,7 @@ export class Household {
         constructionPriceGrowthPerYear: params.forecastParameters.constructionPriceGrowthPerYear,
         rentGrowthPerYear: params.forecastParameters.rentGrowthPerYear,
         yearsForecast: params.forecastParameters.yearsForecast,
-        maintenancePercentage: params.forecastParameters.maintenancePercentage,
+        maintenanceLevel: params.forecastParameters.maintenanceLevel,
         incomeGrowthPerYear: params.forecastParameters.incomeGrowthPerYear,
         affordabilityThresholdIncomePercentage: params.forecastParameters.affordabilityThresholdIncomePercentage,
         incomeYearly: this.incomeYearly,

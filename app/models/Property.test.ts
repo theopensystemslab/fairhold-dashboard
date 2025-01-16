@@ -1,5 +1,4 @@
 import { Property } from "./Property";
-import { MAINTENANCE_LEVELS } from './constants';
 import { createTestProperty } from "./testHelpers"; 
 
 let property = createTestProperty();
@@ -46,7 +45,7 @@ describe('Property', () => {
         'foundations',
         property.newBuildPrice,
         property.age,
-        MAINTENANCE_LEVELS[1]
+        'low'
       );
 
       expect(result.newComponentValue).toBe(39177.6);
@@ -58,7 +57,7 @@ describe('Property', () => {
         'internalLinings',
         property.newBuildPrice,
         property.age,
-        MAINTENANCE_LEVELS[1]
+        'low'
       );
 
       expect(result.depreciationFactor).toBe(.968);
@@ -69,7 +68,7 @@ describe('Property', () => {
         'electricalAppliances',
         property.newBuildPrice,
         property.age,
-        MAINTENANCE_LEVELS[1]
+        'low'
       );
 
       expect(result.maintenanceAddition).toBe(207.0816);
@@ -80,7 +79,7 @@ describe('Property', () => {
         'ventilationServices',
         property.newBuildPrice,
         property.age,
-        MAINTENANCE_LEVELS[1]
+        'low'
       );
 
       expect(result.depreciatedComponentValue).toBeCloseTo(7171.739);
@@ -91,7 +90,7 @@ describe('Property', () => {
         'ventilationServices',
         property.newBuildPrice,
         100, // High age to test possible negative values
-        MAINTENANCE_LEVELS[1]
+        'low'
       );
 
       expect(result.depreciatedComponentValue).toBeGreaterThanOrEqual(0);
