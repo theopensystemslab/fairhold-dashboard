@@ -15,7 +15,7 @@ const ResaleValueWrapper: React.FC<ResaleValueWrapperProps> = ({
     household
 }) => {
     // Since we want one line (user selected) to be solid, need to map the maintenance percentage to the line type
-    const getSelectedMaintenance = (maintenancePercentage: number): 'noMaintenance' | 'lowMaintenance' | 'mediumMaintenance' | 'highMaintenance' => { // LINE CHANGED
+    const getSelectedMaintenance = (maintenancePercentage: number): 'noMaintenance' | 'lowMaintenance' | 'mediumMaintenance' | 'highMaintenance' => { 
       switch (maintenancePercentage) {
         case 0:
           return 'noMaintenance';

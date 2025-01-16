@@ -119,7 +119,7 @@ const ResaleValueLineChart: React.FC<ResaleValueLineChartProps> = ({
               domain={[0, maxY]}
             >
               <Label
-                value="Resale Value (£)"
+                value="Resale Value"
                 angle={-90}
                 position="left"
                 offset={0}
