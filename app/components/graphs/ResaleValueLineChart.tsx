@@ -1,5 +1,5 @@
-import React from 'react';
-import { LineChart, Line, CartesianGrid, XAxis, YAxis, Label, TooltipProps } from 'recharts';
+import React from "react";
+import { LineChart, Line, CartesianGrid, XAxis, YAxis, Label, TooltipProps } from "recharts";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
   ChartConfig,
@@ -10,7 +10,7 @@ import { formatValue } from "@/app/lib/format";
 
 type CustomTooltipProps = TooltipProps<number, string> & {
   payload?: Array<{
-    name: keyof Omit<DataPoint, 'year'>;
+    name: keyof Omit<DataPoint, "year">;
     value: number;
     stroke: string;
   }>;
@@ -45,7 +45,7 @@ export interface DataPoint {
 
 interface ResaleValueLineChartProps {
   data: DataPoint[];
-  selectedMaintenance: 'noMaintenance' | 'lowMaintenance' | 'mediumMaintenance' | 'highMaintenance';
+  selectedMaintenance: "noMaintenance" | "lowMaintenance" | "mediumMaintenance" | "highMaintenance";
   maxY: number;
 }
 
@@ -54,7 +54,7 @@ const ResaleValueLineChart: React.FC<ResaleValueLineChartProps> = ({
   selectedMaintenance,
   maxY
 }) => {
-  const renderLine = (dataKey: keyof Omit<DataPoint, 'year'>) => (
+  const renderLine = (dataKey: keyof Omit<DataPoint, "year">) => (
     <Line
       type="monotone"
       dataKey={dataKey}
@@ -65,31 +65,30 @@ const ResaleValueLineChart: React.FC<ResaleValueLineChartProps> = ({
     />
   );
   const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
-    if (active && payload && payload.length) {
-      return (
-        <div className="bg-white p-3 border rounded shadow">
-          <p className="font-medium mb-2">Year {label}</p>
-          {payload.map((entry) => (
-            <div key={entry.name} className="flex items-center gap-2 mb-1">
-              <svg width="20" height="2" className="flex-shrink-0">
-                <line
-                  x1="0"
-                  y1="1"
-                  x2="20"
-                  y2="1"
-                  stroke={entry.stroke}
-                  strokeWidth="2"
-                  strokeDasharray={entry.name === selectedMaintenance ? "0" : "5 5"}
-                />
-              </svg>
-              <span>{chartConfig[entry.name as keyof typeof chartConfig].label}:</span>
-              <span className="font-medium">{formatValue(entry.value ?? 0)}</span>
-            </div>
-          ))}
-        </div>
-      );
-    }
-    return null;
+    if (!active || !payload || !payload.length) return null;
+
+    return (
+      <div className="bg-white p-3 border rounded shadow">
+        <p className="font-medium mb-2">Year {label}</p>
+        {payload.map((entry) => (
+          <div key={entry.name} className="flex items-center gap-2 mb-1">
+            <svg width="20" height="2" className="flex-shrink-0">
+              <line
+                x1="0"
+                y1="1"
+                x2="20"
+                y2="1"
+                stroke={entry.stroke}
+                strokeWidth="2"
+                strokeDasharray={entry.name === selectedMaintenance ? "0" : "5 5"}
+              />
+            </svg>
+            <span>{chartConfig[entry.name as keyof typeof chartConfig].label}:</span>
+            <span className="font-medium">{formatValue(entry.value ?? 0)}</span>
+          </div>
+        ))}
+      </div>
+    );
   };
 
   return (
@@ -127,10 +126,10 @@ const ResaleValueLineChart: React.FC<ResaleValueLineChartProps> = ({
               />
             </YAxis>
             <ChartTooltip content={<CustomTooltip />} />
-            {renderLine('highMaintenance')}
-            {renderLine('mediumMaintenance')}
-            {renderLine('lowMaintenance')}
-            {renderLine('noMaintenance')}
+            {renderLine("highMaintenance")}
+            {renderLine("mediumMaintenance")}
+            {renderLine("lowMaintenance")}
+            {renderLine("noMaintenance")}
           </LineChart>
         </ChartContainer>
       </CardContent>

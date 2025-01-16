@@ -56,7 +56,7 @@ const ResaleValueWrapper: React.FC<ResaleValueWrapperProps> = ({
 
     // We want a constant y value across the graphs so we can compare resale values between them
     const finalYear = household.lifetime.lifetimeData[household.lifetime.lifetimeData.length - 1]
-    const maxY = Math.ceil((1.1 * (finalYear.fairholdLandPurchaseResaleValue + finalYear.depreciatedHouseResaleValueHighMaintenance)) / 100000) * 100000 // Round to nearest hundred thousand to make things tidy
+    const maxY = Math.ceil((1.1 * (finalYear.fairholdLandPurchaseResaleValue + finalYear.depreciatedHouseResaleValueHighMaintenance)) / 100000) * 100000 // Scale y axis by 1.1 (for a bit of visual headroom) and round to nearest hundred thousand to make things tidy
 
     if (!household) {
       return <div>No household data available</div>;

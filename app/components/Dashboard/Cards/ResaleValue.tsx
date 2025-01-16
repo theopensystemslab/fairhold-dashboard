@@ -5,12 +5,15 @@ import { Drawer } from "../../ui/Drawer";
 import { Household } from "@/app/models/Household";
 import TenureSelector from "../../ui/TenureSelector";
 
+const TENURES = ['landPurchase', 'landRent'] as const;
+type Tenure = (typeof TENURES)[number];
+
 interface DashboardProps {
   data: Household;
 }
 
 export const ResaleValue: React.FC<DashboardProps> = ({ data }) => {
-  const [selectedTenure, setSelectedTenure] = useState<'landPurchase' | 'landRent'>('landPurchase');
+  const [selectedTenure, setSelectedTenure] = useState<Tenure>('landPurchase');
 
   return (
     <GraphCard
@@ -18,19 +21,16 @@ export const ResaleValue: React.FC<DashboardProps> = ({ data }) => {
       subtitle="Estimated sale price at any time"
     >
       <div className="flex flex-col h-full w-3/4 justify-between">
-        <div className="flex gap-2 mb-4">
-          <TenureSelector 
-            isSelected={selectedTenure === 'landPurchase'}
-            onClick={() => setSelectedTenure('landPurchase')}
-          >
-            Fairhold Land Purchase
-          </TenureSelector>
-          <TenureSelector 
-            isSelected={selectedTenure === 'landRent'}
-            onClick={() => setSelectedTenure('landRent')}
-          >
-            Fairhold Land Rent
-          </TenureSelector>
+      <div className="flex gap-2 mb-4">
+          {TENURES.map(tenure => ( 
+            <TenureSelector 
+              key={tenure} 
+              isSelected={selectedTenure === tenure} 
+              onClick={() => setSelectedTenure(tenure)} 
+            > 
+              {`Fairhold ${tenure === 'landPurchase' ? 'Land Purchase' : 'Land Rent'}`} 
+            </TenureSelector> 
+          ))} 
         </div>
         
         <ResaleValueWrapper 
