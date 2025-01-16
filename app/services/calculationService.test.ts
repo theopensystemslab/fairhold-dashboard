@@ -11,7 +11,7 @@ import { rentService } from "./rentService";
 import { parse } from "postcode";
 import { ValidPostcode } from "../schemas/calculationSchema";
 import { z } from "zod";
-import { maintenancePercentageSchema } from "../schemas/calculationSchema";
+import { maintenanceLevelSchema } from "../schemas/calculationSchema";
 
 jest.mock("./itlService");
 jest.mock("./gdhiService");
@@ -50,7 +50,7 @@ describe("getHouseholdData", () => {
     houseAge: number;
     houseBedrooms: number;
     houseSize: number;
-    maintenancePercentage: z.infer<typeof maintenancePercentageSchema>;
+    maintenanceLevel: z.infer<typeof maintenanceLevelSchema>;
   }
 
   const mockInput: MockInputType = {
@@ -59,7 +59,7 @@ describe("getHouseholdData", () => {
     houseAge: 20,
     houseBedrooms: 3,
     houseSize: 100,
-    maintenancePercentage: 0.019
+    maintenanceLevel: "medium"
   };
 
   beforeEach(() => {
@@ -117,7 +117,7 @@ describe("getHouseholdData", () => {
       houseAge: mockInput.houseAge,
       houseBedrooms: mockInput.houseBedrooms,
       houseSize: mockInput.houseSize,
-      maintenancePercentage: mockInput.maintenancePercentage,
+      maintenanceLevel: mockInput.maintenanceLevel,
       averagePrice: parseFloat(mockPricesPaidSummary.averagePrice.toFixed(2)),
       itl3: mockITL3,
       gdhi: mockGDHI,

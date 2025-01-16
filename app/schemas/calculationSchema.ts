@@ -1,6 +1,11 @@
 import { z } from "zod";
-import { parse as parsePostcode, isValid as isValidPostcode } from "postcode";
-import { HOUSE_TYPES, MaintenancePercentage } from "../models/Property";
+import {
+  parse as parsePostcode,
+  isValid as isValidPostcode,
+} from "postcode";
+import { 
+  HOUSE_TYPES 
+} from "../models/Property";
 import { MAINTENANCE_LEVELS } from "../models/constants";
 
 export type ValidPostcode = Extract<
@@ -10,15 +15,7 @@ export type ValidPostcode = Extract<
 
 const HouseTypeEnum = z.enum(HOUSE_TYPES);
 
-export const maintenancePercentageSchema = z
-  .number()
-  .refine(
-    (value): value is MaintenancePercentage =>
-      (MAINTENANCE_LEVELS as readonly number[]).includes(value),
-    {
-      message: `Maintenance percentage must be one of: ${MAINTENANCE_LEVELS.join(", ")}`,
-    }
-  );
+export const maintenanceLevelSchema = z.enum(Object.keys(MAINTENANCE_LEVELS) as [keyof typeof MAINTENANCE_LEVELS, ...Array<keyof typeof MAINTENANCE_LEVELS>]);
 
 export const calculationSchema = z.object({
   housePostcode: z
@@ -40,7 +37,7 @@ export const calculationSchema = z.object({
       message: `houseType is required and must be one of ${HOUSE_TYPES}`,
     }
   ),
-  maintenancePercentage: maintenancePercentageSchema,
+  maintenanceLevel: maintenanceLevelSchema,
 });
 
 export type Calculation = z.infer<typeof calculationSchema>;
