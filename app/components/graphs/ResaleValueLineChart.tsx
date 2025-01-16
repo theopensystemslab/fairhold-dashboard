@@ -7,6 +7,7 @@ import {
   ChartTooltip,
 } from "@/components/ui/chart";
 import { formatValue } from "@/app/lib/format";
+import { MaintenanceLevel } from "@/app/models/constants";
 
 type CustomTooltipProps = TooltipProps<number, string> & {
   payload?: Array<{
@@ -17,19 +18,19 @@ type CustomTooltipProps = TooltipProps<number, string> & {
 };
 
 const chartConfig = {
-  noMaintenance: {
+  none: {
     label: "No maintenance",
     color: "rgb(var(--fairhold-land-color-rgb))", 
   },
-  lowMaintenance: {
+  low: {
     label: "Low maintenance",
     color: "rgb(var(--fairhold-land-color-rgb))",
   },
-  mediumMaintenance: {
+  medium: {
     label: "Medium maintenance",
     color: "rgb(var(--fairhold-land-color-rgb))",
   },
-  highMaintenance: {
+  high: {
     label: "High maintenance",
     color: "rgb(var(--fairhold-land-color-rgb))",
   },
@@ -37,15 +38,15 @@ const chartConfig = {
 
 export interface DataPoint {
   year: number;
-  noMaintenance: number;
-  lowMaintenance: number;
-  mediumMaintenance: number;
-  highMaintenance: number;
+  none: number;
+  low: number;
+  medium: number;
+  high: number;
 }
 
 interface ResaleValueLineChartProps {
   data: DataPoint[];
-  selectedMaintenance: "noMaintenance" | "lowMaintenance" | "mediumMaintenance" | "highMaintenance";
+  selectedMaintenance: MaintenanceLevel;
   maxY: number;
 }
 
@@ -126,10 +127,10 @@ const ResaleValueLineChart: React.FC<ResaleValueLineChartProps> = ({
               />
             </YAxis>
             <ChartTooltip content={<CustomTooltip />} />
-            {renderLine("highMaintenance")}
-            {renderLine("mediumMaintenance")}
-            {renderLine("lowMaintenance")}
-            {renderLine("noMaintenance")}
+            {renderLine("high")}
+            {renderLine("medium")}
+            {renderLine("low")}
+            {renderLine("none")}
           </LineChart>
         </ChartContainer>
       </CardContent>

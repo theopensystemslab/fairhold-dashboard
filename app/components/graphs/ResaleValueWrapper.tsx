@@ -14,21 +14,6 @@ const ResaleValueWrapper: React.FC<ResaleValueWrapperProps> = ({
     tenure,
     household
 }) => {
-    // Since we want one line (user selected) to be solid, need to map the maintenance percentage to the line type
-    const getSelectedMaintenance = (maintenancePercentage: number): 'noMaintenance' | 'lowMaintenance' | 'mediumMaintenance' | 'highMaintenance' => { 
-      switch (maintenancePercentage) {
-        case 0:
-          return 'noMaintenance';
-        case 0.015:
-          return 'lowMaintenance';
-        case 0.019:
-          return 'mediumMaintenance';
-        case 0.025:
-          return 'highMaintenance';
-        default:
-          return 'lowMaintenance';
-      }
-    };
 
     /** Needs either `landRent` or `landPurchase` to denote Fairhold tenure type; based on this arg, it will determine if land resale value is 0 or FHLP over time */
     const formatData = (household: Household) => {
@@ -41,10 +26,10 @@ const ResaleValueWrapper: React.FC<ResaleValueWrapperProps> = ({
       
         chartData.push({
           year: i + 1,
-          noMaintenance: landValue + lifetime[i].depreciatedHouseResaleValueNoMaintenance,
-          lowMaintenance: landValue + lifetime[i].depreciatedHouseResaleValueLowMaintenance,
-          mediumMaintenance: landValue + lifetime[i].depreciatedHouseResaleValueMediumMaintenance,
-          highMaintenance: landValue + lifetime[i].depreciatedHouseResaleValueHighMaintenance
+          none: landValue + lifetime[i].depreciatedHouseResaleValueNoMaintenance,
+          low: landValue + lifetime[i].depreciatedHouseResaleValueLowMaintenance,
+          medium: landValue + lifetime[i].depreciatedHouseResaleValueMediumMaintenance,
+          high: landValue + lifetime[i].depreciatedHouseResaleValueHighMaintenance
         })
         
       }
@@ -52,7 +37,6 @@ const ResaleValueWrapper: React.FC<ResaleValueWrapperProps> = ({
     }
 
     const formattedData = formatData(household);
-    const selectedMaintenance = getSelectedMaintenance(household.property.maintenancePercentage)
 
     // We want a constant y value across the graphs so we can compare resale values between them
     const finalYear = household.lifetime.lifetimeData[household.lifetime.lifetimeData.length - 1]
@@ -67,7 +51,7 @@ const ResaleValueWrapper: React.FC<ResaleValueWrapperProps> = ({
         <div>
           <ResaleValueLineChart 
             data={formattedData} 
-            selectedMaintenance={selectedMaintenance}
+            selectedMaintenance={household.property.maintenanceLevel}
             maxY={maxY}
             />
         </div>
