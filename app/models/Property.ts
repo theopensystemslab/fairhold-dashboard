@@ -22,14 +22,14 @@ export const HOUSE_TYPES = ["D", "S", "T", "F"] as const;
 
 export type HouseType = (typeof HOUSE_TYPES)[number];
 
-export type MaintenancePercentage = (typeof MAINTENANCE_LEVELS)[number]
+export type MaintenancePercentage = (typeof MAINTENANCE_LEVELS)[number];
 
 export type ComponentCalculation = {
   newComponentValue: number;
   depreciationFactor: number;
   maintenanceAddition: number;
   depreciatedComponentValue: number;
-}
+};
 
 export class Property {
   postcode: string;
@@ -68,7 +68,7 @@ export class Property {
     this.postcode = params.postcode;
     this.houseType = params.houseType;
     this.numberOfBedrooms = params.numberOfBedrooms;
-    this.age = params.age // TODO: update frontend so that newbuild = 0
+    this.age = params.age; // TODO: update frontend so that newbuild = 0
     this.size = params.size;
     this.maintenancePercentage = params.maintenancePercentage;
     this.newBuildPricePerMetre = params.newBuildPricePerMetre;
@@ -92,21 +92,25 @@ export class Property {
     if (this.age === 0) return this.newBuildPrice;
     let depreciatedBuildPrice = 0;
 
-  // Calculate for each component using the public method
-  for (const key of Object.keys(HOUSE_BREAKDOWN_PERCENTAGES) as (keyof houseBreakdownType)[]) {
-    const result = this.calculateComponentValue(
-      key, 
-      this.newBuildPrice, 
-      this.age, 
-      this.maintenancePercentage
+    // Calculate for each component using the public method
+    for (const key of Object.keys(
+      HOUSE_BREAKDOWN_PERCENTAGES
+    ) as (keyof houseBreakdownType)[]) {
+      const result = this.calculateComponentValue(
+        key,
+        this.newBuildPrice,
+        this.age,
+        this.maintenancePercentage
+      );
+
+      depreciatedBuildPrice += result.depreciatedComponentValue;
+    }
+    depreciatedBuildPrice = parseFloat(
+      depreciatedBuildPrice.toFixed(PRECISION)
     );
 
-    depreciatedBuildPrice += result.depreciatedComponentValue;
+    return depreciatedBuildPrice;
   }
-    depreciatedBuildPrice = parseFloat(depreciatedBuildPrice.toFixed(PRECISION))
-
-  return depreciatedBuildPrice;
-}
 
   public calculateComponentValue(
     componentKey: keyof houseBreakdownType,
@@ -115,30 +119,35 @@ export class Property {
     maintenanceLevel: number
   ): ComponentCalculation {
     const component = HOUSE_BREAKDOWN_PERCENTAGES[componentKey];
-    
+
     // Calculate new component value
     const newComponentValue = newBuildPrice * component.percentageOfHouse;
-    
-    // Calculate depreciation
-    const depreciationFactor = 1 - (component.depreciationPercentageYearly * age);
-    
-    // Calculate maintenance (0 for foundations and structure)
-    const maintenanceAddition = 
-      (componentKey === 'foundations' || componentKey === 'structureEnvelope') 
-        ? 0 
-        : maintenanceLevel * newBuildPrice * age * component.percentOfMaintenanceYearly;
-    
-    // Calculate final value
-    let depreciatedComponentValue = 
-      (newComponentValue * depreciationFactor) + maintenanceAddition;
 
-    depreciatedComponentValue < 0 ? depreciatedComponentValue = 0 : depreciatedComponentValue
+    // Calculate depreciation
+    const depreciationFactor = 1 - component.depreciationPercentageYearly * age;
+
+    // Calculate maintenance (0 for foundations and structure)
+    const maintenanceAddition =
+      componentKey === "foundations" || componentKey === "structureEnvelope"
+        ? 0
+        : maintenanceLevel *
+          newBuildPrice *
+          age *
+          component.percentOfMaintenanceYearly;
+
+    // Calculate final value
+    let depreciatedComponentValue =
+      newComponentValue * depreciationFactor + maintenanceAddition;
+
+    depreciatedComponentValue < 0
+      ? (depreciatedComponentValue = 0)
+      : depreciatedComponentValue;
 
     return {
       newComponentValue,
       depreciationFactor,
       maintenanceAddition,
-      depreciatedComponentValue
+      depreciatedComponentValue,
     };
   }
 }

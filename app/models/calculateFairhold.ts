@@ -1,4 +1,4 @@
-import { ValidPostcode } from './../schemas/calculationSchema';
+import { ValidPostcode } from "../schemas/calculationSchema";
 import { createForecastParameters } from "./ForecastParameters";
 import { Household } from "./Household";
 import { HouseType, MaintenancePercentage, Property } from "./Property";
@@ -12,7 +12,7 @@ export interface ResponseData {
   houseBedrooms: number;
   buildPrice: number;
   houseAge: number;
-  houseSize: number;
+  houseSize: number | undefined;
   maintenancePercentage: MaintenancePercentage;
   averagePrice: number;
   itl3: string;
@@ -35,13 +35,27 @@ function calculateFairhold(responseData: ResponseData) {
     throw new Error("maintenancePercentage data is missing or empty");
   }
 
+  function assignHouseSize(numberOfBedrooms: number) {
+    const sizeMapping: { [key: number]: number } = {
+      1: 55,
+      2: 70,
+      3: 95,
+      4: 110,
+      5: 125,
+      6: 135,
+    };
+
+    const size = numberOfBedrooms > 6 ? 135 : sizeMapping[numberOfBedrooms];
+    return size;
+  }
+
   // define the property object
   const property = new Property({
     postcode: responseData.postcode.postcode,
     houseType: responseData.houseType,
     numberOfBedrooms: responseData.houseBedrooms,
     age: responseData.houseAge,
-    size: responseData.houseSize,
+    size: responseData.houseSize ?? assignHouseSize(responseData.houseBedrooms),
     maintenancePercentage: responseData.maintenancePercentage,
     newBuildPricePerMetre: responseData.buildPrice,
     averageMarketPrice: responseData.averagePrice,
@@ -57,9 +71,11 @@ function calculateFairhold(responseData: ResponseData) {
     housePriceIndex: responseData.hpi,
     kwhCostPence: responseData.kwhCostPence,
     property: property,
-    forecastParameters: createForecastParameters(responseData.maintenancePercentage),
+    forecastParameters: createForecastParameters(
+      responseData.maintenancePercentage
+    ),
   });
-  
+
   return household;
 }
 
