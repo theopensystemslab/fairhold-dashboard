@@ -12,7 +12,7 @@ import { Lifetime } from "./Lifetime";
 import { Property } from "./Property";
 import { MarketPurchase } from "./tenure/MarketPurchase";
 
-const socialRentAdjustments: socialRentAdjustmentTypes = [
+export const socialRentAdjustments: socialRentAdjustmentTypes = [
   {
     inflation: 3.3,
     total: 4.3,
@@ -164,10 +164,10 @@ const socialRentAdjustments: socialRentAdjustmentTypes = [
  * kwhCostPence: 8,
  * property: createTestProperty(),
  * forecastParameters: DEFAULT_FORECAST_PARAMETERS,`
- * @returns 
+ * @returns
  */
-export const createTestHousehold = (overrides = {}) => { 
-  return new Household ({
+export const createTestHousehold = (overrides = {}) => {
+  return new Household({
     averageRentYearly: 1200,
     socialRentAverageEarning: 354.1,
     socialRentAdjustments: socialRentAdjustments,
@@ -176,9 +176,9 @@ export const createTestHousehold = (overrides = {}) => {
     kwhCostPence: 7,
     property: createTestProperty(),
     forecastParameters: DEFAULT_FORECAST_PARAMETERS,
-    ...overrides
-  })
-}
+    ...overrides,
+  });
+};
 
 /**
  * Creates a simplified instance of the `Property` class with straightforward property values for testing. Assumes newbuild!
@@ -195,97 +195,97 @@ export const createTestHousehold = (overrides = {}) => {
  * @returns
  */
 export const createTestProperty = (overrides = {}) => {
-    return new Property ({ 
-      postcode: "SE15 1TX",
-      houseType: "T",
-      numberOfBedrooms: 2,
-      age: 1,
-      size: 88,
-      maintenancePercentage: .015,
-      newBuildPricePerMetre: 2120,
-      averageMarketPrice: 500000,
-      itl3: "TLI44",
-      ...overrides
-    })
-}
+  return new Property({
+    postcode: "SE15 1TX",
+    houseType: "T",
+    numberOfBedrooms: 2,
+    age: 1,
+    size: 88,
+    maintenancePercentage: 0.015,
+    newBuildPricePerMetre: 2120,
+    averageMarketPrice: 500000,
+    itl3: "TLI44",
+    ...overrides,
+  });
+};
 
 /**
- * Creates a simplified instance of the `Mortgage` class, representing the land portion of `MarketPurchase`. Uses straightforward property values for testing. 
+ * Creates a simplified instance of the `Mortgage` class, representing the land portion of `MarketPurchase`. Uses straightforward property values for testing.
  * @param overrides Include custom values to overwrite those provided. Default values are:
  * `propertyValue: 300000,
- * interestRate: 0.035, 
+ * interestRate: 0.035,
  * mortgageTerm: 25,
- * initialDeposit: 0.1,` 
- * @returns 
+ * initialDeposit: 0.1,`
+ * @returns
  */
-// export const createTestMarketLandMortgage = (overrides = {}) => { 
+// export const createTestMarketLandMortgage = (overrides = {}) => {
 //     return new Mortgage({
 //       propertyValue: 300000,
-//       interestRate: 0.035, 
+//       interestRate: 0.035,
 //       mortgageTerm: 25,
-//       initialDeposit: 0.1, 
+//       initialDeposit: 0.1,
 //       ...overrides
 //     });
 //   };
 
 /**
- * Creates a simplified instance of the `Mortgage` class, representing the replacement value of a newbuild house in `MarketPurchase`. Uses straightforward property values for testing. 
+ * Creates a simplified instance of the `Mortgage` class, representing the replacement value of a newbuild house in `MarketPurchase`. Uses straightforward property values for testing.
  * @param overrides Include custom values to overwrite those provided. Default values are:
  * `propertyValue: 200000,
- * interestRate: 0.035, 
+ * interestRate: 0.035,
  * mortgageTerm: 25,
  * initialDeposit: 0.1,`
- * @returns 
+ * @returns
  */
 // export const createTestNewbuildHouseMortgage = (overrides = {}) => { TODO: write tests; commenting out the function for now because of test coverage issue
 //   return new Mortgage({
 //     propertyValue: 200000,
-//     interestRate: 0.035, 
+//     interestRate: 0.035,
 //     mortgageTerm: 25,
-//     initialDeposit: 0.1, 
+//     initialDeposit: 0.1,
 //     ...overrides
 //   });
 // };
 
 /**
- * Creates a simplified instance of the `Mortgage` class, representing the depreciated house portion of the Fairhold tenures. Uses straightforward property values for testing. 
+ * Creates a simplified instance of the `Mortgage` class, representing the depreciated house portion of the Fairhold tenures. Uses straightforward property values for testing.
  * @param overrides Include custom values to overwrite those provided. Default values are:
  * `propertyValue: 150000,
- * interestRate: 0.035, 
+ * interestRate: 0.035,
  * mortgageTerm: 25,
  * initialDeposit: 0.1, `
- * @returns 
+ * @returns
  */
 // export const createTestDepreciatedHouseMortgage = (overrides = {}) => { TODO: write tests; commenting out the function for now because of test coverage issue
 //   return new Mortgage({
 //     propertyValue: 150000,
-//     interestRate: 0.035, 
+//     interestRate: 0.035,
 //     mortgageTerm: 25,
-//     initialDeposit: 0.1, 
+//     initialDeposit: 0.1,
 //     ...overrides
 //   });
 // };
 
 /**
- * Creates a simplified instance of the `Mortgage` class, representing the discounted sale of a `FairholdLandPurchase` lease. Uses straightforward property values for testing. 
+ * Creates a simplified instance of the `Mortgage` class, representing the discounted sale of a `FairholdLandPurchase` lease. Uses straightforward property values for testing.
  * @param overrides Include custom values to overwrite those provided. Default values are:
  * `propertyValue: 45000,
- * interestRate: 0.035, 
+ * interestRate: 0.035,
  * mortgageTerm: 25,
  * initialDeposit: 0.1,`
- * @returns 
+ * @returns
  */
 // export const createTestFairholdLandMortgage = (overrides = {}) => { TODO: write tests; commenting out the function for now because of test coverage issue
 //   return new Mortgage({
 //     propertyValue: 45000,
-//     interestRate: 0.035, 
+//     interestRate: 0.035,
 //     mortgageTerm: 25,
-//     initialDeposit: 0.1, 
+//     initialDeposit: 0.1,
 //     ...overrides
 //   });
 // };
 
-/** 
+/**
  * Note that this creates an instance of `Fairhold`, not `FairholdLandPurchase`. The former is needed as part of the latter.
  * @param overrides Include custom values to overwrite those provided. Default values are:
  * `affordability: .6,
@@ -294,13 +294,13 @@ export const createTestProperty = (overrides = {}) => {
  */
 export const createTestFairholdForLandPurchase = (overrides = {}) => {
   return new Fairhold({
-    affordability: .6,
+    affordability: 0.6,
     landPriceOrRent: 300000,
-    ...overrides
-  })
-}
+    ...overrides,
+  });
+};
 
-/** 
+/**
  * Note that this creates an instance of `Fairhold`, not `FairholdLandRent`. The former is needed as part of the latter.
  * @param overrides Include custom values to overwrite those provided. Default values are:
  * `affordability: .6,
@@ -309,14 +309,14 @@ export const createTestFairholdForLandPurchase = (overrides = {}) => {
  */
 export const createTestFairholdForLandRent = (overrides = {}) => {
   return new Fairhold({
-    affordability: .6,
+    affordability: 0.6,
     landPriceOrRent: 900,
-    ...overrides
-  })
-}
+    ...overrides,
+  });
+};
 
 /**
- * Creates a simplified instance of the `MarketPurchase` class. Uses straightforward property values for testing. 
+ * Creates a simplified instance of the `MarketPurchase` class. Uses straightforward property values for testing.
  * @param overrides Include custom values to overwrite those provided. Default values are:
  * `averagePrice: 500000,
  * newBuildPrice: 200000,
@@ -324,7 +324,7 @@ export const createTestFairholdForLandRent = (overrides = {}) => {
  * landPrice: 300000,
  * incomeYearly: 30000,
  * forecastParameters: DEFAULT_FORECAST_PARAMETERS,`
- * @returns 
+ * @returns
  */
 export const createTestMarketPurchase = (overrides = {}) => {
   return new MarketPurchase({
@@ -334,12 +334,12 @@ export const createTestMarketPurchase = (overrides = {}) => {
     landPrice: 300000,
     incomeYearly: 30000,
     forecastParameters: DEFAULT_FORECAST_PARAMETERS,
-    ...overrides
-  })
-}
+    ...overrides,
+  });
+};
 
 /**
- * Creates a simplified instance of the `MarketRent` class. Uses straightforward property values for testing. 
+ * Creates a simplified instance of the `MarketRent` class. Uses straightforward property values for testing.
  * @param overrides Include custom values to overwrite those provided. Default values are:
  * `averageRentYearly: 18000,
  * averagePrice: 500000,
@@ -348,7 +348,7 @@ export const createTestMarketPurchase = (overrides = {}) => {
  * landPrice: 300000,
  * incomeYearly: 30000,
  * forecastParameters: DEFAULT_FORECAST_PARAMETERS,`
- * @returns 
+ * @returns
  */
 export const createTestMarketRent = (overrides = {}) => {
   return new MarketRent({
@@ -356,14 +356,14 @@ export const createTestMarketRent = (overrides = {}) => {
     newBuildPrice: 200000,
     depreciatedBuildPrice: 150000,
     incomeYearly: 30000,
-    landToTotalRatio: .6,
+    landToTotalRatio: 0.6,
     forecastParameters: DEFAULT_FORECAST_PARAMETERS,
-    ...overrides
-  })
-}
+    ...overrides,
+  });
+};
 
 /**
- * Creates a simplified instance of the `FairholdLandPurchase` class, which includes `Fairhold` and `MarketPurchase` instances. Uses straightforward property values for testing. 
+ * Creates a simplified instance of the `FairholdLandPurchase` class, which includes `Fairhold` and `MarketPurchase` instances. Uses straightforward property values for testing.
  * @param overrides Include custom values to overwrite those provided. Default values are:
  * `newBuildPrice: 200000,
  * depreciatedBuildPrice: 150000,
@@ -371,22 +371,22 @@ export const createTestMarketRent = (overrides = {}) => {
  * fairhold: createTestFairholdForLandPurchase(),
  * forecastParameters: DEFAULT_FORECAST_PARAMETERS,
  * marketPurchase: createTestMarketPurchase(),`
- * @returns 
+ * @returns
  */
 export const createTestFairholdLandPurchase = (overrides = {}) => {
   return new FairholdLandPurchase({
     newBuildPrice: 200000,
     depreciatedBuildPrice: 150000,
-    affordability: .6,
+    affordability: 0.6,
     fairhold: createTestFairholdForLandPurchase(),
     forecastParameters: DEFAULT_FORECAST_PARAMETERS,
     marketPurchase: createTestMarketPurchase(),
-    ...overrides
-  })
-}
+    ...overrides,
+  });
+};
 
 /**
- * Creates a simplified instance of the `FairholdLandRent` class, which includes `Fairhold` and `MarketPurchase` instances. Uses straightforward property values for testing. 
+ * Creates a simplified instance of the `FairholdLandRent` class, which includes `Fairhold` and `MarketPurchase` instances. Uses straightforward property values for testing.
  * @param overrides Include custom values to overwrite those provided. Default values are:
  * `averageRentYearly: 18000,
  * averagePrice: 500000,
@@ -397,7 +397,7 @@ export const createTestFairholdLandPurchase = (overrides = {}) => {
  * fairhold: createTestFairholdForLandRent(),
  * forecastParameters: DEFAULT_FORECAST_PARAMETERS,
  * marketPurchase: createTestMarketPurchase(),`
- * @returns 
+ * @returns
  */
 export const createTestFairholdLandRent = (overrides = {}) => {
   return new FairholdLandRent({
@@ -406,22 +406,22 @@ export const createTestFairholdLandRent = (overrides = {}) => {
     depreciatedBuildPrice: 150000,
     incomeYearly: 30000,
     fairhold: createTestFairholdForLandRent(),
-    landToTotalRatio: .6,
+    landToTotalRatio: 0.6,
     forecastParameters: DEFAULT_FORECAST_PARAMETERS,
     marketPurchase: createTestMarketPurchase(),
-    ...overrides
-  })
-}
+    ...overrides,
+  });
+};
 
 /**
- * Creates a simplified instance of the `SocialRent` class. Uses straightforward property values for testing. 
+ * Creates a simplified instance of the `SocialRent` class. Uses straightforward property values for testing.
  * @param overrides Include custom values to overwrite those provided. Default values are:
  * `numberOfBedrooms: 2,
  * socialRentAverageEarning: 354.1,
  * socialRentAdjustments: socialRentAdjustments,
  * housePriceIndex: 100000,
  * landToTotalRatio: .6,`
- * @returns 
+ * @returns
  */
 export const createTestSocialRent = (overrides = {}) => {
   return new SocialRent({
@@ -429,15 +429,15 @@ export const createTestSocialRent = (overrides = {}) => {
     socialRentAverageEarning: 354.1,
     socialRentAdjustments: socialRentAdjustments,
     housePriceIndex: 100000,
-    landToTotalRatio: .6,
-    ...overrides
-  })
-}
+    landToTotalRatio: 0.6,
+    ...overrides,
+  });
+};
 
 /**
- * Creates a simplified instance of the `Lifetime` class, which includes instances of all tenure classes and `Property` too. Uses straightforward property values for testing. 
- * @param overrides Include custom values to overwrite those provided. Default values are from other class helper functions and `DEFAULT_FORECAST_PARAMETERS`. 
- * @returns 
+ * Creates a simplified instance of the `Lifetime` class, which includes instances of all tenure classes and `Property` too. Uses straightforward property values for testing.
+ * @param overrides Include custom values to overwrite those provided. Default values are from other class helper functions and `DEFAULT_FORECAST_PARAMETERS`.
+ * @returns
  */
 export const createTestLifetime = (overrides = {}) => {
   return new Lifetime({
@@ -447,14 +447,17 @@ export const createTestLifetime = (overrides = {}) => {
     fairholdLandPurchase: createTestFairholdLandPurchase(),
     fairholdLandRent: createTestFairholdLandRent(),
     property: createTestProperty(),
-    propertyPriceGrowthPerYear: DEFAULT_FORECAST_PARAMETERS.propertyPriceGrowthPerYear,
-    constructionPriceGrowthPerYear: DEFAULT_FORECAST_PARAMETERS.constructionPriceGrowthPerYear,
+    propertyPriceGrowthPerYear:
+      DEFAULT_FORECAST_PARAMETERS.propertyPriceGrowthPerYear,
+    constructionPriceGrowthPerYear:
+      DEFAULT_FORECAST_PARAMETERS.constructionPriceGrowthPerYear,
     rentGrowthPerYear: DEFAULT_FORECAST_PARAMETERS.rentGrowthPerYear,
     yearsForecast: DEFAULT_FORECAST_PARAMETERS.yearsForecast,
     maintenancePercentage: DEFAULT_FORECAST_PARAMETERS.maintenancePercentage,
     incomeGrowthPerYear: DEFAULT_FORECAST_PARAMETERS.incomeGrowthPerYear,
-    affordabilityThresholdIncomePercentage: DEFAULT_FORECAST_PARAMETERS.affordabilityThresholdIncomePercentage,
+    affordabilityThresholdIncomePercentage:
+      DEFAULT_FORECAST_PARAMETERS.affordabilityThresholdIncomePercentage,
     incomeYearly: 30000,
-    ...overrides
-  })
-}
+    ...overrides,
+  });
+};
