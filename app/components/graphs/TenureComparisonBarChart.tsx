@@ -24,12 +24,10 @@ type DataInput = {
   [key: string]: string | number;
 };
 
-// Define the props type for StackedBarChart
 interface StackedBarChartProps {
   data: DataInput[];
 }
 
-// Implementation of the Chart.js Stacked Bar Chart
 const TenureComparisonBarChart: React.FC<StackedBarChartProps> = ({ data }) => {
   const chartData = [
     {
