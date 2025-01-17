@@ -1,23 +1,25 @@
 import { z } from "zod";
-import {
-  parse as parsePostcode,
-  isValid as isValidPostcode,
-} from "postcode";
+import { parse as parsePostcode, isValid as isValidPostcode } from "postcode";
 import { HOUSE_TYPES, MaintenancePercentage } from "../models/Property";
 import { MAINTENANCE_LEVELS } from "../models/constants";
 
 // Type not exported by postcode lib directly
-export type ValidPostcode = Extract<ReturnType<typeof parsePostcode>, { valid: true }>;
+export type ValidPostcode = Extract<
+  ReturnType<typeof parsePostcode>,
+  { valid: true }
+>;
 
 const HouseTypeEnum = z.enum(HOUSE_TYPES);
 
-export const maintenancePercentageSchema = z.number().refine(
-  (value): value is MaintenancePercentage =>
-    (MAINTENANCE_LEVELS as readonly number[]).includes(value),
-  {
-    message: `Maintenance percentage must be one of: ${MAINTENANCE_LEVELS.join(', ')}`
-  }
-);
+export const maintenancePercentageSchema = z
+  .number()
+  .refine(
+    (value): value is MaintenancePercentage =>
+      (MAINTENANCE_LEVELS as readonly number[]).includes(value),
+    {
+      message: `Maintenance percentage must be one of: ${MAINTENANCE_LEVELS.join(", ")}`,
+    }
+  );
 
 /**
  * Describes the form the user will interact with in the frontend
@@ -30,7 +32,9 @@ export const calculationSchema = z.object({
     .transform(parsePostcode)
     .refine((postcode): postcode is ValidPostcode => postcode.valid),
   houseSize: z.coerce.number().positive("houseSize must be a positive integer"),
-  houseAge: z.coerce.number().positive("houseAge must be a positive integer"),
+  houseAge: z.coerce
+    .number()
+    .nonnegative("houseAge must be a positive integer or 0"),
   houseBedrooms: z.coerce
     .number()
     .positive("houseBedrooms must be a positive integer"),
