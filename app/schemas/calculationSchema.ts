@@ -3,7 +3,6 @@ import { parse as parsePostcode, isValid as isValidPostcode } from "postcode";
 import { HOUSE_TYPES, MaintenancePercentage } from "../models/Property";
 import { MAINTENANCE_LEVELS } from "../models/constants";
 
-// Type not exported by postcode lib directly
 export type ValidPostcode = Extract<
   ReturnType<typeof parsePostcode>,
   { valid: true }
@@ -21,9 +20,6 @@ export const maintenancePercentageSchema = z
     }
   );
 
-/**
- * Describes the form the user will interact with in the frontend
- */
 export const calculationSchema = z.object({
   housePostcode: z
     .string()

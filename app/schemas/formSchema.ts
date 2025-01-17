@@ -5,9 +5,6 @@ import { maintenancePercentageSchema } from "../schemas/calculationSchema";
 
 const HouseTypeEnum = z.enum(HOUSE_TYPES);
 
-/**
- * Describes the form the user will interact with in the frontend
- */
 export const formSchema = z.object({
   housePostcode: z
     .string()
