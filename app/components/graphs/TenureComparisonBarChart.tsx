@@ -4,7 +4,6 @@ import React from "react";
 import { Bar, BarChart, CartesianGrid, XAxis, LabelList } from "recharts";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
-  ChartConfig,
   ChartContainer,
   ChartLegend,
   ChartLegendContent,
@@ -12,17 +11,6 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { formatValue } from "@/app/lib/format";
-
-const chartConfig = {
-  freehold: {
-    label: "Freehold",
-    color: "rgb(var(--freehold-land-color-rgb))",
-  },
-  privateRent: {
-    label: "Private Rent",
-    color: "rgb(var(--private-rent-color-rgb))",
-  },
-} satisfies ChartConfig;
 
 // Define type for DataInput
 type DataInput = {
@@ -87,7 +75,7 @@ const TenureComparisonBarChart: React.FC<StackedBarChartProps> = ({ data }) => {
     <Card>
       <CardHeader></CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig}>
+        <ChartContainer config={{}}>
           <BarChart accessibilityLayer data={chartData}>
             <CartesianGrid vertical={false} />
             <XAxis
