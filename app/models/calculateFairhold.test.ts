@@ -4,6 +4,10 @@ import { Household } from "./Household";
 import { ValidPostcode } from "../schemas/calculationSchema";
 import { parse as parsePostcode } from "postcode";
 import { socialRentAdjustments } from "./testHelpers";
+import { maintenancePercentageSchema } from "../schemas/calculationSchema";
+import { z } from "zod";
+
+type MaintenancePercentage = z.infer<typeof maintenancePercentageSchema>;
 
 jest.mock("./Household", () => {
   return {
@@ -48,6 +52,23 @@ describe("calculateFairhold", () => {
     const invalidData = { ...validResponseData, itl3: "" };
     expect(() => calculateFairhold(invalidData)).toThrow(
       "itl3 data is missing or empty"
+    );
+  });
+
+  it("throws an error if buildPrice is missing or empty", () => {
+    const invalidData = { ...validResponseData, buildPrice: NaN };
+    expect(() => calculateFairhold(invalidData)).toThrow(
+      "buildPrice data is missing or empty"
+    );
+  });
+
+  it("throws an error if maintenancePercentage is missing or empty", () => {
+    const invalidData = {
+      ...validResponseData,
+      maintenancePercentage: "" as unknown as MaintenancePercentage,
+    };
+    expect(() => calculateFairhold(invalidData)).toThrow(
+      "maintenancePercentage data is missing or empty"
     );
   });
 
