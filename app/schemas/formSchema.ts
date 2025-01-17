@@ -5,16 +5,15 @@ import { maintenancePercentageSchema } from "../schemas/calculationSchema";
 
 const HouseTypeEnum = z.enum(HOUSE_TYPES);
 
-/**
- * Describes the form the user will interact with in the frontend
- */
 export const formSchema = z.object({
   housePostcode: z
     .string()
     .min(1, "Postcode is required")
     .refine(isValidPostcode, "Invalid postcode"),
   houseSize: z.coerce.number().positive("House size must be a positive number"),
-  houseAge: z.coerce.number().positive("House age must be a positive number"),
+  houseAge: z.coerce
+    .number()
+    .nonnegative("House age must be a positive number or 0"),
   houseBedrooms: z.coerce
     .number()
     .positive("House bedrooms must be a positive number"),
