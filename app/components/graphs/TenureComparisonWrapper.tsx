@@ -6,15 +6,6 @@ import TenureComparisonBarChart from "./TenureComparisonBarChart";
 
 interface TenureComparisonWrapperProps {
   household: Household;
-  mortgageLand?: number;
-  averageRentLand?: number;
-  socialRentMonthlyLand?: number;
-  mortgageFairholdLandPurchase?: number;
-  fairholdLandRent?: number;
-  mortgageHouse?: number;
-  mortgageDepreciatedHouse?: number;
-  averageRentHouse?: number;
-  socialRentMonthlyHouse?: number;
 }
 
 const TenureComparisonWrapper: React.FC<TenureComparisonWrapperProps> = ({
