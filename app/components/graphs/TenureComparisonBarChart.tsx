@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/chart";
 import { formatValue } from "@/app/lib/format";
 
-// Define type for DataInput
 type DataInput = {
   category: string;
   marketPurchase: number;
