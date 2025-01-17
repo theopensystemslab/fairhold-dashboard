@@ -3,7 +3,9 @@ import TenureComparisonWrapper from "../../graphs/TenureComparisonWrapper";
 import { Drawer } from "../../ui/Drawer";
 import { DashboardProps } from "../../ui/Dashboard";
 
-export const HowMuchPerMonth: React.FC<DashboardProps> = ({
+type ProcessedDataOnly = Pick<DashboardProps, "processedData">;
+
+export const HowMuchPerMonth: React.FC<ProcessedDataOnly> = ({
   processedData,
 }) => {
   return (
