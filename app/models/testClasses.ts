@@ -1,8 +1,8 @@
 import { ValidPostcode } from './../schemas/calculationSchema';
 import { createForecastParameters } from "./ForecastParameters";
 import { Household } from "./Household";
-import { HouseType, MaintenancePercentage, Property } from "./Property";
-import { MONTHS_PER_YEAR } from "./constants";
+import { HouseType, Property } from "./Property";
+import { MaintenanceLevel, MONTHS_PER_YEAR } from "./constants";
 import { socialRentAdjustmentTypes } from "../data/socialRentAdjustmentsRepo";
 
 // TODO: Share type with backend
@@ -13,7 +13,7 @@ export interface ResponseData {
   buildPrice: number;
   houseAge: number;
   houseSize: number;
-  maintenancePercentage: MaintenancePercentage;
+  maintenanceLevel: MaintenanceLevel;
   averagePrice: number;
   itl3: string;
   gdhi: number;
@@ -31,8 +31,8 @@ function calculateFairhold(responseData: ResponseData) {
   if (!responseData.itl3 || responseData.itl3.length === 0) {
     throw new Error("itl3 data is missing or empty");
   }
-  if (!responseData.maintenancePercentage) {
-    throw new Error("maintenancePercentage data is missing or empty");
+  if (!responseData.maintenanceLevel) {
+    throw new Error("maintenanceLevel data is missing or empty");
   }
 
   // define the property object
@@ -42,7 +42,7 @@ function calculateFairhold(responseData: ResponseData) {
     numberOfBedrooms: responseData.houseBedrooms,
     age: responseData.houseAge,
     size: responseData.houseSize,
-    maintenancePercentage: responseData.maintenancePercentage,
+    maintenanceLevel: responseData.maintenanceLevel,
     newBuildPricePerMetre: responseData.buildPrice,
     averageMarketPrice: responseData.averagePrice,
     itl3: responseData.itl3,
@@ -57,7 +57,7 @@ function calculateFairhold(responseData: ResponseData) {
     housePriceIndex: responseData.hpi,
     kwhCostPence: responseData.kwhCostPence,
     property: property,
-    forecastParameters: createForecastParameters(responseData.maintenancePercentage),
+    forecastParameters: createForecastParameters(responseData.maintenanceLevel),
   });
   
   return household;

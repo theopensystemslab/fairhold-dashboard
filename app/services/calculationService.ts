@@ -49,7 +49,7 @@ export const getHouseholdData = async (input: Calculation) => {
       houseAge: input.houseAge,
       houseBedrooms: input.houseBedrooms,
       houseSize: input.houseSize,
-      maintenancePercentage: input.maintenancePercentage,
+      maintenanceLevel: input.maintenanceLevel,
       averagePrice: parseFloat(averagePrice.toFixed(2)),
       itl3,
       gdhi,

@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { isValid as isValidPostcode } from "postcode";
 import { HOUSE_TYPES } from "../models/Property";
-import { maintenancePercentageSchema } from "../schemas/calculationSchema";
+import { maintenanceLevelSchema } from "../schemas/calculationSchema";
 
 const HouseTypeEnum = z.enum(HOUSE_TYPES);
 
@@ -23,7 +23,7 @@ export const formSchema = z.object({
       message: `House type is required`,
     }
   ),
-  maintenancePercentage: maintenancePercentageSchema,
+  maintenanceLevel: maintenanceLevelSchema,
 });
 
 export type FormFrontend = z.infer<typeof formSchema>;

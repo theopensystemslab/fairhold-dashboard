@@ -5,7 +5,7 @@ import { FairholdLandPurchase } from "./tenure/FairholdLandPurchase";
 import { FairholdLandRent } from "./tenure/FairholdLandRent";
 import { Fairhold } from "./Fairhold";
 import { Property } from "./Property";
-import { MONTHS_PER_YEAR, MAINTENANCE_LEVELS } from "./constants";
+import { MONTHS_PER_YEAR, MAINTENANCE_LEVELS, MaintenanceLevel } from "./constants";
 
 export interface LifetimeParams {
     household: Household;
@@ -18,7 +18,7 @@ export interface LifetimeParams {
     constructionPriceGrowthPerYear: number;
     rentGrowthPerYear: number;
     yearsForecast: number;
-    maintenancePercentage: number;
+    maintenanceLevel: MaintenanceLevel;
     incomeGrowthPerYear: number;
     affordabilityThresholdIncomePercentage: number;
     incomeYearly: number;
@@ -96,11 +96,11 @@ export class Lifetime {
             marketRentYearlyIterative - marketRentLandYearlyIterative;
         /** The percentage levels are kept steady, and are multiplied by the `newBuildPriceIterative` as it inflates  */
         let maintenanceCostLowIterative = 
-            MAINTENANCE_LEVELS[1] * newBuildPriceIterative;
+            MAINTENANCE_LEVELS.low * newBuildPriceIterative;
         let maintenanceCostMediumIterative = 
-            MAINTENANCE_LEVELS[2] * newBuildPriceIterative;
+            MAINTENANCE_LEVELS.medium * newBuildPriceIterative;
         let maintenanceCostHighIterative = 
-            MAINTENANCE_LEVELS[3] * newBuildPriceIterative;
+            MAINTENANCE_LEVELS.high * newBuildPriceIterative;
         /** Each loop a new `Property` instance is created, this is updated by running the `calculateDepreciatedBuildPrice()` method on `iterativeProperty` */
         let depreciatedHouseResaleValueNoMaintenanceIterative = params.property.depreciatedBuildPrice;
         let depreciatedHouseResaleValueLowMaintenanceIterative = params.property.depreciatedBuildPrice;
@@ -178,11 +178,11 @@ export class Lifetime {
             marketRentHouseYearlyIterative =
                 marketRentYearlyIterative - marketRentLandYearlyIterative;
             maintenanceCostLowIterative =
-                MAINTENANCE_LEVELS[1] * newBuildPriceIterative;
+                MAINTENANCE_LEVELS.low * newBuildPriceIterative;
             maintenanceCostMediumIterative =
-                MAINTENANCE_LEVELS[2] * newBuildPriceIterative;
+                MAINTENANCE_LEVELS.medium * newBuildPriceIterative;
             maintenanceCostHighIterative =
-                MAINTENANCE_LEVELS[3] * newBuildPriceIterative;
+                MAINTENANCE_LEVELS.high * newBuildPriceIterative;
             gasBillExistingBuildIterative = 
                 gasBillExistingBuildIterative * (1 + params.constructionPriceGrowthPerYear) // TODO: when other branch merged, should be CPI
             gasBillNewBuildOrRetrofitIterative = 
@@ -195,22 +195,22 @@ export class Lifetime {
             const iterativePropertyNoMaintenance = new Property({ 
                 ...params.property,
                 age: houseAgeIterative,
-                maintenancePercentage: 0
+                maintenanceLevel: "none"
             });
             const iterativePropertyLowMaintenance = new Property({ 
                 ...params.property,
                 age: houseAgeIterative,
-                maintenancePercentage: 0.015 
+                maintenanceLevel: "low" 
             });
             const iterativePropertyMediumMaintenance = new Property({ 
                 ...params.property,
                 age: houseAgeIterative, 
-                maintenancePercentage: 0.019
+                maintenanceLevel: "medium"
             });
             const iterativePropertyHighMaintenance = new Property({ 
                 ...params.property,
                 age: houseAgeIterative, 
-                maintenancePercentage: 0.025
+                maintenanceLevel: "high"
             });
             /* Use the `calculateDepreciatedBuildPrice()` method on the new `Property` class 
             to calculate an updated depreciated house value */

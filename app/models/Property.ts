@@ -1,4 +1,4 @@
-import { MAINTENANCE_LEVELS, HOUSE_BREAKDOWN_PERCENTAGES } from "./constants";
+import { MAINTENANCE_LEVELS, HOUSE_BREAKDOWN_PERCENTAGES, MaintenanceLevel } from "./constants";
 import { houseBreakdownType } from "./constants";
 /**
  * Number of decimal places to use when rounding numerical values
@@ -12,7 +12,7 @@ type PropertyParams = Pick<
   | "numberOfBedrooms"
   | "age"
   | "size"
-  | "maintenancePercentage"
+  | "maintenanceLevel"
   | "newBuildPricePerMetre"
   | "averageMarketPrice"
   | "itl3"
@@ -21,8 +21,6 @@ type PropertyParams = Pick<
 export const HOUSE_TYPES = ["D", "S", "T", "F"] as const;
 
 export type HouseType = (typeof HOUSE_TYPES)[number];
-
-export type MaintenancePercentage = (typeof MAINTENANCE_LEVELS)[number]
 
 export type ComponentCalculation = {
   newComponentValue: number;
@@ -40,7 +38,7 @@ export class Property {
    * Size of the house in square meters
    */
   size: number;
-  maintenancePercentage: MaintenancePercentage;
+  maintenanceLevel: MaintenanceLevel;
   /**
    * Average build price per metre of a new house
    */
@@ -70,7 +68,7 @@ export class Property {
     this.numberOfBedrooms = params.numberOfBedrooms;
     this.age = params.age // TODO: update frontend so that newbuild = 0
     this.size = params.size;
-    this.maintenancePercentage = params.maintenancePercentage;
+    this.maintenanceLevel = params.maintenanceLevel;
     this.newBuildPricePerMetre = params.newBuildPricePerMetre;
     this.averageMarketPrice = params.averageMarketPrice;
     this.itl3 = params.itl3;
@@ -98,7 +96,7 @@ export class Property {
       key, 
       this.newBuildPrice, 
       this.age, 
-      this.maintenancePercentage
+      this.maintenanceLevel
     );
 
     depreciatedBuildPrice += result.depreciatedComponentValue;
@@ -112,8 +110,10 @@ export class Property {
     componentKey: keyof houseBreakdownType,
     newBuildPrice: number,
     age: number,
-    maintenanceLevel: number
+    maintenanceLevel: MaintenanceLevel
   ): ComponentCalculation {
+    const maintenancePercentage = MAINTENANCE_LEVELS[maintenanceLevel]
+
     const component = HOUSE_BREAKDOWN_PERCENTAGES[componentKey];
     
     // Calculate new component value
@@ -126,7 +126,7 @@ export class Property {
     const maintenanceAddition = 
       (componentKey === 'foundations' || componentKey === 'structureEnvelope') 
         ? 0 
-        : maintenanceLevel * newBuildPrice * age * component.percentOfMaintenanceYearly;
+        : maintenancePercentage * newBuildPrice * age * component.percentOfMaintenanceYearly;
     
     // Calculate final value
     let depreciatedComponentValue = 
