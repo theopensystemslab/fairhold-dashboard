@@ -25,6 +25,7 @@ export interface LifetimeParams {
 }
 
 export interface MaintenanceCosts {
+    none: 0;
     low: number;
     medium: number;
     high: number;
@@ -153,6 +154,7 @@ export class Lifetime {
             marketLandMortgageYearly: marketLandMortgageYearlyIterative,
             fairholdLandRentYearly: fairholdLandRentIterative,
             maintenanceCost: {
+                none: 0,
                 low: maintenanceCostLowIterative,
                 medium: maintenanceCostMediumIterative,
                 high: maintenanceCostHighIterative
@@ -275,6 +277,7 @@ export class Lifetime {
                 marketLandMortgageYearly: marketLandMortgageYearlyIterative,
                 fairholdLandRentYearly: fairholdLandRentIterative,
                 maintenanceCost: {
+                    none: 0,
                     low: maintenanceCostLowIterative,
                     medium: maintenanceCostMediumIterative,
                     high: maintenanceCostHighIterative
