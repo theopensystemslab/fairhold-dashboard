@@ -47,7 +47,7 @@ export const MAINTENANCE_LEVELS = {
   medium: 0.019, 
   high: 0.025} as const;
 
-  export type MaintenanceLevel = keyof typeof MAINTENANCE_LEVELS;
+export type MaintenanceLevel = keyof typeof MAINTENANCE_LEVELS;
 
 /** Type for storing component values and depreciation*/
 export type componentBreakdownType = {

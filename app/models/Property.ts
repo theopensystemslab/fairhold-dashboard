@@ -1,4 +1,4 @@
-import { MAINTENANCE_LEVELS, HOUSE_BREAKDOWN_PERCENTAGES } from "./constants";
+import { MAINTENANCE_LEVELS, HOUSE_BREAKDOWN_PERCENTAGES, MaintenanceLevel } from "./constants";
 import { houseBreakdownType } from "./constants";
 /**
  * Number of decimal places to use when rounding numerical values
@@ -38,7 +38,7 @@ export class Property {
    * Size of the house in square meters
    */
   size: number;
-  maintenanceLevel: 'none' | 'low' | 'medium' | 'high';
+  maintenanceLevel: MaintenanceLevel;
   /**
    * Average build price per metre of a new house
    */
@@ -110,7 +110,7 @@ export class Property {
     componentKey: keyof houseBreakdownType,
     newBuildPrice: number,
     age: number,
-    maintenanceLevel: keyof typeof MAINTENANCE_LEVELS
+    maintenanceLevel: MaintenanceLevel
   ): ComponentCalculation {
     const maintenancePercentage = MAINTENANCE_LEVELS[maintenanceLevel]
 

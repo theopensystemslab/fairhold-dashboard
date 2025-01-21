@@ -7,6 +7,7 @@ import Dashboard from "./Dashboard";
 import { formSchema, FormFrontend } from "@/app/schemas/formSchema";
 import { useSearchParams } from "next/navigation";
 import { DEFAULT_INTEREST_RATE, DEFAULT_MORTGAGE_TERM, DEFAULT_INITIAL_DEPOSIT, MAINTENANCE_LEVELS } from "../../models/constants"
+import type { MaintenanceLevel } from "../../models/constants";
 
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { ClipLoader } from "react-spinners";
@@ -49,13 +50,9 @@ const CalculatorInput = () => {
         urlHouseType === "S"
           ? urlHouseType
           : "D", // Default value for house type
-        maintenanceLevel: 
-          urlMaintenanceLevel === "high"  ||
-          urlMaintenanceLevel === "medium"  ||
-          urlMaintenanceLevel === "low"  ||
-          urlMaintenanceLevel === "none"
-            ? urlMaintenanceLevel
-            : "low",
+          maintenanceLevel: (urlMaintenanceLevel && urlMaintenanceLevel in MAINTENANCE_LEVELS)
+          ? urlMaintenanceLevel as MaintenanceLevel
+          : "low",
       housePostcode: urlPostcode || "",
       // Apply defaults if provided
       // Type-safe to account for exactOptionalPropertyTypes propert in tsconfig.json
