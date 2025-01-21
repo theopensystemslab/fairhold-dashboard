@@ -51,8 +51,8 @@ export interface LifetimeData {
     gasBillNewBuildOrRetrofitYearly: number;
     depreciatedHouseResaleValue: DepreciatedHouseByMaintenanceLevel;
     fairholdLandPurchaseResaleValue: number;
-    socialRentYearlyLand: number;
-    socialRentYearlyHouse: number;
+    socialRentLandYearly: number;
+    socialRentHouseYearly: number;
     houseAge: number;
     [key: number]: number;
 }
@@ -118,8 +118,8 @@ export class Lifetime {
 
         /** Resale value increases with `ForecastParameters.constructionPriceGrowthPerYear` */
         let fairholdLandPurchaseResaleValueIterative = params.fairholdLandPurchase.discountedLandPrice;
-        let socialRentYearlyLandIterative = params.household.tenure.socialRent.socialRentMonthlyLand * 12; 
-        let socialRentYearlyHouseIterative = params.household.tenure.socialRent.socialRentMonthlyHouse * 12;
+        let socialRentLandYearlyIterative = params.household.tenure.socialRent.socialRentMonthlyLand * 12; 
+        let socialRentHouseYearlyIterative = params.household.tenure.socialRent.socialRentMonthlyHouse * 12;
         
         /** Initialises as user input house age and increments by one */
         let houseAgeIterative = params.property.age;
@@ -166,8 +166,8 @@ export class Lifetime {
                 high: depreciatedHouseResaleValueHighMaintenanceIterative
             },
             fairholdLandPurchaseResaleValue: fairholdLandPurchaseResaleValueIterative,
-            socialRentYearlyHouse: socialRentYearlyHouseIterative,
-            socialRentYearlyLand: socialRentYearlyLandIterative,
+            socialRentHouseYearly: socialRentHouseYearlyIterative,
+            socialRentLandYearly: socialRentLandYearlyIterative,
             houseAge: houseAgeIterative,
             gasBillExistingBuildYearly: gasBillExistingBuildIterative,
             gasBillNewBuildOrRetrofitYearly: gasBillNewBuildOrRetrofitIterative
@@ -263,8 +263,8 @@ export class Lifetime {
             }).discountedLandPriceOrRent;
 
             // Increase monthly social rent by the average inflation adjustment (2.83%)
-            socialRentYearlyHouseIterative *= 1.0283;
-            socialRentYearlyLandIterative *= 1.0283;
+            socialRentHouseYearlyIterative *= 1.0283; // TODO: decide if this is the best way to increase social rent or if we should preserve the changing land-house ratio as land costs inflate
+            socialRentLandYearlyIterative *= 1.0283;
             
             lifetime.push({
                 incomeYearly: incomeYearlyIterative,
@@ -288,8 +288,8 @@ export class Lifetime {
                     high: depreciatedHouseResaleValueHighMaintenanceIterative
                 },
                 fairholdLandPurchaseResaleValue: fairholdLandPurchaseResaleValueIterative,
-                socialRentYearlyHouse: socialRentYearlyHouseIterative,
-                socialRentYearlyLand: socialRentYearlyLandIterative,
+                socialRentHouseYearly: socialRentHouseYearlyIterative,
+                socialRentLandYearly: socialRentLandYearlyIterative,
                 houseAge: houseAgeIterative,
                 gasBillExistingBuildYearly: gasBillExistingBuildIterative,
                 gasBillNewBuildOrRetrofitYearly: gasBillNewBuildOrRetrofitIterative
