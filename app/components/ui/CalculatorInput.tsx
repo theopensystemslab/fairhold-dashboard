@@ -7,7 +7,7 @@ import Dashboard from "./Dashboard";
 import { formSchema, FormFrontend } from "@/app/schemas/formSchema";
 import { useSearchParams } from "next/navigation";
 import { DEFAULT_INTEREST_RATE, DEFAULT_MORTGAGE_TERM, DEFAULT_INITIAL_DEPOSIT, MAINTENANCE_LEVELS } from "../../models/constants"
-import type { MaintenanceLevel } from "../../models/constants";
+import { MaintenanceLevel } from "../../models/constants";
 
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { ClipLoader } from "react-spinners";
@@ -273,13 +273,13 @@ const CalculatorInput = () => {
 
                   <FormControl>
                     <RadioGroup
-                      value={String(field.value)} // Convert number to string for RadioGroup
-                      onValueChange={(value) => field.onChange(Number(value))} // Convert back to number for form
+                      value={field.value}
+                      onValueChange={field.onChange}
                       className="flex space-x-4"
                     >
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem
-                          value={MAINTENANCE_LEVELS.low.toString()}
+                          value="low"
                           id="radio-option-low"
                           className="radio-button-style"
                         />
@@ -292,7 +292,7 @@ const CalculatorInput = () => {
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem
-                          value={MAINTENANCE_LEVELS.medium.toString()}
+                          value="medium"
                           id="radio-option-medium"
                           className="radio-button-style"
                         />
@@ -305,7 +305,7 @@ const CalculatorInput = () => {
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem
-                          value={MAINTENANCE_LEVELS.high.toString()}
+                          value="high"
                           id="radio-option-high"
                           className="radio-button-style"
                         />
