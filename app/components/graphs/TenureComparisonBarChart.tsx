@@ -41,7 +41,7 @@ const TenureComparisonBarChart: React.FC<StackedBarChartProps> = ({ data }) => {
       land: data[0].marketRent,
       house: data[1].marketRent,
       monthly: data[0].marketRent + data[1].marketRent,
-      fill: "rgb(var(--private-rent-color-rgb))",
+      fill: "rgb(var(--private-rent-land-color-rgb))",
     },
 
     {
@@ -64,7 +64,7 @@ const TenureComparisonBarChart: React.FC<StackedBarChartProps> = ({ data }) => {
       land: data[0].socialRent,
       house: data[1].socialRent,
       monthly: data[0].socialRent + data[1].socialRent,
-      fill: "rgb(var(--social-rent-color-rgb))",
+      fill: "rgb(var(--social-rent-land-color-rgb))",
     },
   ];
 
