@@ -26,6 +26,7 @@ export const ResaleValue: React.FC<DashboardProps> = ({ data }) => {
             <TenureSelector 
               key={tenure} 
               isSelected={selectedTenure === tenure} 
+              tenureType="fairhold"
               onClick={() => setSelectedTenure(tenure)} 
             > 
               {`Fairhold ${tenure === 'landPurchase' ? 'Land Purchase' : 'Land Rent'}`} 
