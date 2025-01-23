@@ -15,14 +15,14 @@
 
   --freehold-land-color-rgb: 66 75 179;
   --freehold-house-color-rgb: 131 164 255;
+  --freehold-maintenance-color-rgb: 190 201 232;
   --fairhold-land-color-rgb: 74 179 91;
   --fairhold-house-color-rgb: 159 211 166;
-  --fairhold-house-alpha: 0.5;
+  --fairhold-maintenance-color-rgb: 207 227 209;
   --private-rent-land-color-rgb: 45 155 240;
   --private-rent-house-color-rgb: 119 188 242;
   --social-rent-land-color-rgb: 255 97 118;
   --social-rent-house-color-rgb: 242 160 171;
-  --maintenance-color-rgb: 184 184 184;
 }
 
 @layer utilities {

@@ -11,17 +11,17 @@ const TENURE_COLORS = {
     marketPurchase: {
       land: "rgb(var(--freehold-land-color-rgb))",
       house: "rgb(var(--freehold-house-color-rgb))",
-      maintenance: "rgb(var(--maintenance-color-rgb))",
+      maintenance: "rgb(var(--freehold-maintenance-color-rgb))",
     },
     fairholdLandPurchase: {
       land: "rgb(var(--fairhold-land-color-rgb))",
       house: "rgb(var(--fairhold-house-color-rgb))",
-      maintenance: "rgb(var(--maintenance-color-rgb))",
+      maintenance: "rgb(var(--fairhold-maintenance-color-rgb))",
     },
     fairholdLandRent: {
       land: "rgb(var(--fairhold-land-color-rgb))",
       house: "rgb(var(--fairhold-house-color-rgb))",
-      maintenance: "rgb(var(--maintenance-color-rgb))",
+      maintenance: "rgb(var(--fairhold-maintenance-color-rgb))",
     },
     marketRent: {
       land: "rgb(var(--private-rent-land-color-rgb))",
