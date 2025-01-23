@@ -17,7 +17,7 @@ const TenureSelector: React.FC<TenureSelectorProps> = ({
   tenureType
 }) => {
   const getColors = () => {
-    if (!isSelected) return "bg-gray-100 text-gray-700 hover:bg-gray-200";
+    if (!isSelected) return "bg-[rgb(var(--button-background-rgb))] text-gray-700 hover:bg-gray-200";
     
     switch (tenureType) {
       case 'marketPurchase':
