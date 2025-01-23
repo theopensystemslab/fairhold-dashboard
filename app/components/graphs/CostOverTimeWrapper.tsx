@@ -91,12 +91,17 @@ const CostOverTimeWrapper: React.FC<CostOverTimeWrapperProps> = ({
     const maintenanceLevel = household.property.maintenanceLevel
 
     const formattedData = formatData(tenure, household, maintenanceLevel);
+    
+    // We want a constant y value across the graphs so we can compare costs between them
+    const firstYear = household.lifetime.lifetimeData[0]
+    const maxY = Math.ceil((1 * (firstYear.marketLandMortgageYearly + firstYear.newbuildHouseMortgageYearly)) / 100000) * 100000 // Scale y axis by 1.1 (for a bit of visual headroom) and round to nearest hundred thousand to make things tidy
 
     return (
         <ErrorBoundary>
       <CostOverTimeStackedBarChart 
         data={formattedData}
         config={chartConfig}
+        maxY={maxY}
       />
     </ErrorBoundary>
     )

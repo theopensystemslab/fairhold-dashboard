@@ -16,6 +16,7 @@ export interface LifetimeBarData {
 
   interface CostOverTimeStackedBarChartProps {
     data: LifetimeBarData[];
+    maxY: number;
     config: {
       colors: {
         land: string;
@@ -24,10 +25,12 @@ export interface LifetimeBarData {
       };
       showMaintenance: boolean;
     };
+
   }
 
 const CostOverTimeStackedBarChart: React.FC<CostOverTimeStackedBarChartProps> = ({
   data,
+  maxY,
   config
 }) => {
     const chartConfig: Record<string, { label: string; color: string }> = { // LINE CHANGED
@@ -54,7 +57,8 @@ const CostOverTimeStackedBarChart: React.FC<CostOverTimeStackedBarChartProps> = 
           <BarChart data={data}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="year" />
-            <YAxis />
+            <YAxis 
+              domain={[0, maxY]}/>
             <Tooltip content={<ChartTooltipContent />} />
             <Legend />
             
