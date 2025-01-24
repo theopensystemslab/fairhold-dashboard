@@ -24,6 +24,18 @@ export interface LifetimeParams {
     incomeYearly: number;
 }
 
+export interface MaintenanceCosts {
+    low: number;
+    medium: number;
+    high: number;
+}
+
+export interface DepreciatedHouseByMaintenanceLevel {
+    none: number;
+    low: number;
+    medium: number;
+    high: number;
+}
 export interface LifetimeData {
     incomeYearly: number;
     affordabilityThresholdIncome: number;
@@ -32,17 +44,12 @@ export interface LifetimeData {
     fairholdLandMortgageYearly: number;
     marketLandMortgageYearly: number;
     fairholdLandRentYearly: number;
-    maintenanceCostLow: number;
-    maintenanceCostMedium: number;
-    maintenanceCostHigh: number;
+    maintenanceCost: MaintenanceCosts;
     marketLandRentYearly: number;
     marketHouseRentYearly: number;
     gasBillExistingBuildYearly: number;
     gasBillNewBuildOrRetrofitYearly: number;
-    depreciatedHouseResaleValueNoMaintenance: number;
-    depreciatedHouseResaleValueLowMaintenance: number;
-    depreciatedHouseResaleValueMediumMaintenance: number;
-    depreciatedHouseResaleValueHighMaintenance: number;
+    depreciatedHouseResaleValue: DepreciatedHouseByMaintenanceLevel;
     fairholdLandPurchaseResaleValue: number;
     houseAge: number;
     [key: number]: number;
@@ -140,15 +147,19 @@ export class Lifetime {
             fairholdLandMortgageYearly: fairholdLandMortgageYearlyIterative,
             marketLandMortgageYearly: marketLandMortgageYearlyIterative,
             fairholdLandRentYearly: fairholdLandRentIterative,
-            maintenanceCostLow: maintenanceCostLowIterative,
-            maintenanceCostMedium: maintenanceCostMediumIterative,
-            maintenanceCostHigh: maintenanceCostHighIterative,
+            maintenanceCost: {
+                low: maintenanceCostLowIterative,
+                medium: maintenanceCostMediumIterative,
+                high: maintenanceCostHighIterative
+            },
             marketLandRentYearly: marketRentLandYearlyIterative,
             marketHouseRentYearly: marketRentHouseYearlyIterative,
-            depreciatedHouseResaleValueNoMaintenance: depreciatedHouseResaleValueNoMaintenanceIterative,
-            depreciatedHouseResaleValueLowMaintenance: depreciatedHouseResaleValueLowMaintenanceIterative,
-            depreciatedHouseResaleValueMediumMaintenance: depreciatedHouseResaleValueMediumMaintenanceIterative,
-            depreciatedHouseResaleValueHighMaintenance: depreciatedHouseResaleValueHighMaintenanceIterative,
+            depreciatedHouseResaleValue: {
+                none: depreciatedHouseResaleValueNoMaintenanceIterative,
+                low: depreciatedHouseResaleValueLowMaintenanceIterative,
+                medium: depreciatedHouseResaleValueMediumMaintenanceIterative,
+                high: depreciatedHouseResaleValueHighMaintenanceIterative
+            },
             fairholdLandPurchaseResaleValue: fairholdLandPurchaseResaleValueIterative,
             houseAge: houseAgeIterative,
             gasBillExistingBuildYearly: gasBillExistingBuildIterative,
@@ -252,15 +263,19 @@ export class Lifetime {
                 fairholdLandMortgageYearly: fairholdLandMortgageYearlyIterative,
                 marketLandMortgageYearly: marketLandMortgageYearlyIterative,
                 fairholdLandRentYearly: fairholdLandRentIterative,
-                maintenanceCostLow: maintenanceCostLowIterative,
-                maintenanceCostMedium: maintenanceCostMediumIterative,
-                maintenanceCostHigh: maintenanceCostHighIterative,
+                maintenanceCost: {
+                    low: maintenanceCostLowIterative,
+                    medium: maintenanceCostMediumIterative,
+                    high: maintenanceCostHighIterative
+                },
                 marketLandRentYearly: marketRentLandYearlyIterative,
                 marketHouseRentYearly: marketRentHouseYearlyIterative,
-                depreciatedHouseResaleValueNoMaintenance: depreciatedHouseResaleValueNoMaintenanceIterative,
-                depreciatedHouseResaleValueLowMaintenance: depreciatedHouseResaleValueLowMaintenanceIterative,
-                depreciatedHouseResaleValueMediumMaintenance: depreciatedHouseResaleValueMediumMaintenanceIterative,
-                depreciatedHouseResaleValueHighMaintenance: depreciatedHouseResaleValueHighMaintenanceIterative,
+                depreciatedHouseResaleValue: {
+                    none: depreciatedHouseResaleValueNoMaintenanceIterative,
+                    low: depreciatedHouseResaleValueLowMaintenanceIterative,
+                    medium: depreciatedHouseResaleValueMediumMaintenanceIterative,
+                    high: depreciatedHouseResaleValueHighMaintenanceIterative
+                },
                 fairholdLandPurchaseResaleValue: fairholdLandPurchaseResaleValueIterative,
                 houseAge: houseAgeIterative,
                 gasBillExistingBuildYearly: gasBillExistingBuildIterative,

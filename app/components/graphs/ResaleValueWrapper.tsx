@@ -26,10 +26,10 @@ const ResaleValueWrapper: React.FC<ResaleValueWrapperProps> = ({
       
         chartData.push({
           year: i + 1,
-          none: landValue + lifetime[i].depreciatedHouseResaleValueNoMaintenance,
-          low: landValue + lifetime[i].depreciatedHouseResaleValueLowMaintenance,
-          medium: landValue + lifetime[i].depreciatedHouseResaleValueMediumMaintenance,
-          high: landValue + lifetime[i].depreciatedHouseResaleValueHighMaintenance
+          none: landValue + lifetime[i].depreciatedHouseResaleValue.none,
+          low: landValue + lifetime[i].depreciatedHouseResaleValue.low,
+          medium: landValue + lifetime[i].depreciatedHouseResaleValue.medium,
+          high: landValue + lifetime[i].depreciatedHouseResaleValue.high
         })
         
       }
@@ -40,7 +40,7 @@ const ResaleValueWrapper: React.FC<ResaleValueWrapperProps> = ({
 
     // We want a constant y value across the graphs so we can compare resale values between them
     const finalYear = household.lifetime.lifetimeData[household.lifetime.lifetimeData.length - 1]
-    const maxY = Math.ceil((1.1 * (finalYear.fairholdLandPurchaseResaleValue + finalYear.depreciatedHouseResaleValueHighMaintenance)) / 100000) * 100000 // Scale y axis by 1.1 (for a bit of visual headroom) and round to nearest hundred thousand to make things tidy
+    const maxY = Math.ceil((1.1 * (finalYear.fairholdLandPurchaseResaleValue + finalYear.depreciatedHouseResaleValue.high)) / 100000) * 100000 // Scale y axis by 1.1 (for a bit of visual headroom) and round to nearest hundred thousand to make things tidy
 
     if (!household) {
       return <div>No household data available</div>;
