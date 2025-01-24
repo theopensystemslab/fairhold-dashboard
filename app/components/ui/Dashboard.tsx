@@ -41,7 +41,7 @@ const Dashboard: React.FC<DashboardProps> = ({ inputData, processedData }) => {
         <HowMuchPerMonth processedData={processedData} />
         <CostOverTime processedData={processedData} />
         <ResaleValue data={processedData} />
-        <WhatDifference />
+        <WhatDifference data={processedData}/>
         <WhatWouldYouChoose />
       </div>
       <Carousel
