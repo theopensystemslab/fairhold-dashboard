@@ -146,23 +146,23 @@ export class Household {
     }
 
     private calculateGasDemand(params: ConstructorParams) {
-      return {
-        kwhExistingBuildYearly: this.calculateKwh(params, "existingBuild"),
-        kwhNewBuildOrRetrofitYearly: this.calculateKwh(params, "newBuild"),
-        billExistingBuildYearly: this.calculateGasBill("existingBuild"),
-        billNewBuildOrRetrofitYearly: this.calculateGasBill("newBuild")
+      const kwhExistingBuildYearly = this.calculateKwhExistingBuildYearly(params);
+      const kwhNewBuildOrRetrofitYearly = this.calculateKwhNewBuildOrRetrofitYearly(params);
+        return {
+          kwhExistingBuildYearly,
+          kwhNewBuildOrRetrofitYearly,
+          billExistingBuildYearly: this.kwhCostPence * kwhExistingBuildYearly / 100,
+          billNewBuildOrRetrofitYearly: this.kwhCostPence * kwhNewBuildOrRetrofitYearly / 100
       }
       }
 
-    private calculateKwh(params: ConstructorParams, newOrExisting: string) {
-      const kwhM2 = newOrExisting === "existingBuild" ? KWH_M2_YR_EXISTING_BUILDS : KWH_M2_YR_NEWBUILDS_RETROFIT
-      const kwhYearly = params.property.size * kwhM2[params.property.houseType]
+    private calculateKwhExistingBuildYearly(params: ConstructorParams) {
+      const kwhYearly = params.property.size * KWH_M2_YR_EXISTING_BUILDS[params.property.houseType]
       return kwhYearly
     }
-    
-    private calculateGasBill(newOrExisting: string) {
-      const kwhYearly = newOrExisting === "existingBuild" ? this.gasDemand.kwhExistingBuildYearly : this.gasDemand.kwhNewBuildOrRetrofitYearly
-      const gasBillExistingBuildYearly = this.kwhCostPence * kwhYearly / 100
-      return gasBillExistingBuildYearly
+
+    private calculateKwhNewBuildOrRetrofitYearly(params: ConstructorParams) {
+      const kwhYearly = params.property.size * KWH_M2_YR_NEWBUILDS_RETROFIT[params.property.houseType]
+      return kwhYearly
     }
   }
