@@ -5,7 +5,7 @@ import { Drawer } from "../../ui/Drawer";
 import { Household } from "@/app/models/Household";
 import TenureSelector from "../../ui/TenureSelector";
 
-const TENURES = ['landPurchase', 'landRent'] as const;
+const TENURES = ['fairholdLandPurchase', 'fairholdLandRent'] as const;
 type Tenure = (typeof TENURES)[number];
 
 interface DashboardProps {
@@ -13,7 +13,7 @@ interface DashboardProps {
 }
 
 export const ResaleValue: React.FC<DashboardProps> = ({ data }) => {
-  const [selectedTenure, setSelectedTenure] = useState<Tenure>('landPurchase');
+  const [selectedTenure, setSelectedTenure] = useState<Tenure>('fairholdLandPurchase');
 
   return (
     <GraphCard
@@ -26,9 +26,10 @@ export const ResaleValue: React.FC<DashboardProps> = ({ data }) => {
             <TenureSelector 
               key={tenure} 
               isSelected={selectedTenure === tenure} 
+              tenureType={tenure}
               onClick={() => setSelectedTenure(tenure)} 
             > 
-              {`Fairhold ${tenure === 'landPurchase' ? 'Land Purchase' : 'Land Rent'}`} 
+              {`Fairhold ${tenure === 'fairholdLandPurchase' ? 'Land Purchase' : 'Land Rent'}`} 
             </TenureSelector> 
           ))} 
         </div>

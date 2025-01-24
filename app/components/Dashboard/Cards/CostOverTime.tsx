@@ -29,6 +29,7 @@ export const CostOverTime: React.FC<DashboardProps> = ({ processedData }) => {
             key={tenure}
             isSelected={selectedTenure === tenure}
             onClick={() => setSelectedTenure(tenure)}
+            tenureType={tenure}
           >
             {TENURE_LABELS[tenure]}
           </TenureSelector>
