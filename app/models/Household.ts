@@ -9,6 +9,7 @@ import { ForecastParameters } from "./ForecastParameters";
 import { socialRentAdjustmentTypes } from "../data/socialRentAdjustmentsRepo";
 import { Lifetime, LifetimeParams } from "./Lifetime"; 
 import { KWH_M2_YR_EXISTING_BUILDS, KWH_M2_YR_NEWBUILDS_RETROFIT } from "./constants" ;
+import { SocialValue } from "./SocialValue";
 
 const HEADS_PER_HOUSEHOLD = 2.4;
 
@@ -44,6 +45,7 @@ export class Household {
     billExistingBuildYearly: number;
     billNewBuildOrRetrofitYearly: number;
   }
+  public socialValue: SocialValue;
 
   constructor(params: ConstructorParams) {
     this.incomePerPersonYearly = params.incomePerPersonYearly;
@@ -54,6 +56,7 @@ export class Household {
     this.gasDemand = this.calculateGasDemand(params)
     this.tenure = this.calculateTenures(params);
     this.lifetime = this.calculateLifetime(params);
+    this.socialValue = this.calculateSocialValue();
   }
 
   private calculateTenures({
@@ -165,4 +168,11 @@ export class Household {
       const kwhYearly = params.property.size * KWH_M2_YR_NEWBUILDS_RETROFIT[params.property.houseType]
       return kwhYearly
     }
+
+    private calculateSocialValue() {
+      return new SocialValue({
+        household: this
+      })
+    }
+
   }

@@ -179,4 +179,8 @@ export const KWH_M2_YR_NEWBUILDS_RETROFIT = {
   D: 55
 }
 
-export const KG_CO2_PER_KWH = 0.0185 // from Carbon Independent https://www.carbonindependent.org/15.html#:~:text=Natural%20gas&text=Older%20gas%20meters%20measure%20gas,kg%20%2F%20kWh%20%5B9%5D%20.
+export const KG_CO2_PER_KWH = 0.185 // from Carbon Independent https://www.carbonindependent.org/15.html#:~:text=Natural%20gas&text=Older%20gas%20meters%20measure%20gas,kg%20%2F%20kWh%20%5B9%5D%20.
+
+export const NHS_SAVINGS_PER_HEAD_PER_YEAR = 24.78 // from BRE report in 2021, NHS first-year care costs due to poor housing in England individualised
+
+export const FTE_SPEND = 60000
