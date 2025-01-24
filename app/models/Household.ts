@@ -38,11 +38,11 @@ export class Household {
     fairholdLandRent: FairholdLandRent;
   };
   public lifetime: Lifetime;
-  public gasDemand = {
-    kwhExistingBuildYearly: 0,
-    kwhNewBuildOrRetrofitYearly: 0,
-    billExistingBuildYearly: 0,
-    billNewBuildOrRetrofitYearly: 0
+  public gasDemand: {
+    kwhExistingBuildYearly: number;
+    kwhNewBuildOrRetrofitYearly: number;
+    billExistingBuildYearly: number;
+    billNewBuildOrRetrofitYearly: number;
   }
 
   constructor(params: ConstructorParams) {
