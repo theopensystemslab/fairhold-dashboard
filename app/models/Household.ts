@@ -165,9 +165,4 @@ export class Household {
       const gasBillExistingBuildYearly = this.kwhCostPence * kwhYearly / 100
       return gasBillExistingBuildYearly
     }
-
-    private calculateGasBillNewBuildOrRetrofit() {
-      const gasBillNewBuildOrRetrofitYearly = this.kwhCostPence * this.gasDemand.kwhNewBuildOrRetrofitYearly / 100
-      return gasBillNewBuildOrRetrofitYearly
-    }
   }
