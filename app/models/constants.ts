@@ -22,6 +22,8 @@ export const BED_WEIGHTS_AND_CAPS: BedWeightsAndCaps = {
   socialRentCap: [155.73, 155.73, 164.87, 174.03, 183.18, 192.35, 201.5],
 };
 
+export const SOCIAL_RENT_ADJUSTMENT_FORECAST = 1.0283  // TODO: decide if this is the best way to increase social rent or if we should preserve the changing land-house ratio as land costs inflate
+
 export type NationalAverage = {
   socialRentWeekly: number;
   propertyValue: number;

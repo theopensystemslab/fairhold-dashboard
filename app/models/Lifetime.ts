@@ -5,7 +5,7 @@ import { FairholdLandPurchase } from "./tenure/FairholdLandPurchase";
 import { FairholdLandRent } from "./tenure/FairholdLandRent";
 import { Fairhold } from "./Fairhold";
 import { Property } from "./Property";
-import { MONTHS_PER_YEAR, MAINTENANCE_LEVELS, MaintenanceLevel } from "./constants";
+import { MONTHS_PER_YEAR, MAINTENANCE_LEVELS, MaintenanceLevel, SOCIAL_RENT_ADJUSTMENT_FORECAST } from "./constants";
 
 export interface LifetimeParams {
     household: Household;
@@ -25,6 +25,7 @@ export interface LifetimeParams {
 }
 
 export interface MaintenanceCosts {
+    none: 0;
     low: number;
     medium: number;
     high: number;
@@ -51,6 +52,8 @@ export interface LifetimeData {
     gasBillNewBuildOrRetrofitYearly: number;
     depreciatedHouseResaleValue: DepreciatedHouseByMaintenanceLevel;
     fairholdLandPurchaseResaleValue: number;
+    socialRentLandYearly: number;
+    socialRentHouseYearly: number;
     houseAge: number;
     [key: number]: number;
 }
@@ -116,6 +119,9 @@ export class Lifetime {
 
         /** Resale value increases with `ForecastParameters.constructionPriceGrowthPerYear` */
         let fairholdLandPurchaseResaleValueIterative = params.fairholdLandPurchase.discountedLandPrice;
+        let socialRentLandYearlyIterative = params.household.tenure.socialRent.socialRentMonthlyLand * 12; 
+        let socialRentHouseYearlyIterative = params.household.tenure.socialRent.socialRentMonthlyHouse * 12;
+        
         /** Initialises as user input house age and increments by one */
         let houseAgeIterative = params.property.age;
 
@@ -148,6 +154,7 @@ export class Lifetime {
             marketLandMortgageYearly: marketLandMortgageYearlyIterative,
             fairholdLandRentYearly: fairholdLandRentIterative,
             maintenanceCost: {
+                none: 0,
                 low: maintenanceCostLowIterative,
                 medium: maintenanceCostMediumIterative,
                 high: maintenanceCostHighIterative
@@ -161,6 +168,8 @@ export class Lifetime {
                 high: depreciatedHouseResaleValueHighMaintenanceIterative
             },
             fairholdLandPurchaseResaleValue: fairholdLandPurchaseResaleValueIterative,
+            socialRentHouseYearly: socialRentHouseYearlyIterative,
+            socialRentLandYearly: socialRentLandYearlyIterative,
             houseAge: houseAgeIterative,
             gasBillExistingBuildYearly: gasBillExistingBuildIterative,
             gasBillNewBuildOrRetrofitYearly: gasBillNewBuildOrRetrofitIterative
@@ -254,6 +263,10 @@ export class Lifetime {
                 affordability: marketRentAffordabilityIterative,
                 landPriceOrRent: marketRentLandYearlyIterative,
             }).discountedLandPriceOrRent;
+
+            // Increase monthly social rent by the average inflation adjustment (2.83%)
+            socialRentHouseYearlyIterative *= SOCIAL_RENT_ADJUSTMENT_FORECAST;
+            socialRentLandYearlyIterative *= SOCIAL_RENT_ADJUSTMENT_FORECAST;
             
             lifetime.push({
                 incomeYearly: incomeYearlyIterative,
@@ -264,6 +277,7 @@ export class Lifetime {
                 marketLandMortgageYearly: marketLandMortgageYearlyIterative,
                 fairholdLandRentYearly: fairholdLandRentIterative,
                 maintenanceCost: {
+                    none: 0,
                     low: maintenanceCostLowIterative,
                     medium: maintenanceCostMediumIterative,
                     high: maintenanceCostHighIterative
@@ -277,6 +291,8 @@ export class Lifetime {
                     high: depreciatedHouseResaleValueHighMaintenanceIterative
                 },
                 fairholdLandPurchaseResaleValue: fairholdLandPurchaseResaleValueIterative,
+                socialRentHouseYearly: socialRentHouseYearlyIterative,
+                socialRentLandYearly: socialRentLandYearlyIterative,
                 houseAge: houseAgeIterative,
                 gasBillExistingBuildYearly: gasBillExistingBuildIterative,
                 gasBillNewBuildOrRetrofitYearly: gasBillNewBuildOrRetrofitIterative

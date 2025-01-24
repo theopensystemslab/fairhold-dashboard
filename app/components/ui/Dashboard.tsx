@@ -1,5 +1,4 @@
 import React, { useRef, useState } from "react";
-import GraphCard from "./GraphCard";
 import { Household } from "@/app/models/Household";
 import { FormFrontend } from "@/app/schemas/formSchema";
 import { WhatWouldYouChoose } from "../Dashboard/Cards/WhatWouldYouChoose";
@@ -8,10 +7,11 @@ import { HowMuchFHCost } from "../Dashboard/Cards/HowMuchFHCost";
 import { Carousel } from "./Carousel";
 import { HowMuchPerMonth } from "../Dashboard/Cards/HowMuchPerMonth";
 import { ResaleValue } from "../Dashboard/Cards/ResaleValue";
+import { CostOverTime } from "../Dashboard/Cards/CostOverTime";
 
 export interface DashboardProps {
   processedData: Household;
-  inputData: FormFrontend;
+  inputData?: FormFrontend;
 }
 
 const Dashboard: React.FC<DashboardProps> = ({ inputData, processedData }) => {
@@ -39,7 +39,7 @@ const Dashboard: React.FC<DashboardProps> = ({ inputData, processedData }) => {
       >
         <HowMuchFHCost data={processedData} />
         <HowMuchPerMonth processedData={processedData} />
-        <GraphCard title="How would the cost change over my life?"></GraphCard>
+        <CostOverTime processedData={processedData} />
         <ResaleValue data={processedData} />
         <WhatDifference />
         <WhatWouldYouChoose />
