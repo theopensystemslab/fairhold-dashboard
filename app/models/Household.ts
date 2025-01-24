@@ -142,7 +142,6 @@ export class Household {
         yearsForecast: params.forecastParameters.yearsForecast,
         maintenanceLevel: params.forecastParameters.maintenanceLevel,
         incomeGrowthPerYear: params.forecastParameters.incomeGrowthPerYear,
-        affordabilityThresholdIncomePercentage: params.forecastParameters.affordabilityThresholdIncomePercentage,
         incomeYearly: this.incomeYearly,
       };
       return new Lifetime(lifetimeParams);

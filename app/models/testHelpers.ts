@@ -453,7 +453,6 @@ export const createTestLifetime = (overrides = {}) => {
     yearsForecast: DEFAULT_FORECAST_PARAMETERS.yearsForecast,
     maintenanceLevel: 'low',
     incomeGrowthPerYear: DEFAULT_FORECAST_PARAMETERS.incomeGrowthPerYear,
-    affordabilityThresholdIncomePercentage: DEFAULT_FORECAST_PARAMETERS.affordabilityThresholdIncomePercentage,
     incomeYearly: 30000,
     ...overrides
   })
