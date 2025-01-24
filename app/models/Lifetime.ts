@@ -20,7 +20,6 @@ export interface LifetimeParams {
     yearsForecast: number;
     maintenanceLevel: MaintenanceLevel;
     incomeGrowthPerYear: number;
-    affordabilityThresholdIncomePercentage: number;
     incomeYearly: number;
 }
 
@@ -39,7 +38,6 @@ export interface DepreciatedHouseByMaintenanceLevel {
 }
 export interface LifetimeData {
     incomeYearly: number;
-    affordabilityThresholdIncome: number;
     newbuildHouseMortgageYearly: number;
     depreciatedHouseMortgageYearly: number;
     fairholdLandMortgageYearly: number;
@@ -80,9 +78,6 @@ export class Lifetime {
         const lifetime: LifetimeData[] = [];
         /** Increases yearly by `ForecastParameters.incomeGrowthPerYear`*/
         let incomeYearlyIterative = params.incomeYearly;
-        /** 35% (or the value of `affordabilityThresholdIncomePercentage`) multiplied by `incomeYearly`*/
-        let affordabilityThresholdIncomeIterative =
-            incomeYearlyIterative * params.affordabilityThresholdIncomePercentage;
         /** Increases yearly by `ForecastParameters.propertyPriceGrowthPerYear`*/
         let averageMarketPriceIterative = params.property.averageMarketPrice;
         /** Increases yearly by `ForecastParameters.constructionPriceGrowthPerYear`*/
@@ -147,7 +142,6 @@ export class Lifetime {
         // Push the Y0 values before they start being iterated-upon
         lifetime.push({
             incomeYearly: incomeYearlyIterative,
-            affordabilityThresholdIncome: affordabilityThresholdIncomeIterative,
             newbuildHouseMortgageYearly: newbuildHouseMortgageYearlyIterative,
             depreciatedHouseMortgageYearly: depreciatedHouseMortgageYearlyIterative,
             fairholdLandMortgageYearly: fairholdLandMortgageYearlyIterative,
@@ -179,8 +173,6 @@ export class Lifetime {
         for (let i = 1; i <= params.yearsForecast - 1; i++) {
             incomeYearlyIterative = 
                 incomeYearlyIterative * (1 + params.incomeGrowthPerYear);
-            affordabilityThresholdIncomeIterative =
-                incomeYearlyIterative * params.affordabilityThresholdIncomePercentage;
             averageMarketPriceIterative =
                 averageMarketPriceIterative * (1 + params.propertyPriceGrowthPerYear);
             newBuildPriceIterative =
@@ -270,7 +262,6 @@ export class Lifetime {
             
             lifetime.push({
                 incomeYearly: incomeYearlyIterative,
-                affordabilityThresholdIncome: affordabilityThresholdIncomeIterative,
                 newbuildHouseMortgageYearly: newbuildHouseMortgageYearlyIterative,
                 depreciatedHouseMortgageYearly: depreciatedHouseMortgageYearlyIterative,
                 fairholdLandMortgageYearly: fairholdLandMortgageYearlyIterative,
