@@ -2,14 +2,19 @@ import { useState } from "react";
 import GraphCard from "../../ui/GraphCard";
 import CostOverTimeWrapper, { TenureType } from "../../graphs/CostOverTimeWrapper";
 import { Drawer } from "../../ui/Drawer";
-import { Household } from "@/app/models/Household";
 import TenureSelector from "../../ui/TenureSelector";
+import { DashboardProps } from "../../ui/Dashboard";
 
-interface DashboardProps {
-  data: Household;
+const TENURES = ['marketPurchase', 'marketRent', 'fairholdLandPurchase', 'fairholdLandRent', 'socialRent'] as const
+const TENURE_LABELS = {
+  marketPurchase: 'Freehold',
+  marketRent: 'Private rent',
+  fairholdLandPurchase: 'Fairhold Land Purchase',
+  fairholdLandRent: 'Fairhold Land Rent',
+  socialRent: 'Social rent'
 }
 
-export const CostOverTime: React.FC<DashboardProps> = ({ data }) => {
+export const CostOverTime: React.FC<DashboardProps> = ({ processedData }) => {
   const [selectedTenure, setSelectedTenure] = useState<TenureType>('marketPurchase');
 
   return (
@@ -19,40 +24,19 @@ export const CostOverTime: React.FC<DashboardProps> = ({ data }) => {
     >
       <div className="flex flex-col h-full w-3/4 justify-between">
         <div className="flex gap-2 mb-4">
-          <TenureSelector 
-            isSelected={selectedTenure === 'marketPurchase'}
-            onClick={() => setSelectedTenure('marketPurchase')}
+        {TENURES.map(tenure => (
+          <TenureSelector
+            key={tenure}
+            isSelected={selectedTenure === tenure}
+            onClick={() => setSelectedTenure(tenure)}
           >
-            Market Purchase
+            {TENURE_LABELS[tenure]}
           </TenureSelector>
-          <TenureSelector 
-            isSelected={selectedTenure === 'marketRent'}
-            onClick={() => setSelectedTenure('marketRent')}
-          >
-            Market Rent
-          </TenureSelector>
-          <TenureSelector 
-            isSelected={selectedTenure === 'fairholdLandPurchase'}
-            onClick={() => setSelectedTenure('fairholdLandPurchase')}
-          >
-            Fairhold Land Purchase
-          </TenureSelector>
-          <TenureSelector 
-            isSelected={selectedTenure === 'fairholdLandRent'}
-            onClick={() => setSelectedTenure('fairholdLandRent')}
-          >
-            Fairhold Land Rent
-          </TenureSelector>
-          <TenureSelector 
-            isSelected={selectedTenure === 'socialRent'}
-            onClick={() => setSelectedTenure('socialRent')}
-          >
-            Social Rent
-          </TenureSelector>
+        ))}
         </div>
 
         <CostOverTimeWrapper 
-          household={data}
+          household={processedData}
           tenure={selectedTenure}
         />
 

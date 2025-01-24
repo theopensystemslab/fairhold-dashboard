@@ -5,7 +5,7 @@ import { FairholdLandPurchase } from "./tenure/FairholdLandPurchase";
 import { FairholdLandRent } from "./tenure/FairholdLandRent";
 import { Fairhold } from "./Fairhold";
 import { Property } from "./Property";
-import { MONTHS_PER_YEAR, MAINTENANCE_LEVELS, MaintenanceLevel } from "./constants";
+import { MONTHS_PER_YEAR, MAINTENANCE_LEVELS, MaintenanceLevel, SOCIAL_RENT_ADJUSTMENT_FORECAST } from "./constants";
 
 export interface LifetimeParams {
     household: Household;
@@ -265,8 +265,8 @@ export class Lifetime {
             }).discountedLandPriceOrRent;
 
             // Increase monthly social rent by the average inflation adjustment (2.83%)
-            socialRentHouseYearlyIterative *= 1.0283; // TODO: decide if this is the best way to increase social rent or if we should preserve the changing land-house ratio as land costs inflate
-            socialRentLandYearlyIterative *= 1.0283;
+            socialRentHouseYearlyIterative *= SOCIAL_RENT_ADJUSTMENT_FORECAST;
+            socialRentLandYearlyIterative *= SOCIAL_RENT_ADJUSTMENT_FORECAST;
             
             lifetime.push({
                 incomeYearly: incomeYearlyIterative,

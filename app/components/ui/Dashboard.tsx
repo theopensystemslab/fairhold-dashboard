@@ -11,7 +11,7 @@ import { CostOverTime } from "../Dashboard/Cards/CostOverTime";
 
 export interface DashboardProps {
   processedData: Household;
-  inputData: FormFrontend;
+  inputData?: FormFrontend;
 }
 
 const Dashboard: React.FC<DashboardProps> = ({ inputData, processedData }) => {
@@ -39,7 +39,7 @@ const Dashboard: React.FC<DashboardProps> = ({ inputData, processedData }) => {
       >
         <HowMuchFHCost data={processedData} />
         <HowMuchPerMonth processedData={processedData} />
-        <CostOverTime data={processedData} />
+        <CostOverTime processedData={processedData} />
         <ResaleValue data={processedData} />
         <WhatDifference />
         <WhatWouldYouChoose />
