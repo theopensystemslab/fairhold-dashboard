@@ -6,7 +6,7 @@ import ResaleValueLineChart from "./ResaleValueLineChart";
 import type { DataPoint } from "./ResaleValueLineChart"
 
 interface ResaleValueWrapperProps {
-  tenure: 'landPurchase' | 'landRent';
+  tenure: 'fairholdLandPurchase' | 'fairholdLandRent';
   household: Household;
 }
 
@@ -22,7 +22,7 @@ const ResaleValueWrapper: React.FC<ResaleValueWrapperProps> = ({
 
       for (let i = 0; i < lifetime.length; i++ ) {
         // Fairhold land rent cannot be sold for anything, assign as 0 
-        const landValue = tenure === 'landRent' ? 0 : lifetime[i].fairholdLandPurchaseResaleValue;
+        const landValue = tenure === 'fairholdLandRent' ? 0 : lifetime[i].fairholdLandPurchaseResaleValue;
       
         chartData.push({
           year: i + 1,
