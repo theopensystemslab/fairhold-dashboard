@@ -34,7 +34,7 @@ const TenureComparisonBarChart: React.FC<StackedBarChartProps> = ({ data }) => {
       land: data[0].marketPurchase,
       house: data[1].marketPurchase,
       monthly: data[0].marketPurchase + data[1].marketPurchase,
-      fill: "rgb(var(--freehold-land-color-rgb))",
+      fill: "rgb(var(--freehold-equity-color-rgb))",
     },
     {
       tenure: "Private Rent",
@@ -49,14 +49,14 @@ const TenureComparisonBarChart: React.FC<StackedBarChartProps> = ({ data }) => {
       land: data[0].fairholdLandPurchase,
       house: data[1].fairholdLandPurchase,
       monthly: data[0].fairholdLandPurchase + data[1].fairholdLandPurchase,
-      fill: "rgb(var(--fairhold-land-color-rgb))",
+      fill: "rgb(var(--fairhold-equity-color-rgb))",
     },
     {
       tenure: "Fairhold - Land Rent",
       land: data[0].fairholdLandRent,
       house: data[1].fairholdLandRent,
       monthly: data[0].fairholdLandRent + data[1].fairholdLandRent,
-      fill: "rgb(var(--fairhold-house-color-rgb))",
+      fill: "rgb(var(--fairhold-interest-color-rgb))",
     },
 
     {

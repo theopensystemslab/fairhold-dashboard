@@ -20,19 +20,19 @@ type CustomTooltipProps = TooltipProps<number, string> & {
 const chartConfig = {
   none: {
     label: "No maintenance",
-    color: "rgb(var(--fairhold-land-color-rgb))", 
+    color: "rgb(var(--fairhold-equity-color-rgb))", 
   },
   low: {
     label: "Low maintenance",
-    color: "rgb(var(--fairhold-land-color-rgb))",
+    color: "rgb(var(--fairhold-equity-color-rgb))",
   },
   medium: {
     label: "Medium maintenance",
-    color: "rgb(var(--fairhold-land-color-rgb))",
+    color: "rgb(var(--fairhold-equity-color-rgb))",
   },
   high: {
     label: "High maintenance",
-    color: "rgb(var(--fairhold-land-color-rgb))",
+    color: "rgb(var(--fairhold-equity-color-rgb))",
   },
 } satisfies ChartConfig;
 
