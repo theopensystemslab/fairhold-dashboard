@@ -21,13 +21,13 @@ const TenureSelector: React.FC<TenureSelectorProps> = ({
     
     switch (tenureType) {
       case 'marketPurchase':
-        return "bg-[rgb(var(--freehold-detail-color-rgb))] text-[rgb(var(--freehold-land-color-rgb))]";
+        return "bg-[rgb(var(--freehold-detail-color-rgb))] text-[rgb(var(--freehold-equity-color-rgb))]";
       case 'marketRent':
           return "bg-[rgb(var(--private-rent-detail-color-rgb))] text-[rgb(var(--private-rent-land-color-rgb))]";
       case 'fairholdLandPurchase':
-        return "bg-[rgb(var(--fairhold-detail-color-rgb))] text-[rgb(var(--fairhold-land-color-rgb))]";
+        return "bg-[rgb(var(--fairhold-detail-color-rgb))] text-[rgb(var(--fairhold-equity-color-rgb))]";
       case 'fairholdLandRent':
-          return "bg-[rgb(var(--fairhold-detail-color-rgb))] text-[rgb(var(--fairhold-land-color-rgb))]";
+          return "bg-[rgb(var(--fairhold-detail-color-rgb))] text-[rgb(var(--fairhold-equity-color-rgb))]";
       case 'socialRent':
         return "bg-[rgb(var(--social-rent-detail-color-rgb))] text-[rgb(var(--social-rent-land-color-rgb))]";
       default:

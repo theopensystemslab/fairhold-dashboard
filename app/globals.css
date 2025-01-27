@@ -14,11 +14,12 @@
   --text-inaccessible-rgb: 171 164 164;
   --button-background-rgb: 227 227 225;
 
-  --freehold-land-color-rgb: 66 75 179;
-  --freehold-house-color-rgb: 131 164 255;
+  --freehold-equity-color-rgb: 66 75 179;
+  --freehold-interest-color-rgb: 131 164 255;
   --freehold-detail-color-rgb: 190 201 232;
-  --fairhold-land-color-rgb: 74 179 91;
-  --fairhold-house-color-rgb: 159 211 166;
+  --fairhold-land-rent-color-rgb: 28 117 43;
+  --fairhold-equity-color-rgb: 74 179 91;
+  --fairhold-interest-color-rgb: 159 211 166;
   --fairhold-detail-color-rgb: 207 227 209;
   --private-rent-land-color-rgb: 45 155 240;
   --private-rent-house-color-rgb: 119 188 242;
