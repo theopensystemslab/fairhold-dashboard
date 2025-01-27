@@ -4,8 +4,10 @@ import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Legend, Tooltip } from "rec
 import { Card, CardContent } from "@/components/ui/card";
 import {
   ChartContainer,
-  ChartTooltipContent,
 } from "@/components/ui/chart";
+import { TooltipProps } from "recharts";
+import { ValueType } from "tailwindcss/types/config";
+import { NameType } from "recharts/types/component/DefaultTooltipContent";
 
 export interface LifetimeBarData {
   landRent?: number;
@@ -14,6 +16,24 @@ export interface LifetimeBarData {
   rent?: number;
   maintenance?: number;
 }
+
+const CostOverTimeTooltip = ({ active, payload, label }: TooltipProps<ValueType, NameType>) => {
+  if (!active || !payload) return null;
+
+  return (
+    <div className="rounded-lg border bg-background p-2 shadow-sm">
+      <div className="grid grid-cols-2 gap-2">
+        <div className="font-medium">Year {label}</div>
+        {payload.map((entry, index) => (
+          <div key={`${entry.name}-${index}`} className="grid grid-cols-2 gap-4">
+            <div style={{ color: entry.color }}>{entry.name}:</div>
+            <div>£{entry.value ? entry.value.toLocaleString() : '0'}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
 
   interface CostOverTimeStackedBarChartProps {
     data: LifetimeBarData[];
@@ -26,7 +46,6 @@ export interface LifetimeBarData {
         rent?: string;
         maintenance?: string;
       };
-      // showMaintenance: boolean;
     };
   }
 
@@ -81,7 +100,7 @@ const CostOverTimeStackedBarChart: React.FC<CostOverTimeStackedBarChartProps> = 
             <XAxis dataKey="year" />
             <YAxis 
               domain={[0, maxY]}/>
-            <Tooltip content={<ChartTooltipContent />} />
+            <Tooltip content={<CostOverTimeTooltip />} />
             <Legend />
             
             {config.colors.landRent && ( 
@@ -107,3 +126,4 @@ const CostOverTimeStackedBarChart: React.FC<CostOverTimeStackedBarChartProps> = 
 };
 
 export default CostOverTimeStackedBarChart
+
