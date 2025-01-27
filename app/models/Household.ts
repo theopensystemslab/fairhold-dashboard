@@ -38,8 +38,12 @@ export class Household {
     fairholdLandRent: FairholdLandRent;
   };
   public lifetime: Lifetime;
-  public gasBillExistingBuildYearly: number;
-  public gasBillNewBuildOrRetrofitYearly: number;
+  public gasDemand: {
+    kwhExistingBuildYearly: number;
+    kwhNewBuildOrRetrofitYearly: number;
+    billExistingBuildYearly: number;
+    billNewBuildOrRetrofitYearly: number;
+  }
 
   constructor(params: ConstructorParams) {
     this.incomePerPersonYearly = params.incomePerPersonYearly;
@@ -47,8 +51,7 @@ export class Household {
     this.property = params.property;
     this.forecastParameters = params.forecastParameters;
     this.incomeYearly = HEADS_PER_HOUSEHOLD * params.incomePerPersonYearly;
-    this.gasBillExistingBuildYearly = this.calculateGasBillExistingBuild(params);
-    this.gasBillNewBuildOrRetrofitYearly = this.calculateGasBillNewBuildOrRetrofit(params);
+    this.gasDemand = this.calculateGasDemand(params)
     this.tenure = this.calculateTenures(params);
     this.lifetime = this.calculateLifetime(params);
   }
@@ -142,13 +145,24 @@ export class Household {
       return new Lifetime(lifetimeParams);
     }
 
-    private calculateGasBillExistingBuild(params: ConstructorParams) {
-      const gasBillExistingBuildYearly = this.kwhCostPence * params.property.size * KWH_M2_YR_EXISTING_BUILDS[params.property.houseType] / 100
-      return gasBillExistingBuildYearly
+    private calculateGasDemand(params: ConstructorParams) {
+      const kwhExistingBuildYearly = this.calculateKwhExistingBuildYearly(params);
+      const kwhNewBuildOrRetrofitYearly = this.calculateKwhNewBuildOrRetrofitYearly(params);
+        return {
+          kwhExistingBuildYearly,
+          kwhNewBuildOrRetrofitYearly,
+          billExistingBuildYearly: this.kwhCostPence * kwhExistingBuildYearly / 100,
+          billNewBuildOrRetrofitYearly: this.kwhCostPence * kwhNewBuildOrRetrofitYearly / 100
+      }
+      }
+
+    private calculateKwhExistingBuildYearly(params: ConstructorParams) {
+      const kwhYearly = params.property.size * KWH_M2_YR_EXISTING_BUILDS[params.property.houseType]
+      return kwhYearly
     }
 
-    private calculateGasBillNewBuildOrRetrofit(params: ConstructorParams) {
-      const gasBillNewBuildOrRetrofitYearly = this.kwhCostPence * params.property.size * KWH_M2_YR_NEWBUILDS_RETROFIT[params.property.houseType] / 100
-      return gasBillNewBuildOrRetrofitYearly
+    private calculateKwhNewBuildOrRetrofitYearly(params: ConstructorParams) {
+      const kwhYearly = params.property.size * KWH_M2_YR_NEWBUILDS_RETROFIT[params.property.houseType]
+      return kwhYearly
     }
   }

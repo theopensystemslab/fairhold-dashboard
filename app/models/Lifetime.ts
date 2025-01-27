@@ -125,8 +125,8 @@ export class Lifetime {
         /** Initialises as user input house age and increments by one */
         let houseAgeIterative = params.property.age;
 
-        let gasBillExistingBuildIterative = params.household.gasBillExistingBuildYearly;
-        let gasBillNewBuildOrRetrofitIterative = params.household.gasBillNewBuildOrRetrofitYearly;
+        let gasBillExistingBuildIterative = params.household.gasDemand.billExistingBuildYearly;
+        let gasBillNewBuildOrRetrofitIterative = params.household.gasDemand.billNewBuildOrRetrofitYearly;
 
         // Initialise mortgage variables
         /** Assuming a constant interest rate, this figures stays the same until the mortgage term (`marketPurchase.houseMortgage.termYears`) is reached */
