@@ -6,14 +6,16 @@ interface MortgageParams {
   initialDeposit?: number;
 }
 
-type MortgageBreakdown = {
+export type MortgageBreakdownElement = {
   year: number;
   yearlyPayment: number;
+  yearlyInterestPaid: number;
+  yearlyEquityPaid: number;
   cumulativePaid: number;
   cumulativeInterestPaid: number;
-  cumulativePrincipalPaid: number;
+  cumulativeEquityPaid: number;
   remainingBalance: number;
-}[];
+};
 
 /** 
  * The `Mortgage` class is instantiated each time a mortgage needs to be calculated,
@@ -37,7 +39,7 @@ export class Mortgage {
   monthlyPayment: number;
   /** This includes principal, monthly repayments and interest */
   totalMortgageCost: number;
-  yearlyPaymentBreakdown: MortgageBreakdown;
+  yearlyPaymentBreakdown: MortgageBreakdownElement[];
   totalInterest: number;
 
   constructor(params: MortgageParams) {
@@ -79,6 +81,13 @@ export class Mortgage {
     monthlyPayment = parseFloat(monthlyPayment.toFixed(2));
     return { monthlyPayment, totalMortgageCost };
   }
+
+  /** 
+   * While the yearly payment breakdown is currently only accessed from the `Lifetime` class, the calculations are kept here because
+   * a.) separation of concerns (`Mortgage` handles all mortgage-specific calculations)
+   * b.) in case we end up needing the schedule elsewhere
+   * c.) changing its output data structure and iterating through it within the `Lifetime` class seemed excessively complicated (eg needing to access the previous iteration's outputs)
+   */
   private calculateYearlyPaymentBreakdown() {
     const monthlyRate = this.interestRate / MONTHS_PER_YEAR;
     
@@ -90,30 +99,32 @@ export class Mortgage {
     
     // Calculate first year's interest and principal
     let balance = parseFloat(this.principal.toFixed(10));  // This method uses this throughout to ensure consistent precision, was hitting errors
-    let yearInterestPaid = 0;
-    let yearPrincipalPaid = 0;
+    let yearlyInterestPaid = 0;
+    let yearlyEquityPaid = 0;
     
     // Calculate first year's monthly payments
     for (let month = 0; month < MONTHS_PER_YEAR; month++) {
       const monthlyInterest = parseFloat((balance * monthlyRate).toFixed(10)); 
       const monthlyPrincipal = parseFloat((this.monthlyPayment - monthlyInterest).toFixed(10)); 
       
-      yearInterestPaid += monthlyInterest;
-      yearPrincipalPaid += monthlyPrincipal;
+      yearlyInterestPaid += monthlyInterest;
+      yearlyEquityPaid += monthlyPrincipal;
       balance = parseFloat((balance - monthlyPrincipal).toFixed(10)); 
     }
     
-    let cumulativeInterestPaid = yearInterestPaid;
-    let cumulativePrincipalPaid = yearPrincipalPaid;
+    let cumulativeInterestPaid = yearlyInterestPaid;
+    let cumulativeEquityPaid = yearlyEquityPaid;
     let remainingBalance = balance;
 
-    const yearlyPaymentBreakdown: MortgageBreakdown = [
+    const yearlyPaymentBreakdown: MortgageBreakdownElement[] = [
       {
         year: 0,
         yearlyPayment,
+        yearlyInterestPaid,
+        yearlyEquityPaid,
         cumulativePaid,
         cumulativeInterestPaid,
-        cumulativePrincipalPaid,
+        cumulativeEquityPaid,
         remainingBalance,
       },
     ];
@@ -122,29 +133,31 @@ export class Mortgage {
       yearlyPayment = this.monthlyPayment * MONTHS_PER_YEAR;
       cumulativePaid += yearlyPayment;
       
-      yearInterestPaid = 0;
-      yearPrincipalPaid = 0;
+      yearlyInterestPaid = 0;
+      yearlyEquityPaid = 0;
       
       // Calculate each month's breakdown
       for (let month = 0; month < MONTHS_PER_YEAR; month++) {
         const monthlyInterest = parseFloat((balance * monthlyRate).toFixed(10)); 
         const monthlyPrincipal = parseFloat((this.monthlyPayment - monthlyInterest).toFixed(10)); 
         
-        yearInterestPaid += monthlyInterest;
-        yearPrincipalPaid += monthlyPrincipal;
+        yearlyInterestPaid += monthlyInterest;
+        yearlyEquityPaid += monthlyPrincipal;
         balance = parseFloat((balance - monthlyPrincipal).toFixed(10)); 
       }
       
-      cumulativeInterestPaid = parseFloat((cumulativeInterestPaid + yearInterestPaid).toFixed(10)); 
-      cumulativePrincipalPaid = parseFloat((cumulativePrincipalPaid + yearPrincipalPaid).toFixed(10)); 
+      cumulativeInterestPaid = parseFloat((cumulativeInterestPaid + yearlyInterestPaid).toFixed(10)); 
+      cumulativeEquityPaid = parseFloat((cumulativeEquityPaid + yearlyEquityPaid).toFixed(10)); 
       i === (this.termYears - 1) ? remainingBalance = 0 : remainingBalance = balance;
 
       yearlyPaymentBreakdown.push({
         year: i,
         yearlyPayment,
+        yearlyInterestPaid,
+        yearlyEquityPaid,
         cumulativePaid,
         cumulativeInterestPaid,
-        cumulativePrincipalPaid,
+        cumulativeEquityPaid,
         remainingBalance,
       });
     }
