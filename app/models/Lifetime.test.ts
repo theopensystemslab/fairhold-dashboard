@@ -16,10 +16,9 @@ it("creates an array with the correct number of years", () => {
 })
 
 it("reduces mortgage payments to 0 after the mortgage term is reached", () => {
-    expect(lifetime.lifetimeData[35].newbuildHouseMortgageYearly).toBe(0);
-    expect(lifetime.lifetimeData[34].marketLandMortgageYearly).toBe(0);
-    expect(lifetime.lifetimeData[33].fairholdLandMortgageYearly).toBe(0);
-    expect(lifetime.lifetimeData[32].marketLandMortgageYearly).toBe(0);
+    expect(lifetime.lifetimeData[35].marketPurchaseYearly.yearlyEquityPaid).toBe(0);
+    expect(lifetime.lifetimeData[34].fairholdLandPurchaseYearly.yearlyInterestPaid).toBe(0);
+    expect(lifetime.lifetimeData[33].fairholdLandRentYearly.yearlyEquityPaid).toBe(0);
 })
 
 describe("resale values", () => {
