@@ -100,7 +100,7 @@ export class Mortgage {
     // Calculate first year's interest and principal
     let balance = parseFloat(this.principal.toFixed(10));  // This method uses this throughout to ensure consistent precision, was hitting errors
     let yearlyInterestPaid = 0;
-    let yearlyEquityPaid = 0;
+    let yearlyEquityPaid = this.initialDeposit * this.propertyValue;
     
     // Calculate first year's monthly payments
     for (let month = 0; month < MONTHS_PER_YEAR; month++) {
