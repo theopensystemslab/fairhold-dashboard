@@ -30,8 +30,8 @@ export class SocialValue {
         let fairholdLandPurchaseTotal = 0;
         const lifetime = params.household.lifetime.lifetimeData
         for (let i = 0; i < 10; i++) { // TODO: should this include bills? TODO: do we want to show 10 years only? using 10 here because designs showed savings over 10 year period, not lifetime
-            marketPurchaseTotal += (lifetime[i].marketLandMortgageYearly + lifetime[i].newbuildHouseMortgageYearly)
-            fairholdLandPurchaseTotal += (lifetime[i].fairholdLandMortgageYearly + lifetime[i].depreciatedHouseMortgageYearly)
+            marketPurchaseTotal += (lifetime[i].marketPurchaseYearly.yearlyEquityPaid + lifetime[i].marketPurchaseYearly.yearlyInterestPaid)
+            fairholdLandPurchaseTotal += (lifetime[i].fairholdLandPurchaseYearly.yearlyEquityPaid + lifetime[i].fairholdLandPurchaseYearly.yearlyInterestPaid)
         }
         const moneySaved = marketPurchaseTotal - fairholdLandPurchaseTotal
         return moneySaved;
@@ -40,7 +40,7 @@ export class SocialValue {
         const lifetime = params.household.lifetime.lifetimeData
         let communityWealth = 0
         for (let i = 0; i < SOCIAL_VALUE_YEARS; i++) { // TODO: decide on time period
-            communityWealth += lifetime[i].fairholdLandRentYearly
+            communityWealth += lifetime[i].fairholdLandRentCGRYearly
         }
         return communityWealth;
     }
