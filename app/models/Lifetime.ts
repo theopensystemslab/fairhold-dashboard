@@ -6,6 +6,7 @@ import { FairholdLandRent } from "./tenure/FairholdLandRent";
 import { Fairhold } from "./Fairhold";
 import { Property } from "./Property";
 import { MONTHS_PER_YEAR, MAINTENANCE_LEVELS, MaintenanceLevel, SOCIAL_RENT_ADJUSTMENT_FORECAST } from "./constants";
+import type { MortgageBreakdownElement } from "./Mortgage"
 
 export interface LifetimeParams {
     household: Household;
@@ -36,22 +37,23 @@ export interface DepreciatedHouseByMaintenanceLevel {
     medium: number;
     high: number;
 }
+
+type LifetimeMortgageBreakdown = Pick<MortgageBreakdownElement, "yearlyInterestPaid" | "yearlyEquityPaid">
 export interface LifetimeData {
     incomeYearly: number;
-    newbuildHouseMortgageYearly: number;
-    depreciatedHouseMortgageYearly: number;
-    fairholdLandMortgageYearly: number;
-    marketLandMortgageYearly: number;
-    fairholdLandRentYearly: number;
+    marketPurchaseYearly: LifetimeMortgageBreakdown;
+    fairholdLandPurchaseYearly: LifetimeMortgageBreakdown;
+    fairholdLandRentYearly: LifetimeMortgageBreakdown;
+    fairholdLandRentCGRYearly: number;
     maintenanceCost: MaintenanceCosts;
-    marketLandRentYearly: number;
-    marketHouseRentYearly: number;
+    /** While our graph doesn't split rent values into land and house, this is still used as an input into Fairhold Land Rent calcs */
+    marketRentLandYearly: number;
+    marketRentYearly: number;
     gasBillExistingBuildYearly: number;
     gasBillNewBuildOrRetrofitYearly: number;
     depreciatedHouseResaleValue: DepreciatedHouseByMaintenanceLevel;
     fairholdLandPurchaseResaleValue: number;
-    socialRentLandYearly: number;
-    socialRentHouseYearly: number;
+    socialRentYearly: number;
     houseAge: number;
     [key: number]: number;
 }
@@ -93,20 +95,19 @@ export class Lifetime {
         /** Increases yearly by `ForecastParameters.rentGrowthPerYear`*/
         let marketRentAffordabilityIterative = 
             marketRentYearlyIterative / incomeYearlyIterative
-        /** Uses the `landToTotalRatioIterative` to calculate the percentage of market rent that goes towards land as the market inflates */
+        /** 
+         * We need this figure as an input to calculate`FairholdLandRent`
+         * Uses the `landToTotalRatioIterative` to calculate the percentage of market rent that goes towards land as the market inflates */
         let marketRentLandYearlyIterative =
             marketRentYearlyIterative * landToTotalRatioIterative;
-        /** Subtracts `marketRentLandYearlyIterative` from inflating `marketRentYearlyIterative` */
-        let marketRentHouseYearlyIterative =
-            marketRentYearlyIterative - marketRentLandYearlyIterative;
-        /** The percentage levels are kept steady, and are multiplied by the `newBuildPriceIterative` as it inflates  */
+        /* The percentage levels are kept steady, and are multiplied by the `newBuildPriceIterative` as it inflates  */
         let maintenanceCostLowIterative = 
             MAINTENANCE_LEVELS.low * newBuildPriceIterative;
         let maintenanceCostMediumIterative = 
             MAINTENANCE_LEVELS.medium * newBuildPriceIterative;
         let maintenanceCostHighIterative = 
             MAINTENANCE_LEVELS.high * newBuildPriceIterative;
-        /** Each loop a new `Property` instance is created, this is updated by running the `calculateDepreciatedBuildPrice()` method on `iterativeProperty` */
+        /* Each loop a new `Property` instance is created, this is updated by running the `calculateDepreciatedBuildPrice()` method on `iterativeProperty` */
         let depreciatedHouseResaleValueNoMaintenanceIterative = params.property.depreciatedBuildPrice;
         let depreciatedHouseResaleValueLowMaintenanceIterative = params.property.depreciatedBuildPrice;
         let depreciatedHouseResaleValueMediumMaintenanceIterative = params.property.depreciatedBuildPrice;
@@ -114,47 +115,40 @@ export class Lifetime {
 
         /** Resale value increases with `ForecastParameters.constructionPriceGrowthPerYear` */
         let fairholdLandPurchaseResaleValueIterative = params.fairholdLandPurchase.discountedLandPrice;
-        let socialRentLandYearlyIterative = params.household.tenure.socialRent.socialRentMonthlyLand * 12; 
-        let socialRentHouseYearlyIterative = params.household.tenure.socialRent.socialRentMonthlyHouse * 12;
+        let socialRentYearlyIterative = (params.household.tenure.socialRent.socialRentMonthlyLand + params.household.tenure.socialRent.socialRentMonthlyHouse) * 12; 
         
         /** Initialises as user input house age and increments by one */
         let houseAgeIterative = params.property.age;
 
         let gasBillExistingBuildIterative = params.household.gasDemand.billExistingBuildYearly;
         let gasBillNewBuildOrRetrofitIterative = params.household.gasDemand.billNewBuildOrRetrofitYearly;
-
-        // Initialise mortgage variables
-        /** Assuming a constant interest rate, this figures stays the same until the mortgage term (`marketPurchase.houseMortgage.termYears`) is reached */
-        let newbuildHouseMortgageYearlyIterative = params.marketPurchase.houseMortgage.yearlyPaymentBreakdown[0].yearlyPayment;
-        /** Assuming a constant interest rate, this figures stays the same until the mortgage term (`marketPurchase.houseMortgage.termYears`) is reached. `termyears` is the same across tenures, so it doesn't matter that it comes from a `marketPurchase` object here */ 
-        let depreciatedHouseMortgageYearlyIterative = params.fairholdLandPurchase.depreciatedHouseMortgage.yearlyPaymentBreakdown[0].yearlyPayment;
-        /** Assuming a constant interest rate, this figures stays the same until the mortgage term (`marketPurchase.houseMortgage.termYears`) is reached. `termyears` is the same across tenures, so it doesn't matter that it comes from a `marketPurchase` object here */ 
-        let fairholdLandMortgageYearlyIterative = params.fairholdLandPurchase.discountedLandMortgage.yearlyPaymentBreakdown[0].yearlyPayment;
-        /** Assuming a constant interest rate, this figures stays the same until the mortgage term (`marketPurchase.houseMortgage.termYears`) is reached. `termyears` is the same across tenures, so it doesn't matter that it comes from a `marketPurchase` object here */ 
-        let marketLandMortgageYearlyIterative = params.marketPurchase.landMortgage.yearlyPaymentBreakdown[0].yearlyPayment;
        
         // New instance of FairholdLandRent class
-        let fairholdLandRentIterative = new Fairhold({
+        let fairholdLandRentCGRYearlyIterative = new Fairhold({
             affordability: marketRentAffordabilityIterative,
             landPriceOrRent: marketRentLandYearlyIterative,
         }).discountedLandPriceOrRent;
 
+        // Initialise LifetimeMortgageBreakdown Y0 TODO: deal with deposits too!
+        let marketPurchaseYearlyIterative = this.getMortgageBreakdown("marketPurchase", params.household, 0)
+        let fairholdLandPurchaseYearlyIterative = this.getMortgageBreakdown("fairholdLandPurchase", params.household, 0)
+        let fairholdLandRentYearlyIterative = this.getMortgageBreakdown("fairholdLandRent", params.household, 0)
+
         // Push the Y0 values before they start being iterated-upon
         lifetime.push({
             incomeYearly: incomeYearlyIterative,
-            newbuildHouseMortgageYearly: newbuildHouseMortgageYearlyIterative,
-            depreciatedHouseMortgageYearly: depreciatedHouseMortgageYearlyIterative,
-            fairholdLandMortgageYearly: fairholdLandMortgageYearlyIterative,
-            marketLandMortgageYearly: marketLandMortgageYearlyIterative,
-            fairholdLandRentYearly: fairholdLandRentIterative,
+            marketPurchaseYearly: marketPurchaseYearlyIterative,
+            fairholdLandPurchaseYearly: fairholdLandPurchaseYearlyIterative,
+            fairholdLandRentYearly: fairholdLandRentYearlyIterative,
+            fairholdLandRentCGRYearly: fairholdLandRentCGRYearlyIterative,
             maintenanceCost: {
                 none: 0,
                 low: maintenanceCostLowIterative,
                 medium: maintenanceCostMediumIterative,
                 high: maintenanceCostHighIterative
             },
-            marketLandRentYearly: marketRentLandYearlyIterative,
-            marketHouseRentYearly: marketRentHouseYearlyIterative,
+            marketRentYearly: marketRentYearlyIterative,
+            marketRentLandYearly: marketRentLandYearlyIterative,
             depreciatedHouseResaleValue: {
                 none: depreciatedHouseResaleValueNoMaintenanceIterative,
                 low: depreciatedHouseResaleValueLowMaintenanceIterative,
@@ -162,8 +156,7 @@ export class Lifetime {
                 high: depreciatedHouseResaleValueHighMaintenanceIterative
             },
             fairholdLandPurchaseResaleValue: fairholdLandPurchaseResaleValueIterative,
-            socialRentHouseYearly: socialRentHouseYearlyIterative,
-            socialRentLandYearly: socialRentLandYearlyIterative,
+            socialRentYearly: socialRentYearlyIterative,
             houseAge: houseAgeIterative,
             gasBillExistingBuildYearly: gasBillExistingBuildIterative,
             gasBillNewBuildOrRetrofitYearly: gasBillNewBuildOrRetrofitIterative
@@ -172,7 +165,7 @@ export class Lifetime {
         // The 0th round has already been calculated and pushed above
         for (let i = 1; i <= params.yearsForecast - 1; i++) {
             incomeYearlyIterative = 
-                incomeYearlyIterative * (1 + params.incomeGrowthPerYear);
+                incomeYearlyIterative * (1 + params.incomeGrowthPerYear);      
             averageMarketPriceIterative =
                 averageMarketPriceIterative * (1 + params.propertyPriceGrowthPerYear);
             newBuildPriceIterative =
@@ -187,8 +180,6 @@ export class Lifetime {
                 marketRentYearlyIterative / incomeYearlyIterative
             marketRentLandYearlyIterative =
                 marketRentYearlyIterative * landToTotalRatioIterative;
-            marketRentHouseYearlyIterative =
-                marketRentYearlyIterative - marketRentLandYearlyIterative;
             maintenanceCostLowIterative =
                 MAINTENANCE_LEVELS.low * newBuildPriceIterative;
             maintenanceCostMediumIterative =
@@ -200,10 +191,7 @@ export class Lifetime {
             gasBillNewBuildOrRetrofitIterative = 
                 gasBillNewBuildOrRetrofitIterative * (1 + params.constructionPriceGrowthPerYear)
             
-            /** 
-             * A new instance of the `Property` class is needed each loop in order to
-            re-calculate the depreciated house value as the house gets older
-            */
+            /** A new instance of the `Property` class is needed each loop in order to re-calculate the depreciated house value as the house gets older */
             const iterativePropertyNoMaintenance = new Property({ 
                 ...params.property,
                 age: houseAgeIterative,
@@ -224,6 +212,7 @@ export class Lifetime {
                 age: houseAgeIterative, 
                 maintenanceLevel: "high"
             });
+
             /* Use the `calculateDepreciatedBuildPrice()` method on the new `Property` class 
             to calculate an updated depreciated house value */
             depreciatedHouseResaleValueNoMaintenanceIterative = iterativePropertyNoMaintenance.calculateDepreciatedBuildPrice()            
@@ -234,47 +223,49 @@ export class Lifetime {
             fairholdLandPurchaseResaleValueIterative = fairholdLandPurchaseResaleValueIterative * (1 + params.constructionPriceGrowthPerYear) // TODO: replace variable name with cpiGrowthPerYear
             houseAgeIterative += 1
 
-            // If the mortgage term ongoing (if `i` is less than the term), calculate yearly mortgage payments
+            // If the mortgage term is ongoing (if `i` is less than the term), use yearly mortgage payments
             if (i < params.marketPurchase.houseMortgage.termYears - 1) {
-                newbuildHouseMortgageYearlyIterative = params.marketPurchase.houseMortgage.yearlyPaymentBreakdown[i].yearlyPayment;
-                depreciatedHouseMortgageYearlyIterative = params.fairholdLandPurchase.depreciatedHouseMortgage.yearlyPaymentBreakdown[i].yearlyPayment;
-                fairholdLandMortgageYearlyIterative = params.fairholdLandPurchase.discountedLandMortgage.yearlyPaymentBreakdown[i].yearlyPayment
-                marketLandMortgageYearlyIterative = params.marketPurchase.landMortgage.yearlyPaymentBreakdown[i].yearlyPayment;
+                marketPurchaseYearlyIterative = this.getMortgageBreakdown("marketPurchase", params.household, i)
+                fairholdLandPurchaseYearlyIterative = this.getMortgageBreakdown("fairholdLandPurchase", params.household, i)
+                fairholdLandRentYearlyIterative = this.getMortgageBreakdown("fairholdLandRent", params.household, i)      
             // If the mortgage term has ended, yearly payment is 0
             } else {
-                newbuildHouseMortgageYearlyIterative = 0;
-                depreciatedHouseMortgageYearlyIterative = 0;
-                fairholdLandMortgageYearlyIterative = 0;
-                marketLandMortgageYearlyIterative = 0;
+                const noMortgage = {
+                    yearlyInterestPaid: 0,
+                    yearlyEquityPaid: 0
+                }
+                marketPurchaseYearlyIterative = noMortgage;
+                fairholdLandPurchaseYearlyIterative = noMortgage;
+                fairholdLandRentYearlyIterative = noMortgage;
             }
 
             /* A new instance of the Fairhold class is needed in each loop in order to
             re-calculate land rent values per-year (with updating local house prices
             and income levels)*/
-            fairholdLandRentIterative = new Fairhold({
+            fairholdLandRentCGRYearlyIterative = new Fairhold({
                 affordability: marketRentAffordabilityIterative,
                 landPriceOrRent: marketRentLandYearlyIterative,
             }).discountedLandPriceOrRent;
 
             // Increase monthly social rent by the average inflation adjustment (2.83%)
-            socialRentHouseYearlyIterative *= SOCIAL_RENT_ADJUSTMENT_FORECAST;
-            socialRentLandYearlyIterative *= SOCIAL_RENT_ADJUSTMENT_FORECAST;
+            socialRentYearlyIterative *= SOCIAL_RENT_ADJUSTMENT_FORECAST;
             
             lifetime.push({
                 incomeYearly: incomeYearlyIterative,
-                newbuildHouseMortgageYearly: newbuildHouseMortgageYearlyIterative,
-                depreciatedHouseMortgageYearly: depreciatedHouseMortgageYearlyIterative,
-                fairholdLandMortgageYearly: fairholdLandMortgageYearlyIterative,
-                marketLandMortgageYearly: marketLandMortgageYearlyIterative,
-                fairholdLandRentYearly: fairholdLandRentIterative,
+                marketPurchaseYearly: marketPurchaseYearlyIterative,
+                fairholdLandPurchaseYearly: fairholdLandPurchaseYearlyIterative,
+                fairholdLandRentYearly: fairholdLandRentYearlyIterative,
+                fairholdLandRentCGRYearly: fairholdLandRentCGRYearlyIterative,
                 maintenanceCost: {
                     none: 0,
                     low: maintenanceCostLowIterative,
                     medium: maintenanceCostMediumIterative,
                     high: maintenanceCostHighIterative
                 },
-                marketLandRentYearly: marketRentLandYearlyIterative,
-                marketHouseRentYearly: marketRentHouseYearlyIterative,
+                marketRentLandYearly: marketRentLandYearlyIterative,
+                marketRentYearly: marketRentYearlyIterative,
+                gasBillExistingBuildYearly: gasBillExistingBuildIterative,
+                gasBillNewBuildOrRetrofitYearly: gasBillNewBuildOrRetrofitIterative,
                 depreciatedHouseResaleValue: {
                     none: depreciatedHouseResaleValueNoMaintenanceIterative,
                     low: depreciatedHouseResaleValueLowMaintenanceIterative,
@@ -282,13 +273,44 @@ export class Lifetime {
                     high: depreciatedHouseResaleValueHighMaintenanceIterative
                 },
                 fairholdLandPurchaseResaleValue: fairholdLandPurchaseResaleValueIterative,
-                socialRentHouseYearly: socialRentHouseYearlyIterative,
-                socialRentLandYearly: socialRentLandYearlyIterative,
+                socialRentYearly: socialRentYearlyIterative,
                 houseAge: houseAgeIterative,
-                gasBillExistingBuildYearly: gasBillExistingBuildIterative,
-                gasBillNewBuildOrRetrofitYearly: gasBillNewBuildOrRetrofitIterative
             });
         }
         return lifetime;
     }
-};
+
+    private getMortgageBreakdown(
+        tenure: "marketPurchase" | "fairholdLandPurchase" | "fairholdLandRent",
+        params: Household,
+        year: number
+      ): LifetimeMortgageBreakdown {
+        const lifetimeMortgageBreakdown = {
+            yearlyInterestPaid: 0,
+            yearlyEquityPaid: 0,
+        }
+        // Handle different property names based on tenure type. No need to deal with mortgage term here; it is handled in the Lifetime constructor instead
+        if (tenure === "marketPurchase") {
+            const landMortgageYearly = params.tenure.marketPurchase.landMortgage.yearlyPaymentBreakdown[year]
+            const houseMortgageYearly = params.tenure.marketPurchase.houseMortgage.yearlyPaymentBreakdown[year]
+
+            lifetimeMortgageBreakdown.yearlyInterestPaid = landMortgageYearly.yearlyInterestPaid + houseMortgageYearly.yearlyInterestPaid
+            lifetimeMortgageBreakdown.yearlyEquityPaid = landMortgageYearly.yearlyEquityPaid + houseMortgageYearly.yearlyEquityPaid
+        }
+        if (tenure === "fairholdLandPurchase") {
+            const landMortgageYearly = params.tenure.fairholdLandPurchase.discountedLandMortgage.yearlyPaymentBreakdown[year]
+            const houseMortgageYearly = params.tenure.fairholdLandPurchase.depreciatedHouseMortgage.yearlyPaymentBreakdown[year]
+
+            lifetimeMortgageBreakdown.yearlyInterestPaid = landMortgageYearly.yearlyInterestPaid + houseMortgageYearly.yearlyInterestPaid
+            lifetimeMortgageBreakdown.yearlyEquityPaid = landMortgageYearly.yearlyEquityPaid + houseMortgageYearly.yearlyEquityPaid
+        }
+        if (tenure === "fairholdLandRent") {
+            // FairholdLandRent only has house mortgage
+            const houseMortgageYearly = params.tenure.fairholdLandRent.depreciatedHouseMortgage.yearlyPaymentBreakdown[year]
+
+            lifetimeMortgageBreakdown.yearlyInterestPaid = houseMortgageYearly.yearlyInterestPaid 
+            lifetimeMortgageBreakdown.yearlyEquityPaid = houseMortgageYearly.yearlyEquityPaid
+        }
+            return lifetimeMortgageBreakdown;
+        }
+    }
