@@ -1,8 +1,10 @@
 import { Household } from "./Household"
-import { KG_CO2_PER_KWH, NHS_SAVINGS_PER_HEAD_PER_YEAR, FTE_SPEND } from "./constants";
+import { KG_CO2_PER_KWH, NHS_SAVINGS_PER_HEAD_PER_YEAR, FTE_SPEND, SOCIAL_VALUE_YEARS } from "./constants";
 
 type ConstructorParams = {
-    household: Household};
+    household: Household
+};
+
 
 export class SocialValue {
     public moneySaved: number;
@@ -37,7 +39,7 @@ export class SocialValue {
     private calculateCommunityWealth(params: ConstructorParams) {
         const lifetime = params.household.lifetime.lifetimeData
         let communityWealth = 0
-        for (let i = 0; i < 10; i++) { // TODO: decide on time period
+        for (let i = 0; i < SOCIAL_VALUE_YEARS; i++) { // TODO: decide on time period
             communityWealth += lifetime[i].fairholdLandRentYearly
         }
         return communityWealth;
