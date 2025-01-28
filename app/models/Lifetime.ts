@@ -129,7 +129,7 @@ export class Lifetime {
             landPriceOrRent: marketRentLandYearlyIterative,
         }).discountedLandPriceOrRent;
 
-        // Initialise LifetimeMortgageBreakdown Y0 TODO: deal with deposits too!
+        // Initialise LifetimeMortgageBreakdown
         let marketPurchaseYearlyIterative = this.getMortgageBreakdown("marketPurchase", params.household, 0)
         let fairholdLandPurchaseYearlyIterative = this.getMortgageBreakdown("fairholdLandPurchase", params.household, 0)
         let fairholdLandRentYearlyIterative = this.getMortgageBreakdown("fairholdLandRent", params.household, 0)
