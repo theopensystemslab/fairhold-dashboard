@@ -7,12 +7,12 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet"
 import { QuestionMarkCircledIcon } from "@radix-ui/react-icons";
-import React from "react";
+import React, { ReactNode } from "react";
 
 interface Props {
   buttonTitle: string;
   title: string;
-  description: string;
+  description: ReactNode;
 }
 
 export const Drawer: React.FC<React.PropsWithChildren<Props>> = ({ buttonTitle, title, description, children }) => (
