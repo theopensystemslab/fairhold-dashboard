@@ -2,6 +2,8 @@ import GraphCard from "../../ui/GraphCard";
 import HowMuchFHCostWrapper from "../../graphs/HowMuchFHCostWrapper";
 import { Drawer } from "../../ui/Drawer";
 import { Household } from "@/app/models/Household";
+import ReactMarkdown from 'react-markdown';
+import explanationContent from '../Help/HowMuchFHCost.md';
 
 interface DashboardProps {
   data: Household;
@@ -18,7 +20,7 @@ export const HowMuchFHCost: React.FC<DashboardProps> = ({ data }) => {
         <Drawer
           buttonTitle="Find out more about how we estimated these"
           title="How we estimated these figures"
-          description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum minus eligendi fugit nulla officia dolor inventore nemo ex quo quia, laborum qui ratione aperiam, pariatur explicabo ipsum culpa impedit ad!"
+          description={<ReactMarkdown className="space-y-4">{explanationContent}</ReactMarkdown>}
         />
       </div>
     </GraphCard>

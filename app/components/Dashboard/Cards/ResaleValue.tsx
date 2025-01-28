@@ -4,6 +4,9 @@ import ResaleValueWrapper from "../../graphs/ResaleValueWrapper";
 import { Drawer } from "../../ui/Drawer";
 import { Household } from "@/app/models/Household";
 import TenureSelector from "../../ui/TenureSelector";
+import ReactMarkdown from 'react-markdown';
+import explanationContent from '../Help/ResaleValue.md';
+import { DEFAULT_FORECAST_PARAMETERS } from "@/app/models/ForecastParameters";
 
 const TENURES = ['fairholdLandPurchase', 'fairholdLandRent'] as const;
 type Tenure = (typeof TENURES)[number];
@@ -13,6 +16,12 @@ interface DashboardProps {
 }
 
 export const ResaleValue: React.FC<DashboardProps> = ({ data }) => {
+    // We don't want to hard code the variables in markdown because then we'd have to maintain them in multiple places
+    const processedContent = explanationContent.replace(
+      `{{constructionPriceGrowthPerYear}}`,
+      (DEFAULT_FORECAST_PARAMETERS.constructionPriceGrowthPerYear * 100).toString()
+    )
+
   const [selectedTenure, setSelectedTenure] = useState<Tenure>('fairholdLandPurchase');
 
   return (
@@ -42,7 +51,7 @@ export const ResaleValue: React.FC<DashboardProps> = ({ data }) => {
         <Drawer
           buttonTitle="Find out more about how we estimated these"
           title="How we estimated these figures"
-          description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum minus eligendi fugit nulla officia dolor inventore nemo ex quo quia, laborum qui ratione aperiam, pariatur explicabo ipsum culpa impedit ad!"
+          description={<ReactMarkdown className="space-y-4">{processedContent}</ReactMarkdown>}
         />
       </div>
     </GraphCard>

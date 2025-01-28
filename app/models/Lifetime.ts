@@ -302,7 +302,8 @@ export class Lifetime {
             }).discountedLandPriceOrRent;
 
             // Increase monthly social rent by the average inflation adjustment (2.83%)
-            socialRentYearlyIterative *= SOCIAL_RENT_ADJUSTMENT_FORECAST;
+            socialRentHouseYearlyIterative *= (1 + SOCIAL_RENT_ADJUSTMENT_FORECAST);
+            socialRentLandYearlyIterative *= (1 + SOCIAL_RENT_ADJUSTMENT_FORECAST);
             
             lifetime.push({
                 incomeYearly: incomeYearlyIterative,

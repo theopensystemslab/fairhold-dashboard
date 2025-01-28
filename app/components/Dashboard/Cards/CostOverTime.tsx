@@ -4,8 +4,11 @@ import CostOverTimeWrapper, { TenureType } from "../../graphs/CostOverTimeWrappe
 import { Drawer } from "../../ui/Drawer";
 import TenureSelector from "../../ui/TenureSelector";
 import { DashboardProps } from "../../ui/Dashboard";
-import { DEFAULT_FORECAST_PARAMETERS } from "@/app/models/ForecastParameters";
 import { formatValue } from "@/app/lib/format";
+import ReactMarkdown from 'react-markdown';
+import explanationContent from '../Help/CostOverTime.md';
+import { DEFAULT_FORECAST_PARAMETERS } from "@/app/models/ForecastParameters";
+import { SOCIAL_RENT_ADJUSTMENT_FORECAST } from "@/app/models/constants";
 
 const TENURES = ['marketPurchase', 'marketRent', 'fairholdLandPurchase', 'fairholdLandRent', 'socialRent'] as const
 const TENURE_LABELS = {
@@ -25,6 +28,24 @@ const TENURE_COLORS = {
 } as const;
 
 export const CostOverTime: React.FC<DashboardProps> = ({ processedData }) => {
+  // We don't want to hard code the variables in markdown because then we'd have to maintain them in multiple places
+  const processedContent = explanationContent.replace(
+    `{{constructionPriceGrowthPerYear}}`,
+    (DEFAULT_FORECAST_PARAMETERS.constructionPriceGrowthPerYear * 100).toString()
+  ).replace(
+    `{{rentGrowthPerYear}}`,
+    (DEFAULT_FORECAST_PARAMETERS.rentGrowthPerYear * 100).toString()
+  ).replace(
+    `{{propertyPriceGrowthPerYear}}`,
+    (DEFAULT_FORECAST_PARAMETERS.propertyPriceGrowthPerYear * 100).toString()
+  ).replace(
+    `{{incomeGrowthPerYear}}`,
+    (DEFAULT_FORECAST_PARAMETERS.propertyPriceGrowthPerYear * 100).toString()
+  ).replace(
+    `{{SOCIAL_RENT_ADJUSTMENT_FORECAST}}`,
+    (SOCIAL_RENT_ADJUSTMENT_FORECAST * 100).toString()
+  )
+
   const [selectedTenure, setSelectedTenure] = useState<TenureType>('marketPurchase');
   const lifetimeTotal = processedData.lifetime.lifetimeData[processedData.lifetime.lifetimeData.length - 1].cumulativeCosts[selectedTenure];
 
@@ -62,7 +83,7 @@ export const CostOverTime: React.FC<DashboardProps> = ({ processedData }) => {
         <Drawer
           buttonTitle="Find out more about how we calculated these"
           title="How we calculated these figures"
-          description="..."
+          description={<ReactMarkdown className="space-y-4">{processedContent}</ReactMarkdown>}
         />
       </div>
     </GraphCard>
