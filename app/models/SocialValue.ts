@@ -1,5 +1,5 @@
 import { Household } from "./Household"
-import { KG_CO2_PER_KWH, NHS_SAVINGS_PER_HEAD_PER_YEAR, FTE_SPEND, SOCIAL_VALUE_YEARS } from "./constants";
+import { KG_CO2_PER_KWH, NHS_SAVINGS_PER_HOUSE_PER_YEAR, SOCIAL_SAVINGS_PER_HOUSE_PER_YEAR, FTE_SPEND, SOCIAL_VALUE_YEARS } from "./constants";
 
 type ConstructorParams = {
     household: Household
@@ -11,7 +11,8 @@ export class SocialValue {
     public communityWealthDecade: number;
     public embodiedCarbonSavings: number;
     public savingsEnergyPoundsYearly: number;
-    public savingsToNHSPerHeadYearly: number;
+    public savingsToNHSPerHouseYearly: number;
+    public savingsToSocietyPerHouseYearly: number;
     public localJobs: number;
     public operationalCarbonSavingsYearly: number;
 
@@ -20,7 +21,8 @@ export class SocialValue {
         this.communityWealthDecade = this.calculateCommunityWealth(params);
         this.embodiedCarbonSavings = 31.89; // TODO: update figures, not placing in constants.ts because it's placeholder; static number comparing average brick & block emissions vs. timber on slab
         this.savingsEnergyPoundsYearly = this.calculateSavingsEnergyPoundsYearly(params);
-        this.savingsToNHSPerHeadYearly = NHS_SAVINGS_PER_HEAD_PER_YEAR
+        this.savingsToNHSPerHouseYearly = NHS_SAVINGS_PER_HOUSE_PER_YEAR;
+        this.savingsToSocietyPerHouseYearly = SOCIAL_SAVINGS_PER_HOUSE_PER_YEAR;
         this.localJobs = this.calculateLocalJobsSupported(params);
         this.operationalCarbonSavingsYearly = this.calculateCarbonSavingsYearly(params);
     }

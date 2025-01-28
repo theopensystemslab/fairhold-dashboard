@@ -36,19 +36,18 @@ const Highlight: React.FC<React.PropsWithChildren> = ({ children }) => (
   <span className="text-green-500 font-semibold">{children}</span>
 )
 
-
-
 const Cards: React.FC<CardsProps> = ({ household }) => {
   const moneySaved = Math.round(household.socialValue.moneySaved).toLocaleString();
   const communityWealthDecade = Math.round(household.socialValue.communityWealthDecade).toLocaleString();
   const embodiedCarbonSavings = household.socialValue.embodiedCarbonSavings.toFixed(1);
   const savingsEnergyPoundsYearly = Math.round(household.socialValue.savingsEnergyPoundsYearly).toLocaleString()
-  const savingsToNHSPerHeadYearly = Math.round(household.socialValue.savingsToNHSPerHeadYearly).toLocaleString();
+  const savingsToNHSPerHouseYearly = Math.round(household.socialValue.savingsToNHSPerHouseYearly).toLocaleString();
+  const savingsToSocietyPerHouseYearly = Math.round(household.socialValue.savingsToSocietyPerHouseYearly).toLocaleString();
   const newBuildPrice = Math.round(household.property.newBuildPrice).toLocaleString();
   const operationalCarbonSavingsYearly = household.socialValue.operationalCarbonSavingsYearly.toFixed(1);
   const maintenanceCost = Math.round(household.lifetime.lifetimeData[0].maintenanceCost[household.property.maintenanceLevel]).toLocaleString();
   const localJobs = household.socialValue.localJobs.toFixed(1);
-  
+
   return <div className="flex flex-wrap gap-6">
     <Card title="Money saved" figure={`£${moneySaved}`}>
       <p>If Fairhold Land Purchase, on housing costs over 10 years compared to conventional ownership</p>
@@ -65,8 +64,11 @@ const Cards: React.FC<CardsProps> = ({ household }) => {
     <Card title="Energy savings" figure={`£${savingsEnergyPoundsYearly}`} subfigure="per year">
       <p>Every year, if new build or retrofitted</p>
     </Card>
-    <Card title="Savings to NHS" figure={`£${savingsToNHSPerHeadYearly}`}>
-      <p>per person, per year of a healthy, well-maintained home</p>
+    <Card title="Health savings">
+    <p>
+        If moving from substandard accommodation, Fairhold would save the NHS {" "}
+        <Highlight>£{savingsToNHSPerHouseYearly}</Highlight> and society at large {" "}<Highlight>£{savingsToSocietyPerHouseYearly}</Highlight> yearly
+      </p>
     </Card>
     <Card title="Local economy">
       <p>If new build, the home would add <Highlight>£{newBuildPrice}</Highlight> to the local economy, and <Highlight>£{maintenanceCost}</Highlight> every year, supporting <Highlight>{localJobs}</Highlight> full-time-equivalent jobs in total</p>
