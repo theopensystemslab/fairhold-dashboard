@@ -86,3 +86,12 @@ it("correctly ages the house", () => {
     expect(lifetime.lifetimeData[20].houseAge).toBe(30);
     expect(lifetime.lifetimeData[39].houseAge).toBe(49);
 })
+
+it("correctly calculates health savings", () => {
+    const exampleYear10 = lifetime.lifetimeData[9].healthSavings
+    const exampleYear9 = lifetime.lifetimeData[8].healthSavings
+    expect(exampleYear10.nhsCumulative).toBeGreaterThan(exampleYear10.nhs)
+    expect(exampleYear10.socialCumulative).toBeGreaterThan(exampleYear10.social)
+    expect(exampleYear10.nhsCumulative).toBeGreaterThan(exampleYear9.nhsCumulative)
+    expect(exampleYear10.social).toBeGreaterThan(exampleYear9.social)
+})
