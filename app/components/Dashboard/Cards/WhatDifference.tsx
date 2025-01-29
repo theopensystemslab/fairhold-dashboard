@@ -70,7 +70,7 @@ const Cards: React.FC<CardsProps> = ({ household }) => {
     <Card title="Health savings">
     <p>
         If moving from substandard accommodation, Fairhold would save the NHS {" "}
-        <Highlight>£{savingsToNHSPerHouseLifetime}</Highlight> and society at large {" "}<Highlight>£{savingsToSocietyPerHouseLifetime}</Highlight> over a lifetime
+        <Highlight>£{savingsToNHSPerHouseLifetime}</Highlight> and society at large {" "}<Highlight>£{savingsToSocietyPerHouseLifetime}</Highlight> over {DEFAULT_FORECAST_PARAMETERS.yearsForecast} years
       </p>
     </Card>
     <Card title="Local economy">
