@@ -4,6 +4,7 @@ import CostOverTimeWrapper, { TenureType } from "../../graphs/CostOverTimeWrappe
 import { Drawer } from "../../ui/Drawer";
 import TenureSelector from "../../ui/TenureSelector";
 import { DashboardProps } from "../../ui/Dashboard";
+import { DEFAULT_FORECAST_PARAMETERS } from "@/app/models/ForecastParameters";
 
 const TENURES = ['marketPurchase', 'marketRent', 'fairholdLandPurchase', 'fairholdLandRent', 'socialRent'] as const
 const TENURE_LABELS = {
@@ -20,7 +21,7 @@ export const CostOverTime: React.FC<DashboardProps> = ({ processedData }) => {
   return (
     <GraphCard
       title="How would the cost change over my life?"
-      subtitle="Over x years, the home would cost £y" // TODO: interpolate
+      subtitle={`Over ${DEFAULT_FORECAST_PARAMETERS.yearsForecast} years, the home would cost £y`}
     >
       <div className="flex flex-col h-full w-3/4 justify-between">
         <div className="flex gap-2 mb-4">
