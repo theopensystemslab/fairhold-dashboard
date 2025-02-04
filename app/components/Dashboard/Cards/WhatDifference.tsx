@@ -1,7 +1,10 @@
 import { Household } from "@/app/models/Household";
 import { Drawer } from "../../ui/Drawer";
 import GraphCard from "../../ui/GraphCard"
-import { SOCIAL_VALUE_YEARS } from "@/app/models/constants";
+import { SOCIAL_VALUE_YEARS, DEFAULT_INTEREST_RATE, DEFAULT_MORTGAGE_TERM, DEFAULT_INITIAL_DEPOSIT } from "@/app/models/constants";
+import ReactMarkdown from 'react-markdown';
+import explanationContent from '../Help/WhatDifference.md';
+import { DEFAULT_FORECAST_PARAMETERS } from "@/app/models/ForecastParameters";
 
 type CardsProps = {
   household: Household;
@@ -37,6 +40,7 @@ const Highlight: React.FC<React.PropsWithChildren> = ({ children }) => (
 )
 
 const Cards: React.FC<CardsProps> = ({ household }) => {
+  
   const moneySaved = Math.round(household.socialValue.moneySaved).toLocaleString();
   const communityWealthDecade = Math.round(household.socialValue.communityWealthDecade).toLocaleString();
   const embodiedCarbonSavings = household.socialValue.embodiedCarbonSavings.toFixed(1);
@@ -54,7 +58,7 @@ const Cards: React.FC<CardsProps> = ({ household }) => {
     </Card>
     <Card title="Community wealth">
       <p>
-        Every ${SOCIAL_VALUE_YEARS} years the house would contribute{" "}
+        If Fairhold Land Rent, every {SOCIAL_VALUE_YEARS} years the house would contribute{" "}
         <Highlight>£{communityWealthDecade}</Highlight> to community infrastructure and services
       </p>
     </Card>
@@ -80,6 +84,24 @@ const Cards: React.FC<CardsProps> = ({ household }) => {
 }
 
 export const WhatDifference: React.FC<WhatDifferenceProps> = ({ data }) => {
+  // We don't want to hard code the variables in markdown because then we'd have to maintain them in multiple places
+  const processedContent = explanationContent.replace(
+    `{{DEFAULT_INTEREST_RATE}}`,
+    (DEFAULT_INTEREST_RATE * 100).toString()
+  ).replace(
+    `{{DEFAULT_MORTGAGE_TERM}}`,
+    DEFAULT_MORTGAGE_TERM.toString()
+  ).replace(
+    `{{DEFAULT_INITIAL_DEPOSIT}}`,
+    (DEFAULT_INITIAL_DEPOSIT * 100).toString()
+  ).replace(
+    `{{propertyPriceGrowthPerYear}}`,
+    (DEFAULT_FORECAST_PARAMETERS.propertyPriceGrowthPerYear * 100).toString()
+  ).replace(
+    `{{incomeGrowthPerYear}}`,
+    (DEFAULT_FORECAST_PARAMETERS.incomeGrowthPerYear * 100).toString()
+  );
+  
   return (
     <GraphCard 
       title="What difference would Fairhold make to me, my community, and the world?"
@@ -90,7 +112,7 @@ export const WhatDifference: React.FC<WhatDifferenceProps> = ({ data }) => {
         <Drawer
           buttonTitle="Find out more about how we estimated these"
           title="How we estimated these figures"
-          description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum minus eligendi fugit nulla officia dolor inventore nemo ex quo quia, laborum qui ratione aperiam, pariatur explicabo ipsum culpa impedit ad!"
+          description={<ReactMarkdown className="space-y-4">{processedContent}</ReactMarkdown>}
         />
       </div>
     </GraphCard>
