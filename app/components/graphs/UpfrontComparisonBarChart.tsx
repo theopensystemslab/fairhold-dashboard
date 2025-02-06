@@ -12,19 +12,19 @@ import {
 const chartConfig = {
   freeholdLand: {
     label: "Land",
-    color: "rgb(var(--freehold-land-color-rgb))",
+    color: "rgb(var(--freehold-equity-color-rgb))",
   },
   freeholdHouse: {
     label: "House",
-    color: "rgb(var(--freehold-house-color-rgb))",
+    color: "rgb(var(--freehold-interest-color-rgb))",
   },
   fairholdLand: {
     label: "Land",
-    color: "rgb(var(--fairhold-land-color-rgb))",
+    color: "rgb(var(--fairhold-equity-color-rgb))",
   },
   fairholdHouse: {
     label: "House",
-    color: "rgb(var(--fairhold-house-color-rgb))",
+    color: "rgb(var(--fairhold-interest-color-rgb))",
   },
 } satisfies ChartConfig;
 
