@@ -2,7 +2,7 @@ import React from "react";
 
 type Props = React.PropsWithChildren<{
   title: string;
-  subtitle?: string;
+  subtitle?: React.ReactNode;
 }>;
 
 const GraphCard: React.FC<Props> = ({ title, subtitle, children }) => {

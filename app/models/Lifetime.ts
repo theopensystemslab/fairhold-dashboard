@@ -55,6 +55,13 @@ export interface LifetimeData {
     fairholdLandPurchaseResaleValue: number;
     socialRentYearly: number;
     houseAge: number;
+    cumulativeCosts: {
+        marketPurchase: number;
+        marketRent: number;
+        fairholdLandPurchase: number;
+        fairholdLandRent: number;
+        socialRent: number;
+    }
     [key: number]: number;
 }
 /** 
@@ -115,7 +122,7 @@ export class Lifetime {
 
         /** Resale value increases with `ForecastParameters.constructionPriceGrowthPerYear` */
         let fairholdLandPurchaseResaleValueIterative = params.fairholdLandPurchase.discountedLandPrice;
-        let socialRentYearlyIterative = (params.household.tenure.socialRent.socialRentMonthlyLand + params.household.tenure.socialRent.socialRentMonthlyHouse) * 12; 
+        let socialRentYearlyIterative = (params.household.tenure.socialRent.socialRentMonthlyLand + params.household.tenure.socialRent.socialRentMonthlyHouse) * MONTHS_PER_YEAR; 
         
         /** Initialises as user input house age and increments by one */
         let houseAgeIterative = params.property.age;
@@ -134,6 +141,13 @@ export class Lifetime {
         let fairholdLandPurchaseYearlyIterative = this.getMortgageBreakdown("fairholdLandPurchase", params.household, 0)
         let fairholdLandRentYearlyIterative = this.getMortgageBreakdown("fairholdLandRent", params.household, 0)
 
+        // Initialise the cumulative figures
+        let marketPurchaseCumulative = marketPurchaseYearlyIterative.yearlyEquityPaid + marketPurchaseYearlyIterative.yearlyInterestPaid
+        let marketRentCumulative = marketRentYearlyIterative
+        let fairholdLandPurchaseCumulative = fairholdLandPurchaseYearlyIterative.yearlyEquityPaid + fairholdLandPurchaseYearlyIterative.yearlyInterestPaid
+        let fairholdLandRentCumulative = fairholdLandRentYearlyIterative.yearlyEquityPaid + fairholdLandRentYearlyIterative.yearlyInterestPaid
+        let socialRentCumulative = socialRentYearlyIterative
+        
         // Push the Y0 values before they start being iterated-upon
         lifetime.push({
             incomeYearly: incomeYearlyIterative,
@@ -159,7 +173,14 @@ export class Lifetime {
             socialRentYearly: socialRentYearlyIterative,
             houseAge: houseAgeIterative,
             gasBillExistingBuildYearly: gasBillExistingBuildIterative,
-            gasBillNewBuildOrRetrofitYearly: gasBillNewBuildOrRetrofitIterative
+            gasBillNewBuildOrRetrofitYearly: gasBillNewBuildOrRetrofitIterative,
+            cumulativeCosts: {
+                marketPurchase: marketPurchaseCumulative,
+                marketRent:marketRentCumulative,
+                fairholdLandPurchase: fairholdLandPurchaseCumulative,
+                fairholdLandRent: fairholdLandRentCumulative,
+                socialRent: socialRentCumulative
+            }
         });
 
         // The 0th round has already been calculated and pushed above
@@ -190,7 +211,17 @@ export class Lifetime {
                 gasBillExistingBuildIterative * (1 + params.constructionPriceGrowthPerYear) // TODO: when other branch merged, should be CPI
             gasBillNewBuildOrRetrofitIterative = 
                 gasBillNewBuildOrRetrofitIterative * (1 + params.constructionPriceGrowthPerYear)
-            
+            marketPurchaseCumulative += 
+                (marketPurchaseYearlyIterative.yearlyEquityPaid + marketPurchaseYearlyIterative.yearlyInterestPaid)
+            marketRentCumulative += 
+                marketRentYearlyIterative
+            fairholdLandPurchaseCumulative += 
+                (fairholdLandPurchaseYearlyIterative.yearlyEquityPaid + fairholdLandPurchaseYearlyIterative.yearlyInterestPaid)
+            fairholdLandRentCumulative += 
+                (fairholdLandRentYearlyIterative.yearlyEquityPaid + fairholdLandRentYearlyIterative.yearlyInterestPaid + fairholdLandRentCGRYearlyIterative)
+            socialRentCumulative += 
+                socialRentYearlyIterative
+
             /** A new instance of the `Property` class is needed each loop in order to re-calculate the depreciated house value as the house gets older */
             const iterativePropertyNoMaintenance = new Property({ 
                 ...params.property,
@@ -275,6 +306,13 @@ export class Lifetime {
                 fairholdLandPurchaseResaleValue: fairholdLandPurchaseResaleValueIterative,
                 socialRentYearly: socialRentYearlyIterative,
                 houseAge: houseAgeIterative,
+                cumulativeCosts: {
+                    marketPurchase: marketPurchaseCumulative,
+                    marketRent: marketRentCumulative,
+                    fairholdLandPurchase: fairholdLandPurchaseCumulative,
+                    fairholdLandRent: fairholdLandRentCumulative,
+                    socialRent: socialRentCumulative
+                }
             });
         }
         return lifetime;
