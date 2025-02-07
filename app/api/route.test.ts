@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 
 // Mock dependencies
 jest.mock("../services/calculationService");
-jest.mock("../models/testClasses", () => jest.fn()); // Mock calculateFairhold
+jest.mock("../models/calculateFairhold", () => jest.fn()); // Mock calculateFairhold
 jest.mock("next/server", () => ({
   NextResponse: {
     json: jest.fn((data) => ({ data })),
