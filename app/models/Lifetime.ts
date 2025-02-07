@@ -12,7 +12,9 @@ import { MONTHS_PER_YEAR,
     HOUSE_BREAKDOWN_PERCENTAGES, 
     houseBreakdownType,
     NHS_SAVINGS_PER_HOUSE_PER_YEAR,
-    SOCIAL_SAVINGS_PER_HOUSE_PER_YEAR
+    SOCIAL_SAVINGS_PER_HOUSE_PER_YEAR,
+    FOUNDATIONS_LIFETIME,
+    STRUCTURE_ENVELOPE_LIFETIME
  } from "./constants";
 import type { MortgageBreakdownElement } from "./Mortgage"
 import { DEFAULT_FORECAST_PARAMETERS } from "./ForecastParameters";
@@ -287,7 +289,7 @@ export class Lifetime {
 
 
             depreciatedHouseBreakdownOverTimeIterative = {
-                noMaintenance: this.depreciateComponents(params.property.newBuildPrice, depreciatedHouseBreakdownOverTimeIterative.noMaintenance,0),
+                noMaintenance: this.depreciateAllComponents(params.property.newBuildPrice, depreciatedHouseBreakdownOverTimeIterative.noMaintenance),
                 lowMaintenance: this.depreciateComponents(params.property.newBuildPrice, depreciatedHouseBreakdownOverTimeIterative.lowMaintenance, maintenanceCostLowIterative),
                 mediumMaintenance: this.depreciateComponents(params.property.newBuildPrice, depreciatedHouseBreakdownOverTimeIterative.mediumMaintenance, maintenanceCostMediumIterative),
                 highMaintenance:this.depreciateComponents(params.property.newBuildPrice, depreciatedHouseBreakdownOverTimeIterative.highMaintenance, maintenanceCostHighIterative)
@@ -406,7 +408,6 @@ export class Lifetime {
             return lifetimeMortgageBreakdown;
         }
     
-        // Depreciate components (all maintenance levels except none)
         private depreciateComponents(newBuildPrice: number, currentComponents: DepreciatedHouseBreakdownType, maintenanceSpend: number) {
             const depreciatedComponents = {} as DepreciatedHouseBreakdownType;
             
@@ -421,68 +422,31 @@ export class Lifetime {
             return depreciatedComponents
         }
 
+        /** We only depreciate _all_ components when maintenance spend is 0, assuming that spending on other components protects foundations and structureEnvelope */
+        private depreciateAllComponents(newBuildPrice: number, currentComponents: DepreciatedHouseBreakdownType) {
+            const depreciatedComponents = {} as DepreciatedHouseBreakdownType;
+            
+            for (const key of Object.keys(HOUSE_BREAKDOWN_PERCENTAGES) as (keyof houseBreakdownType)[]) {
+                const component = HOUSE_BREAKDOWN_PERCENTAGES[key]
+                if (key === 'foundations' || key === 'structureEnvelope') {
+                    const depreciationAmount = newBuildPrice * component.percentageOfHouse / (key === 'foundations' ? FOUNDATIONS_LIFETIME : STRUCTURE_ENVELOPE_LIFETIME) // TODO: fix magic numbers!
+                    let newValue = currentComponents[key] - depreciationAmount
+                    newValue = (newValue < 0) ? 0 : newValue
+                    depreciatedComponents[key] = newValue
+                } else {
+                    const component = HOUSE_BREAKDOWN_PERCENTAGES[key]
+                    const depreciationAmount = newBuildPrice * component.percentageOfHouse * component.depreciationPercentageYearly
+                    let newValue = currentComponents[key] - depreciationAmount
+                    newValue = (newValue < 0) ? 0 : newValue
+                    depreciatedComponents[key] = newValue
+                }
+                
+            }
+            return depreciatedComponents
+        }
+
         /** Reduces the DepreciatedHouseBreakdownType object by summing its values */
         private calculateDepreciatedResaleValue(depreciatedComponents: DepreciatedHouseBreakdownType) {
             return Object.values(depreciatedComponents).reduce((sum, value) => sum + value, 0)
         }
-
-        // Depreciate components (no maintenance)
-
-        // Calculate depreciated house value
-
-        // --------------------------------------------------------------------------------------
-        // // Depreciate incrementally based on the year that came before (so that we can adjust to the current house value, historical depreciation assumed low)
-        // private calculateCurrentDepreciation(previousHouseValue: number, maintenanceLevel: MaintenanceLevel, params: LifetimeParams): number {
-        //     const maintenancePercentage = MAINTENANCE_LEVELS[maintenanceLevel]
-            
-        //     let depreciatedHouseValue = 0
-        //     // Iterate through components
-        //     for (const key of Object.keys(HOUSE_BREAKDOWN_PERCENTAGES) as (keyof houseBreakdownType)[]) {
-        //         const newBuildPrice = params.property.newBuildPrice;
-        //         const foundationsPrice = newBuildPrice * HOUSE_BREAKDOWN_PERCENTAGES['foundations'].percentageOfHouse
-        //         const structurePrice = newBuildPrice * HOUSE_BREAKDOWN_PERCENTAGES['structureEnvelope'].percentageOfHouse
-
-        //         const component = HOUSE_BREAKDOWN_PERCENTAGES[key];
-        //         const newComponentValue = newBuildPrice * component.percentageOfHouse
-        //         const currentComponentValue = 
-        //             (key === 'foundations' || key === 'structureEnvelope') ? newComponentValue : 
-        //                 (previousHouseValue - foundationsPrice - structurePrice) / 54 * 100 * component.percentageOfHouse 
-        //         const maintenanceAddition = maintenancePercentage * newBuildPrice * component.percentOfMaintenanceYearly
-        //         let depreciatedComponentValue =  currentComponentValue - (newComponentValue * component.depreciationPercentageYearly) + maintenanceAddition
-
-        //         depreciatedComponentValue < 0 ? depreciatedComponentValue = 0 : depreciatedComponentValue
-        //         depreciatedHouseValue += depreciatedComponentValue
-        //     }
-        //     return depreciatedHouseValue
-        // }
-
-        // // 'none' maintenance level has a separate function because we _do_ depreciate foundations and structure / envelope here (logic being that they are not protected by the other maintained components)
-        // private calculateCurrentDepreciationNoMaintenance(previousHouseValue: number, params: LifetimeParams): number {        
-        //     const newBuildPrice = params.property.newBuildPrice;
-            
-        //     let depreciatedHouseValue = previousHouseValue
-
-        //     Iterate through components
-        //     for (const key of Object.keys(HOUSE_BREAKDOWN_PERCENTAGES) as (keyof houseBreakdownType)[]) {
-        //         const component = HOUSE_BREAKDOWN_PERCENTAGES[key];
-        //         const newComponentValue = newBuildPrice * component.percentageOfHouse;
-        //         const currentComponentValue = previousHouseValue - 
-
-        //         const depreciation = 
-        //             (key === 'foundations' || key === 'structureEnvelope') ? NO_MAINTENANCE_DEPRECIATION_PERCENTAGE[key] * (newBuildPrice * component.percentageOfHouse) : 
-        //                 HOUSE_BREAKDOWN_PERCENTAGES[key] * (newBuildPrice * component.percentageOfHouse) 
-
-        //         let depreciatedComponentValue = newComponentValue - depreciation * (i + age)
-
-        //         depreciatedComponentValue < 0 ? depreciatedComponentValue = 0 : depreciatedComponentValue
-        //         depreciatedHouseValue += depreciatedComponentValue
-        //     }
-
-        //     console.log({
-        //         totalDepreciationPercentageYearly,
-        //         previousHouseValue
-        //     })
-        //     depreciatedHouseValue = (depreciatedHouseValue < 0) ? 0 : depreciatedHouseValue
-        //     return depreciatedHouseValue    
-        // }
     }
