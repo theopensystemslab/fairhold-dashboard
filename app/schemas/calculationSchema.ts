@@ -41,7 +41,7 @@ export const calculationSchema = z
     houseBedrooms: z.coerce
       .number()
       .positive("houseBedrooms must be a positive integer"),
-    houseSize: z.coerce.number(),
+    houseSize: z.coerce.number().optional(),
     houseAge: z.coerce
       .number()
       .nonnegative("houseAge must be a positive integer or 0"),
