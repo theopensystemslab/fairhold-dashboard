@@ -97,6 +97,10 @@ body {
   margin-bottom: 0px;
 }
 
+.optional-style {
+  color: rgb(var(--text-inaccessible-rgb));
+}
+
 .radio-button-style {
   background: rgb(var(--background-input-field-rgb));
   font-size: 12px;
