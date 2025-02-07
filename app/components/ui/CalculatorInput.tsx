@@ -6,7 +6,12 @@ import { Household } from "@/app/models/Household";
 import Dashboard from "./Dashboard";
 import { formSchema, FormFrontend } from "@/app/schemas/formSchema";
 import { useSearchParams } from "next/navigation";
-import { DEFAULT_INTEREST_RATE, DEFAULT_MORTGAGE_TERM, DEFAULT_INITIAL_DEPOSIT, MAINTENANCE_LEVELS } from "../../models/constants"
+import {
+  DEFAULT_INTEREST_RATE,
+  DEFAULT_MORTGAGE_TERM,
+  DEFAULT_INITIAL_DEPOSIT,
+  MAINTENANCE_LEVELS,
+} from "../../models/constants";
 import { MaintenanceLevel } from "../../models/constants";
 
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -50,8 +55,9 @@ const CalculatorInput = () => {
         urlHouseType === "S"
           ? urlHouseType
           : "D", // Default value for house type
-          maintenanceLevel: (urlMaintenanceLevel && urlMaintenanceLevel in MAINTENANCE_LEVELS)
-          ? urlMaintenanceLevel as MaintenanceLevel
+      maintenanceLevel:
+        urlMaintenanceLevel && urlMaintenanceLevel in MAINTENANCE_LEVELS
+          ? (urlMaintenanceLevel as MaintenanceLevel)
           : "low",
       housePostcode: urlPostcode || "",
       // Apply defaults if provided
@@ -80,20 +86,18 @@ const CalculatorInput = () => {
     switch (error.code) {
       case "ITL3_NOT_FOUND":
       case "INSUFFICIENT_PRICES_PAID_DATA":
-        form.setError(
-          "housePostcode", 
-          { message: 
-            "Insufficient data for this postcode. Please try again with a different postcode" 
-          }
-        );
+        form.setError("housePostcode", {
+          message:
+            "Insufficient data for this postcode. Please try again with a different postcode",
+        });
         break;
       case "UNHANDLED_EXCEPTION":
       default:
-        console.error(error)
-    };
-    
+        console.error(error);
+    }
+
     setView("form");
-  }
+  };
 
   if (view === "form") {
     return (
@@ -203,7 +207,8 @@ const CalculatorInput = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="h3-style">
-                      How big is the house?
+                      How big is the house?{" "}
+                      <span className="optional-style">(Optional)</span>
                     </FormLabel>
                     <FormControl>
                       <Input
@@ -318,7 +323,7 @@ const CalculatorInput = () => {
                       </div>
                     </RadioGroup>
                   </FormControl>
-                  <MaintenanceExplainerDrawer/>
+                  <MaintenanceExplainerDrawer />
                   <FormMessage />
                 </FormItem>
               )}
@@ -329,19 +334,25 @@ const CalculatorInput = () => {
                 <span className="h3-style inaccessible-input-style">
                   Mortgage interest rate
                 </span>
-                <span className="inaccessible-input-style">{DEFAULT_INTEREST_RATE * 100}%</span>
+                <span className="inaccessible-input-style">
+                  {DEFAULT_INTEREST_RATE * 100}%
+                </span>
               </div>
               <div className="flex flex-col">
                 <span className="h3-style inaccessible-input-style">
                   Mortgage term
                 </span>
-                <span className="inaccessible-input-style">{DEFAULT_MORTGAGE_TERM} years</span>
+                <span className="inaccessible-input-style">
+                  {DEFAULT_MORTGAGE_TERM} years
+                </span>
               </div>
               <div className="flex flex-col">
                 <span className="h3-style inaccessible-input-style">
                   Mortgage deposit
                 </span>
-                <span className="inaccessible-input-style">{DEFAULT_INITIAL_DEPOSIT * 100}%</span>
+                <span className="inaccessible-input-style">
+                  {DEFAULT_INITIAL_DEPOSIT * 100}%
+                </span>
               </div>
             </div>
 
@@ -350,8 +361,8 @@ const CalculatorInput = () => {
             </Button>
           </form>
         </Form>
-        <hr className="my-8 text-gray-300"/>
-        <BackgroundAssumptions/>
+        <hr className="my-8 text-gray-300" />
+        <BackgroundAssumptions />
       </div>
     );
   }
@@ -362,8 +373,8 @@ const CalculatorInput = () => {
         <ClipLoader color="black" size={50} />
       </div>
     );
-  };
-  
+  }
+
   if (view === "dashboard" && data) {
     const formValues = form.getValues();
     return <Dashboard processedData={data} inputData={formValues} />;
