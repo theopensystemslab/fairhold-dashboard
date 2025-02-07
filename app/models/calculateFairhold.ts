@@ -1,4 +1,4 @@
-import { ValidPostcode } from './../schemas/calculationSchema';
+import { ValidPostcode } from "../schemas/calculationSchema";
 import { createForecastParameters } from "./ForecastParameters";
 import { Household } from "./Household";
 import { HouseType, Property } from "./Property";
@@ -59,7 +59,7 @@ function calculateFairhold(responseData: ResponseData) {
     property: property,
     forecastParameters: createForecastParameters(responseData.maintenanceLevel),
   });
-  
+
   return household;
 }
 
