@@ -1,3 +1,4 @@
+import { DEFAULT_FORECAST_PARAMETERS } from "./ForecastParameters";
 import { Household } from "./Household"
 import { KG_CO2_PER_KWH, NHS_SAVINGS_PER_HOUSE_PER_YEAR, SOCIAL_SAVINGS_PER_HOUSE_PER_YEAR, FTE_SPEND, SOCIAL_VALUE_YEARS } from "./constants";
 
@@ -28,14 +29,12 @@ export class SocialValue {
     }
 
     private calculateMoneySavedFHLP(params: ConstructorParams) {
-        let marketPurchaseTotal = 0;
-        let fairholdLandPurchaseTotal = 0;
+        const finalYear = DEFAULT_FORECAST_PARAMETERS.yearsForecast - 1
         const lifetime = params.household.lifetime.lifetimeData
-        for (let i = 0; i < 10; i++) { // TODO: should this include bills? TODO: do we want to show 10 years only? using 10 here because designs showed savings over 10 year period, not lifetime
-            marketPurchaseTotal += (lifetime[i].marketPurchaseYearly.yearlyEquityPaid + lifetime[i].marketPurchaseYearly.yearlyInterestPaid)
-            fairholdLandPurchaseTotal += (lifetime[i].fairholdLandPurchaseYearly.yearlyEquityPaid + lifetime[i].fairholdLandPurchaseYearly.yearlyInterestPaid)
-        }
+        const marketPurchaseTotal = lifetime[finalYear].cumulativeCosts.marketPurchase
+        const fairholdLandPurchaseTotal = lifetime[finalYear].cumulativeCosts.fairholdLandPurchase
         const moneySaved = marketPurchaseTotal - fairholdLandPurchaseTotal
+
         return moneySaved;
     }
     private calculateCommunityWealth(params: ConstructorParams) {

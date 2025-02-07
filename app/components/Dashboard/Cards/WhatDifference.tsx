@@ -2,6 +2,7 @@ import { Household } from "@/app/models/Household";
 import { Drawer } from "../../ui/Drawer";
 import GraphCard from "../../ui/GraphCard"
 import { SOCIAL_VALUE_YEARS } from "@/app/models/constants";
+import { DEFAULT_FORECAST_PARAMETERS } from "@/app/models/ForecastParameters";
 
 type CardsProps = {
   household: Household;
@@ -50,7 +51,7 @@ const Cards: React.FC<CardsProps> = ({ household }) => {
 
   return <div className="flex flex-wrap gap-6">
     <Card title="Money saved" figure={`£${moneySaved}`}>
-      <p>If Fairhold Land Purchase, on housing costs over 10 years compared to conventional ownership</p>
+      <p>If Fairhold Land Purchase, on housing costs over {DEFAULT_FORECAST_PARAMETERS.yearsForecast} years compared to conventional ownership</p>
     </Card>
     <Card title="Community wealth">
       <p>
