@@ -53,10 +53,9 @@ export const calculationSchema = z
     ),
     maintenanceLevel: maintenanceLevelSchema,
   })
-  .superRefine((data) => {
-    if (data.houseSize === undefined) {
-      data.houseSize = assignHouseSize(data.houseBedrooms);
-    }
-  });
+  .transform((data) => ({
+    ...data,
+    houseSize: data.houseSize ?? assignHouseSize(data.houseBedrooms),
+  }));
 
 export type Calculation = z.infer<typeof calculationSchema>;
