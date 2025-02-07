@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { calculationSchema } from "../schemas/calculationSchema";
 import * as calculationService from "../services/calculationService";
-import calculateFairhold from "../models/testClasses";
+import calculateFairhold from "../models/calculateFairhold";
 import { APIError } from "../lib/exceptions";
 
 export async function POST(req: Request) {
@@ -16,16 +16,13 @@ export async function POST(req: Request) {
     console.log("ERROR: API - ", (error as Error).message);
 
     if (error instanceof APIError) {
-      return NextResponse.json(
-        { error },
-        { status: error.status },
-      );
+      return NextResponse.json({ error }, { status: error.status });
     }
 
     const response = {
-      error: { 
-        message: (error as Error).message, 
-        code: "UNHANDLED_EXCEPTION" 
+      error: {
+        message: (error as Error).message,
+        code: "UNHANDLED_EXCEPTION",
       },
     };
     return NextResponse.json(response, { status: 500 });

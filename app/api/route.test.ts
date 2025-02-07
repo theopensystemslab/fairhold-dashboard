@@ -1,6 +1,6 @@
 import { POST } from "../api/route";
 import * as calculationService from "../services/calculationService";
-import calculateFairhold from "../models/testClasses";
+import calculateFairhold from "../models/calculateFairhold";
 import { NextResponse } from "next/server";
 
 // Mock dependencies
