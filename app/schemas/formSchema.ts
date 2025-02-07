@@ -11,7 +11,8 @@ export const formSchema = z.object({
     .min(1, "Postcode is required")
     .refine(isValidPostcode, "Invalid postcode"),
   houseSize: z.coerce
-    .number()
+    .string()
+    .transform((val) => (val === "" ? undefined : Number(val)))
     .optional()
     .refine((value) => value === undefined || value > 0, {
       message: "House size must be a positive number",
