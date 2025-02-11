@@ -51,6 +51,7 @@
     "react-markdown": "^9.0.3",
     "react-spinners": "^0.15.0",
     "recharts": "^2.15.1",
+    "remark": "^15.0.1",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
     "ts-node": "^10.9.2",
