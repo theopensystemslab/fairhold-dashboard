@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import GraphCard from "../../ui/GraphCard";
 import CostOverTimeWrapper, { TenureType } from "../../graphs/CostOverTimeWrapper";
 import { Drawer } from "../../ui/Drawer";
@@ -9,6 +9,9 @@ import ReactMarkdown from 'react-markdown';
 import explanationContent from '../Help/CostOverTime.md';
 import { DEFAULT_FORECAST_PARAMETERS } from "@/app/models/ForecastParameters";
 import { SOCIAL_RENT_ADJUSTMENT_FORECAST } from "@/app/models/constants";
+import { remark } from "remark";
+import { visit } from 'unist-util-visit';
+import type { TextNode } from "./types";
 
 const TENURES = ['marketPurchase', 'marketRent', 'fairholdLandPurchase', 'fairholdLandRent', 'socialRent'] as const
 const TENURE_LABELS = {
@@ -28,26 +31,37 @@ const TENURE_COLORS = {
 } as const;
 
 export const CostOverTime: React.FC<DashboardProps> = ({ processedData }) => {
-  // We don't want to hard code the variables in markdown because then we'd have to maintain them in multiple places
-  const processedContent = explanationContent.replace(
-    `{{constructionPriceGrowthPerYear}}`,
-    (DEFAULT_FORECAST_PARAMETERS.constructionPriceGrowthPerYear * 100).toString()
-  ).replace(
-    `{{rentGrowthPerYear}}`,
-    (DEFAULT_FORECAST_PARAMETERS.rentGrowthPerYear * 100).toString()
-  ).replace(
-    `{{propertyPriceGrowthPerYear}}`,
-    (DEFAULT_FORECAST_PARAMETERS.propertyPriceGrowthPerYear * 100).toString()
-  ).replace(
-    `{{incomeGrowthPerYear}}`,
-    (DEFAULT_FORECAST_PARAMETERS.propertyPriceGrowthPerYear * 100).toString()
-  ).replace(
-    `{{SOCIAL_RENT_ADJUSTMENT_FORECAST}}`,
-    (SOCIAL_RENT_ADJUSTMENT_FORECAST * 100).toString()
-  )
-
   const [selectedTenure, setSelectedTenure] = useState<TenureType>('marketPurchase');
   const lifetimeTotal = processedData.lifetime.lifetimeData[processedData.lifetime.lifetimeData.length - 1].cumulativeCosts[selectedTenure];
+  const [processedContent, setProcessedContent] = useState('');
+  
+  // We don't hard code the variables in markdown because then we'd have to maintain them in multiple places
+  const replacements = useMemo(() => ({
+    constructionPriceGrowthPerYear: (DEFAULT_FORECAST_PARAMETERS.constructionPriceGrowthPerYear * 100).toString(),
+    rentGrowthPerYear: (DEFAULT_FORECAST_PARAMETERS.rentGrowthPerYear * 100).toString(),
+    propertyPriceGrowthPerYear: (DEFAULT_FORECAST_PARAMETERS.propertyPriceGrowthPerYear * 100).toString(),
+    incomeGrowthPerYear: (DEFAULT_FORECAST_PARAMETERS.propertyPriceGrowthPerYear * 100).toString(),
+    SOCIAL_RENT_ADJUSTMENT_FORECAST: (SOCIAL_RENT_ADJUSTMENT_FORECAST * 100).toString()
+  }), []);
+
+  useEffect(() => {
+    const processMarkdown = async () => {
+      const result = await remark()
+        .use(() => (tree) => {
+          visit(tree, 'text', (node: TextNode) => {
+            let value = node.value;
+            Object.entries(replacements).forEach(([key, replacement]) => {
+              value = value.replace(`{{${key}}}`, replacement);
+            });
+            node.value = value;
+          });
+        })
+        .process(explanationContent);
+      setProcessedContent(result.toString());
+    };
+    
+    processMarkdown();
+  }, [replacements]);
 
   return (
     <GraphCard
