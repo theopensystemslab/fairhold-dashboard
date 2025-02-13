@@ -36,21 +36,21 @@ export class SocialRent {
   private calculateSocialRent(params: SocialRentParams) {
     let bedWeight; // initialize the bedWeight variable
     let rentCapWeekly; // initialize the rent cap values
-    const bedWeightsAndCaps = BED_WEIGHTS_AND_CAPS;
+    const SocialRentBedWeightsAndCaps = BED_WEIGHTS_AND_CAPS;
     const numberOfBedrooms = params.numberOfBedrooms;
 
     const nationalAverageRent = NATIONAL_AVERAGES.socialRentWeekly;
     const nationalAverageProperty = NATIONAL_AVERAGES.propertyValue;
     const nationalAverageEarnings = NATIONAL_AVERAGES.earningsWeekly;
 
-    if (numberOfBedrooms < bedWeightsAndCaps.numberOfBedrooms.length - 1) {
-      bedWeight = bedWeightsAndCaps.weight[numberOfBedrooms]; // find the weight corresponding to the number of beds
-      rentCapWeekly = bedWeightsAndCaps.socialRentCap[numberOfBedrooms]; // assign the rent cap value based on the number of beds
+    if (numberOfBedrooms < SocialRentBedWeightsAndCaps.numberOfBedrooms.length - 1) {
+      bedWeight = SocialRentBedWeightsAndCaps.weight[numberOfBedrooms]; // find the weight corresponding to the number of beds
+      rentCapWeekly = SocialRentBedWeightsAndCaps.socialRentCap[numberOfBedrooms]; // assign the rent cap value based on the number of beds
     } else {
-      bedWeight = bedWeightsAndCaps.weight[bedWeightsAndCaps.weight.length - 1]; // assign the last value if out of scale
+      bedWeight = SocialRentBedWeightsAndCaps.weight[SocialRentBedWeightsAndCaps.weight.length - 1]; // assign the last value if out of scale
       rentCapWeekly =
-        bedWeightsAndCaps.socialRentCap[
-          bedWeightsAndCaps.socialRentCap.length - 1
+        SocialRentBedWeightsAndCaps.socialRentCap[
+          SocialRentBedWeightsAndCaps.socialRentCap.length - 1
         ]; // assign the last value if out of scale
     }
 

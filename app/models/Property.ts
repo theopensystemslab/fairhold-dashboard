@@ -1,4 +1,4 @@
-import { MAINTENANCE_LEVELS, HOUSE_BREAKDOWN_PERCENTAGES, MaintenanceLevel } from "./constants";
+import { MAINTENANCE_LEVELS, HOUSE_BREAKDOWN_PERCENTAGES, MaintenanceLevel, PROPERTY_PRICE_WEIGHTS } from "./constants";
 import { houseBreakdownType } from "./constants";
 /**
  * Number of decimal places to use when rounding numerical values
@@ -70,14 +70,18 @@ export class Property {
     this.size = params.size;
     this.maintenanceLevel = params.maintenanceLevel;
     this.newBuildPricePerMetre = params.newBuildPricePerMetre;
-    this.averageMarketPrice = params.averageMarketPrice;
     this.itl3 = params.itl3;
 
     // Computed properties, order is significant
+    this.averageMarketPrice = this.weightAverageMarketPrice(params);
     this.newBuildPrice = this.calculateNewBuildPrice();
     this.depreciatedBuildPrice = this.calculateDepreciatedBuildPrice();
     this.landPrice = this.averageMarketPrice - this.newBuildPrice;
     this.landToTotalRatio = this.landPrice / this.averageMarketPrice;
+  }
+  private weightAverageMarketPrice(params: PropertyParams) {
+    const weightedAverageMarketPrice = params.averageMarketPrice * PROPERTY_PRICE_WEIGHTS[this.houseType][this.numberOfBedrooms]
+    return weightedAverageMarketPrice
   }
 
   private calculateNewBuildPrice() {
