@@ -94,8 +94,8 @@ export class Property {
   }
 
   public calculateDepreciatedBuildPrice() {
-    if (this.age === 0) return this.newBuildPrice;
-    let depreciatedBuildPrice = 0;
+  // Initialise depreciatedBuildPrice; since we need the house breakdown even for a newbuild (to store and iterate on it in Lifetime), we run calculateComponentValue instead of just assigning depreciatedHousePrice = newBuildPrice
+  let depreciatedBuildPrice = 0;
 
   // Calculate for each component using the public method
   for (const key of Object.keys(HOUSE_BREAKDOWN_PERCENTAGES) as (keyof houseBreakdownType)[]) {
@@ -109,7 +109,6 @@ export class Property {
     depreciatedBuildPrice += result.depreciatedComponentValue;
   }
     depreciatedBuildPrice = parseFloat(depreciatedBuildPrice.toFixed(PRECISION))
-
   return depreciatedBuildPrice;
 }
 
