@@ -95,7 +95,8 @@ const CostOverTimeStackedBarChart: React.FC<CostOverTimeStackedBarChartProps> = 
   return (
     <Card>
       <CardContent>
-        <ChartContainer config={chartConfig}>
+        <ChartContainer config={chartConfig}
+        className="[&_.recharts-rectangle.recharts-tooltip-cursor]:fill-transparent">
           <BarChart 
             data={data}
             margin={{ top: 20, right: 30, left: 20, bottom: 50 }}

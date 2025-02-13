@@ -80,7 +80,8 @@ const HowMuchFHCostBarChart: React.FC<StackedBarChartProps> = ({
     <Card>
       <CardHeader></CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig}>
+        <ChartContainer config={chartConfig}
+        className="[&_.recharts-rectangle.recharts-tooltip-cursor]:fill-transparent">
           <BarChart accessibilityLayer data={chartData}>
             <CartesianGrid vertical={false} />
             <XAxis

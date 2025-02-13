@@ -70,7 +70,8 @@ const HowMuchPerMonthBarChart: React.FC<StackedBarChartProps> = ({ data }) => {
     <Card>
       <CardHeader></CardHeader>
       <CardContent>
-        <ChartContainer config={{}}>
+        <ChartContainer config={{}}
+        className="[&_.recharts-rectangle.recharts-tooltip-cursor]:fill-transparent">
           <BarChart accessibilityLayer data={chartData}>
             <CartesianGrid vertical={false} />
             <XAxis
