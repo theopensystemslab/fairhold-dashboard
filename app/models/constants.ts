@@ -7,7 +7,7 @@ export const DEFAULT_INTEREST_RATE = 0.06;
 export const DEFAULT_MORTGAGE_TERM = 30;
 export const DEFAULT_INITIAL_DEPOSIT = 0.15;
 
-export type BedWeightsAndCaps = {
+export type SocialRentBedWeightsAndCaps = {
   numberOfBedrooms: number[];
   weight: number[];
   socialRentCap: number[];
@@ -16,7 +16,7 @@ export type BedWeightsAndCaps = {
 /**
  * This is used to weight social rent values by property size based on number of bedrooms
  */
-export const BED_WEIGHTS_AND_CAPS: BedWeightsAndCaps = {
+export const BED_WEIGHTS_AND_CAPS: SocialRentBedWeightsAndCaps = {
   numberOfBedrooms: [0, 1, 2, 3, 4, 5, 6],
   weight: [0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4],
   socialRentCap: [155.73, 155.73, 164.87, 174.03, 183.18, 192.35, 201.5],
@@ -195,3 +195,44 @@ export const EMBODIED_CARBON_BRICK_BLOCK_KG_M2 = 404.086
 
 /** from Stride Treglown Gwynfaen embodied emissions estimates */
 export const EMBODIED_CARBON_TIMBER_SLAB_KG_M2 = 59.933
+export type BedroomWeights = {
+  [key in HouseType]: {
+    [key: number]: number;
+  };
+};
+
+export const PROPERTY_PRICE_WEIGHTS: BedroomWeights = { // from dwh https://www.dwh.co.uk/advice-and-inspiration/average-house-sizes-uk
+  D: {
+    1: 0.7,  
+    2: 0.8,
+    3: 0.9,
+    4: 1.0,
+    5: 1.1,
+    6: 1.2
+  },
+  S: {
+    1: 0.8,
+    2: 0.9,
+    3: 1.0,
+    4: 1.1,
+    5: 1.2,
+    6: 1.3
+  },
+  T: {
+    1: 0.8,
+    2: 0.9,  
+    3: 1.0,
+    4: 1.1,
+    5: 1.2,
+    6: 1.3
+  },
+  F: {
+    0: 0.8,
+    1: 0.9, 
+    2: 1.0, 
+    3: 1.1,
+    4: 1.2,
+    5: 1.3,
+    6: 1.4
+  }
+} as const;
