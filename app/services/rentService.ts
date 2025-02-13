@@ -1,9 +1,9 @@
 import { rentRepo } from "../data/rentRepo";
 
-const getByITL3 = async (itl3: string) => {
-  return await rentRepo.getRentByITL3(itl3);
+const getByITL3AndBedrooms = async (itl3: string, bedrooms: number) => {
+  return await rentRepo.getRentByITL3AndBedrooms(itl3, bedrooms);
 };
 
 export const rentService = {
-  getByITL3,
+  getByITL3AndBedrooms,
 };
