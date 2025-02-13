@@ -1,11 +1,17 @@
 import { DEFAULT_FORECAST_PARAMETERS } from "./ForecastParameters";
 import { Household } from "./Household"
-import { KG_CO2_PER_KWH, NHS_SAVINGS_PER_HOUSE_PER_YEAR, SOCIAL_SAVINGS_PER_HOUSE_PER_YEAR, FTE_SPEND, SOCIAL_VALUE_YEARS } from "./constants";
+import { KG_CO2_PER_KWH, 
+    NHS_SAVINGS_PER_HOUSE_PER_YEAR, 
+    SOCIAL_SAVINGS_PER_HOUSE_PER_YEAR, 
+    FTE_SPEND, 
+    SOCIAL_VALUE_YEARS,
+    EMBODIED_CARBON_BRICK_BLOCK_KG_M2,
+    EMBODIED_CARBON_TIMBER_SLAB_KG_M2
+} from "./constants";
 
 type ConstructorParams = {
     household: Household
 };
-
 
 export class SocialValue {
     public moneySaved: number;
@@ -20,7 +26,7 @@ export class SocialValue {
     constructor(params: ConstructorParams) {
         this.moneySaved = this.calculateMoneySavedFHLP(params);
         this.communityWealthDecade = this.calculateCommunityWealth(params);
-        this.embodiedCarbonSavings = 31.89; // TODO: update figures, not placing in constants.ts because it's placeholder; static number comparing average brick & block emissions vs. timber on slab
+        this.embodiedCarbonSavings = this.calculateEmbodiedCarbonSaved(params)
         this.savingsEnergyPoundsYearly = this.calculateSavingsEnergyPoundsYearly(params);
         this.savingsToNHSPerHouseYearly = NHS_SAVINGS_PER_HOUSE_PER_YEAR;
         this.savingsToSocietyPerHouseYearly = SOCIAL_SAVINGS_PER_HOUSE_PER_YEAR;
@@ -63,5 +69,13 @@ export class SocialValue {
         let jobsSupported = totalSpend / FTE_SPEND
         jobsSupported = parseFloat(jobsSupported.toFixed(1));
         return jobsSupported
+    }
+
+    private calculateEmbodiedCarbonSaved(params: ConstructorParams) {
+        const houseSizeM2 = params.household.property.size
+        const embodiedCarbonSavedTco2e = 
+            ((EMBODIED_CARBON_BRICK_BLOCK_KG_M2 * houseSizeM2) - (EMBODIED_CARBON_TIMBER_SLAB_KG_M2 * houseSizeM2))
+            / 1000
+        return embodiedCarbonSavedTco2e
     }
 }
