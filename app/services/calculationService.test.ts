@@ -98,7 +98,7 @@ describe("getHouseholdData", () => {
     (
       pricesPaidService.getPricesPaidByPostcodeAndHouseType as jest.Mock
     ).mockResolvedValueOnce(mockPricesPaidSummary);
-    (rentService.getByITL3 as jest.Mock).mockResolvedValueOnce(
+    (rentService.getByITL3AndBedrooms as jest.Mock).mockResolvedValueOnce(
       mockAverageRentMonthly
     );
     (
