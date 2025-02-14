@@ -7,8 +7,6 @@ import {
   ChartContainer,
   ChartLegend,
   ChartLegendContent,
-  ChartTooltip,
-  ChartTooltipContent,
 } from "@/components/ui/chart";
 import { formatValue } from "@/app/lib/format";
 
@@ -82,7 +80,6 @@ const HowMuchPerMonthBarChart: React.FC<StackedBarChartProps> = ({ data }) => {
               axisLine={false}
               tickFormatter={(value) => value}
             />
-            <ChartTooltip content={<ChartTooltipContent hideLabel />} />
             <ChartLegend content={<ChartLegendContent />} />
             <Bar dataKey="monthly" strokeWidth={2} activeIndex={2}>
               <LabelList
