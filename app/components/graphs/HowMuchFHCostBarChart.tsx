@@ -11,19 +11,19 @@ import {
 
 const chartConfig = {
   freeholdLand: {
-    label: "Land",
+    label: "Land ",
     color: "rgb(var(--freehold-equity-color-rgb))",
   },
   freeholdHouse: {
-    label: "House",
+    label: "House ",
     color: "rgb(var(--freehold-interest-color-rgb))",
   },
   fairholdLand: {
-    label: "Land",
+    label: "Land ",
     color: "rgb(var(--fairhold-equity-color-rgb))",
   },
   fairholdHouse: {
-    label: "House",
+    label: "House ",
     color: "rgb(var(--fairhold-interest-color-rgb))",
   },
 } satisfies ChartConfig;
@@ -43,7 +43,7 @@ interface StackedBarChartProps {
   data: DataInput[];
 }
 
-const UpfrontComparisonBarChart: React.FC<StackedBarChartProps> = ({
+const HowMuchFHCostBarChart: React.FC<StackedBarChartProps> = ({
   data,
 }) => {
   const chartData = [
@@ -78,9 +78,9 @@ const UpfrontComparisonBarChart: React.FC<StackedBarChartProps> = ({
                   case "freehold":
                     return "Freehold";
                   case "fairhold: land purchase":
-                    return "Fairhold - Land Purchase";
+                    return "Fairhold – Land Purchase";
                   case "fairhold: land rent":
-                    return "Fairhold - Land Rent";
+                    return "Fairhold – Land Rent";
                   default:
                     return value;
                 }
@@ -154,4 +154,4 @@ const UpfrontComparisonBarChart: React.FC<StackedBarChartProps> = ({
   );
 };
 
-export default UpfrontComparisonBarChart;
+export default HowMuchFHCostBarChart;

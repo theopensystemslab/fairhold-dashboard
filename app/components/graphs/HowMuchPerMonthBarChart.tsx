@@ -27,7 +27,7 @@ interface StackedBarChartProps {
   data: DataInput[];
 }
 
-const TenureComparisonBarChart: React.FC<StackedBarChartProps> = ({ data }) => {
+const HowMuchPerMonthBarChart: React.FC<StackedBarChartProps> = ({ data }) => {
   const chartData = [
     {
       tenure: "Freehold",
@@ -100,4 +100,4 @@ const TenureComparisonBarChart: React.FC<StackedBarChartProps> = ({ data }) => {
   );
 };
 
-export default TenureComparisonBarChart;
+export default HowMuchPerMonthBarChart;
