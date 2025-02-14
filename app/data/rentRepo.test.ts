@@ -1,33 +1,33 @@
-// __tests__/rentRepo.test.ts
-import { rentRepo } from "./rentRepo"; // Adjust the import according to your file structure
-import prisma from "./db"; // Your Prisma setup file
+import { rentRepo } from "./rentRepo";
+import prisma from "./db";
 
 jest.mock("./db", () => ({
   rent: {
-    aggregate: jest.fn(), // Mock the aggregate method
+    aggregate: jest.fn(),
   },
 }));
 
 describe("rentRepo", () => {
   afterEach(() => {
-    jest.clearAllMocks(); // Clear mocks after each test
+    jest.clearAllMocks();
   });
 
   it("should return the average monthly mean rent for a valid ITL3", async () => {
-    const itl3 = "XYZ123456"; // Example ITL3
-    const mockMonthlyMeanRent = 1200; // Example rent value
+    const itl3 = "TLI3";
+    const mockMonthlyMeanRent = 1200;
 
     // Mock the Prisma client response
     (prisma.rent.aggregate as jest.Mock).mockResolvedValueOnce({
       _avg: { monthlyMeanRent: mockMonthlyMeanRent },
     });
 
-    const result = await rentRepo.getRentByITL3(itl3);
+    const result = await rentRepo.getRentByITL3AndBedrooms(itl3, 2);
 
     expect(result).toBe(mockMonthlyMeanRent);
     expect(prisma.rent.aggregate).toHaveBeenCalledWith({
       where: {
         itl3: { equals: itl3 },
+        bedrooms: { equals: 2}
       },
       _avg: {
         monthlyMeanRent: true,
@@ -44,20 +44,20 @@ describe("rentRepo", () => {
     });
 
     // Call the function and expect an error
-    await expect(rentRepo.getRentByITL3(itl3)).rejects.toThrow(
+    await expect(rentRepo.getRentByITL3AndBedrooms(itl3, 2)).rejects.toThrow(
       `Data error: Unable to find monthlyMeanRent for itl3 ${itl3}`
     );
   });
 
   it("should throw an error for any other error", async () => {
-    const itl3 = "XYZ123456"; // Example ITL3
+    const itl3 = "TLI2";
 
     // Mock the Prisma client to throw an error
     (prisma.rent.aggregate as jest.Mock).mockRejectedValueOnce(
       new Error("Database error")
     );
 
-    await expect(rentRepo.getRentByITL3(itl3)).rejects.toThrow(
+    await expect(rentRepo.getRentByITL3AndBedrooms(itl3, 4)).rejects.toThrow(
       `Data error: Unable to find monthlyMeanRent for itl3 ${itl3}`
     );
   });

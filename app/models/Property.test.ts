@@ -17,11 +17,11 @@ describe('Property', () => {
   });
   
   it("correctly calculates the landPrice", () => {
-    expect(property.landPrice).toBeCloseTo(313440);
+    expect(property.landPrice).toBeCloseTo(263440);
   });
   
   it("correctly calculates the landToTotalRatio", () => {
-    expect(property.landToTotalRatio).toBeCloseTo(0.62688);
+    expect(property.landToTotalRatio).toBeCloseTo(0.58542);
   });
   
   it("correctly calculates the values even for number of bedroooms exceeding the max ", () => {
