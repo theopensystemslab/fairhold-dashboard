@@ -47,26 +47,26 @@ const CostOverTimeWrapper: React.FC<CostOverTimeWrapperProps> = ({
             switch (tenure) {
                 case 'marketPurchase': 
                     return {
-                        year: index,
+                        year: index + 1,
                         equity: yearData.marketPurchaseYearly.yearlyEquityPaid,
                         interest: yearData.marketPurchaseYearly.yearlyInterestPaid,
                         maintenance: yearData.maintenanceCost[maintenanceLevel]
                     }
                 case 'marketRent':
                     return {
-                        year: index,
+                        year: index + 1,
                         rent: yearData.marketRentYearly
                     };                
                 case 'fairholdLandPurchase':
                     return {
-                        year: index,
+                        year: index + 1,
                         equity: yearData.fairholdLandPurchaseYearly.yearlyEquityPaid,
                         interest: yearData.fairholdLandPurchaseYearly.yearlyInterestPaid,
                         maintenance: yearData.maintenanceCost[maintenanceLevel]
                     }
                 case 'fairholdLandRent':
                     return {
-                        year: index,
+                        year: index + 1,
                         landRent: yearData.fairholdLandRentCGRYearly,
                         equity: yearData.fairholdLandRentYearly.yearlyEquityPaid,
                         interest: yearData.fairholdLandRentYearly.yearlyInterestPaid,
@@ -74,7 +74,7 @@ const CostOverTimeWrapper: React.FC<CostOverTimeWrapperProps> = ({
                     }
                 case 'socialRent':
                     return {
-                        year: index,
+                        year: index + 1,
                         rent: yearData.socialRentYearly
                     }
             }

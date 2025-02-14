@@ -1,6 +1,6 @@
 "use client";
 
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Legend, Tooltip } from "recharts";
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Legend, Tooltip, Label } from "recharts";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   ChartContainer,
@@ -8,6 +8,7 @@ import {
 import { TooltipProps } from "recharts";
 import { ValueType } from "tailwindcss/types/config";
 import { NameType } from "recharts/types/component/DefaultTooltipContent";
+import { formatValue } from "@/app/lib/format";
 
 export interface LifetimeBarData {
   landRent?: number;
@@ -95,13 +96,36 @@ const CostOverTimeStackedBarChart: React.FC<CostOverTimeStackedBarChartProps> = 
     <Card>
       <CardContent>
         <ChartContainer config={chartConfig}>
-          <BarChart data={data}>
+          <BarChart 
+            data={data}
+            margin={{ top: 20, right: 30, left: 20, bottom: 50 }}
+            >
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="year" />
+            <XAxis dataKey="year">
+              <Label
+                  value="Year"
+                  position="bottom"
+                  offset={10}
+                  className="label-class"
+                  />
+            </XAxis> 
             <YAxis 
-              domain={[0, maxY]}/>
+              domain={[0, maxY]}
+              tickFormatter={formatValue}
+              >
+                
+                <Label
+                  value="Cost"
+                  angle={-90}
+                  position="left"
+                  offset={10}
+                  className="label-class"
+                  />
+              </YAxis>
             <Tooltip content={<CostOverTimeTooltip />} />
-            <Legend />
+            <Legend 
+                verticalAlign="top"
+            />
             
             {config.colors.landRent && ( 
               <Bar dataKey="landRent" stackId="a" fill={config.colors.landRent} name="Land Rent" /> 
