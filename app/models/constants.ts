@@ -190,6 +190,8 @@ export const FTE_SPEND = 60000
 
 export const SOCIAL_VALUE_YEARS = 10;
 
-export const EMBODIED_CARBON_BRICK_BLOCK_KG_M2 = 404.086 // from Leeds Beckett LCA comparison report
+/** from Leeds Beckett Wikihouse LCA comparison report */
+export const EMBODIED_CARBON_BRICK_BLOCK_KG_M2 = 404.086
 
-export const EMBODIED_CARBON_TIMBER_SLAB_KG_M2 = 59.933 // from Stride Treglown Gwynfaen embodied emissions estimates
+/** from Stride Treglown Gwynfaen embodied emissions estimates */
+export const EMBODIED_CARBON_TIMBER_SLAB_KG_M2 = 59.933
