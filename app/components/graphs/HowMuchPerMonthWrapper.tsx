@@ -2,16 +2,16 @@
 import React from "react";
 import ErrorBoundary from "../ErrorBoundary";
 import { Household } from "@/app/models/Household";
-import TenureComparisonBarChart from "./TenureComparisonBarChart";
+import HowMuchPerMonthBarChart from "./HowMuchPerMonthBarChart";
 
-interface TenureComparisonWrapperProps {
+interface HowMuchPerMonthWrapperProps {
   household: Household;
 }
 
-const TenureComparisonWrapper: React.FC<TenureComparisonWrapperProps> = ({
+const HowMuchPerMonthWrapper: React.FC<HowMuchPerMonthWrapperProps> = ({
   household,
 }) => {
-  console.log("TenureComparisonWrapper household:", household);
+  console.log("HowMuchPerMonthWrapper household:", household);
 
   if (!household) {
     return <div>No household data available</div>;
@@ -60,10 +60,10 @@ const TenureComparisonWrapper: React.FC<TenureComparisonWrapperProps> = ({
   return (
     <ErrorBoundary>
       <div>
-        <TenureComparisonBarChart data={formattedData} />
+        <HowMuchPerMonthBarChart data={formattedData} />
       </div>
     </ErrorBoundary>
   );
 };
 
-export default TenureComparisonWrapper;
+export default HowMuchPerMonthWrapper;

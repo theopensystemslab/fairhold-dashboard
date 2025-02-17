@@ -7,8 +7,6 @@ import {
   ChartContainer,
   ChartLegend,
   ChartLegendContent,
-  ChartTooltip,
-  ChartTooltipContent,
 } from "@/components/ui/chart";
 import { formatValue } from "@/app/lib/format";
 
@@ -27,7 +25,7 @@ interface StackedBarChartProps {
   data: DataInput[];
 }
 
-const TenureComparisonBarChart: React.FC<StackedBarChartProps> = ({ data }) => {
+const HowMuchPerMonthBarChart: React.FC<StackedBarChartProps> = ({ data }) => {
   const chartData = [
     {
       tenure: "Freehold",
@@ -82,7 +80,6 @@ const TenureComparisonBarChart: React.FC<StackedBarChartProps> = ({ data }) => {
               axisLine={false}
               tickFormatter={(value) => value}
             />
-            <ChartTooltip content={<ChartTooltipContent hideLabel />} />
             <ChartLegend content={<ChartLegendContent />} />
             <Bar dataKey="monthly" strokeWidth={2} activeIndex={2}>
               <LabelList
@@ -100,4 +97,4 @@ const TenureComparisonBarChart: React.FC<StackedBarChartProps> = ({ data }) => {
   );
 };
 
-export default TenureComparisonBarChart;
+export default HowMuchPerMonthBarChart;

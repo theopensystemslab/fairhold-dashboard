@@ -1,29 +1,25 @@
 "use client";
 
-import { Bar, BarChart, CartesianGrid, XAxis, Label, LabelList } from "recharts";
+import { Bar, BarChart, CartesianGrid, XAxis, Label, LabelList, Tooltip, TooltipProps } from "recharts";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
   ChartConfig,
   ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
 } from "@/components/ui/chart";
+import { ValueType } from "tailwindcss/types/config";
+import { NameType } from "recharts/types/component/DefaultTooltipContent";
 
 const chartConfig = {
   freeholdLand: {
-    label: "Land",
     color: "rgb(var(--freehold-equity-color-rgb))",
   },
   freeholdHouse: {
-    label: "House",
     color: "rgb(var(--freehold-interest-color-rgb))",
   },
   fairholdLand: {
-    label: "Land",
     color: "rgb(var(--fairhold-equity-color-rgb))",
   },
   fairholdHouse: {
-    label: "House",
     color: "rgb(var(--fairhold-interest-color-rgb))",
   },
 } satisfies ChartConfig;
@@ -43,7 +39,21 @@ interface StackedBarChartProps {
   data: DataInput[];
 }
 
-const UpfrontComparisonBarChart: React.FC<StackedBarChartProps> = ({
+const CustomTooltip = ({ active, payload }: TooltipProps<ValueType, NameType>) => {
+  if (!active || !payload) return null;
+
+  const total = payload[0].payload.total;
+  return (
+    <div className="rounded-lg border bg-background p-2 shadow-sm">
+      <div className="grid grid-cols-2 gap-2">
+        <div className="font-medium">Total:</div>
+        <div>£{total.toLocaleString()}</div>
+      </div>
+    </div>
+  );
+};
+
+const HowMuchFHCostBarChart: React.FC<StackedBarChartProps> = ({
   data,
 }) => {
   const chartData = [
@@ -51,15 +61,18 @@ const UpfrontComparisonBarChart: React.FC<StackedBarChartProps> = ({
       tenure: "freehold",
       freeholdLand: data[0].marketPurchase,
       freeholdHouse: data[1].marketPurchase,
+      total: data[0].marketPurchase + data[1].marketPurchase,
     },
     {
       tenure: "fairhold: land purchase",
       fairholdLand: data[0].fairholdLandPurchase,
       fairholdHouse: data[2].fairholdLandPurchase,
+      total: data[0].fairholdLandPurchase + data[2].fairholdLandPurchase,
     },
     {
       tenure: "fairhold: land rent",
       fairholdHouse: data[2].fairholdLandRent,
+      total: data[2].fairholdLandRent,
     },
   ];
 
@@ -78,9 +91,9 @@ const UpfrontComparisonBarChart: React.FC<StackedBarChartProps> = ({
                   case "freehold":
                     return "Freehold";
                   case "fairhold: land purchase":
-                    return "Fairhold - Land Purchase";
+                    return "Fairhold – Land Purchase";
                   case "fairhold: land rent":
-                    return "Fairhold - Land Rent";
+                    return "Fairhold – Land Rent";
                   default:
                     return value;
                 }
@@ -94,7 +107,7 @@ const UpfrontComparisonBarChart: React.FC<StackedBarChartProps> = ({
               />
             </XAxis>
 
-            <ChartTooltip content={<ChartTooltipContent hideLabel />} />
+            <Tooltip content={<CustomTooltip />} />
             <Bar
               dataKey="freeholdLand"
               stackId="stack"
@@ -154,4 +167,4 @@ const UpfrontComparisonBarChart: React.FC<StackedBarChartProps> = ({
   );
 };
 
-export default UpfrontComparisonBarChart;
+export default HowMuchFHCostBarChart;

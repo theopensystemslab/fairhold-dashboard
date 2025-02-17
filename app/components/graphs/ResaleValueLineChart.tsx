@@ -107,7 +107,7 @@ const ResaleValueLineChart: React.FC<ResaleValueLineChartProps> = ({
               tickLine={false}
             >
               <Label
-                value="Years"
+                value="Year"
                 position="bottom"
                 offset={20}
                 className="label-class"

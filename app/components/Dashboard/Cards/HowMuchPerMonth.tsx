@@ -1,5 +1,5 @@
 import GraphCard from "../../ui/GraphCard";
-import TenureComparisonWrapper from "../../graphs/TenureComparisonWrapper";
+import HowMuchPerMonthWrapper from "../../graphs/HowMuchPerMonthWrapper";
 import { Drawer } from "../../ui/Drawer";
 import { DashboardProps } from "../../ui/Dashboard";
 
@@ -14,7 +14,7 @@ export const HowMuchPerMonth: React.FC<ProcessedDataOnly> = ({
       subtitle="Monthly cost of housing, not including energy bills."
     >
       <div className="flex flex-col h-full w-3/4 justify-between">
-        <TenureComparisonWrapper household={processedData} />
+        <HowMuchPerMonthWrapper household={processedData} />
         <Drawer
           buttonTitle="Find out more about how we estimated these"
           title="How we estimated these figures"

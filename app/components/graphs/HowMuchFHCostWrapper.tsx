@@ -2,9 +2,9 @@
 import React from "react";
 import ErrorBoundary from "../ErrorBoundary";
 import { Household } from "@/app/models/Household";
-import UpfrontComparisonBarChart from "./UpfrontComparisonBarChart";
+import HowMuchFHCostBarChart from "./HowMuchFHCostBarChart";
 
-interface UpfrontComparisonWrapperProps {
+interface HowMuchFHCostWrapperProps {
   household: Household;
   mortgageLand?: number;
   averageRentLand?: number;
@@ -17,7 +17,7 @@ interface UpfrontComparisonWrapperProps {
   socialRentMonthlyHouse?: number;
 }
 
-const UpfrontComparisonWrapper: React.FC<UpfrontComparisonWrapperProps> = ({
+const HowMuchFHCostWrapper: React.FC<HowMuchFHCostWrapperProps> = ({
   household,
 }) => {
   if (!household) {
@@ -55,10 +55,10 @@ const UpfrontComparisonWrapper: React.FC<UpfrontComparisonWrapperProps> = ({
   return (
     <ErrorBoundary>
       <div>
-        <UpfrontComparisonBarChart data={formattedData} />
+        <HowMuchFHCostBarChart data={formattedData} />
       </div>
     </ErrorBoundary>
   );
 };
 
-export default UpfrontComparisonWrapper;
+export default HowMuchFHCostWrapper;
