@@ -42,8 +42,6 @@ const Cards: React.FC<CardsProps> = ({ household }) => {
   const communityWealthDecade = Math.round(household.socialValue.communityWealthDecade).toLocaleString();
   const embodiedCarbonSavings = household.socialValue.embodiedCarbonSavings.toFixed(1);
   const savingsEnergyPoundsYearly = Math.round(household.socialValue.savingsEnergyPoundsYearly).toLocaleString()
-  // const savingsToNHSPerHouseYearly = Math.round(household.socialValue.savingsToNHSPerHouseYearly).toLocaleString();
-  // const savingsToSocietyPerHouseYearly = Math.round(household.socialValue.savingsToSocietyPerHouseYearly).toLocaleString();
   const savingsToNHSPerHouseLifetime = Math.round(household.lifetime.lifetimeData[household.lifetime.lifetimeData.length - 1].healthSavings.nhsCumulative).toLocaleString();
   const savingsToSocietyPerHouseLifetime = Math.round(household.lifetime.lifetimeData[household.lifetime.lifetimeData.length - 1].healthSavings.socialCumulative).toLocaleString();
   const newBuildPrice = Math.round(household.property.newBuildPrice).toLocaleString();
