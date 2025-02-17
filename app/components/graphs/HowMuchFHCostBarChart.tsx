@@ -4,8 +4,10 @@ import { Bar, BarChart, CartesianGrid, XAxis, Label, LabelList, Tooltip, Tooltip
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
   ChartConfig,
-  ChartContainer,
 } from "@/components/ui/chart";
+import {
+  StyledChartContainer,
+} from "../ui/StyledChartContainer";
 import { ValueType } from "tailwindcss/types/config";
 import { NameType } from "recharts/types/component/DefaultTooltipContent";
 
@@ -80,7 +82,7 @@ const HowMuchFHCostBarChart: React.FC<StackedBarChartProps> = ({
     <Card>
       <CardHeader></CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig}
+        <StyledChartContainer config={chartConfig}
         className="[&_.recharts-rectangle.recharts-tooltip-cursor]:fill-transparent">
           <BarChart accessibilityLayer data={chartData}>
             <CartesianGrid vertical={false} />
@@ -162,7 +164,7 @@ const HowMuchFHCostBarChart: React.FC<StackedBarChartProps> = ({
               />
             </Bar>
           </BarChart>
-        </ChartContainer>
+        </StyledChartContainer>
       </CardContent>
     </Card>
   );
