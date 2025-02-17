@@ -5,8 +5,9 @@ import { FairholdLandPurchase } from "./tenure/FairholdLandPurchase";
 import { FairholdLandRent } from "./tenure/FairholdLandRent";
 import { Fairhold } from "./Fairhold";
 import { Property } from "./Property";
-import { MONTHS_PER_YEAR, MAINTENANCE_LEVELS, MaintenanceLevel, SOCIAL_RENT_ADJUSTMENT_FORECAST } from "./constants";
+import { MONTHS_PER_YEAR, MAINTENANCE_LEVELS, MaintenanceLevel, SOCIAL_RENT_ADJUSTMENT_FORECAST, NHS_SAVINGS_PER_HOUSE_PER_YEAR, SOCIAL_SAVINGS_PER_HOUSE_PER_YEAR } from "./constants";
 import type { MortgageBreakdownElement } from "./Mortgage"
+import { DEFAULT_FORECAST_PARAMETERS } from "./ForecastParameters";
 
 export interface LifetimeParams {
     household: Household;
@@ -61,6 +62,12 @@ export interface LifetimeData {
         fairholdLandPurchase: number;
         fairholdLandRent: number;
         socialRent: number;
+    }
+    healthSavings: {
+        nhs: number;
+        social: number;
+        nhsCumulative: number;
+        socialCumulative: number;
     }
     [key: number]: number;
 }
@@ -147,6 +154,12 @@ export class Lifetime {
         let fairholdLandPurchaseCumulative = fairholdLandPurchaseYearlyIterative.yearlyEquityPaid + fairholdLandPurchaseYearlyIterative.yearlyInterestPaid
         let fairholdLandRentCumulative = fairholdLandRentYearlyIterative.yearlyEquityPaid + fairholdLandRentYearlyIterative.yearlyInterestPaid
         let socialRentCumulative = socialRentYearlyIterative
+
+        // Initialise the health savings figures
+        let nhsSaveYearlyIterative = NHS_SAVINGS_PER_HOUSE_PER_YEAR
+        let socialSaveYearlyIterative = SOCIAL_SAVINGS_PER_HOUSE_PER_YEAR
+        let nhsSaveCumulative = nhsSaveYearlyIterative
+        let socialSaveCumulative = socialSaveYearlyIterative
         
         // Push the Y0 values before they start being iterated-upon
         lifetime.push({
@@ -180,6 +193,12 @@ export class Lifetime {
                 fairholdLandPurchase: fairholdLandPurchaseCumulative,
                 fairholdLandRent: fairholdLandRentCumulative,
                 socialRent: socialRentCumulative
+            },
+            healthSavings: {
+                nhs: nhsSaveYearlyIterative,
+                social: socialSaveYearlyIterative,
+                nhsCumulative: nhsSaveCumulative,
+                socialCumulative: socialSaveCumulative
             }
         });
 
@@ -221,6 +240,10 @@ export class Lifetime {
                 (fairholdLandRentYearlyIterative.yearlyEquityPaid + fairholdLandRentYearlyIterative.yearlyInterestPaid + fairholdLandRentCGRYearlyIterative)
             socialRentCumulative += 
                 socialRentYearlyIterative
+            nhsSaveYearlyIterative *= (1 + DEFAULT_FORECAST_PARAMETERS.constructionPriceGrowthPerYear)
+            socialSaveYearlyIterative *= (1 + DEFAULT_FORECAST_PARAMETERS.constructionPriceGrowthPerYear)
+            nhsSaveCumulative += nhsSaveYearlyIterative
+            socialSaveCumulative += socialSaveYearlyIterative
 
             /** A new instance of the `Property` class is needed each loop in order to re-calculate the depreciated house value as the house gets older */
             const iterativePropertyNoMaintenance = new Property({ 
@@ -312,6 +335,12 @@ export class Lifetime {
                     fairholdLandPurchase: fairholdLandPurchaseCumulative,
                     fairholdLandRent: fairholdLandRentCumulative,
                     socialRent: socialRentCumulative
+                },
+                healthSavings: {
+                    nhs: nhsSaveYearlyIterative,
+                    social: socialSaveYearlyIterative,
+                    nhsCumulative: nhsSaveCumulative,
+                    socialCumulative: socialSaveCumulative
                 }
             });
         }
