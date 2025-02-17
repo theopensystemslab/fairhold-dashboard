@@ -189,3 +189,9 @@ export const SOCIAL_SAVINGS_PER_HOUSE_PER_YEAR = 5286
 export const FTE_SPEND = 60000
 
 export const SOCIAL_VALUE_YEARS = 10;
+
+/** from Leeds Beckett Wikihouse LCA comparison report */
+export const EMBODIED_CARBON_BRICK_BLOCK_KG_M2 = 404.086
+
+/** from Stride Treglown Gwynfaen embodied emissions estimates */
+export const EMBODIED_CARBON_TIMBER_SLAB_KG_M2 = 59.933
