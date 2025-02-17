@@ -11,19 +11,15 @@ import { NameType } from "recharts/types/component/DefaultTooltipContent";
 
 const chartConfig = {
   freeholdLand: {
-    label: "Land ",
     color: "rgb(var(--freehold-equity-color-rgb))",
   },
   freeholdHouse: {
-    label: "House ",
     color: "rgb(var(--freehold-interest-color-rgb))",
   },
   fairholdLand: {
-    label: "Land ",
     color: "rgb(var(--fairhold-equity-color-rgb))",
   },
   fairholdHouse: {
-    label: "House ",
     color: "rgb(var(--fairhold-interest-color-rgb))",
   },
 } satisfies ChartConfig;
@@ -43,14 +39,14 @@ interface StackedBarChartProps {
   data: DataInput[];
 }
 
-const CustomTooltip = ({ active, payload }: TooltipProps<ValueType, NameType>) => { // LINE CHANGED
+const CustomTooltip = ({ active, payload }: TooltipProps<ValueType, NameType>) => {
   if (!active || !payload) return null;
 
   const total = payload[0].payload.total;
   return (
     <div className="rounded-lg border bg-background p-2 shadow-sm">
       <div className="grid grid-cols-2 gap-2">
-        <div className="font-medium">Total</div>
+        <div className="font-medium">Total:</div>
         <div>£{total.toLocaleString()}</div>
       </div>
     </div>
