@@ -3,8 +3,8 @@
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Legend, Tooltip, Label } from "recharts";
 import { Card, CardContent } from "@/components/ui/card";
 import {
-  ChartContainer,
-} from "@/components/ui/chart";
+  StyledChartContainer,
+} from "../ui/StyledChartContainer";
 import { TooltipProps } from "recharts";
 import { ValueType } from "tailwindcss/types/config";
 import { NameType } from "recharts/types/component/DefaultTooltipContent";
@@ -95,7 +95,7 @@ const CostOverTimeStackedBarChart: React.FC<CostOverTimeStackedBarChartProps> = 
   return (
     <Card>
       <CardContent>
-        <ChartContainer config={chartConfig}>
+        <StyledChartContainer config={chartConfig}>
           <BarChart 
             data={data}
             margin={{ top: 20, right: 30, left: 20, bottom: 50 }}
@@ -143,7 +143,7 @@ const CostOverTimeStackedBarChart: React.FC<CostOverTimeStackedBarChartProps> = 
               <Bar dataKey="maintenance" stackId="a" fill={config.colors.maintenance} name="Maintenance" />
             )}
           </BarChart>
-        </ChartContainer>
+        </StyledChartContainer>
       </CardContent>
     </Card>
   );

@@ -4,10 +4,12 @@ import React from "react";
 import { Bar, BarChart, CartesianGrid, XAxis, LabelList } from "recharts";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
-  ChartContainer,
   ChartLegend,
   ChartLegendContent,
 } from "@/components/ui/chart";
+import {
+  StyledChartContainer,
+} from "../ui/StyledChartContainer";
 import { formatValue } from "@/app/lib/format";
 
 type DataInput = {
@@ -70,7 +72,8 @@ const HowMuchPerMonthBarChart: React.FC<StackedBarChartProps> = ({ data }) => {
     <Card>
       <CardHeader></CardHeader>
       <CardContent>
-        <ChartContainer config={{}}>
+        <StyledChartContainer config={{}}
+        className="[&_.recharts-rectangle.recharts-tooltip-cursor]:fill-transparent">
           <BarChart accessibilityLayer data={chartData}>
             <CartesianGrid vertical={false} />
             <XAxis
@@ -91,7 +94,7 @@ const HowMuchPerMonthBarChart: React.FC<StackedBarChartProps> = ({ data }) => {
               />
             </Bar>
           </BarChart>
-        </ChartContainer>
+        </StyledChartContainer>
       </CardContent>
     </Card>
   );

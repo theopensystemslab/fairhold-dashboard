@@ -3,9 +3,11 @@ import { LineChart, Line, CartesianGrid, XAxis, YAxis, Label, TooltipProps } fro
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
   ChartConfig,
-  ChartContainer,
   ChartTooltip,
 } from "@/components/ui/chart";
+import {
+  StyledChartContainer,
+} from "../ui/StyledChartContainer";
 import { formatValue } from "@/app/lib/format";
 import { MaintenanceLevel } from "@/app/models/constants";
 
@@ -96,7 +98,7 @@ const ResaleValueLineChart: React.FC<ResaleValueLineChartProps> = ({
     <Card>
       <CardHeader></CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig}>
+        <StyledChartContainer config={chartConfig}>
           <LineChart
             data={data}
             margin={{ top: 20, right: 30, left: 20, bottom: 50 }}
@@ -132,7 +134,7 @@ const ResaleValueLineChart: React.FC<ResaleValueLineChartProps> = ({
             {renderLine("low")}
             {renderLine("none")}
           </LineChart>
-        </ChartContainer>
+        </StyledChartContainer>
       </CardContent>
     </Card>
   );
