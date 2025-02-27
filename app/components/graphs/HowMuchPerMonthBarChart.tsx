@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Bar, BarChart, CartesianGrid, XAxis, LabelList } from "recharts";
+import { Bar, BarChart, CartesianGrid, XAxis, LabelList, ReferenceLine } from "recharts";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
   ChartLegend,
@@ -83,8 +83,8 @@ const HowMuchPerMonthBarChart: React.FC<StackedBarChartProps> = ({ data }) => {
               axisLine={false}
               tickFormatter={(value) => value}
             />
-            <ChartLegend content={<ChartLegendContent />} />
-            <Bar dataKey="monthly" strokeWidth={2} activeIndex={2}>
+            <ChartLegend content={<ChartLegendContent />} />    
+              <Bar dataKey="monthly" strokeWidth={2} activeIndex={2}>
               <LabelList
                 dataKey="monthly"
                 position="center"
@@ -93,6 +93,18 @@ const HowMuchPerMonthBarChart: React.FC<StackedBarChartProps> = ({ data }) => {
                 fontSize={12}
               />
             </Bar>
+            <ReferenceLine 
+              y={data[0].affordabilityMonthly} 
+              stroke="rgb(var(--text-inaccessible-rgb))" 
+              strokeDasharray="6 6" 
+              label={{ 
+                value: '35% average household income',
+                position: 'insideTopRight',
+                fill: 'rgb(var(--text-inaccessible-rgb))',
+                fontSize: 12, 
+                offset: 10
+              }} 
+            />        
           </BarChart>
         </StyledChartContainer>
       </CardContent>
