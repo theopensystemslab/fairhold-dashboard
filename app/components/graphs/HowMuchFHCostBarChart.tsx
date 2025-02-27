@@ -55,6 +55,18 @@ const CustomTooltip = ({ active, payload }: TooltipProps<ValueType, NameType>) =
   );
 };
 
+const formatValueWithLabel = (value: number, dataKey: string) => {
+  const formattedValue = formatValue(value);
+  
+  if (dataKey.includes('Land')) {
+    return `Land: ${formattedValue}`;
+  } else if (dataKey.includes('House')) {
+    return `House: ${formattedValue}`;
+  }
+  
+  return formattedValue;
+};
+
 const HowMuchFHCostBarChart: React.FC<StackedBarChartProps> = ({
   data,
 }) => {
@@ -119,7 +131,7 @@ const HowMuchFHCostBarChart: React.FC<StackedBarChartProps> = ({
               <LabelList
                 dataKey="freeholdLand"
                 position="center"
-                formatter={formatValue}
+                formatter={(value: number) => formatValueWithLabel(value, "freeholdLand")}
                 fill="white"
                 fontSize={12}
               />
@@ -132,7 +144,7 @@ const HowMuchFHCostBarChart: React.FC<StackedBarChartProps> = ({
               <LabelList
                 dataKey="freeholdHouse"
                 position="center"
-                formatter={formatValue}
+                formatter={(value: number) => formatValueWithLabel(value, "freeholdHouse")}
                 fill="white"
                 fontSize={12}
               />
@@ -145,7 +157,7 @@ const HowMuchFHCostBarChart: React.FC<StackedBarChartProps> = ({
               <LabelList
                 dataKey="fairholdLand"
                 position="center"
-                formatter={formatValue}
+                formatter={(value: number) => formatValueWithLabel(value, "fairholdLand")}
                 fill="white"
                 fontSize={12}
               />
@@ -158,7 +170,7 @@ const HowMuchFHCostBarChart: React.FC<StackedBarChartProps> = ({
               <LabelList
                 dataKey="fairholdHouse"
                 position="center"
-                formatter={formatValue}
+                formatter={(value: number) => formatValueWithLabel(value, "fairholdHouse")}
                 fill="white"
                 fontSize={12}
               />
