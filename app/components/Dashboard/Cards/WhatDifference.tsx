@@ -24,17 +24,17 @@ const Card: React.FC<React.PropsWithChildren<CardProps>> = ({ title, figure, sub
     <div className="text-sm">{children}</div>
     <div className="flex items-center gap-2">
       {figure &&
-        <p className="text-4xl text-green-500 font-semibold">{figure}</p>
+        <p className="text-4xl text-highlight-green font-semibold">{figure}</p>
       }
       {figure && subfigure && 
-        <p className="text-sm text-green-500 font-semibold">{subfigure}</p>
+        <p className="text-sm text-highlight-green font-semibold">{subfigure}</p>
       }
     </div>
   </div>
 )
 
 const Highlight: React.FC<React.PropsWithChildren> = ({ children }) => (
-  <span className="text-green-500 font-semibold">{children}</span>
+  <span className="text-highlight-green font-semibold">{children}</span>
 )
 
 const Cards: React.FC<CardsProps> = ({ household }) => {
