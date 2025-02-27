@@ -14,13 +14,13 @@
   --text-inaccessible-rgb: 171 164 164;
   --button-background-rgb: 227 227 225;
 
-  --freehold-equity-color-rgb: 66 75 179;
-  --freehold-interest-color-rgb: 131 164 255;
-  --freehold-detail-color-rgb: 190 201 232;
+  --freehold-equity-color-rgb: 50 60 160; /* 66 75 179; */
+  --freehold-interest-color-rgb: 131 138 212;
+  --freehold-detail-color-rgb: 160 168 225; /* 190 195 232; */
   --fairhold-land-rent-color-rgb: 28 117 43;
-  --fairhold-equity-color-rgb: 74 179 91;
-  --fairhold-interest-color-rgb: 159 211 166;
-  --fairhold-detail-color-rgb: 207 227 209;
+  --fairhold-equity-color-rgb: 55 150 70; /* 74 179 91; */
+  --fairhold-interest-color-rgb: 131 195 143;
+  --fairhold-detail-color-rgb: 157 207 167; /* 190 222 197; */
   --private-rent-land-color-rgb: 45 155 240;
   --private-rent-house-color-rgb: 119 188 242;
   --private-rent-detail-color-rgb: 203 225 242;
@@ -143,4 +143,8 @@ body {
 
 main {
   background: #f2f2f0;
+}
+
+.text-highlight-green {
+  color: rgb(var(--fairhold-equity-color-rgb));
 }
