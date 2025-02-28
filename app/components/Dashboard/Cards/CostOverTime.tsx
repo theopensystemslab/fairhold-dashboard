@@ -40,7 +40,7 @@ export const CostOverTime: React.FC<DashboardProps> = ({ processedData }) => {
     constructionPriceGrowthPerYear: (DEFAULT_FORECAST_PARAMETERS.constructionPriceGrowthPerYear * 100).toString(),
     rentGrowthPerYear: (DEFAULT_FORECAST_PARAMETERS.rentGrowthPerYear * 100).toString(),
     propertyPriceGrowthPerYear: (DEFAULT_FORECAST_PARAMETERS.propertyPriceGrowthPerYear * 100).toString(),
-    incomeGrowthPerYear: (DEFAULT_FORECAST_PARAMETERS.propertyPriceGrowthPerYear * 100).toString(),
+    incomeGrowthPerYear: (DEFAULT_FORECAST_PARAMETERS.incomeGrowthPerYear * 100).toString(),
     SOCIAL_RENT_ADJUSTMENT_FORECAST: (SOCIAL_RENT_ADJUSTMENT_FORECAST * 100).toString()
   }), []);
 
@@ -61,7 +61,7 @@ export const CostOverTime: React.FC<DashboardProps> = ({ processedData }) => {
     };
     
     processMarkdown();
-  }, [replacements]);
+  });
 
   return (
     <GraphCard
