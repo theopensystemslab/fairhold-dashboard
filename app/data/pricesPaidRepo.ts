@@ -16,7 +16,7 @@ const getPricesPaidByPostcodeAndHouseType = async (
   houseType: string
 ): Promise<PricesPaidParams> => {
   try {
-    const summary = await prisma.pricesPaidSummaryFiltered.findFirst({
+    const summary = await prisma.pricesPaidSummary.findFirst({
       where: {
         propertyType: houseType,
         postcode: {
@@ -27,6 +27,7 @@ const getPricesPaidByPostcodeAndHouseType = async (
         },
       },
       orderBy: {
+        // Coincidentally 'sector' comes before 'district' comes before 'area'
         granularityLevel: "asc",
       },
     });
