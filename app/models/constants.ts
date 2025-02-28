@@ -61,6 +61,9 @@ export type componentBreakdownType = {
   percentOfMaintenanceYearly: number
 }
 
+/** from ONS https://www.ons.gov.uk/peoplepopulationandcommunity/birthsdeathsandmarriages/families/bulletins/familiesandhouseholds/2022 */
+export const HEADS_PER_HOUSEHOLD = 2.36; 
+
 export type houseBreakdownType = {
   foundations: componentBreakdownType,
   structureEnvelope: componentBreakdownType,
