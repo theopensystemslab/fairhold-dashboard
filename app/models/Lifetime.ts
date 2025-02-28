@@ -415,9 +415,9 @@ export class Lifetime {
                 const component = HOUSE_BREAKDOWN_PERCENTAGES[key]
                 const depreciationAmount = newBuildPrice * component.percentageOfHouse * component.depreciationPercentageYearly
                 const componentMaintenanceSpend =  maintenanceSpend * component.percentOfMaintenanceYearly
-                let newValue = currentComponents[key] - depreciationAmount + componentMaintenanceSpend
-                newValue = (newValue < 0) ? 0 : newValue
-                depreciatedComponents[key] = newValue
+                let updatedValue = currentComponents[key] - depreciationAmount + componentMaintenanceSpend
+                updatedValue = (updatedValue < 0) ? 0 : updatedValue
+                depreciatedComponents[key] = updatedValue
             }
             return depreciatedComponents
         }
@@ -429,16 +429,16 @@ export class Lifetime {
             for (const key of Object.keys(HOUSE_BREAKDOWN_PERCENTAGES) as (keyof houseBreakdownType)[]) {
                 const component = HOUSE_BREAKDOWN_PERCENTAGES[key]
                 if (key === 'foundations' || key === 'structureEnvelope') {
-                    const depreciationAmount = newBuildPrice * component.percentageOfHouse / (key === 'foundations' ? FOUNDATIONS_LIFETIME : STRUCTURE_ENVELOPE_LIFETIME) // TODO: fix magic numbers!
-                    let newValue = currentComponents[key] - depreciationAmount
-                    newValue = (newValue < 0) ? 0 : newValue
-                    depreciatedComponents[key] = newValue
+                    const depreciationAmount = newBuildPrice * component.percentageOfHouse / (key === 'foundations' ? FOUNDATIONS_LIFETIME : STRUCTURE_ENVELOPE_LIFETIME)
+                    let updatedValue = currentComponents[key] - depreciationAmount
+                    updatedValue = (updatedValue < 0) ? 0 : updatedValue
+                    depreciatedComponents[key] = updatedValue
                 } else {
                     const component = HOUSE_BREAKDOWN_PERCENTAGES[key]
                     const depreciationAmount = newBuildPrice * component.percentageOfHouse * component.depreciationPercentageYearly
-                    let newValue = currentComponents[key] - depreciationAmount
-                    newValue = (newValue < 0) ? 0 : newValue
-                    depreciatedComponents[key] = newValue
+                    let updatedValue = currentComponents[key] - depreciationAmount
+                    updatedValue = (updatedValue < 0) ? 0 : updatedValue
+                    depreciatedComponents[key] = updatedValue
                 }
                 
             }
