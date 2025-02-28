@@ -41,7 +41,7 @@ export const HowMuchPerMonth: React.FC<ProcessedDataOnly> = ({
     };
     
     processMarkdown();
-  }, [replacements]);
+  });
 
 
   return (
