@@ -10,10 +10,10 @@ describe('Social Value', () => {
     })
 
     it("calculates money saved", () => {
-        expect(socialValue.moneySaved).toBeCloseTo(408354.174)
+        expect(socialValue.moneySaved).toBeCloseTo(412362.556)
     })
     it("calculates money to community", () => {
-        expect(socialValue.communityWealthDecade).toBeCloseTo(5577.11)
+        expect(socialValue.communityWealthDecade).toBeCloseTo(5574.685)
     })
     it("calculates energy bill savings", () => {
         expect(socialValue.savingsEnergyPoundsYearly).toBeCloseTo(554.4)

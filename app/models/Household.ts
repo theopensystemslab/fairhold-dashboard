@@ -8,10 +8,8 @@ import { SocialRent } from "./tenure/SocialRent";
 import { ForecastParameters } from "./ForecastParameters";
 import { socialRentAdjustmentTypes } from "../data/socialRentAdjustmentsRepo";
 import { Lifetime, LifetimeParams } from "./Lifetime"; 
-import { KWH_M2_YR_EXISTING_BUILDS, KWH_M2_YR_NEWBUILDS_RETROFIT } from "./constants" ;
+import { KWH_M2_YR_EXISTING_BUILDS, KWH_M2_YR_NEWBUILDS_RETROFIT, HEADS_PER_HOUSEHOLD } from "./constants" ;
 import { SocialValue } from "./SocialValue";
-
-const HEADS_PER_HOUSEHOLD = 2.4;
 
 type ConstructorParams = Pick<
   Household,
