@@ -61,7 +61,7 @@ export const CostOverTime: React.FC<DashboardProps> = ({ processedData }) => {
     };
     
     processMarkdown();
-  });
+  }, [replacements]);
 
   return (
     <GraphCard
