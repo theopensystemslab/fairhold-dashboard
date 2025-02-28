@@ -44,7 +44,7 @@ export const ResaleValue: React.FC<DashboardProps> = ({ data }) => {
     };
     
     processMarkdown();
-  });
+  }, [replacements]);
 
   return (
     <GraphCard
