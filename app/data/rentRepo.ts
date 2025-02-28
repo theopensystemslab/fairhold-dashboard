@@ -1,10 +1,11 @@
 import prisma from "./db";
 
-const getRentByITL3 = async (itl3: string): Promise<number> => {
+const getRentByITL3AndBedrooms = async (itl3: string, bedrooms: number): Promise<number> => {
   try {
     const result = await prisma.rent.aggregate({
       where: {
         itl3: { equals: itl3 },
+        bedrooms: { equals: bedrooms }
       },
       _avg: {
         monthlyMeanRent: true,
@@ -26,5 +27,5 @@ const getRentByITL3 = async (itl3: string): Promise<number> => {
 };
 
 export const rentRepo = {
-  getRentByITL3,
+  getRentByITL3AndBedrooms,
 };

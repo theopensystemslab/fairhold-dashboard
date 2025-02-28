@@ -23,13 +23,14 @@ export const getHouseholdData = async (input: Calculation) => {
     const postcodeArea = postcode.area; // extract only the characters for the area, e.g SE
     const postcodeDistrict = postcode.district; // extract only characters for the district, SE17
     const postcodeSector = postcode.sector; // extract only the characters for the sector, SE17 1
+    const bedrooms = input.houseBedrooms <= 4 ? input.houseBedrooms : 4; // rental data only goes up to 4br TODO: do we want to increase the weight? 
 
     const itl3 = await itlService.getByPostcodeDistrict(postcodeDistrict);
     const gdhi = await gdhiService.getByITL3(itl3);
     const kwhCostPence = await gasPriceService.getByITL3(itl3);
     const hpi = await hpiService.getByITL3(itl3);
     const buildPrice = await buildPriceService.getBuildPriceByHouseType(input.houseType);
-
+    
     const { averagePrice, numberOfTransactions, granularityPostcode } =
       await pricesPaidService.getPricesPaidByPostcodeAndHouseType(
         postcodeDistrict,
@@ -38,7 +39,7 @@ export const getHouseholdData = async (input: Calculation) => {
         input.houseType
       );
 
-    const averageRentMonthly = await rentService.getByITL3(itl3); 
+    const averageRentMonthly = await rentService.getByITL3AndBedrooms(itl3, bedrooms); 
 
     const socialRentAdjustments = await socialRentAdjustmentsService.getAdjustments();
     const socialRentAverageEarning = await socialRentEarningsService.getByITL3(itl3)
