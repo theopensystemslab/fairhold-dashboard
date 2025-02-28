@@ -2,7 +2,7 @@ import { pricesPaidRepo } from "./pricesPaidRepo";
 import prisma from "./db";
 
 jest.mock("./db", () => ({
-  pricesPaidSummary: {
+  pricesPaidSummaryFiltered: {
     findFirst: jest.fn(),
   },
 }));
@@ -19,7 +19,7 @@ describe("pricesPaidRepo", () => {
   });
 
   it("should return prices paid data", async () => {   
-    (prisma.pricesPaidSummary.findFirst as jest.Mock).mockResolvedValueOnce({
+    (prisma.pricesPaidSummaryFiltered.findFirst as jest.Mock).mockResolvedValueOnce({
       averagePrice: 500000,
       transactionCount: 35,
       postcode: postcodeSector,
@@ -40,7 +40,7 @@ describe("pricesPaidRepo", () => {
   });
 
   it("should throw an error if no transaction data is found", async () => {
-    (prisma.pricesPaidSummary.findFirst as jest.Mock).mockResolvedValueOnce(null);
+    (prisma.pricesPaidSummaryFiltered.findFirst as jest.Mock).mockResolvedValueOnce(null);
 
     await expect(
       pricesPaidRepo.getPricesPaidByPostcodeAndHouseType(
@@ -55,7 +55,7 @@ describe("pricesPaidRepo", () => {
   });
 
   it("should throw an error for any other error", async () => {
-    (prisma.pricesPaidSummary.findFirst as jest.Mock).mockRejectedValueOnce(
+    (prisma.pricesPaidSummaryFiltered.findFirst as jest.Mock).mockRejectedValueOnce(
       new Error("Database error")
     );
 
