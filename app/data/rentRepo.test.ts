@@ -3,7 +3,7 @@ import prisma from "./db";
 
 jest.mock("./db", () => ({
   rent: {
-    aggregate: jest.fn(),
+    findMany: jest.fn(),
   },
 }));
 
@@ -17,20 +17,18 @@ describe("rentRepo", () => {
     const mockMonthlyMeanRent = 1200;
 
     // Mock the Prisma client response
-    (prisma.rent.aggregate as jest.Mock).mockResolvedValueOnce({
-      _avg: { monthlyMeanRent: mockMonthlyMeanRent },
-    });
+    (prisma.rent.findMany as jest.Mock).mockResolvedValueOnce([
+      { monthlyMeanRent: 1100 },
+      { monthlyMeanRent: 1300 }
+    ]);
 
     const result = await rentRepo.getRentByITL3AndBedrooms(itl3, 2);
 
     expect(result).toBe(mockMonthlyMeanRent);
-    expect(prisma.rent.aggregate).toHaveBeenCalledWith({
+    expect(prisma.rent.findMany).toHaveBeenCalledWith({
       where: {
-        itl3: { equals: itl3 },
-        bedrooms: { equals: 2}
-      },
-      _avg: {
-        monthlyMeanRent: true,
+        itl3: itl3,
+        bedrooms: 2
       },
     });
   });
@@ -39,9 +37,7 @@ describe("rentRepo", () => {
     const itl3 = "NON_EXISTENT_ITL3"; // Example non-existent ITL3
 
     // Mock the Prisma client response with null average
-    (prisma.rent.aggregate as jest.Mock).mockResolvedValueOnce({
-      _avg: { monthlyMeanRent: null },
-    });
+    (prisma.rent.findMany as jest.Mock).mockResolvedValueOnce([]);
 
     // Call the function and expect an error
     await expect(rentRepo.getRentByITL3AndBedrooms(itl3, 2)).rejects.toThrow(
@@ -53,7 +49,7 @@ describe("rentRepo", () => {
     const itl3 = "TLI2";
 
     // Mock the Prisma client to throw an error
-    (prisma.rent.aggregate as jest.Mock).mockRejectedValueOnce(
+    (prisma.rent.findMany as jest.Mock).mockRejectedValueOnce(
       new Error("Database error")
     );
 
