@@ -165,6 +165,9 @@ export const HOUSE_BREAKDOWN_PERCENTAGES: houseBreakdownType = {
   },
 }
 
+export const FOUNDATIONS_LIFETIME = 110
+export const STRUCTURE_ENVELOPE_LIFETIME = 65
+
 export type BillsByHouseType = Record<HouseType, number>
 
 /** Figures are from LETI / Studio PDP */

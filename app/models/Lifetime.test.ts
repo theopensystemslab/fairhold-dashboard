@@ -63,10 +63,10 @@ describe("resale values", () => {
 });
 
 it("correctly calculates depreciated house value for all maintenance levels", () => {
-    expect(lifetime.lifetimeData[3].depreciatedHouseResaleValue.none).toBeCloseTo(173636.99)
-    expect(lifetime.lifetimeData[20].depreciatedHouseResaleValue.low).toBeCloseTo(157202.92)
-    expect(lifetime.lifetimeData[27].depreciatedHouseResaleValue.medium).toBeCloseTo(168197.27)
-    expect(lifetime.lifetimeData[39].depreciatedHouseResaleValue.high).toBeCloseTo(203777.25) 
+    expect(lifetime.lifetimeData[3].depreciatedHouseResaleValue.none).toBeCloseTo(168906.62)
+    expect(lifetime.lifetimeData[20].depreciatedHouseResaleValue.low).toBeCloseTo(172168.596)
+    expect(lifetime.lifetimeData[27].depreciatedHouseResaleValue.medium).toBeCloseTo(206487.633)
+    expect(lifetime.lifetimeData[39].depreciatedHouseResaleValue.high).toBeCloseTo(326753.094) 
 
     expect(lifetime.lifetimeData[5].depreciatedHouseResaleValue.none).toBeLessThan(
         lifetime.lifetimeData[5].depreciatedHouseResaleValue.low);

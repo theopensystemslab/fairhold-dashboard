@@ -1,5 +1,6 @@
 import { MAINTENANCE_LEVELS, HOUSE_BREAKDOWN_PERCENTAGES, MaintenanceLevel, PROPERTY_PRICE_WEIGHTS } from "./constants";
 import { houseBreakdownType } from "./constants";
+import { DepreciatedHouseBreakdownType } from "./Lifetime";
 /**
  * Number of decimal places to use when rounding numerical values
  */
@@ -55,6 +56,7 @@ export class Property {
    * The calculations use our custom depreciation method
    */
   depreciatedBuildPrice: number;
+  depreciatedHouseBreakdown: DepreciatedHouseBreakdownType;
   landPrice: number;
   /**
    * This shows the % of the market price that land accounts for (`land value / market value`)
@@ -71,6 +73,7 @@ export class Property {
     this.maintenanceLevel = params.maintenanceLevel;
     this.newBuildPricePerMetre = params.newBuildPricePerMetre;
     this.itl3 = params.itl3;
+    this.depreciatedHouseBreakdown = {} as DepreciatedHouseBreakdownType
 
     // Computed properties, order is significant
     this.averageMarketPrice = this.weightAverageMarketPrice(params);
@@ -91,8 +94,8 @@ export class Property {
   }
 
   public calculateDepreciatedBuildPrice() {
-    if (this.age === 0) return this.newBuildPrice;
-    let depreciatedBuildPrice = 0;
+  // Initialise depreciatedBuildPrice; since we need the house breakdown even for a newbuild (to store and iterate on it in Lifetime), we run calculateComponentValue instead of just assigning depreciatedHousePrice = newBuildPrice
+  let depreciatedBuildPrice = 0;
 
   // Calculate for each component using the public method
   for (const key of Object.keys(HOUSE_BREAKDOWN_PERCENTAGES) as (keyof houseBreakdownType)[]) {
@@ -106,7 +109,6 @@ export class Property {
     depreciatedBuildPrice += result.depreciatedComponentValue;
   }
     depreciatedBuildPrice = parseFloat(depreciatedBuildPrice.toFixed(PRECISION))
-
   return depreciatedBuildPrice;
 }
 
@@ -128,16 +130,14 @@ export class Property {
     
     // Calculate maintenance (0 for foundations and structure)
     const maintenanceAddition = 
-      (componentKey === 'foundations' || componentKey === 'structureEnvelope') 
-        ? 0 
-        : maintenancePercentage * newBuildPrice * age * component.percentOfMaintenanceYearly;
+        maintenancePercentage * newBuildPrice * age * component.percentOfMaintenanceYearly;
     
     // Calculate final value
     let depreciatedComponentValue = 
       (newComponentValue * depreciationFactor) + maintenanceAddition;
 
     depreciatedComponentValue < 0 ? depreciatedComponentValue = 0 : depreciatedComponentValue
-
+    this.depreciatedHouseBreakdown[componentKey] = depreciatedComponentValue
     return {
       newComponentValue,
       depreciationFactor,
