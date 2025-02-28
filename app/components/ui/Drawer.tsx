@@ -1,18 +1,17 @@
 import {
   Sheet,
   SheetContent,
-  SheetDescription,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
 import { QuestionMarkCircledIcon } from "@radix-ui/react-icons";
-import React from "react";
+import React, { ReactNode } from "react";
 
 interface Props {
   buttonTitle: string;
   title: string;
-  description: string;
+  description: ReactNode;
 }
 
 export const Drawer: React.FC<React.PropsWithChildren<Props>> = ({ buttonTitle, title, description, children }) => (
@@ -24,8 +23,10 @@ export const Drawer: React.FC<React.PropsWithChildren<Props>> = ({ buttonTitle, 
     <SheetContent>
       <SheetHeader>
         <SheetTitle>{ title }</SheetTitle>
-        <SheetDescription>{ description }</SheetDescription>
-      </SheetHeader>
+        <div className="text-sm text-muted-foreground">
+          { description }
+        </div>
+        </SheetHeader>
       { children }
     </SheetContent>
   </Sheet>
