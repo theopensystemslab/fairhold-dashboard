@@ -6,7 +6,12 @@ import { Household } from "@/app/models/Household";
 import Dashboard from "./Dashboard";
 import { formSchema, FormFrontend } from "@/app/schemas/formSchema";
 import { useSearchParams } from "next/navigation";
-import { DEFAULT_INTEREST_RATE, DEFAULT_MORTGAGE_TERM, DEFAULT_INITIAL_DEPOSIT, MAINTENANCE_LEVELS } from "../../models/constants"
+import {
+  DEFAULT_INTEREST_RATE,
+  DEFAULT_MORTGAGE_TERM,
+  DEFAULT_INITIAL_DEPOSIT,
+  MAINTENANCE_LEVELS,
+} from "../../models/constants";
 import { MaintenanceLevel } from "../../models/constants";
 
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -25,7 +30,7 @@ import { Label } from "@/components/ui/label";
 import { APIError } from "@/app/lib/exceptions";
 import { BackgroundAssumptions } from "./BackgroundAssumptions";
 import { MaintenanceExplainerDrawer } from "./MaintenanceExplainerDrawer";
-import InputDropdown from "./InputDropdown"
+import InputDropdown from "./InputDropdown";
 
 type View = "form" | "loading" | "dashboard";
 
@@ -42,18 +47,18 @@ const CalculatorInput = () => {
   const urlMaintenanceLevel = searchParams.get("maintenancePercentage");
 
   const AGE_OPTIONS = [
-    { label: "New", value: 0},
-    { label: "2020s", value: 3},
-    { label: "2010s", value: 12},
-    { label: "2000s", value: 22},
-    { label: "1990s", value: 32},
-    { label: "1980s", value: 42},
-    { label: "1970s", value: 52},
-    { label: "1960s", value: 62},
-    { label: "1950s", value: 72},
-    { label: "Pre-war", value: 88},
-    { label: "Pre-1900", value: 130},
-] as const;
+    { label: "New", value: 0 },
+    { label: "2020s", value: 3 },
+    { label: "2010s", value: 12 },
+    { label: "2000s", value: 22 },
+    { label: "1990s", value: 32 },
+    { label: "1980s", value: 42 },
+    { label: "1970s", value: 52 },
+    { label: "1960s", value: 62 },
+    { label: "1950s", value: 72 },
+    { label: "Pre-war", value: 88 },
+    { label: "Pre-1900", value: 130 },
+  ] as const;
 
   const form = useForm<FormFrontend>({
     resolver: zodResolver(formSchema),
@@ -65,8 +70,9 @@ const CalculatorInput = () => {
         urlHouseType === "S"
           ? urlHouseType
           : "D", // Default value for house type
-          maintenanceLevel: (urlMaintenanceLevel && urlMaintenanceLevel in MAINTENANCE_LEVELS)
-          ? urlMaintenanceLevel as MaintenanceLevel
+      maintenanceLevel:
+        urlMaintenanceLevel && urlMaintenanceLevel in MAINTENANCE_LEVELS
+          ? (urlMaintenanceLevel as MaintenanceLevel)
           : "low",
       housePostcode: urlPostcode || "",
       // Apply defaults if provided
@@ -95,20 +101,18 @@ const CalculatorInput = () => {
     switch (error.code) {
       case "ITL3_NOT_FOUND":
       case "INSUFFICIENT_PRICES_PAID_DATA":
-        form.setError(
-          "housePostcode", 
-          { message: 
-            "Insufficient data for this postcode. Please try again with a different postcode" 
-          }
-        );
+        form.setError("housePostcode", {
+          message:
+            "Insufficient data for this postcode. Please try again with a different postcode",
+        });
         break;
       case "UNHANDLED_EXCEPTION":
       default:
-        console.error(error)
-    };
-    
+        console.error(error);
+    }
+
     setView("form");
-  }
+  };
 
   if (view === "form") {
     return (
@@ -238,20 +242,20 @@ const CalculatorInput = () => {
                 control={form.control}
                 name="houseAge"
                 render={({ field }) => (
-                    <FormItem>
-                        <FormLabel className="h3-style">
-                            How old is the building?
-                        </FormLabel>
-                        <FormControl>
-                            <InputDropdown
-                                value={field.value}
-                                onValueChange={field.onChange}
-                                options={AGE_OPTIONS}
-                                placeholder="Select house age"
-                            />
-                        </FormControl>
-                        <FormMessage />
-                    </FormItem>
+                  <FormItem>
+                    <FormLabel className="h3-style">
+                      How old is the building?
+                    </FormLabel>
+                    <FormControl>
+                      <InputDropdown
+                        value={field.value}
+                        onValueChange={field.onChange}
+                        options={AGE_OPTIONS}
+                        placeholder="Select house age"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
                 )}
               />
 
@@ -333,7 +337,7 @@ const CalculatorInput = () => {
                       </div>
                     </RadioGroup>
                   </FormControl>
-                  <MaintenanceExplainerDrawer/>
+                  <MaintenanceExplainerDrawer />
                   <FormMessage />
                 </FormItem>
               )}
@@ -344,19 +348,25 @@ const CalculatorInput = () => {
                 <span className="h3-style inaccessible-input-style">
                   Mortgage interest rate
                 </span>
-                <span className="inaccessible-input-style">{DEFAULT_INTEREST_RATE * 100}%</span>
+                <span className="inaccessible-input-style">
+                  {DEFAULT_INTEREST_RATE * 100}%
+                </span>
               </div>
               <div className="flex flex-col">
                 <span className="h3-style inaccessible-input-style">
                   Mortgage term
                 </span>
-                <span className="inaccessible-input-style">{DEFAULT_MORTGAGE_TERM} years</span>
+                <span className="inaccessible-input-style">
+                  {DEFAULT_MORTGAGE_TERM} years
+                </span>
               </div>
               <div className="flex flex-col">
                 <span className="h3-style inaccessible-input-style">
                   Mortgage deposit
                 </span>
-                <span className="inaccessible-input-style">{DEFAULT_INITIAL_DEPOSIT * 100}%</span>
+                <span className="inaccessible-input-style">
+                  {DEFAULT_INITIAL_DEPOSIT * 100}%
+                </span>
               </div>
             </div>
 
@@ -365,8 +375,8 @@ const CalculatorInput = () => {
             </Button>
           </form>
         </Form>
-        <hr className="my-8 text-gray-300"/>
-        <BackgroundAssumptions/>
+        <hr className="my-8 text-gray-300" />
+        <BackgroundAssumptions />
       </div>
     );
   }
@@ -377,8 +387,8 @@ const CalculatorInput = () => {
         <ClipLoader color="black" size={50} />
       </div>
     );
-  };
-  
+  }
+
   if (view === "dashboard" && data) {
     const formValues = form.getValues();
     return <Dashboard processedData={data} inputData={formValues} />;
