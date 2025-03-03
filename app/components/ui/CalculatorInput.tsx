@@ -245,7 +245,7 @@ const CalculatorInput = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="h3-style">
-                      How old is the building?
+                      When was the house built?
                     </FormLabel>
                     <FormControl>
                       <InputDropdown
