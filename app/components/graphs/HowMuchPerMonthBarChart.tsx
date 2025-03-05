@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Bar, BarChart, CartesianGrid, XAxis, LabelList, ReferenceLine } from "recharts";
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis, LabelList, ReferenceLine } from "recharts";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
   ChartLegend,
@@ -25,9 +25,13 @@ type DataInput = {
 
 interface StackedBarChartProps {
   data: DataInput[];
+  maxY: number;
 }
 
-const HowMuchPerMonthBarChart: React.FC<StackedBarChartProps> = ({ data }) => {
+const HowMuchPerMonthBarChart: React.FC<StackedBarChartProps> = ({ 
+  data, 
+  maxY 
+}) => {
   const chartData = [
     {
       tenure: "Freehold",
@@ -83,6 +87,12 @@ const HowMuchPerMonthBarChart: React.FC<StackedBarChartProps> = ({ data }) => {
               axisLine={false}
               tickFormatter={(value) => value}
             />
+            <YAxis 
+              domain={[0, maxY]}
+              tick={false}
+              axisLine={false}
+              tickLine={false}
+              ></YAxis>
             <ChartLegend content={<ChartLegendContent />} />    
               <Bar dataKey="monthly" strokeWidth={2} activeIndex={2}>
               <LabelList

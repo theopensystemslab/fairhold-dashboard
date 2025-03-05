@@ -17,6 +17,14 @@ const HowMuchPerMonthWrapper: React.FC<HowMuchPerMonthWrapperProps> = ({
     return <div>No household data available</div>;
   }
 
+  const fairholdLandPurchaseMonthly = household.tenure.fairholdLandPurchase.depreciatedHouseMortgage.monthlyPayment + household.tenure.fairholdLandPurchase.discountedLandMortgage.monthlyPayment
+  const marketPurchaseMonthly = household.tenure.marketPurchase.landMortgage.monthlyPayment + household.tenure.marketPurchase.houseMortgage.monthlyPayment
+  const affordabilityMonthly = (household.incomeYearly / 12) *
+    household.forecastParameters
+      .affordabilityThresholdIncomePercentage || 0
+  const highestValue = Math.max(fairholdLandPurchaseMonthly, marketPurchaseMonthly, affordabilityMonthly)
+  const maxY = Math.ceil(highestValue / 500) * 500
+
   const formatData = (household: Household) => {
     return [
       {
@@ -31,9 +39,7 @@ const HowMuchPerMonthWrapper: React.FC<HowMuchPerMonthWrapperProps> = ({
         fairholdLandRent:
           household.tenure.fairholdLandRent?.discountedLandRentMonthly || 0,
         affordabilityMonthly:
-          (household.incomeYearly / 12) *
-            household.forecastParameters
-              .affordabilityThresholdIncomePercentage || 0,
+          affordabilityMonthly,
       },
       {
         category: "Monthly Costs House",
@@ -47,10 +53,8 @@ const HowMuchPerMonthWrapper: React.FC<HowMuchPerMonthWrapperProps> = ({
         fairholdLandRent:
           household.tenure.fairholdLandPurchase?.depreciatedHouseMortgage
             ?.monthlyPayment || 0,
-        affordabilityMonthly:
-          (household.incomeYearly / 12) *
-            household.forecastParameters
-              .affordabilityThresholdIncomePercentage || 0,
+        affordabilityMonthly: 
+          affordabilityMonthly,
       },
     ];
   };
@@ -60,7 +64,10 @@ const HowMuchPerMonthWrapper: React.FC<HowMuchPerMonthWrapperProps> = ({
   return (
     <ErrorBoundary>
       <div>
-        <HowMuchPerMonthBarChart data={formattedData} />
+        <HowMuchPerMonthBarChart 
+          data={formattedData}
+          maxY={maxY} 
+          />
       </div>
     </ErrorBoundary>
   );
