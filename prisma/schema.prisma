@@ -21,7 +21,7 @@ model BuildPrices {
 
 model GDHI {
   id       Int     @id @default(autoincrement())
-  itl3     String  @db.VarChar(250)
+  itl1     String  @db.VarChar(250)
   region   String  @db.VarChar(250)
   gdhi Float 
 

@@ -1,9 +1,9 @@
 import { gdhiRepo } from "../data/gdhiRepo";
 
-const getByITL3 = async (itl3: string) => {
-  return await gdhiRepo.getGDHIByITL3(itl3);
+const getByITL1 = async (itl1: string) => {
+  return await gdhiRepo.getGDHIByITL1(itl1);
 };
 
 export const gdhiService = {
-  getByITL3,
+  getByITL1,
 };

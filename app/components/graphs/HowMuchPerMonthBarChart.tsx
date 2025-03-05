@@ -98,7 +98,7 @@ const HowMuchPerMonthBarChart: React.FC<StackedBarChartProps> = ({ data }) => {
               stroke="rgb(var(--text-inaccessible-rgb))" 
               strokeDasharray="6 6" 
               label={{ 
-                value: '35% average household income',
+                value: '35% median household income',
                 position: 'insideTopRight',
                 fill: 'rgb(var(--text-inaccessible-rgb))',
                 fontSize: 12, 

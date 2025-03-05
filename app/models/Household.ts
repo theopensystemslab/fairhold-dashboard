@@ -8,12 +8,12 @@ import { SocialRent } from "./tenure/SocialRent";
 import { ForecastParameters } from "./ForecastParameters";
 import { socialRentAdjustmentTypes } from "../data/socialRentAdjustmentsRepo";
 import { Lifetime, LifetimeParams } from "./Lifetime"; 
-import { KWH_M2_YR_EXISTING_BUILDS, KWH_M2_YR_NEWBUILDS_RETROFIT, HEADS_PER_HOUSEHOLD } from "./constants" ;
+import { KWH_M2_YR_EXISTING_BUILDS, KWH_M2_YR_NEWBUILDS_RETROFIT } from "./constants" ;
 import { SocialValue } from "./SocialValue";
 
 type ConstructorParams = Pick<
   Household,
-  "incomePerPersonYearly" | "kwhCostPence" | "property" | "forecastParameters"
+  "incomeYearly" | "kwhCostPence" | "property" | "forecastParameters"
 > & {
   averageRentYearly: number;
   socialRentAverageEarning: number;
@@ -24,11 +24,11 @@ type ConstructorParams = Pick<
 
 /** The 'parent' class; when instantiated, it instantiates all other relevant classes, including `Property` */
 export class Household {
-  public incomePerPersonYearly: number;
+  /** Median household */
+  public incomeYearly: number;
   public kwhCostPence: number;
   public property: Property;
   public forecastParameters: ForecastParameters;
-  public incomeYearly: number;
   public tenure: {
     marketPurchase: MarketPurchase;
     marketRent: MarketRent;
@@ -46,11 +46,10 @@ export class Household {
   public socialValue: SocialValue;
 
   constructor(params: ConstructorParams) {
-    this.incomePerPersonYearly = params.incomePerPersonYearly;
+    this.incomeYearly = params.incomeYearly;
     this.kwhCostPence = params.kwhCostPence;
     this.property = params.property;
     this.forecastParameters = params.forecastParameters;
-    this.incomeYearly = HEADS_PER_HOUSEHOLD * params.incomePerPersonYearly;
     this.gasDemand = this.calculateGasDemand(params)
     this.tenure = this.calculateTenures(params);
     this.lifetime = this.calculateLifetime(params);

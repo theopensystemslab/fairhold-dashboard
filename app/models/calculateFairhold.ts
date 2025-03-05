@@ -50,7 +50,7 @@ function calculateFairhold(responseData: ResponseData) {
 
   // define the household object
   const household = new Household({
-    incomePerPersonYearly: responseData.gdhi,
+    incomeYearly: responseData.gdhi,
     averageRentYearly: responseData.averageRentMonthly * MONTHS_PER_YEAR,
     socialRentAverageEarning: responseData.socialRentAverageEarning,
     socialRentAdjustments: responseData.socialRentAdjustments,
