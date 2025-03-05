@@ -87,7 +87,12 @@ const HowMuchPerMonthBarChart: React.FC<StackedBarChartProps> = ({
               axisLine={false}
               tickFormatter={(value) => value}
             />
-            <YAxis domain={[0, maxY]}></YAxis>
+            <YAxis 
+              domain={[0, maxY]}
+              tick={false}
+              axisLine={false}
+              tickLine={false}
+              ></YAxis>
             <ChartLegend content={<ChartLegendContent />} />    
               <Bar dataKey="monthly" strokeWidth={2} activeIndex={2}>
               <LabelList
