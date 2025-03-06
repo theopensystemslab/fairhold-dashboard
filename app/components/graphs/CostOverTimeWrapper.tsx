@@ -92,7 +92,9 @@ const CostOverTimeWrapper: React.FC<CostOverTimeWrapperProps> = ({
     
     // We want a constant y value across the graphs so we can compare costs between them
     const firstYear = household.lifetime.lifetimeData[0]
-    const maxY = Math.ceil((1 * (firstYear.marketPurchaseYearly.yearlyEquityPaid + firstYear.marketPurchaseYearly.yearlyInterestPaid)) / 100000) * 100000 // Scale y axis by 1.1 (for a bit of visual headroom) and round to nearest hundred thousand to make things tidy
+    const maxValue = firstYear.marketPurchaseYearly.yearlyEquityPaid + firstYear.marketPurchaseYearly.yearlyInterestPaid
+    const yScale = maxValue < 50000 ? 50000 : 100000
+    const maxY = Math.ceil((1 * (maxValue)) / yScale) * yScale // Scale y axis by 1.1 (for a bit of visual headroom) and round to nearest hundred (or fifty) thousand to make things tidy
 
     return (
         <ErrorBoundary>
