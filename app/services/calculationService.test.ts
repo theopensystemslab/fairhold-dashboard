@@ -12,6 +12,7 @@ import { parse } from "postcode";
 import { ValidPostcode } from "../schemas/calculationSchema";
 import { z } from "zod";
 import { maintenanceLevelSchema } from "../schemas/calculationSchema";
+import { APIError } from "../lib/exceptions";
 
 jest.mock("./itlService");
 jest.mock("./gdhiService");
@@ -141,5 +142,40 @@ describe("getHouseholdData", () => {
     await expect(getHouseholdData(mockInput)).rejects.toThrow(
       `Service error: Unable to generate household. Message: ${errorMessage}`
     );
+  });
+
+  it("should pass through APIError when thrown by a service", async () => {
+    const apiError = new APIError({
+      code: "ITL3_NOT_FOUND",
+      message: "ITL3 region not found",
+      status: 400
+    });
+    
+    // this is the error we want to throw
+    (itlService.getByPostcodeDistrict as jest.Mock).mockRejectedValueOnce(apiError);
+
+    // all other mocks should return empty/default values to prevent other errors
+    (gdhiService.getByITL3 as jest.Mock).mockResolvedValueOnce(null);
+    (gasPriceService.getByITL3 as jest.Mock).mockResolvedValueOnce(null);
+    (hpiService.getByITL3 as jest.Mock).mockResolvedValueOnce(null);
+    (buildPriceService.getBuildPriceByHouseType as jest.Mock).mockResolvedValueOnce(null);
+    (pricesPaidService.getPricesPaidByPostcodeAndHouseType as jest.Mock).mockResolvedValueOnce({
+      averagePrice: 0,
+      numberOfTransactions: 0,
+      granularityPostcode: ""
+    });
+    (rentService.getByITL3AndBedrooms as jest.Mock).mockResolvedValueOnce(0);
+    (socialRentAdjustmentsService.getAdjustments as jest.Mock).mockResolvedValueOnce([]);
+    (socialRentEarningsService.getByITL3 as jest.Mock).mockResolvedValueOnce(0);
+  
+    await expect(getHouseholdData(mockInput)).rejects.toThrow(apiError);
+    
+    try {
+      await getHouseholdData(mockInput);
+    } catch (err) {
+      expect(err).toBe(apiError);
+      expect(err).toBeInstanceOf(APIError);
+      expect((err as APIError).code).toBe("ITL3_NOT_FOUND");
+    }
   });
 });
