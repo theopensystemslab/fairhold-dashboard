@@ -116,11 +116,11 @@ const CalculatorInput = () => {
 
   if (view === "form") {
     return (
-      <div className="flex flex-col justify-center max-w-xl mx-auto px-10">
-        <div className="h1-style text-3xl sm:text-2xl md:text-xl">
+      <div className="flex flex-col justify-center max-w-2xl mx-auto px-10">
+        <div className="h1-style text-lg md:text-xl lg:text-2xl">
           Calculate how Fairhold could work for you
         </div>
-        <div className="subheadstyle text-xl sm:text-lg md:text-base">
+        <div className="subheadstyle text-sm sm:text-sm md:text-base lg:text-base">
           Compare the estimated cost of a Fairhold home in your area with other
           ways of owning or renting.
         </div>
@@ -131,12 +131,14 @@ const CalculatorInput = () => {
               name="houseType" // Name in the Calculation schema for the new radio field
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="h3-style ">House type</FormLabel>
+                  <FormLabel className="h3-style text-sm md:text-sm lg:text-base ">
+                    House type
+                  </FormLabel>
                   <FormControl>
                     <RadioGroup
                       value={field.value}
                       onValueChange={(value) => field.onChange(value)} // Bind selection to field
-                      className="flex space-x-auto"
+                      className="grid grid-cols-2 md:flex md:space-x-auto"
                     >
                       <div className="flex items-center space-x-2 ">
                         <RadioGroupItem
@@ -203,12 +205,14 @@ const CalculatorInput = () => {
                 name="housePostcode"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="h3-style">Postcode</FormLabel>
+                    <FormLabel className="h3-style text-sm md:text-sm lg:text-base ">
+                      Postcode
+                    </FormLabel>
                     <FormControl>
                       <Input
                         placeholder="e.g. SE17 1PE"
                         {...field}
-                        className="inputfield-style"
+                        className="inputfield-style text-xs"
                       />
                     </FormControl>
                     <FormMessage />
@@ -221,16 +225,18 @@ const CalculatorInput = () => {
                 name="houseSize"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="h3-style">
+                    <FormLabel className="h3-style text-sm md:text-sm lg:text-base">
                       How big is the house?{" "}
-                      <span className="optional-style">(Optional)</span>
+                      <strong className="optional-style text-xs md:text-xs lg:text-sm">
+                        (Optional)
+                      </strong>
                     </FormLabel>
                     <FormControl>
                       <Input
                         placeholder="e.g. 80 for 80 square metres"
                         {...field}
                         value={field.value ?? ""}
-                        className="inputfield-style"
+                        className="inputfield-style text-xs"
                       />
                     </FormControl>
 
@@ -244,7 +250,7 @@ const CalculatorInput = () => {
                 name="houseAge"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="h3-style">
+                    <FormLabel className="h3-style text-sm md:text-sm lg:text-base">
                       When was the house built?
                     </FormLabel>
                     <FormControl>
@@ -265,7 +271,7 @@ const CalculatorInput = () => {
                 name="houseBedrooms"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="h3-style">
+                    <FormLabel className="h3-style text-sm md:text-sm lg:text-base">
                       Number of bedrooms
                     </FormLabel>
                     <FormControl>
@@ -273,7 +279,7 @@ const CalculatorInput = () => {
                         placeholder=" e.g. 2 for two bedrooms"
                         {...field}
                         value={field.value ?? ""}
-                        className="inputfield-style"
+                        className="inputfield-style text-xs"
                       />
                     </FormControl>
                     <FormMessage />
@@ -287,7 +293,7 @@ const CalculatorInput = () => {
               name="maintenanceLevel" // Name in the Calculation schema for the new radio field
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="h3-style">
+                  <FormLabel className="h3-style text-sm md:text-sm lg:text-base">
                     How much will you spend on maintenance and improvements?
                   </FormLabel>
 
@@ -295,7 +301,7 @@ const CalculatorInput = () => {
                     <RadioGroup
                       value={field.value}
                       onValueChange={field.onChange}
-                      className="flex space-x-4"
+                      className="grid grid-col-1 md:flex md:space-x-4"
                     >
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem
@@ -346,32 +352,35 @@ const CalculatorInput = () => {
 
             <div className="grid grid-cols-2 gap-2">
               <div className="flex flex-col">
-                <span className="h3-style inaccessible-input-style">
+                <span className="font-bold text-xs inaccessible-input-style">
                   Mortgage interest rate
                 </span>
-                <span className="inaccessible-input-style">
+                <span className="inaccessible-input-style text-xs">
                   {DEFAULT_INTEREST_RATE * 100}%
                 </span>
               </div>
               <div className="flex flex-col">
-                <span className="h3-style inaccessible-input-style">
+                <span className="text-xs font-bold inaccessible-input-style">
                   Mortgage term
                 </span>
-                <span className="inaccessible-input-style">
+                <span className="inaccessible-input-style text-xs">
                   {DEFAULT_MORTGAGE_TERM} years
                 </span>
               </div>
               <div className="flex flex-col">
-                <span className="h3-style inaccessible-input-style">
+                <span className="text-xs font-bold inaccessible-input-style">
                   Mortgage deposit
                 </span>
-                <span className="inaccessible-input-style">
+                <span className="inaccessible-input-style text-xs">
                   {DEFAULT_INITIAL_DEPOSIT * 100}%
                 </span>
               </div>
             </div>
 
-            <Button type="submit" className="calculate-button-style px-20">
+            <Button
+              type="submit"
+              className="calculate-button-style px-10 md:px-20"
+            >
               Calculate
             </Button>
           </form>
