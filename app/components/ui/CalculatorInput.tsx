@@ -131,7 +131,7 @@ const CalculatorInput = () => {
               name="houseType" // Name in the Calculation schema for the new radio field
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="h3-style">House type</FormLabel>
+                  <FormLabel className="h3-style ">House type</FormLabel>
                   <FormControl>
                     <RadioGroup
                       value={field.value}
