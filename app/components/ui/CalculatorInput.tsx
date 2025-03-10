@@ -69,7 +69,7 @@ const CalculatorInput = () => {
         urlHouseType === "T" ||
         urlHouseType === "S"
           ? urlHouseType
-          : "D", // Default value for house type
+          : "F", // Default value for house type
       maintenanceLevel:
         urlMaintenanceLevel && urlMaintenanceLevel in MAINTENANCE_LEVELS
           ? (urlMaintenanceLevel as MaintenanceLevel)
@@ -138,32 +138,20 @@ const CalculatorInput = () => {
                       onValueChange={(value) => field.onChange(value)} // Bind selection to field
                       className="flex space-x-auto"
                     >
-                      <div className="flex items-center space-x-2 ">
-                        <RadioGroupItem
-                          value="D"
-                          id="radio-option-D"
-                          className="radio-button-style"
-                        />
-                        <Label
-                          htmlFor="radio-option-D"
-                          className="radio-label-style"
-                        >
-                          Detached{" "}
-                        </Label>
-                      </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem
-                          value="S"
-                          id="radio-option-S"
+                          value="F"
+                          id="radio-option-F"
                           className="radio-button-style"
                         />
                         <Label
-                          htmlFor="radio-option-S"
+                          htmlFor="radio-option-F"
                           className="radio-label-style"
                         >
-                          Semi detached
+                          Flat
                         </Label>
                       </div>
+
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem
                           value="T"
@@ -180,15 +168,29 @@ const CalculatorInput = () => {
 
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem
-                          value="F"
-                          id="radio-option-F"
+                          value="S"
+                          id="radio-option-S"
                           className="radio-button-style"
                         />
                         <Label
-                          htmlFor="radio-option-F"
+                          htmlFor="radio-option-S"
                           className="radio-label-style"
                         >
-                          Flat
+                          Semi detached
+                        </Label>
+                      </div>
+
+                      <div className="flex items-center space-x-2 ">
+                        <RadioGroupItem
+                          value="D"
+                          id="radio-option-D"
+                          className="radio-button-style"
+                        />
+                        <Label
+                          htmlFor="radio-option-D"
+                          className="radio-label-style"
+                        >
+                          Detached{" "}
                         </Label>
                       </div>
                     </RadioGroup>
