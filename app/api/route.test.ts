@@ -2,6 +2,7 @@ import { POST } from "../api/route";
 import * as calculationService from "../services/calculationService";
 import calculateFairhold from "../models/calculateFairhold";
 import { NextResponse } from "next/server";
+import { APIError } from "../lib/exceptions";
 
 // Mock dependencies
 jest.mock("../services/calculationService");
@@ -134,6 +135,38 @@ describe("POST API Route", () => {
         },
       },
       { status: 500 }
+    );
+  });
+
+  it("should handle APIError correctly", async () => {
+    const validApiInput = {
+      housePostcode: "SE17 1PE",
+      houseSize: 100,
+      houseAge: 3,
+      houseBedrooms: 2,
+      houseType: "D",
+      maintenanceLevel: "medium",
+    };
+  
+    // Create an APIError instance
+    const apiError = new APIError({
+      code: "UNHANDLED_EXCEPTION", 
+      message: "API error message", 
+      status: 400
+    });
+        
+    // Mock service throwing an APIError
+    (calculationService.getHouseholdData as jest.Mock).mockRejectedValueOnce(apiError);
+  
+    const req = mockRequest(validApiInput);
+    const res = await POST(req as unknown as Request);
+    callResponse(res);
+  
+    // Assertions
+    expect(calculationService.getHouseholdData).toHaveBeenCalled();
+    expect(NextResponse.json).toHaveBeenCalledWith(
+      { error: apiError },
+      { status: 400 }
     );
   });
 });
