@@ -2,7 +2,7 @@
 Maintenance levels increase with the consumer price index, assumed at a steady {{constructionPriceGrowthPerYear}}% each year. 
 
 ### Private Rent
-This assumes that private rent increases {{rentGrowthPerYear}}% each year.
+This assumes that private rent increases by {{rentGrowthPerYear}}% each year.
 
 ### Fairhold Land Purchase
 Maintenance levels are identical to freehold.
