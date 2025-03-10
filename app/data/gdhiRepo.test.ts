@@ -1,6 +1,5 @@
-// __tests__/gdhiRepo.test.ts
-import { gdhiRepo } from "./gdhiRepo"; // Adjust the import according to your file structure
-import prisma from "./db"; // Your Prisma setup file
+import { gdhiRepo } from "./gdhiRepo";
+import prisma from "./db";
 
 jest.mock("./db", () => ({
   gDHI: {
@@ -13,9 +12,9 @@ describe("gdhiRepo", () => {
     jest.clearAllMocks();
   });
 
-  it("should return the GDHI value for a valid ITL3", async () => {
-    const itl3 = "XYZ123456"; // Example ITL3
-    const mockGDHI = 1000; // Example GDHI value
+  it("should return the GDHI value for a valid ITL1", async () => {
+    const itl1 = "TLH";
+    const mockGDHI = 28000;
 
     // Mock the Prisma client response
     (prisma.gDHI.findFirstOrThrow as jest.Mock).mockResolvedValueOnce({
@@ -23,22 +22,22 @@ describe("gdhiRepo", () => {
     });
 
     // Call the function
-    const result = await gdhiRepo.getGDHIByITL3(itl3);
+    const result = await gdhiRepo.getGDHIByITL1(itl1);
 
     // Assertions
     expect(result).toBe(mockGDHI);
     expect(prisma.gDHI.findFirstOrThrow).toHaveBeenCalledWith({
       where: {
         AND: {
-          itl3: { equals: itl3 },
+          itl1: { equals: itl1 },
         },
       },
       select: { gdhi: true },
     });
   });
 
-  it("should throw an error when no GDHI value is found for the ITL3", async () => {
-    const itl3 = "non-existent-ITL3";
+  it("should throw an error when no GDHI value is found for the ITL1", async () => {
+    const itl1 = "non-existent-ITL1";
 
     // Mock rejection of the Prisma client
     (prisma.gDHI.findFirstOrThrow as jest.Mock).mockRejectedValueOnce(
@@ -46,13 +45,13 @@ describe("gdhiRepo", () => {
     );
 
     // Call the function and expect an error
-    await expect(gdhiRepo.getGDHIByITL3(itl3)).rejects.toThrow(
-      `Data error: Unable to find gdhi for itl3 ${itl3}`
+    await expect(gdhiRepo.getGDHIByITL1(itl1)).rejects.toThrow(
+      `Data error: Unable to find gdhi for itl1 ${itl1}`
     );
   });
 
   it("should throw an error when there is a database error", async () => {
-    const itl3 = "XYZ123456";
+    const itl1 = "TLH";
 
     // Mock rejection of the Prisma client
     (prisma.gDHI.findFirstOrThrow as jest.Mock).mockRejectedValueOnce(
@@ -60,8 +59,8 @@ describe("gdhiRepo", () => {
     );
 
     // Call the function and expect an error
-    await expect(gdhiRepo.getGDHIByITL3(itl3)).rejects.toThrow(
-      `Data error: Unable to find gdhi for itl3 ${itl3}`
+    await expect(gdhiRepo.getGDHIByITL1(itl1)).rejects.toThrow(
+      `Data error: Unable to find gdhi for itl1 ${itl1}`
     );
   });
 });

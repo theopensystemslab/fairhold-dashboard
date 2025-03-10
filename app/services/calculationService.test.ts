@@ -88,7 +88,7 @@ describe("getHouseholdData", () => {
     (itlService.getByPostcodeDistrict as jest.Mock).mockResolvedValueOnce(
       mockITL3
     );
-    (gdhiService.getByITL3 as jest.Mock).mockResolvedValueOnce(mockGDHI);
+    (gdhiService.getByITL1 as jest.Mock).mockResolvedValueOnce(mockGDHI);
     (gasPriceService.getByITL3 as jest.Mock).mockResolvedValueOnce(
       mockGasPriceYearly
     );

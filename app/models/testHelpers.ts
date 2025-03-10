@@ -160,7 +160,7 @@ const socialRentAdjustments: socialRentAdjustmentTypes = [
  * socialRentAverageEarning: 354.1,
  * socialRentAdjustments: socialRentAdjustments,
  * housePriceIndex: 100000,
- * incomePerPersonYearly: 30000,
+ * incomeYearly: 30000,
  * kwhCostPence: 8,
  * property: createTestProperty(),
  * forecastParameters: DEFAULT_FORECAST_PARAMETERS,`
@@ -172,7 +172,7 @@ export const createTestHousehold = (overrides = {}) => {
     socialRentAverageEarning: 354.1,
     socialRentAdjustments: socialRentAdjustments,
     housePriceIndex: 100000,
-    incomePerPersonYearly: 30000,
+    incomeYearly: 35000,
     kwhCostPence: 7,
     property: createTestProperty(),
     forecastParameters: DEFAULT_FORECAST_PARAMETERS,
