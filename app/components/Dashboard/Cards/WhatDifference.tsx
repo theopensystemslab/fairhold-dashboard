@@ -40,7 +40,7 @@ const Highlight: React.FC<React.PropsWithChildren> = ({ children }) => (
 )
 
 const Cards: React.FC<CardsProps> = ({ household }) => {
-  const moneySaved = Math.round(household.socialValue.moneySaved).toLocaleString(); // Using .toLocaleString() to separate decimals and thousands correctly
+  const moneySaved = Math.max(Math.round(household.socialValue.moneySaved),0).toLocaleString(); // Using .toLocaleString() to separate decimals and thousands correctly
   const communityWealthDecade = Math.round(household.socialValue.communityWealthDecade).toLocaleString();
   const embodiedCarbonSavings = household.socialValue.embodiedCarbonSavings.toFixed(1);
   const savingsEnergyPoundsYearly = Math.round(household.socialValue.savingsEnergyPoundsYearly).toLocaleString()
