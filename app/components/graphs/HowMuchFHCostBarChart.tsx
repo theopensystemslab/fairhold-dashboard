@@ -1,6 +1,6 @@
 "use client";
 
-import { Bar, BarChart, CartesianGrid, XAxis, Label, LabelList, Tooltip, TooltipProps } from "recharts";
+import { Bar, BarChart, CartesianGrid, XAxis, Label, LabelList, ReferenceLine } from "recharts";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
   ChartConfig,
@@ -8,8 +8,6 @@ import {
 import {
   StyledChartContainer,
 } from "../ui/StyledChartContainer";
-import { ValueType } from "tailwindcss/types/config";
-import { NameType } from "recharts/types/component/DefaultTooltipContent";
 
 const chartConfig = {
   freeholdLand: {
@@ -24,6 +22,9 @@ const chartConfig = {
   fairholdHouse: {
     color: "rgb(var(--fairhold-interest-color-rgb))",
   },
+  total: {
+    color: "transparent",
+  }
 } satisfies ChartConfig;
 
 import React from "react";
@@ -41,20 +42,6 @@ interface StackedBarChartProps {
   data: DataInput[];
 }
 
-const CustomTooltip = ({ active, payload }: TooltipProps<ValueType, NameType>) => {
-  if (!active || !payload) return null;
-
-  const total = payload[0].payload.total;
-  return (
-    <div className="rounded-lg border bg-background p-2 shadow-sm">
-      <div className="grid grid-cols-2 gap-2">
-        <div className="font-medium">Total:</div>
-        <div>£{total.toLocaleString()}</div>
-      </div>
-    </div>
-  );
-};
-
 const formatValueWithLabel = (value: number, dataKey: string) => {
   const formattedValue = formatValue(value);
   
@@ -62,6 +49,8 @@ const formatValueWithLabel = (value: number, dataKey: string) => {
     return `Land: ${formattedValue}`;
   } else if (dataKey.includes('House')) {
     return `House: ${formattedValue}`;
+  } else if (dataKey === 'total') {
+    return formattedValue;
   }
   
   return formattedValue;
@@ -96,7 +85,7 @@ const HowMuchFHCostBarChart: React.FC<StackedBarChartProps> = ({
       <CardContent>
         <StyledChartContainer config={chartConfig}
         className="[&_.recharts-rectangle.recharts-tooltip-cursor]:fill-transparent">
-          <BarChart accessibilityLayer data={chartData}>
+          <BarChart accessibilityLayer data={chartData} margin={{ top: 30 }}>
             <CartesianGrid vertical={false} />
             <XAxis
               dataKey="tenure"
@@ -122,7 +111,17 @@ const HowMuchFHCostBarChart: React.FC<StackedBarChartProps> = ({
               />
             </XAxis>
 
-            <Tooltip content={<CustomTooltip />} />
+            {/* Custom labels for totals */ }
+            {chartData.map((entry, index) => ( 
+              <ReferenceLine 
+                key={`total-${index}`} 
+                x={entry.tenure} 
+                isFront 
+                stroke="transparent" 
+                label={{ value: `Total: ${formatValue(entry.total)}`, position: 'top', fill: '#000', fontSize: 12 }} // LINE CHANGED
+                /> 
+            ))} 
+
             <Bar
               dataKey="freeholdLand"
               stackId="stack"
