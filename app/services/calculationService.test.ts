@@ -173,7 +173,7 @@ describe("getHouseholdData", () => {
     try {
       await getHouseholdData(mockInput);
     } catch (err) {
-      expect(err).toBe(apiError);
+      expect(err).toEqual(apiError);
       expect(err).toBeInstanceOf(APIError);
       expect((err as APIError).code).toBe("ITL3_NOT_FOUND");
     }
