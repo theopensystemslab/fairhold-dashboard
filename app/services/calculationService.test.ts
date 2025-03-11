@@ -155,7 +155,7 @@ describe("getHouseholdData", () => {
     (itlService.getByPostcodeDistrict as jest.Mock).mockRejectedValueOnce(apiError);
 
     // all other mocks should return empty/default values to prevent other errors
-    (gdhiService.getByITL3 as jest.Mock).mockResolvedValueOnce(null);
+    (gdhiService.getByITL1 as jest.Mock).mockResolvedValueOnce(null);
     (gasPriceService.getByITL3 as jest.Mock).mockResolvedValueOnce(null);
     (hpiService.getByITL3 as jest.Mock).mockResolvedValueOnce(null);
     (buildPriceService.getBuildPriceByHouseType as jest.Mock).mockResolvedValueOnce(null);
@@ -173,7 +173,7 @@ describe("getHouseholdData", () => {
     try {
       await getHouseholdData(mockInput);
     } catch (err) {
-      expect(err).toBe(apiError);
+      expect(err).toEqual(apiError);
       expect(err).toBeInstanceOf(APIError);
       expect((err as APIError).code).toBe("ITL3_NOT_FOUND");
     }

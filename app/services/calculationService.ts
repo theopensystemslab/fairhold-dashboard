@@ -26,8 +26,16 @@ export const getHouseholdData = async (input: Calculation) => {
     const bedrooms = input.houseBedrooms <= 4 ? input.houseBedrooms : 4; // rental data only goes up to 4br TODO: do we want to increase the weight? 
 
     const itl3 = await itlService.getByPostcodeDistrict(postcodeDistrict);
-    const itl1 = itl3.substring(0,3)
+
+    if (!itl3) {
+      throw new APIError({
+        code: "ITL3_NOT_FOUND",
+        message: "ITL3 region not found",
+        status: 400
+      });
+    }
     
+    const itl1 = itl3.substring(0,3)
     const gdhi = await gdhiService.getByITL1(itl1);
     const kwhCostPence = await gasPriceService.getByITL3(itl3);
     const hpi = await hpiService.getByITL3(itl3);
