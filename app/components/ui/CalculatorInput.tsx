@@ -120,7 +120,7 @@ const CalculatorInput = () => {
         <div className="h1-style text-lg md:text-xl lg:text-2xl">
           Calculate how Fairhold could work for you
         </div>
-        <div className="subheadstyle text-sm sm:text-sm md:text-base lg:text-base">
+        <div className="subheadstyle text-sm  md:text-base">
           Compare the estimated cost of a Fairhold home in your area with other
           ways of owning or renting.
         </div>
@@ -131,7 +131,7 @@ const CalculatorInput = () => {
               name="houseType" // Name in the Calculation schema for the new radio field
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="h3-style text-sm md:text-sm lg:text-base ">
+                  <FormLabel className="h3-style text-sm lg:text-base ">
                     House type
                   </FormLabel>
                   <FormControl>
@@ -205,7 +205,7 @@ const CalculatorInput = () => {
                 name="housePostcode"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="h3-style text-sm md:text-sm lg:text-base ">
+                    <FormLabel className="h3-style text-sm lg:text-base ">
                       Postcode
                     </FormLabel>
                     <FormControl>
@@ -225,9 +225,9 @@ const CalculatorInput = () => {
                 name="houseSize"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="h3-style text-sm md:text-sm lg:text-base">
+                    <FormLabel className="h3-style text-sm lg:text-base">
                       How big is the house?{" "}
-                      <strong className="optional-style text-xs md:text-xs lg:text-sm">
+                      <strong className="optional-style text-xs lg:text-sm">
                         (Optional)
                       </strong>
                     </FormLabel>
@@ -250,7 +250,7 @@ const CalculatorInput = () => {
                 name="houseAge"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="h3-style text-sm md:text-sm lg:text-base">
+                    <FormLabel className="h3-style text-sm lg:text-base">
                       When was the house built?
                     </FormLabel>
                     <FormControl>
@@ -271,7 +271,7 @@ const CalculatorInput = () => {
                 name="houseBedrooms"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="h3-style text-sm md:text-sm lg:text-base">
+                    <FormLabel className="h3-style text-sm lg:text-base">
                       Number of bedrooms
                     </FormLabel>
                     <FormControl>
@@ -293,7 +293,7 @@ const CalculatorInput = () => {
               name="maintenanceLevel" // Name in the Calculation schema for the new radio field
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="h3-style text-sm md:text-sm lg:text-base">
+                  <FormLabel className="h3-style text-sm lg:text-base">
                     How much will you spend on maintenance and improvements?
                   </FormLabel>
 
