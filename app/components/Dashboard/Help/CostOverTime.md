@@ -14,3 +14,7 @@ Rising community ground rents are calculated according to rising property prices
 
 ### Social Rent
 Formula rent is inflated by {{SOCIAL_RENT_ADJUSTMENT_FORECAST}}% each year, the average of historical social rent adjustments. 
+
+___
+
+_For more detailed documentation, please see the [Fairhold calculator wiki](https://github.com/theopensystemslab/fairhold-dashboard/wiki)._
