@@ -10,3 +10,7 @@ For more on the depreciation method or the Fairhold formula used here, see [sour
 
 ### Fairhold - Land Rent
 The up-front purchase price of a Fairhold Land Rent property only accounts for the consumer durable home. Land is paid for via community ground rent, and so is not an up-front cost. 
+
+___
+
+_For more detailed documentation, please see the [Fairhold calculator wiki](https://github.com/theopensystemslab/fairhold-dashboard/wiki)._

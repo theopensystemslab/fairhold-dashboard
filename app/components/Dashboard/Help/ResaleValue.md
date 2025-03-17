@@ -5,3 +5,7 @@ As the house is treated as a consumer durable, its price depreciates over time a
 
 ### Fairhold Land Rent
 No land resale value is included since community ground rent is paid monthly. Resale value only represents the house. 
+
+___
+
+_For more detailed documentation, please see the [Fairhold calculator wiki](https://github.com/theopensystemslab/fairhold-dashboard/wiki)._

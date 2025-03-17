@@ -14,3 +14,7 @@ Mortgage payments for the house (treated as a consumer durable) and the communit
 
 ### Social Rent
 This value comes from the [national social rent formula](https://www.gov.uk/government/publications/direction-on-the-rent-standard-from-1-april-2020/policy-statement-on-rents-for-social-housing#chapter-2-social-rent). 
+
+___
+
+_For more detailed documentation, please see the [Fairhold calculator wiki](https://github.com/theopensystemslab/fairhold-dashboard/wiki)._
