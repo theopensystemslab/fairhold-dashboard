@@ -40,7 +40,6 @@ const CalculatorInput = () => {
 
   const searchParams = useSearchParams();
   const urlPostcode = searchParams.get("postcode");
-  const urlHouseSize = searchParams.get("houseSize");
   const urlHouseAge = searchParams.get("houseAge");
   const urlHouseBedrooms = searchParams.get("houseBedrooms");
   const urlHouseType = searchParams.get("houseType");
@@ -77,7 +76,6 @@ const CalculatorInput = () => {
       housePostcode: urlPostcode || "",
       // Apply defaults if provided
       // Type-safe to account for exactOptionalPropertyTypes propert in tsconfig.json
-      ...(urlHouseSize && { houseSize: Number(urlHouseSize) }),
       ...(urlHouseAge && { houseAge: Number(urlHouseAge) }),
       ...(urlHouseBedrooms && { houseBedrooms: Number(urlHouseBedrooms) }),
     },
@@ -217,31 +215,6 @@ const CalculatorInput = () => {
                         className="inputfield-style text-xs"
                       />
                     </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="houseSize"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="h3-style text-sm lg:text-base">
-                      How big is the house?{" "}
-                      <strong className="optional-style text-xs lg:text-sm">
-                        (Optional)
-                      </strong>
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="e.g. 80 for 80 square metres"
-                        {...field}
-                        value={field.value ?? ""}
-                        className="inputfield-style text-xs"
-                      />
-                    </FormControl>
-
                     <FormMessage />
                   </FormItem>
                 )}
