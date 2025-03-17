@@ -306,6 +306,22 @@ const CalculatorInput = () => {
                       className="flex flex-col space-y-2" 
                       >
                       <div className="flex items-center space-x-2">
+                      <RadioGroupItem
+                        value="none"
+                        id="radio-option-none"
+                        className="radio-button-style"
+                      />
+                      <Label
+                        htmlFor="radio-option-none"
+                        className="radio-label-style"
+                      >
+                        None (0%) 
+                          <div className="mt-1 text-[rgb(var(--text-inaccessible-rgb))]">
+                          I will not carry out any maintenance work.
+                          </div>
+                      </Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
                         <RadioGroupItem
                           value="low"
                           id="radio-option-low"
