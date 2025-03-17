@@ -1,13 +1,15 @@
 import React, { useRef, useState } from "react";
 import { Household } from "@/app/models/Household";
 import { FormFrontend } from "@/app/schemas/formSchema";
-import { WhatWouldYouChoose } from "../Dashboard/Cards/WhatWouldYouChoose";
-import { WhatDifference } from "../Dashboard/Cards/WhatDifference";
-import { HowMuchFHCost } from "../Dashboard/Cards/HowMuchFHCost";
+import { WhatWouldYouChoose } from "../dashboard/cards/WhatWouldYouChoose";
+import { WhatDifferenceToMe } from "../dashboard/cards/WhatDifferenceToMe";
+import { WhatDifferenceToCommunity } from "../dashboard/cards/WhatDifferenceToCommunity";
+// import { WhatDifferenceToWorld } from "../dashboard/cards/WhatDifferenceToWorld";
+import { HowMuchFHCost } from "../dashboard/cards/HowMuchFHCost";
 import { Carousel } from "./Carousel";
-import { HowMuchPerMonth } from "../Dashboard/Cards/HowMuchPerMonth";
-import { ResaleValue } from "../Dashboard/Cards/ResaleValue";
-import { CostOverTime } from "../Dashboard/Cards/CostOverTime";
+import { HowMuchPerMonth } from "../dashboard/cards/HowMuchPerMonth";
+import { ResaleValue } from "../dashboard/cards/ResaleValue";
+import { CostOverTime } from "../dashboard/cards/CostOverTime";
 
 export interface DashboardProps {
   processedData: Household;
@@ -41,7 +43,9 @@ const Dashboard: React.FC<DashboardProps> = ({ inputData, processedData }) => {
         <HowMuchPerMonth processedData={processedData} />
         <CostOverTime processedData={processedData} />
         <ResaleValue data={processedData} />
-        <WhatDifference data={processedData}/>
+        <WhatDifferenceToMe data={processedData}/>
+        <WhatDifferenceToCommunity data={processedData}/>
+        {/* <WhatDifferenceToWorld data={processedData}/> */}
         <WhatWouldYouChoose />
       </div>
       <Carousel
