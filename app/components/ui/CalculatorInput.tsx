@@ -303,8 +303,8 @@ const CalculatorInput = () => {
                     <RadioGroup
                       value={field.value}
                       onValueChange={field.onChange}
-                      className="grid grid-col-1 md:flex md:space-x-4"
-                    >
+                      className="flex flex-col space-y-2" 
+                      >
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem
                           value="low"
@@ -315,7 +315,10 @@ const CalculatorInput = () => {
                           htmlFor="radio-option-low"
                           className="radio-label-style"
                         >
-                          Low ({MAINTENANCE_LEVELS.low * 100}%)
+                          Low ({MAINTENANCE_LEVELS.low * 100}%) 
+                            <div className="mt-1 text-[rgb(var(--text-inaccessible-rgb))]">
+                            I will spend the minimum to keep my home habitable, carrying out essential repairs only.
+                            </div>
                         </Label>
                       </div>
                       <div className="flex items-center space-x-2">
@@ -329,6 +332,9 @@ const CalculatorInput = () => {
                           className="radio-label-style"
                         >
                           Medium ({MAINTENANCE_LEVELS.medium * 100}%)
+                          <div className="mt-1 text-[rgb(var(--text-inaccessible-rgb))]">
+                          I will maintain my home to a good standard, redecorating occasionally and replacing elements like kitchens and bathrooms periodically.
+                            </div>
                         </Label>
                       </div>
                       <div className="flex items-center space-x-2">
@@ -342,6 +348,9 @@ const CalculatorInput = () => {
                           className="radio-label-style"
                         >
                           High ({MAINTENANCE_LEVELS.high * 100}%)
+                          <div className="mt-1 text-[rgb(var(--text-inaccessible-rgb))]">
+                          I will maintain my home to a good standard and invest in improvements such as energy retrofit or a new extension.
+                            </div>
                         </Label>
                       </div>
                     </RadioGroup>
