@@ -24,7 +24,7 @@ const CostOverTimeTooltip = ({ active, payload, label }: TooltipProps<ValueType,
   return (
     <div className="rounded-lg border bg-background p-2 shadow-sm">
       <div className="grid grid-cols-2 gap-2">
-        <div className="font-medium">Year {label}</div>
+        <div className="font-medium">Year {label}{parseInt(label as string) === 1 ? " (with deposit)" : ""}</div>
         {payload.map((entry, index) => (
           <div key={`${entry.name}-${index}`} className="grid grid-cols-2 gap-4">
             <div style={{ color: entry.color }}>{entry.name}:</div>
