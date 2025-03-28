@@ -1,12 +1,17 @@
 import { z } from "zod";
-import { parse as parsePostcode, isValid as isValidPostcode } from "postcode";
+import { parse as parsePostcode, isValid as isValidPostcode, validOutcode as isValidOutcode } from "postcode";
 import { HOUSE_TYPES } from "../models/Property";
 import { MAINTENANCE_LEVELS } from "../models/constants";
 
-export type ValidPostcode = Extract<
-  ReturnType<typeof parsePostcode>,
-  { valid: true }
->;
+// a common interface that can be used regardless if user enteres full or outward postcode
+export interface PostcodeScales {
+  outcode: string;
+  incode: string | null;
+  area: string;
+  district: string;
+  sector: string | null;
+  postcode: string | null;
+}
 
 const HouseTypeEnum = z.enum(HOUSE_TYPES);
 function assignHouseSize(numberOfBedrooms: number) {
@@ -35,9 +40,38 @@ export const calculationSchema = z
     housePostcode: z
       .string()
       .min(1, "housePostcode is required")
-      .refine(isValidPostcode, "Invalid postcode")
-      .transform(parsePostcode)
-      .refine((postcode): postcode is ValidPostcode => postcode.valid),
+      .refine(                                               
+        (postcode) => isValidPostcode(postcode) || isValidOutcode(postcode),
+        "Enter a valid full postcode or outcode"
+      )                                                      
+      .transform((postcode): PostcodeScales => {
+        if (isValidPostcode(postcode)) {
+          const parsed = parsePostcode(postcode);
+          return {
+            outcode: parsed.outcode as string,
+            incode: parsed.incode as string,
+            area: parsed.area as string,
+            district: parsed.district as string,
+            sector: parsed.sector as string,
+            postcode: parsed.postcode as string
+          };
+        } else {
+          const outcodeUpper = postcode.toUpperCase();
+          const districtMatch = outcodeUpper.match(/^[A-Z]+\d+/);
+          const district = districtMatch ? districtMatch[0] : outcodeUpper;
+          const areaMatch = outcodeUpper.match(/^[A-Z]+/);
+          const area = areaMatch ? areaMatch[0] : outcodeUpper.charAt(0);
+          
+          return {
+            outcode: outcodeUpper,
+            incode: null,
+            area: area,
+            district: district,
+            sector: null,
+            postcode: null
+          };
+        }
+      }),
     houseBedrooms: z.coerce
       .number()
       .positive("houseBedrooms must be a positive integer"),
@@ -58,4 +92,4 @@ export const calculationSchema = z
     houseSize: data.houseSize ?? assignHouseSize(data.houseBedrooms),
   }));
 
-export type Calculation = z.infer<typeof calculationSchema>;
+  export type Calculation = z.infer<typeof calculationSchema>;

@@ -9,9 +9,8 @@ import { socialRentAdjustmentsService } from "./socialRentAdjustmentsService";
 import { socialRentEarningsService } from "./socialRentEarningsService";
 import { rentService } from "./rentService";
 import { parse } from "postcode";
-import { ValidPostcode } from "../schemas/calculationSchema";
 import { z } from "zod";
-import { maintenanceLevelSchema } from "../schemas/calculationSchema";
+import { maintenanceLevelSchema, PostcodeScales } from "../schemas/calculationSchema";
 import { APIError } from "../lib/exceptions";
 
 jest.mock("./itlService");
@@ -46,7 +45,7 @@ describe("getHouseholdData", () => {
   }
 
   interface MockInputType {
-    housePostcode: ValidPostcode;
+    housePostcode: PostcodeScales;
     houseType: "D" | "S" | "T" | "F";
     houseAge: number;
     houseBedrooms: number;

@@ -2,7 +2,7 @@ import { calculationSchema, maintenanceLevelSchema } from "../schemas/calculatio
 import { MAINTENANCE_LEVELS } from "../models/constants";
 
 describe("calculationSchema", () => {
-  it("should validate valid input", () => {
+  it("should validate valid input (whole postcode)", () => {
     const validInput = {
       housePostcode: "SE17 1PE",
       houseBedrooms: 2,
@@ -12,19 +12,40 @@ describe("calculationSchema", () => {
     };
 
     const result = calculationSchema.parse(validInput);
-    
     expect(result).toEqual({
       ...validInput,
       housePostcode: {
+        outcode: "SE17",
+        incode: "1PE",
         area: "SE",
         district: "SE17",
-        incode: "1PE",
-        outcode: "SE17",
-        postcode: "SE17 1PE",
         sector: "SE17 1",
-        subDistrict: null,
-        unit: "PE",
-        valid: true,
+        postcode: "SE17 1PE"
+      },
+      houseSize: 70, // auto-assigned for 2 bedrooms
+    });
+  });
+
+  it("should validate valid input (outward postcode only)", () => {
+    const validInput = {
+      housePostcode: "SE17",
+      houseBedrooms: 2,
+      houseAge: 3,
+      houseType: "D",
+      maintenanceLevel: "medium",
+    };
+
+    const result = calculationSchema.parse(validInput);
+    console.log({result})
+    expect(result).toEqual({
+      ...validInput,
+      housePostcode: {
+        outcode: "SE17",
+        incode: null,
+        area: "SE",
+        district: "SE17",
+        sector: null,
+        postcode: null
       },
       houseSize: 70, // auto-assigned for 2 bedrooms
     });
