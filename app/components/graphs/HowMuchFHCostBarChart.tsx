@@ -118,7 +118,11 @@ const HowMuchFHCostBarChart: React.FC<StackedBarChartProps> = ({
                 x={entry.tenure} 
                 isFront 
                 stroke="transparent" 
-                label={{ value: `Total: ${formatValue(entry.total)}`, position: 'top', fill: '#000', fontSize: 12 }} // LINE CHANGED
+                label={{ 
+                  value: `Total: ${formatValue(entry.total)}`, 
+                  position: 'top', 
+                  fill: entry.tenure === 'freehold' ? 'rgb(var(--freehold-equity-color-rgb))' : 'rgb(var(--fairhold-equity-color-rgb))',
+                }}                
                 /> 
             ))} 
 
