@@ -29,7 +29,7 @@ export const Drawer: React.FC<React.PropsWithChildren<Props>> = ({
       <QuestionMarkCircledIcon/>
       <span className="ml-1">{buttonTitle}</span>
     </SheetTrigger>
-    <SheetContent>
+    <SheetContent className="overflow-y-auto">
       <SheetHeader>
         <SheetTitle className={titleClassName}>{ title }</SheetTitle>
         <div className={`text-sm text-muted-foreground ${descriptionClassName}`}>
