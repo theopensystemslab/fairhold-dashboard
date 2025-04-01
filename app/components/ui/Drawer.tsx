@@ -12,9 +12,18 @@ interface Props {
   buttonTitle: string;
   title: string;
   description: ReactNode;
+  titleClassName?: string;
+  descriptionClassName?: string;
 }
 
-export const Drawer: React.FC<React.PropsWithChildren<Props>> = ({ buttonTitle, title, description, children }) => (
+export const Drawer: React.FC<React.PropsWithChildren<Props>> = ({ 
+  buttonTitle, 
+  title, 
+  description, 
+  children, 
+  titleClassName = "text-left", 
+  descriptionClassName = "text-left" 
+}) => (
   <Sheet>
     <SheetTrigger className="text-gray-400 text-xs underline flex">
       <QuestionMarkCircledIcon/>
@@ -22,8 +31,8 @@ export const Drawer: React.FC<React.PropsWithChildren<Props>> = ({ buttonTitle, 
     </SheetTrigger>
     <SheetContent>
       <SheetHeader>
-        <SheetTitle>{ title }</SheetTitle>
-        <div className="text-sm text-muted-foreground">
+        <SheetTitle className={titleClassName}>{ title }</SheetTitle>
+        <div className={`text-sm text-muted-foreground ${descriptionClassName}`}>
           { description }
         </div>
         </SheetHeader>
