@@ -117,11 +117,10 @@ const CalculatorInput = () => {
     return (
       <div className="flex flex-col justify-center max-w-2xl mx-auto px-10">
         <div className="h1-style text-lg md:text-xl lg:text-2xl">
-          Calculate how Fairhold could work for you
+          Calculate how much a Fairhold home might cost you
         </div>
         <div className="subheadstyle text-sm  md:text-base">
-          Compare the estimated cost of a Fairhold home in your area with other
-          ways of owning or renting.
+          Use this calculator to compare Fairhold with other ways of owning or renting. Try your current home, or a home you’d like to own.
         </div>
         <Separator className="my-4 bg-[rgb(var(--text-default-rgb))] h-[1px]" orientation="horizontal" />
         <Form {...form}>
