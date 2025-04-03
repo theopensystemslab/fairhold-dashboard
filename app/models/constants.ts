@@ -193,11 +193,17 @@ export const FTE_SPEND = 60000
 
 export const SOCIAL_VALUE_YEARS = 10;
 
-/** from Leeds Beckett Wikihouse LCA comparison report */
-export const EMBODIED_CARBON_BRICK_BLOCK_KG_M2 = 404.086
+/** 
+ * from Leeds Beckett Wikihouse LCA comparison report: 30.66 tco2e for a 92m2 brick and block home in A1-A5 
+ * https://cdn.prod.website-files.com/612569c3243035968aaf61f1/63bd27536d1e152e28e96403_77084_Wikihouse%20Thermal%20Perfromance%20and%20LCA%20report_July%202021.pdf
+*/
+export const EMBODIED_CARBON_BRICK_BLOCK_KG_M2 = 333.26
 
-/** from Stride Treglown Gwynfaen embodied emissions estimates */
-export const EMBODIED_CARBON_TIMBER_SLAB_KG_M2 = 59.933
+/** 
+ * from Stride Treglown Gwynfaen embodied emissions estimates: 40,017kg up-front CO2e for life cycle stages A1-A5 and biogenic carbon sequestration of 36,177kg A1-A3 for a 95m2 home
+ * https://media.stridetreglown.com/wp-content/uploads/2021/03/23114044/152858_LCA-Case-Study_Gwynfaen-final.pdf
+*/
+export const EMBODIED_CARBON_TIMBER_SLAB_KG_M2 = 40.421
 export type BedroomWeights = {
   [key in HouseType]: {
     [key: number]: number;
