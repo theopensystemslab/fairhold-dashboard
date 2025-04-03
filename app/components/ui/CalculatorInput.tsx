@@ -262,6 +262,41 @@ const CalculatorInput = () => {
                 )}
               />
             </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+            <FormItem>
+              <FormLabel className="h3-style text-sm lg:text-base text-[rgb(var(--text-inaccessible-rgb))]">
+                Mortgage interest rate
+              </FormLabel>
+              <Input 
+                value={`${DEFAULT_INTEREST_RATE * 100}%`}
+                disabled
+                className="inputfield-style text-xs bg-gray-100"
+              />
+            </FormItem>
+
+            <FormItem>
+              <FormLabel className="h3-style text-sm lg:text-base text-[rgb(var(--text-inaccessible-rgb))]">
+                Mortgage term
+              </FormLabel>
+              <Input 
+                value={`${DEFAULT_MORTGAGE_TERM} years`}
+                disabled
+                className="inputfield-style text-xs bg-gray-100"
+              />
+            </FormItem>
+
+            <FormItem>
+              <FormLabel className="h3-style text-sm lg:text-base text-[rgb(var(--text-inaccessible-rgb))]">
+                Mortgage deposit
+              </FormLabel>
+              <Input 
+                value={`${DEFAULT_INITIAL_DEPOSIT * 100}%`}
+                disabled
+                className="inputfield-style text-xs bg-gray-100"
+              />
+            </FormItem>
+          </div>
 
             <FormField
               control={form.control}
@@ -349,34 +384,6 @@ const CalculatorInput = () => {
                 </FormItem>
               )}
             />
-
-            <div className="grid grid-cols-2 gap-2">
-              <div className="flex flex-col">
-                <span className="font-bold text-xs inaccessible-input-style">
-                  Mortgage interest rate
-                </span>
-                <span className="inaccessible-input-style text-xs">
-                  {DEFAULT_INTEREST_RATE * 100}%
-                </span>
-              </div>
-              <div className="flex flex-col">
-                <span className="text-xs font-bold inaccessible-input-style">
-                  Mortgage term
-                </span>
-                <span className="inaccessible-input-style text-xs">
-                  {DEFAULT_MORTGAGE_TERM} years
-                </span>
-              </div>
-              <div className="flex flex-col">
-                <span className="text-xs font-bold inaccessible-input-style">
-                  Mortgage deposit
-                </span>
-                <span className="inaccessible-input-style text-xs">
-                  {DEFAULT_INITIAL_DEPOSIT * 100}%
-                </span>
-              </div>
-            </div>
-
             <Button
               type="submit"
               className="calculate-button-style px-10 md:px-20"
@@ -391,7 +398,7 @@ const CalculatorInput = () => {
     );
   }
 
-  if (view === "loading") {
+  if (view === "loading") { // TODO: should this conditional logic actually live in page.tsx and CalculatorInput.tsx is just the form UI?
     return (
       <div className="flex items-center justify-center h-screen text-black mt-5">
         <ClipLoader color="black" size={50} />
