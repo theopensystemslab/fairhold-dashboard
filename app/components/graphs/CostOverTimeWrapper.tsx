@@ -3,7 +3,9 @@ import React from "react";
 import ErrorBoundary from "../ErrorBoundary";
 import { Household } from "@/app/models/Household";
 import CostOverTimeStackedBarChart, { LifetimeBarData } from "./CostOverTimeStackedBarChart";
+import CostOverTimeStackedBarChartMobile from "./CostOverTimeStackedBarChartMobile";
 import { MaintenanceLevel } from "@/app/models/constants";
+import { useScreenSize } from "@/app/hooks/UseScreenSize";
 
 export type TenureType = 'marketPurchase' | 'fairholdLandPurchase' | 'fairholdLandRent' | 'marketRent' | 'socialRent';
 
@@ -40,6 +42,8 @@ const CostOverTimeWrapper: React.FC<CostOverTimeWrapperProps> = ({
     tenure,
     household
 }) => {
+    const isMobile = useScreenSize();
+
     const formatData = (tenure: TenureType, household: Household, maintenanceLevel: MaintenanceLevel): LifetimeBarData[] => {
         const lifetimeData = household.lifetime.lifetimeData;
 
@@ -97,12 +101,22 @@ const CostOverTimeWrapper: React.FC<CostOverTimeWrapperProps> = ({
     const maxY = Math.ceil((1 * (maxValue)) / yScale) * yScale // Scale y axis by 1.1 (for a bit of visual headroom) and round to nearest hundred (or fifty) thousand to make things tidy
 
     return (
-        <ErrorBoundary>
-      <CostOverTimeStackedBarChart 
-        data={formattedData}
-        config={chartConfig}
-        maxY={maxY}
-      />
+    <ErrorBoundary>
+        <div className="h-full">
+        {isMobile ? (
+                <CostOverTimeStackedBarChartMobile 
+                    data={formattedData}
+                    config={chartConfig}
+                    maxY={maxY}
+                />
+            ) : (
+                <CostOverTimeStackedBarChart 
+                    data={formattedData}
+                    config={chartConfig}
+                    maxY={maxY}
+                />
+            )}
+        </div>
     </ErrorBoundary>
     )
 };
