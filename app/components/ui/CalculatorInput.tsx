@@ -313,72 +313,86 @@ const CalculatorInput = () => {
                     <RadioGroup
                       value={field.value}
                       onValueChange={field.onChange}
-                      className="flex flex-col space-y-2" 
+                      className="flex flex-row space-y-0 w-full gap-4 items-stretch" 
                       >
-                      <div className="flex items-center space-x-2">
-                      <RadioGroupItem
-                        value="none"
-                        id="radio-option-none"
-                        className="radio-button-style"
-                      />
-                      <Label
-                        htmlFor="radio-option-none"
-                        className="radio-label-style"
-                      >
-                        None (0%) 
-                          <div className="mt-1 text-[rgb(var(--text-inaccessible-rgb))]">
-                          I will not carry out any maintenance work.
-                          </div>
-                      </Label>
+
+                      <div className="flex items-start space-x-2 bg-[rgb(var(--background-highlight))] py-4 px-4 flex-1 min-h-0">
+                        <RadioGroupItem
+                          value="none"
+                          id="radio-option-none"
+                          className="radio-button-style"
+                        />
+                        <div className="flex flex-col">
+                        <Label
+                          htmlFor="radio-option-none"
+                          className="radio-label-style"
+                        >
+                          Nothing 
+                        </Label>
+                        <span className="mt-1 text-[rgb(var(--text-inaccessible-rgb))] font-medium text-xs py-1">{MAINTENANCE_LEVELS.none * 100}%</span>
+                        <span className="mt-1 text-[rgb(var(--text-inaccessible-rgb))] font-normal text-xs">
+                        I will not carry out any maintenance work.
+                        </span>
                       </div>
-                      <div className="flex items-center space-x-2">
+                      </div>
+
+                      <div className="flex items-start space-x-2 bg-[rgb(var(--background-highlight))] py-4 px-4 flex-1 min-h-0">
                         <RadioGroupItem
                           value="low"
                           id="radio-option-low"
                           className="radio-button-style"
                         />
+                        <div className="flex flex-col">
                         <Label
                           htmlFor="radio-option-low"
                           className="radio-label-style"
                         >
-                          Low ({MAINTENANCE_LEVELS.low * 100}%) 
-                            <div className="mt-1 text-[rgb(var(--text-inaccessible-rgb))]">
-                            I will spend the minimum to keep my home habitable, carrying out essential repairs only.
-                            </div>
+                          Low 
                         </Label>
+                        <span className="mt-1 text-[rgb(var(--text-inaccessible-rgb))] font-medium text-xs py-1">{MAINTENANCE_LEVELS.low * 100}%</span>
+                        <span className="mt-1 text-[rgb(var(--text-inaccessible-rgb))] font-normal text-xs">
+                          I will spend the minimum to keep my home habitable, carrying out essential repairs only.
+                        </span>
                       </div>
-                      <div className="flex items-center space-x-2">
+                      </div>
+                      <div className="flex items-start space-x-2 bg-[rgb(var(--background-highlight))] py-4 px-4 flex-1 min-h-0">
                         <RadioGroupItem
                           value="medium"
                           id="radio-option-medium"
                           className="radio-button-style"
                         />
+                        <div className="flex flex-col">
                         <Label
                           htmlFor="radio-option-medium"
                           className="radio-label-style"
                         >
-                          Medium ({MAINTENANCE_LEVELS.medium * 100}%)
-                          <div className="mt-1 text-[rgb(var(--text-inaccessible-rgb))]">
-                          I will maintain my home to a good standard, redecorating occasionally and replacing elements like kitchens and bathrooms periodically.
-                            </div>
-                        </Label>
+                          Medium 
+                          </Label>
+                          <span className="mt-1 text-[rgb(var(--text-inaccessible-rgb))] font-medium text-xs py-1">{MAINTENANCE_LEVELS.medium * 100}%</span>
+                          <span className="mt-1 text-[rgb(var(--text-inaccessible-rgb))] font-normal text-xs">
+                            I will maintain my home to a good standard, replacing elements like kitchens and bathrooms periodically.
+                          </span>
+                          </div>
                       </div>
-                      <div className="flex items-center space-x-2">
+                      <div className="flex items-start space-x-2 bg-[rgb(var(--background-highlight))] py-4 px-4 flex-1 min-h-0">
                         <RadioGroupItem
                           value="high"
                           id="radio-option-high"
                           className="radio-button-style"
                         />
+                        <div className="flex flex-col">
                         <Label
                           htmlFor="radio-option-high"
                           className="radio-label-style"
                         >
-                          High ({MAINTENANCE_LEVELS.high * 100}%)
-                          <div className="mt-1 text-[rgb(var(--text-inaccessible-rgb))]">
+                          High 
+                          </Label>
+                          <span className="mt-1 text-[rgb(var(--text-inaccessible-rgb))] font-medium text-xs py-1">{MAINTENANCE_LEVELS.high * 100}%</span>
+                          <span className="mt-1 text-[rgb(var(--text-inaccessible-rgb))] font-normal text-xs">
                           I will maintain my home to a good standard and invest in improvements such as energy retrofit or a new extension.
+                            </span>
                             </div>
-                        </Label>
-                      </div>
+                        </div>
                     </RadioGroup>
                   </FormControl>
                   <MaintenanceExplainerDrawer />
