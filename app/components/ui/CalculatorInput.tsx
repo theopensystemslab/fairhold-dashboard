@@ -313,7 +313,7 @@ const CalculatorInput = () => {
                     <RadioGroup
                       value={field.value}
                       onValueChange={field.onChange}
-                      className="flex flex-row space-y-0 w-full gap-4 items-stretch" 
+                      className="flex flex-col md:flex-row space-y-0 w-full gap-4 items-stretch" 
                       >
 
                       <div className="flex items-start space-x-2 bg-[rgb(var(--background-highlight))] py-4 px-4 flex-1 min-h-0">
