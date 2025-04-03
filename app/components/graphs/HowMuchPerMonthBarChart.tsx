@@ -82,16 +82,14 @@ const HowMuchPerMonthBarChart: React.FC<StackedBarChartProps> = ({
             <CartesianGrid vertical={false} />
             <XAxis
               dataKey="tenure"
-              tickLine={false}
               tickMargin={10}
-              axisLine={false}
+              tickSize={0}
               tickFormatter={(value) => value}
             />
             <YAxis 
               domain={[0, maxY]}
-              tick={false}
-              axisLine={false}
-              tickLine={false}
+              tickMargin={10}
+              tickFormatter={formatValue}
               ></YAxis>
             <ChartLegend content={<ChartLegendContent />} />    
               <Bar dataKey="monthly" strokeWidth={2} activeIndex={2}>
@@ -107,14 +105,32 @@ const HowMuchPerMonthBarChart: React.FC<StackedBarChartProps> = ({
               y={data[0].affordabilityMonthly} 
               stroke="rgb(var(--text-inaccessible-rgb))" 
               strokeDasharray="6 6" 
-              label={{ 
-                value: '35% median household income',
-                position: 'insideTopRight',
-                fill: 'rgb(var(--text-inaccessible-rgb))',
-                fontSize: 12, 
-                offset: 10
-              }} 
-            />        
+              label={(props) => { // formatting here is to ensure line break
+                const { viewBox } = props;
+                return (
+                  <g>
+                    <text
+                      x={viewBox.width + 30}  
+                      y={viewBox.y - 30}
+                      textAnchor="end"
+                      fill="rgb(var(--text-inaccessible-rgb))"
+                      fontSize={12}
+                    >
+                      Affordability threshold
+                    </text>
+                    <text
+                      x={viewBox.width + 30} 
+                      y={viewBox.y - 15} 
+                      textAnchor="end"
+                      fill="rgb(var(--text-inaccessible-rgb))"
+                      fontSize={12}
+                    >
+                      (35% median household income)
+                    </text>
+                  </g>
+                );
+              }}
+            />    
           </BarChart>
         </StyledChartContainer>
       </CardContent>
