@@ -12,8 +12,8 @@ interface DashboardProps {
 export const HowMuchFHCost: React.FC<DashboardProps> = ({ data }) => {
   return (
     <GraphCard
-      title="How much would a Fairhold home cost?"
-      subtitle="The up-front cost of a home, compared with conventional home ownership."
+      title="How much would a Fairhold home cost me?"
+      subtitle="The up-front cost of a home, compared with conventional home ownership"
     >
       <div className="flex flex-col h-full w-3/4 justify-between">
         <HowMuchFHCostWrapper household={data} />
