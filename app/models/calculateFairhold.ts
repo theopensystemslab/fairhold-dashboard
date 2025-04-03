@@ -1,4 +1,4 @@
-import { ValidPostcode } from "../schemas/calculationSchema";
+import { PostcodeScales } from "../schemas/calculationSchema";
 import { createForecastParameters } from "./ForecastParameters";
 import { Household } from "./Household";
 import { HouseType, Property } from "./Property";
@@ -7,7 +7,7 @@ import { socialRentAdjustmentTypes } from "../data/socialRentAdjustmentsRepo";
 
 // TODO: Share type with backend
 export interface ResponseData {
-  postcode: ValidPostcode;
+  postcode: PostcodeScales;
   houseType: HouseType;
   houseBedrooms: number;
   buildPrice: number;
@@ -37,7 +37,7 @@ function calculateFairhold(responseData: ResponseData) {
 
   // define the property object
   const property = new Property({
-    postcode: responseData.postcode.postcode,
+    postcode: responseData.postcode.postcode ?? responseData.postcode.outcode,
     houseType: responseData.houseType,
     numberOfBedrooms: responseData.houseBedrooms,
     age: responseData.houseAge,
