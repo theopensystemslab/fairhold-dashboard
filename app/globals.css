@@ -72,6 +72,7 @@ body {
 .inputfield-style {
   background: rgb(var(--background-input-field-rgb));
   color: rgb(var(--text-inaccessible-rgb));
+  height: 30px;
 }
 
 .dropdown-style {
@@ -79,6 +80,7 @@ body {
   color: rgb(var(--text-inaccessible-rgb)) !important;
   font-size: 12px !important;
   border: 1px solid rgb(var(--text-inaccessible-rgb)) !important;
+  height: 30px;
 }
 
 .dropdown-style:focus {

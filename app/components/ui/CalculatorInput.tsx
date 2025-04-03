@@ -31,6 +31,7 @@ import { APIError } from "@/app/lib/exceptions";
 import { BackgroundAssumptions } from "./BackgroundAssumptions";
 import { MaintenanceExplainerDrawer } from "./MaintenanceExplainerDrawer";
 import InputDropdown from "./InputDropdown";
+import { Separator } from "@/components/ui/separator"
 
 type View = "form" | "loading" | "dashboard";
 
@@ -122,6 +123,7 @@ const CalculatorInput = () => {
           Compare the estimated cost of a Fairhold home in your area with other
           ways of owning or renting.
         </div>
+        <Separator className="my-4 bg-[rgb(var(--text-default-rgb))] h-[1px]" orientation="horizontal" />
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
