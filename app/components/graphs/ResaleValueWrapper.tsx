@@ -48,7 +48,7 @@ const ResaleValueWrapper: React.FC<ResaleValueWrapperProps> = ({
 
     return (
         <ErrorBoundary>
-        <div>
+        <div  className="h-full">
           <ResaleValueLineChart 
             data={formattedData} 
             selectedMaintenance={household.property.maintenanceLevel}
