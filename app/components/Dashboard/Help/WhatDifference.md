@@ -1,7 +1,7 @@
 ### Money saved
 The total cost of a Fairhold Land Purchase mortgage is compared to the total cost of a freehold, using the parameters displayed in the form: {{DEFAULT_INTEREST_RATE}}% interest rate, {{DEFAULT_MORTGAGE_TERM}} year mortgage term and {{DEFAULT_INITIAL_DEPOSIT}}% initial deposit. 
 
-### Communiy wealth
+### Community wealth
 This recalculates Fairhold Land Rent yearly, assuming rising property prices at a rate of {{propertyPriceGrowthPerYear}}% per year and incomes at {{incomeGrowthPerYear}}%.
 
 ### Embodied carbon savings
