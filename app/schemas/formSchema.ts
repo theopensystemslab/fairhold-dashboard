@@ -18,12 +18,12 @@ export const formSchema = z.object({
       message: "Enter a positive house size.",
     }),
   houseAge: z
-    .string({
+    .number({
       required_error: "Enter an estimated build year.",
       invalid_type_error: "Enter a valid estimated build year."
     })
     .transform((val) => {
-      if (!val) return undefined;
+      if (val === null || val === undefined) return undefined;
       const parsed = Number(val);
       return isNaN(parsed) ? undefined : parsed;
     })
