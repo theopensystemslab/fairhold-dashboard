@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis, LabelList, ReferenceLine } from "recharts";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   ChartLegend,
   ChartLegendContent,
@@ -73,23 +73,60 @@ const HowMuchPerMonthBarChart: React.FC<StackedBarChartProps> = ({
   ];
 
   return (
-    <Card>
-      <CardHeader></CardHeader>
-      <CardContent>
+    <Card className="h-full w-full">
+      <CardContent className="h-full w-full p-0 md:p-4">
         <StyledChartContainer config={{}}
-        className="[&_.recharts-rectangle.recharts-tooltip-cursor]:fill-transparent">
+        className="[&_.recharts-rectangle.recharts-tooltip-cursor]:fill-transparent h-full w-full">
           <BarChart accessibilityLayer data={chartData}>
             <CartesianGrid vertical={false} />
             <XAxis
               dataKey="tenure"
-              tickMargin={10}
-              tickSize={0}
-              tickFormatter={(value) => value}
-            />
+              tickLine={false}
+              interval={0} 
+              height={60} 
+              tick={({ x, y, payload }) => {
+                const label = (() => {
+                  switch (payload.value) {
+                    case "Freehold":
+                      return "Freehold";
+                    case "Private Rent":
+                      return "Private\nrent";
+                    case "Fairhold - Land Purchase":
+                      return "Fairhold \n/LP";
+                    case "Fairhold - Land Rent":
+                      return "Fairhold \n/LR";
+                    case "Social Rent":
+                      return "Social\nRent";
+                    default:
+                      return payload.value;
+                  }
+                })();
+                              return (
+                                <g transform={`translate(${x},${y})`}>
+                                  {label.split('\n').map((line: string, i: number) => (
+                                    <text
+                                      key={i}
+                                      x={0}
+                                      y={i * 20}
+                                      dy={10}
+                                      textAnchor="middle"
+                                      fill="#666"
+                                      fontSize="12px"
+                                    >
+                                      {line}
+                                    </text>
+                                  ))}
+                                </g>
+                              );
+                            }}
+                          >
+                          </XAxis>
             <YAxis 
               domain={[0, maxY]}
-              tickMargin={10}
-              tickFormatter={formatValue}
+              tick={false}
+              axisLine={false}
+              tickLine={false}
+              hide={true}
               ></YAxis>
             <ChartLegend content={<ChartLegendContent />} />    
               <Bar dataKey="monthly" strokeWidth={2} activeIndex={2}>

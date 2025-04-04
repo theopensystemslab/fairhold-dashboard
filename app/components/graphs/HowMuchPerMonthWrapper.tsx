@@ -63,7 +63,7 @@ const HowMuchPerMonthWrapper: React.FC<HowMuchPerMonthWrapperProps> = ({
 
   return (
     <ErrorBoundary>
-      <div>
+      <div  className="h-full">
         <HowMuchPerMonthBarChart 
           data={formattedData}
           maxY={maxY} 

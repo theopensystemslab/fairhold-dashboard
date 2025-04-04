@@ -15,7 +15,7 @@ export const HowMuchFHCost: React.FC<DashboardProps> = ({ data }) => {
       title="How much would a Fairhold home cost me?"
       subtitle="The up-front cost of a home, compared with conventional home ownership"
     >
-      <div className="flex flex-col h-full w-3/4 justify-between">
+      <div className="flex flex-col h-full md:w-3/4 w-full justify-between">
         <HowMuchFHCostWrapper household={data} />
         <Drawer
           buttonTitle="Find out more about how we estimated these"

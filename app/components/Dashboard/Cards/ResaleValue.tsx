@@ -51,7 +51,7 @@ export const ResaleValue: React.FC<DashboardProps> = ({ data }) => {
       title="How much could I sell it for?"
       subtitle="Estimated sale price at any time"
     >
-      <div className="flex flex-col h-full w-3/4 justify-between">
+      <div className="flex flex-col h-full w-full md:w-3/4 justify-between">
       <div className="flex gap-2 mb-4">
           {TENURES.map(tenure => ( 
             <TenureSelector 

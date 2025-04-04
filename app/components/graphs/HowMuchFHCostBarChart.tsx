@@ -1,7 +1,7 @@
 "use client";
 
-import { Bar, BarChart, CartesianGrid, XAxis, Label, LabelList, Tooltip, TooltipProps } from "recharts";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Bar, BarChart, CartesianGrid, XAxis, LabelList, Tooltip, TooltipProps } from "recharts";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   ChartConfig,
 } from "@/components/ui/chart";
@@ -91,35 +91,50 @@ const HowMuchFHCostBarChart: React.FC<StackedBarChartProps> = ({
   ];
 
   return (
-    <Card>
-      <CardHeader></CardHeader>
-      <CardContent>
+    <Card className="h-full w-full">
+      <CardContent className="h-full w-full p-0 md:p-4">
         <StyledChartContainer config={chartConfig}
-        className="[&_.recharts-rectangle.recharts-tooltip-cursor]:fill-transparent">
-          <BarChart accessibilityLayer data={chartData}>
+        className="[&_.recharts-rectangle.recharts-tooltip-cursor]:fill-transparent h-full w-full">
+          <BarChart className="full" accessibilityLayer data={chartData}>
             <CartesianGrid vertical={false} />
             <XAxis
               dataKey="tenure"
               tickLine={false}
-              tickFormatter={(value) => {
-                switch (value) {
-                  case "freehold":
-                    return "Freehold";
-                  case "fairhold: land purchase":
-                    return "Fairhold – Land Purchase";
-                  case "fairhold: land rent":
-                    return "Fairhold – Land Rent";
-                  default:
-                    return value;
-                }
+              interval={0} 
+              height={60}  
+              tick={({ x, y, payload }) => {
+                const label = (() => {
+                  switch (payload.value) {
+                    case "freehold":
+                      return "Freehold";
+                    case "fairhold: land purchase":
+                      return "Fairhold –\nLand Purchase";
+                    case "fairhold: land rent":
+                      return "Fairhold –\nLand Rent";
+                    default:
+                      return payload.value;
+                  }
+                })();
+
+                return (
+                  <g transform={`translate(${x},${y})`}>
+                    {label.split('\n').map((line: string, i: number) => (
+                      <text
+                        key={i}
+                        x={0}
+                        y={i * 20}
+                        dy={10}
+                        textAnchor="middle"
+                        fill="#666"
+                        fontSize="12px"
+                      >
+                        {line}
+                      </text>
+                    ))}
+                  </g>
+                );
               }}
             >
-              <Label
-                value="Tenure Types"
-                position="bottom"
-                offset={20}
-                className="label-class"
-              />
             </XAxis>
 
             <Tooltip content={<CustomTooltip />} />

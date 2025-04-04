@@ -1,6 +1,6 @@
 import React from "react";
-import { LineChart, Line, CartesianGrid, XAxis, YAxis, Label, TooltipProps } from "recharts";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { LineChart, Line, CartesianGrid, XAxis, YAxis, TooltipProps } from "recharts";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   ChartConfig,
   ChartTooltip,
@@ -95,38 +95,28 @@ const ResaleValueLineChart: React.FC<ResaleValueLineChartProps> = ({
   };
 
   return (
-    <Card>
-      <CardHeader></CardHeader>
-      <CardContent>
-        <StyledChartContainer config={chartConfig}>
+    <Card className="h-full w-full">
+      <CardContent className="h-full w-full p-0 md:p-4">
+        <StyledChartContainer config={chartConfig}  className="h-full w-full">
           <LineChart
             data={data}
-            margin={{ top: 20, right: 30, left: 20, bottom: 50 }}
           >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis 
               dataKey="year"
               tickLine={false}
+              ticks={Array.from(
+                { length: Math.floor(data.length / 5) + 1 },
+                (_, i) => i * 5
+              ).filter(tick => tick <= data.length)}
             >
-              <Label
-                value="Year"
-                position="bottom"
-                offset={20}
-                className="label-class"
-              />
             </XAxis>
             <YAxis
               tickFormatter={formatValue}
               tickLine={false}
               domain={[0, maxY]}
+              width={40}
             >
-              <Label
-                value="Resale Value"
-                angle={-90}
-                position="left"
-                offset={0}
-                className="label-class"
-              />
             </YAxis>
             <ChartTooltip content={<CustomTooltip />} />
             {renderLine("high")}

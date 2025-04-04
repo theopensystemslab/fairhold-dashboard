@@ -54,7 +54,7 @@ const HowMuchFHCostWrapper: React.FC<HowMuchFHCostWrapperProps> = ({
 
   return (
     <ErrorBoundary>
-      <div>
+      <div className="h-full w-full">
         <HowMuchFHCostBarChart data={formattedData} />
       </div>
     </ErrorBoundary>

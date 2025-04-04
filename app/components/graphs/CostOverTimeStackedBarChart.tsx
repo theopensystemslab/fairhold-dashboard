@@ -1,6 +1,6 @@
 "use client";
 
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Legend, Tooltip, Label } from "recharts";
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Tooltip } from "recharts";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   StyledChartContainer,
@@ -26,7 +26,7 @@ const CostOverTimeTooltip = ({ active, payload, label }: TooltipProps<ValueType,
       <div className="grid grid-cols-2 gap-2">
         <div className="font-medium">Year {label}{parseInt(label as string) === 1 ? " (with deposit)" : ""}</div>
         {payload.map((entry, index) => (
-          <div key={`${entry.name}-${index}`} className="grid grid-cols-2 gap-4">
+          <div key={`tooltip-${entry.name}-${index}`} className="grid grid-cols-2 gap-4">
             <div style={{ color: entry.color }}>{entry.name}:</div>
             <div>£{entry.value ? entry.value.toLocaleString() : '0'}</div>
           </div>
@@ -93,39 +93,26 @@ const CostOverTimeStackedBarChart: React.FC<CostOverTimeStackedBarChartProps> = 
   }
 
   return (
-    <Card>
-      <CardContent>
-        <StyledChartContainer config={chartConfig}>
+    <Card className="h-full w-full">
+      <CardContent className="h-full w-full p-0 md:p-4">
+        <StyledChartContainer config={chartConfig}
+        className="h-full w-full">
           <BarChart 
             data={data}
             margin={{ top: 20, right: 30, left: 20, bottom: 50 }}
             >
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="year">
-              <Label
-                  value="Year"
-                  position="bottom"
-                  offset={10}
-                  className="label-class"
-                  />
-            </XAxis> 
+            <XAxis 
+              dataKey="year"
+              tickLine={false}
+              ></XAxis>
             <YAxis 
               domain={[0, maxY]}
               tickFormatter={formatValue}
+              tickLine={false}
               >
-                
-                <Label
-                  value="Cost"
-                  angle={-90}
-                  position="left"
-                  offset={10}
-                  className="label-class"
-                  />
               </YAxis>
             <Tooltip content={<CostOverTimeTooltip />} />
-            <Legend 
-                verticalAlign="top"
-            />
             
             {config.colors.landRent && ( 
               <Bar dataKey="landRent" stackId="a" fill={config.colors.landRent} name="Land Rent" /> 
