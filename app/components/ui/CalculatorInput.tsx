@@ -31,6 +31,7 @@ import { APIError } from "@/app/lib/exceptions";
 import { BackgroundAssumptions } from "./BackgroundAssumptions";
 import { MaintenanceExplainerDrawer } from "./MaintenanceExplainerDrawer";
 import InputDropdown from "./InputDropdown";
+import { Separator } from "@/components/ui/separator"
 
 type View = "form" | "loading" | "dashboard";
 
@@ -116,12 +117,12 @@ const CalculatorInput = () => {
     return (
       <div className="flex flex-col justify-center max-w-2xl mx-auto px-10">
         <div className="h1-style text-lg md:text-xl lg:text-2xl">
-          Calculate how Fairhold could work for you
+          Calculate how much a Fairhold home might cost you
         </div>
         <div className="subheadstyle text-sm  md:text-base">
-          Compare the estimated cost of a Fairhold home in your area with other
-          ways of owning or renting.
+          Use this calculator to compare Fairhold with other ways of owning or renting. Try your current home, or a home you’d like to own.
         </div>
+        <Separator className="my-4 bg-[rgb(var(--text-default-rgb))] h-[1px]" orientation="horizontal" />
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
@@ -262,6 +263,41 @@ const CalculatorInput = () => {
                 )}
               />
             </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+            <FormItem>
+              <FormLabel className="h3-style text-sm lg:text-base text-[rgb(var(--text-inaccessible-rgb))]">
+                Mortgage interest rate
+              </FormLabel>
+              <Input 
+                value={`${DEFAULT_INTEREST_RATE * 100}%`}
+                disabled
+                className="inputfield-style text-xs bg-gray-100"
+              />
+            </FormItem>
+
+            <FormItem>
+              <FormLabel className="h3-style text-sm lg:text-base text-[rgb(var(--text-inaccessible-rgb))]">
+                Mortgage term
+              </FormLabel>
+              <Input 
+                value={`${DEFAULT_MORTGAGE_TERM} years`}
+                disabled
+                className="inputfield-style text-xs bg-gray-100"
+              />
+            </FormItem>
+
+            <FormItem>
+              <FormLabel className="h3-style text-sm lg:text-base text-[rgb(var(--text-inaccessible-rgb))]">
+                Mortgage deposit
+              </FormLabel>
+              <Input 
+                value={`${DEFAULT_INITIAL_DEPOSIT * 100}%`}
+                disabled
+                className="inputfield-style text-xs bg-gray-100"
+              />
+            </FormItem>
+          </div>
 
             <FormField
               control={form.control}
@@ -276,72 +312,86 @@ const CalculatorInput = () => {
                     <RadioGroup
                       value={field.value}
                       onValueChange={field.onChange}
-                      className="flex flex-col space-y-2" 
+                      className="flex flex-col md:flex-row space-y-0 w-full gap-4 items-stretch" 
                       >
-                      <div className="flex items-center space-x-2">
-                      <RadioGroupItem
-                        value="none"
-                        id="radio-option-none"
-                        className="radio-button-style"
-                      />
-                      <Label
-                        htmlFor="radio-option-none"
-                        className="radio-label-style"
-                      >
-                        None (0%) 
-                          <div className="mt-1 text-[rgb(var(--text-inaccessible-rgb))]">
-                          I will not carry out any maintenance work.
-                          </div>
-                      </Label>
+
+                      <div className="flex items-start space-x-2 bg-[rgb(var(--background-highlight))] py-4 px-4 flex-1 min-h-0">
+                        <RadioGroupItem
+                          value="none"
+                          id="radio-option-none"
+                          className="radio-button-style"
+                        />
+                        <div className="flex flex-col">
+                        <Label
+                          htmlFor="radio-option-none"
+                          className="radio-label-style"
+                        >
+                          Nothing 
+                        </Label>
+                        <span className="mt-1 text-[rgb(var(--text-inaccessible-rgb))] font-medium text-xs py-1">{MAINTENANCE_LEVELS.none * 100}%</span>
+                        <span className="mt-1 text-[rgb(var(--text-inaccessible-rgb))] font-normal text-xs">
+                        I will not carry out any maintenance work.
+                        </span>
                       </div>
-                      <div className="flex items-center space-x-2">
+                      </div>
+
+                      <div className="flex items-start space-x-2 bg-[rgb(var(--background-highlight))] py-4 px-4 flex-1 min-h-0">
                         <RadioGroupItem
                           value="low"
                           id="radio-option-low"
                           className="radio-button-style"
                         />
+                        <div className="flex flex-col">
                         <Label
                           htmlFor="radio-option-low"
                           className="radio-label-style"
                         >
-                          Low ({MAINTENANCE_LEVELS.low * 100}%) 
-                            <div className="mt-1 text-[rgb(var(--text-inaccessible-rgb))]">
-                            I will spend the minimum to keep my home habitable, carrying out essential repairs only.
-                            </div>
+                          Low 
                         </Label>
+                        <span className="mt-1 text-[rgb(var(--text-inaccessible-rgb))] font-medium text-xs py-1">{MAINTENANCE_LEVELS.low * 100}%</span>
+                        <span className="mt-1 text-[rgb(var(--text-inaccessible-rgb))] font-normal text-xs">
+                          I will spend the minimum to keep my home habitable, carrying out essential repairs only.
+                        </span>
                       </div>
-                      <div className="flex items-center space-x-2">
+                      </div>
+                      <div className="flex items-start space-x-2 bg-[rgb(var(--background-highlight))] py-4 px-4 flex-1 min-h-0">
                         <RadioGroupItem
                           value="medium"
                           id="radio-option-medium"
                           className="radio-button-style"
                         />
+                        <div className="flex flex-col">
                         <Label
                           htmlFor="radio-option-medium"
                           className="radio-label-style"
                         >
-                          Medium ({MAINTENANCE_LEVELS.medium * 100}%)
-                          <div className="mt-1 text-[rgb(var(--text-inaccessible-rgb))]">
-                          I will maintain my home to a good standard, redecorating occasionally and replacing elements like kitchens and bathrooms periodically.
-                            </div>
-                        </Label>
+                          Medium 
+                          </Label>
+                          <span className="mt-1 text-[rgb(var(--text-inaccessible-rgb))] font-medium text-xs py-1">{MAINTENANCE_LEVELS.medium * 100}%</span>
+                          <span className="mt-1 text-[rgb(var(--text-inaccessible-rgb))] font-normal text-xs">
+                            I will maintain my home to a good standard, replacing elements like kitchens and bathrooms periodically.
+                          </span>
+                          </div>
                       </div>
-                      <div className="flex items-center space-x-2">
+                      <div className="flex items-start space-x-2 bg-[rgb(var(--background-highlight))] py-4 px-4 flex-1 min-h-0">
                         <RadioGroupItem
                           value="high"
                           id="radio-option-high"
                           className="radio-button-style"
                         />
+                        <div className="flex flex-col">
                         <Label
                           htmlFor="radio-option-high"
                           className="radio-label-style"
                         >
-                          High ({MAINTENANCE_LEVELS.high * 100}%)
-                          <div className="mt-1 text-[rgb(var(--text-inaccessible-rgb))]">
+                          High 
+                          </Label>
+                          <span className="mt-1 text-[rgb(var(--text-inaccessible-rgb))] font-medium text-xs py-1">{MAINTENANCE_LEVELS.high * 100}%</span>
+                          <span className="mt-1 text-[rgb(var(--text-inaccessible-rgb))] font-normal text-xs">
                           I will maintain my home to a good standard and invest in improvements such as energy retrofit or a new extension.
+                            </span>
                             </div>
-                        </Label>
-                      </div>
+                        </div>
                     </RadioGroup>
                   </FormControl>
                   <MaintenanceExplainerDrawer />
@@ -349,34 +399,6 @@ const CalculatorInput = () => {
                   </FormItem>
               )}
             />
-
-            <div className="grid grid-cols-2 gap-2">
-              <div className="flex flex-col">
-                <span className="font-bold text-xs inaccessible-input-style">
-                  Mortgage interest rate
-                </span>
-                <span className="inaccessible-input-style text-xs">
-                  {DEFAULT_INTEREST_RATE * 100}%
-                </span>
-              </div>
-              <div className="flex flex-col">
-                <span className="text-xs font-bold inaccessible-input-style">
-                  Mortgage term
-                </span>
-                <span className="inaccessible-input-style text-xs">
-                  {DEFAULT_MORTGAGE_TERM} years
-                </span>
-              </div>
-              <div className="flex flex-col">
-                <span className="text-xs font-bold inaccessible-input-style">
-                  Mortgage deposit
-                </span>
-                <span className="inaccessible-input-style text-xs">
-                  {DEFAULT_INITIAL_DEPOSIT * 100}%
-                </span>
-              </div>
-            </div>
-
             <Button
               type="submit"
               className="calculate-button-style px-10 md:px-20"
@@ -391,7 +413,7 @@ const CalculatorInput = () => {
     );
   }
 
-  if (view === "loading") {
+  if (view === "loading") { // TODO: should this conditional logic actually live in page.tsx and CalculatorInput.tsx is just the form UI?
     return (
       <div className="flex items-center justify-center h-screen text-black mt-5">
         <ClipLoader color="black" size={50} />
