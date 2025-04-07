@@ -101,7 +101,7 @@ const CalculatorInput = () => {
       case "INSUFFICIENT_PRICES_PAID_DATA":
         form.setError("housePostcode", {
           message:
-            "Insufficient data for this postcode. Please try again with a different postcode",
+            "Insufficient data for this postcode. Please try again with a different postcode.",
         });
         break;
       case "UNHANDLED_EXCEPTION":
@@ -195,7 +195,7 @@ const CalculatorInput = () => {
                       </div>
                     </RadioGroup>
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="--error-text-rgb" />
                 </FormItem>
               )}
             />
@@ -215,7 +215,7 @@ const CalculatorInput = () => {
                         className="inputfield-style text-xs"
                       />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage  className="error-message-style" />
                   </FormItem>
                 )}
               />
@@ -236,7 +236,7 @@ const CalculatorInput = () => {
                         placeholder="Select house age"
                       />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage  className="error-message-style" />
                   </FormItem>
                 )}
               />
@@ -257,7 +257,7 @@ const CalculatorInput = () => {
                         className="inputfield-style text-xs"
                       />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage  className="error-message-style" />
                   </FormItem>
                 )}
               />
@@ -345,8 +345,8 @@ const CalculatorInput = () => {
                     </RadioGroup>
                   </FormControl>
                   <MaintenanceExplainerDrawer />
-                  <FormMessage />
-                </FormItem>
+                  <FormMessage  className="error-message-style" />
+                  </FormItem>
               )}
             />
 
