@@ -27,7 +27,7 @@ export const Drawer: React.FC<React.PropsWithChildren<Props>> = ({
   <Sheet>
     <SheetTrigger className="text-gray-400 text-xs underline flex">
       <QuestionMarkCircledIcon/>
-      <span className="ml-1">{buttonTitle}</span>
+      <span className="ml-1 pb-6">{buttonTitle}</span>
     </SheetTrigger>
     <SheetContent className="overflow-y-auto">
       <SheetHeader>
