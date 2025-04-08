@@ -14,7 +14,7 @@ export interface DashboardProps {
   inputData?: FormFrontend;
 }
 
-const Dashboard: React.FC<DashboardProps> = ({ inputData, processedData }) => {
+const Dashboard: React.FC<DashboardProps> = ({ processedData }) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [currentPage, setCurrentPage] = useState(0);
 
@@ -26,14 +26,10 @@ const Dashboard: React.FC<DashboardProps> = ({ inputData, processedData }) => {
       setCurrentPage(newPage);
     }
   };
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const someUnusedVariable = inputData;
-
   return (
-    <div className="snap-container">
+    <div className="snap-container md:h-screen overflow-hidden">
       <div
-        className="snap-scroll"
+        className="snap-y snap-mandatory h-full overflow-y-auto flex flex-col items-center align-center"
         ref={scrollContainerRef}
         onScroll={handleScroll}
       >
