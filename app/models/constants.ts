@@ -191,8 +191,6 @@ export const SOCIAL_SAVINGS_PER_HOUSE_PER_YEAR = 5286
 
 export const FTE_SPEND = 60000
 
-export const SOCIAL_VALUE_YEARS = 10;
-
 /** 
  * from Leeds Beckett Wikihouse LCA comparison report: 30.66 tco2e for a 92m2 brick and block home in A1-A5 
  * https://cdn.prod.website-files.com/612569c3243035968aaf61f1/63bd27536d1e152e28e96403_77084_Wikihouse%20Thermal%20Perfromance%20and%20LCA%20report_July%202021.pdf

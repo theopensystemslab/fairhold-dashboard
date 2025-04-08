@@ -4,7 +4,6 @@ import { KG_CO2_PER_KWH,
     NHS_SAVINGS_PER_HOUSE_PER_YEAR, 
     SOCIAL_SAVINGS_PER_HOUSE_PER_YEAR, 
     FTE_SPEND, 
-    SOCIAL_VALUE_YEARS,
     EMBODIED_CARBON_BRICK_BLOCK_KG_M2,
     EMBODIED_CARBON_TIMBER_SLAB_KG_M2
 } from "./constants";
@@ -15,7 +14,7 @@ type ConstructorParams = {
 
 export class SocialValue {
     public moneySaved: number;
-    public communityWealthDecade: number;
+    public communityWealthLifetime: number;
     public embodiedCarbonSavings: number;
     public savingsEnergyPoundsYearly: number;
     public savingsToNHSPerHouseYearly: number;
@@ -25,7 +24,7 @@ export class SocialValue {
 
     constructor(params: ConstructorParams) {
         this.moneySaved = this.calculateMoneySavedFHLP(params);
-        this.communityWealthDecade = this.calculateCommunityWealth(params);
+        this.communityWealthLifetime = this.calculateCommunityWealth(params);
         this.embodiedCarbonSavings = this.calculateEmbodiedCarbonSaved(params)
         this.savingsEnergyPoundsYearly = this.calculateSavingsEnergyPoundsYearly(params);
         this.savingsToNHSPerHouseYearly = NHS_SAVINGS_PER_HOUSE_PER_YEAR;
@@ -45,8 +44,9 @@ export class SocialValue {
     }
     private calculateCommunityWealth(params: ConstructorParams) {
         const lifetime = params.household.lifetime.lifetimeData
+        const lifetimeLength = params.household.lifetime.lifetimeData.length
         let communityWealth = 0
-        for (let i = 0; i < SOCIAL_VALUE_YEARS; i++) { // TODO: decide on time period
+        for (let i = 0; i < lifetimeLength; i++) {
             communityWealth += lifetime[i].fairholdLandRentCGRYearly
         }
         return communityWealth;
