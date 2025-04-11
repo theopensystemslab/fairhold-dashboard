@@ -46,8 +46,8 @@ export const HowMuchPerMonth: React.FC<ProcessedDataOnly> = ({
 
   return (
     <GraphCard
-      title="How much would Fairhold cost me every month?"
-      subtitle="Monthly cost of housing, excluding bills and maintenance"
+      title="How much would it cost every month?"
+      subtitle="Not including bills"
     >
       <div className="flex flex-col h-full md:w-3/4 w-full justify-between">
         <HowMuchPerMonthWrapper household={processedData} />
