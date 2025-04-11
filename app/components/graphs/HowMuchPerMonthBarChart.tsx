@@ -85,6 +85,22 @@ const HowMuchPerMonthBarChart: React.FC<StackedBarChartProps> = ({
               interval={0} 
               height={60} 
               tick={({ x, y, payload }) => {
+                const labelColor = (() => {
+                  switch (payload.value) {
+                    case "Freehold":
+                      return "rgb(var(--freehold-equity-color-rgb))";
+                    case "Private Rent":
+                      return "rgb(var(--private-rent-land-color-rgb))";
+                    case "Fairhold - Land Purchase":
+                      return "rgb(var(--fairhold-equity-color-rgb))";
+                    case "Fairhold - Land Rent":
+                      return "rgb(var(--fairhold-equity-color-rgb))";
+                    case "Social Rent":
+                      return "rgb(var(--social-rent-land-color-rgb))";
+                    default:
+                      return "#666";
+                  }
+                })();
                 const label = (() => {
                   switch (payload.value) {
                     case "Freehold":
@@ -110,8 +126,9 @@ const HowMuchPerMonthBarChart: React.FC<StackedBarChartProps> = ({
                                       y={i * 20}
                                       dy={10}
                                       textAnchor="middle"
-                                      fill="#666"
+                                      style={{ fill: labelColor }}
                                       fontSize="12px"
+                                      fontWeight={600}
                                     >
                                       {line}
                                     </text>
