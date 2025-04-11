@@ -149,10 +149,50 @@ const HowMuchPerMonthBarChart: React.FC<StackedBarChartProps> = ({
               <Bar dataKey="monthly" strokeWidth={2} activeIndex={2}>
               <LabelList
                 dataKey="monthly"
-                position="center"
-                formatter={formatValue}
-                fill="white"
-                fontSize={12}
+                position="top"
+                content={(props) => {
+                  if (!props.x || !props.y || !props.value || props.index === undefined ) return null;
+
+                  const xPos = typeof props.x === 'number' ? props.x - 2 : 0;
+                  const yPos = typeof props.y === 'number' ? props.y - 30 : 0;
+                  const value = typeof props.value === 'number' ? props.value : parseFloat(props.value as string);
+                  const formattedValue = formatValue(value);
+
+                  const labelColor = (() => {
+                    switch (chartData[props.index].tenure) {
+                      case "Freehold":
+                        return "rgb(var(--freehold-equity-color-rgb))";
+                      case "Private Rent":
+                        return "rgb(var(--private-rent-land-color-rgb))";
+                      case "Fairhold - Land Purchase":
+                        return "rgb(var(--fairhold-equity-color-rgb))";
+                      case "Fairhold - Land Rent":
+                        return "rgb(var(--fairhold-equity-color-rgb))";
+                      case "Social Rent":
+                        return "rgb(var(--social-rent-land-color-rgb))";
+                      default:
+                        return "#666";
+                    }
+                  })();
+
+                  return (
+                    <foreignObject x={xPos} y={yPos} width={100} height={30}>
+                      <div
+                        style={{
+                          position: "absolute",
+                          left: 0,
+                          top: 0,
+                          color: labelColor,
+                          fontSize: "18px",
+                          fontWeight: 600,
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        {formattedValue}
+                      </div>
+                    </foreignObject>
+                  );
+                }}
               />
             </Bar>
             <ReferenceLine 
