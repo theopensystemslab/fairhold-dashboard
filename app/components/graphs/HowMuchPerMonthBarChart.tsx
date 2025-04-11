@@ -140,29 +140,19 @@ const HowMuchPerMonthBarChart: React.FC<StackedBarChartProps> = ({
             </Bar>
             <ReferenceLine 
               y={data[0].affordabilityMonthly} 
-              stroke="rgb(var(--text-inaccessible-rgb))" 
-              strokeDasharray="6 6" 
+              stroke="rgb(var(--text-default-rgb))" 
               label={(props) => { // formatting here is to ensure line break
                 const { viewBox } = props;
                 return (
                   <g>
                     <text
-                      x={viewBox.width + 30}  
-                      y={viewBox.y - 30}
-                      textAnchor="end"
-                      fill="rgb(var(--text-inaccessible-rgb))"
-                      fontSize={12}
-                    >
-                      Affordability threshold
-                    </text>
-                    <text
-                      x={viewBox.width + 30} 
+                      x={viewBox.width} 
                       y={viewBox.y - 15} 
                       textAnchor="end"
-                      fill="rgb(var(--text-inaccessible-rgb))"
+                      fill="rgb(var(--text-default-rgb))"
                       fontSize={12}
                     >
-                      (35% median household income)
+                      Affordable
                     </text>
                   </g>
                 );
