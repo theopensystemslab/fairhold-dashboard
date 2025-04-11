@@ -102,11 +102,19 @@ const HowMuchFHCostBarChart: React.FC<StackedBarChartProps> = ({
                     case "freehold":
                       return "Freehold";
                     case "fairhold: land purchase":
-                      return "Fairhold –\nLand Purchase";
+                      return "Fairhold /\nLand Purchase";
                     case "fairhold: land rent":
-                      return "Fairhold –\nLand Rent";
+                      return "Fairhold /\nLand Rent";
                     default:
                       return payload.value;
+                  }
+                })();
+                const labelColor = (() => {
+                  switch (payload.value) {
+                    case "freehold":
+                      return "rgb(var(--freehold-equity-color-rgb))";
+                    default:
+                      return "rgb(var(--fairhold-equity-color-rgb))";
                   }
                 })();
 
@@ -119,8 +127,9 @@ const HowMuchFHCostBarChart: React.FC<StackedBarChartProps> = ({
                         y={i * 20}
                         dy={10}
                         textAnchor="middle"
-                        fill="#666"
+                        style={{ fill: labelColor }}
                         fontSize="12px"
+                        fontWeight={600}
                       >
                         {line}
                       </text>
