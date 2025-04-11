@@ -52,7 +52,7 @@ export const HowMuchPerMonth: React.FC<ProcessedDataOnly> = ({
       <div className="flex flex-col h-full md:w-3/4 w-full justify-between">
         <HowMuchPerMonthWrapper household={processedData} />
         <Drawer
-          buttonTitle="Find out more about how we estimated these"
+          buttonTitle="35% of the local median household income is a widely-used benchmark for affordability. Find out more about how we estimated these"
           title="How we estimated these figures"
           description={<ReactMarkdown className="space-y-4">{processedContent}</ReactMarkdown>}
         />
