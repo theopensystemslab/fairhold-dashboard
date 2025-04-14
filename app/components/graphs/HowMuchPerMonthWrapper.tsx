@@ -23,7 +23,7 @@ const HowMuchPerMonthWrapper: React.FC<HowMuchPerMonthWrapperProps> = ({
     household.forecastParameters
       .affordabilityThresholdIncomePercentage || 0
   const highestValue = Math.max(fairholdLandPurchaseMonthly, marketPurchaseMonthly, affordabilityMonthly)
-  const maxY = Math.ceil(highestValue / 500) * 500
+  const maxY = Math.ceil(1.1 * highestValue / 500) * 500
 
   const formatData = (household: Household) => {
     return [
