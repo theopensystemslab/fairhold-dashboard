@@ -58,7 +58,13 @@ export const Carousel: React.FC<CarouselProps> = ({ scrollContainerRef, currentP
         ))}
       </div>
       <div className={cn("invisible", { "visible": currentPage < totalPages })}>
-        <NavigationIcon Icon={ArrowDownIcon} onClick={handleNext} />
+        <button
+          onClick={handleNext}
+          className="flex items-center px-4 py-2 bg-[rgb(var(--text-default-rgb))] text-white rounded-3xl text-sm"
+        >
+          Next
+          <ArrowDownIcon className="w-4 h-4 ml-2" />
+        </button>
       </div>
     </div>
   )
