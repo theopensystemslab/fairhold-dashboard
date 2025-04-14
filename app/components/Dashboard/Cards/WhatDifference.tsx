@@ -53,7 +53,7 @@ const Cards: React.FC<CardsProps> = ({ household }) => {
   const maintenanceCost = `£${Math.round(household.lifetime.lifetimeData[0].maintenanceCost[household.property.maintenanceLevel]).toLocaleString()}`;
   const localJobs = household.socialValue.localJobs.toFixed(1);
 
-  return <div className="flex flex-col sm:flex-row gap-6 w-3/4 justify-center py-4">
+  return <div className="flex md:flex-row flex-col gap-6 w-3/4 justify-center py-4">
     <Card title="Economy">
       <SubCard figure={moneySaved} title="Savings on housing costs">Over {lifetime} years.</SubCard>
       <SubCard figure={savingsToNHSPerHouseLifetime} title="Health savings">If moving from substandard accommodation, the home would save the NHS <Highlight>{savingsToNHSYear1}</Highlight> per year and the wider economy <Highlight>{savingsToSocietyPerHouseLifetime}</Highlight> over {lifetime} years.</SubCard>
