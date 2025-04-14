@@ -1,6 +1,6 @@
 "use client";
 
-import { Bar, BarChart, CartesianGrid, XAxis, LabelList, Tooltip, TooltipProps } from "recharts";
+import { Bar, BarChart, CartesianGrid, XAxis, LabelList, Tooltip } from "recharts";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   ChartConfig,
@@ -8,8 +8,8 @@ import {
 import {
   StyledChartContainer,
 } from "../ui/StyledChartContainer";
-import { ValueType } from "tailwindcss/types/config";
-import { NameType } from "recharts/types/component/DefaultTooltipContent";
+import { useState } from "react";
+import { formatValue } from "@/app/lib/format";
 
 const chartConfig = {
   freeholdLand: {
@@ -27,7 +27,6 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 import React from "react";
-import { formatValue } from "@/app/lib/format";
 
 type DataInput = {
   category: string;
@@ -41,52 +40,47 @@ interface StackedBarChartProps {
   data: DataInput[];
 }
 
-const CustomTooltip = ({ active, payload }: TooltipProps<ValueType, NameType>) => {
-  if (!active || !payload) return null;
-
-  const total = payload[0].payload.total;
-  return (
-    <div className="rounded-lg border bg-background p-2 shadow-sm">
-      <div className="grid grid-cols-2 gap-2">
-        <div className="font-medium">Total:</div>
-        <div>£{total.toLocaleString()}</div>
-      </div>
-    </div>
-  );
-};
-
-const formatValueWithLabel = (value: number, dataKey: string) => {
-  const formattedValue = formatValue(value);
-  
-  if (dataKey.includes('Land')) {
-    return `Land: ${formattedValue}`;
-  } else if (dataKey.includes('House')) {
-    return `House: ${formattedValue}`;
-  }
-  
-  return formattedValue;
-};
-
 const HowMuchFHCostBarChart: React.FC<StackedBarChartProps> = ({
   data,
 }) => {
+  const [hoveredBar, setHoveredBar] = useState<{ dataKey: string; value: number } | null>(null);
+  const CustomTooltip: React.FC<{ hoveredBar: { dataKey: string; value: number } | null }> = ({ hoveredBar }) => {
+    if (!hoveredBar) return null;
+  
+    const { dataKey, value } = hoveredBar;
+    const label = dataKey.includes("Land") ? "Land" : "House";
+  
+    return (
+      <div className="bg-[rgb(var(--text-default-rgb))] p-2 shadow-sm rounded-xl">
+        <div style={{ color: "rgb(var(--button-background-rgb))" }}>
+          {label} £{value.toLocaleString()}
+        </div>
+      </div>
+    );
+  };
+
   const chartData = [
     {
       tenure: "freehold",
       freeholdLand: data[0].marketPurchase,
+      freeholdLandLabel: "Land",
       freeholdHouse: data[1].marketPurchase,
-      total: data[0].marketPurchase + data[1].marketPurchase,
+      freeholdHouseLabel: "House",
+      freeholdTotal: data[0].marketPurchase + data[1].marketPurchase,
     },
     {
       tenure: "fairhold: land purchase",
       fairholdLand: data[0].fairholdLandPurchase,
+      fairholdLandLabel: "Land",
       fairholdHouse: data[2].fairholdLandPurchase,
-      total: data[0].fairholdLandPurchase + data[2].fairholdLandPurchase,
+      fairholdHouseLabel: "House",
+      fairholdTotal: data[0].fairholdLandPurchase + data[2].fairholdLandPurchase,
     },
     {
       tenure: "fairhold: land rent",
       fairholdHouse: data[2].fairholdLandRent,
-      total: data[2].fairholdLandRent,
+      fairholdHouseLabel: "House",
+      fairholdTotal: data[2].fairholdLandRent,
     },
   ];
 
@@ -95,7 +89,7 @@ const HowMuchFHCostBarChart: React.FC<StackedBarChartProps> = ({
       <CardContent className="h-full w-full p-0 md:p-4">
         <StyledChartContainer config={chartConfig}
         className="[&_.recharts-rectangle.recharts-tooltip-cursor]:fill-transparent h-full w-full">
-          <BarChart className="full" accessibilityLayer data={chartData}>
+          <BarChart className="w-full" accessibilityLayer data={chartData}>
             <CartesianGrid vertical={false} />
             <XAxis
               dataKey="tenure"
@@ -108,11 +102,19 @@ const HowMuchFHCostBarChart: React.FC<StackedBarChartProps> = ({
                     case "freehold":
                       return "Freehold";
                     case "fairhold: land purchase":
-                      return "Fairhold –\nLand Purchase";
+                      return "Fairhold /\nLand Purchase";
                     case "fairhold: land rent":
-                      return "Fairhold –\nLand Rent";
+                      return "Fairhold /\nLand Rent";
                     default:
                       return payload.value;
+                  }
+                })();
+                const labelColor = (() => {
+                  switch (payload.value) {
+                    case "freehold":
+                      return "rgb(var(--freehold-equity-color-rgb))";
+                    default:
+                      return "rgb(var(--fairhold-equity-color-rgb))";
                   }
                 })();
 
@@ -125,8 +127,9 @@ const HowMuchFHCostBarChart: React.FC<StackedBarChartProps> = ({
                         y={i * 20}
                         dy={10}
                         textAnchor="middle"
-                        fill="#666"
+                        style={{ fill: labelColor }}
                         fontSize="12px"
+                        fontWeight={600}
                       >
                         {line}
                       </text>
@@ -137,16 +140,18 @@ const HowMuchFHCostBarChart: React.FC<StackedBarChartProps> = ({
             >
             </XAxis>
 
-            <Tooltip content={<CustomTooltip />} />
+            <Tooltip content={<CustomTooltip hoveredBar={hoveredBar} />} isAnimationActive={false} />
             <Bar
               dataKey="freeholdLand"
               stackId="stack"
               fill="var(--color-freeholdLand)"
-            >
+              onMouseOver={() =>
+                setHoveredBar({ dataKey: "freeholdLand", value: Math.round(chartData[0].freeholdLand || 0 )})
+              }
+              onMouseOut={() => setHoveredBar(null)}              >
               <LabelList
-                dataKey="freeholdLand"
+                dataKey="freeholdLandLabel"
                 position="center"
-                formatter={(value: number) => formatValueWithLabel(value, "freeholdLand")}
                 fill="white"
                 fontSize={12}
               />
@@ -155,24 +160,60 @@ const HowMuchFHCostBarChart: React.FC<StackedBarChartProps> = ({
               dataKey="freeholdHouse"
               stackId="stack"
               fill="var(--color-freeholdHouse)"
-            >
+              onMouseOver={() =>
+                setHoveredBar({ dataKey: "freeholdHouse", value: Math.round(chartData[0].freeholdHouse || 0 )})
+              }
+              onMouseOut={() => setHoveredBar(null)}
+              >
               <LabelList
-                dataKey="freeholdHouse"
+                dataKey="freeholdHouseLabel"
                 position="center"
-                formatter={(value: number) => formatValueWithLabel(value, "freeholdHouse")}
                 fill="white"
                 fontSize={12}
               />
-              </Bar>
+              <LabelList
+                dataKey="freeholdTotal"
+                position="top"
+                content={(props) => {
+                  if (!props.x || !props.y || !props.value) return null;
+                  
+                  const xPos = typeof props.x === 'number' ? props.x - 2 : 0;
+                  const yPos = typeof props.y === 'number' ? props.y - 30 : 0;
+                  const value = typeof props.value === 'number' ? props.value : parseFloat(props.value as string);
+                  const formattedValue = formatValue(value);
+
+                  return (
+                    <foreignObject x={xPos} y={yPos} width={100} height={30}>
+                      <div
+                        style={{
+                          position: "absolute",
+                          left: 0,
+                          top: 0,
+                          color: "rgb(var(--freehold-equity-color-rgb))",
+                          fontSize: "18px",
+                          fontWeight: 600,
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        {formattedValue}
+                      </div>
+                    </foreignObject>
+                  );
+                }}
+              />
+            </Bar>
             <Bar
               dataKey="fairholdLand"
               stackId="stack"
               fill="var(--color-fairholdLand)"
+              onMouseOver={() =>
+                setHoveredBar({ dataKey: "fairholdLand", value: Math.round(chartData[1].fairholdLand || 0 )})
+              }
+              onMouseOut={() => setHoveredBar(null)}
             >
               <LabelList
-                dataKey="fairholdLand"
+                dataKey="fairholdLandLabel"
                 position="center"
-                formatter={(value: number) => formatValueWithLabel(value, "fairholdLand")}
                 fill="white"
                 fontSize={12}
               />
@@ -181,13 +222,46 @@ const HowMuchFHCostBarChart: React.FC<StackedBarChartProps> = ({
               dataKey="fairholdHouse"
               stackId="stack"
               fill="var(--color-fairholdHouse)"
+              onMouseOver={() =>
+                setHoveredBar({ dataKey: "fairholdHouse", value: Math.round(chartData[1].fairholdHouse || 0 )})
+              }
+              onMouseOut={() => setHoveredBar(null)}
             >
               <LabelList
-                dataKey="fairholdHouse"
+                dataKey="fairholdHouseLabel"
                 position="center"
-                formatter={(value: number) => formatValueWithLabel(value, "fairholdHouse")}
                 fill="white"
                 fontSize={12}
+              />
+              <LabelList
+                dataKey="fairholdTotal"
+                position="top"
+                content={(props) => {
+                  if (!props.x || !props.y || !props.value) return null;
+                  
+                  const xPos = typeof props.x === 'number' ? props.x - 2 : 0;
+                  const yPos = typeof props.y === 'number' ? props.y - 30 : 0;
+                  const value = typeof props.value === 'number' ? props.value : parseFloat(props.value as string);
+                  const formattedValue = formatValue(value);
+
+                  return (
+                    <foreignObject x={xPos} y={yPos} width={100} height={30}>
+                      <div
+                        style={{
+                          position: "absolute",
+                          left: 0,
+                          top: 0,
+                          color: "rgb(var(--fairhold-equity-color-rgb))",
+                          fontSize: "18px",
+                          fontWeight: 600,
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        {formattedValue}
+                      </div>
+                    </foreignObject>
+                  );
+                }}
               />
             </Bar>
           </BarChart>
