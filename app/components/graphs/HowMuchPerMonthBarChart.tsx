@@ -72,6 +72,23 @@ const HowMuchPerMonthBarChart: React.FC<StackedBarChartProps> = ({
     },
   ];
 
+  const getLabelColor = (tenure: string): string => {
+    switch (tenure) {
+      case "Freehold":
+        return "rgb(var(--freehold-equity-color-rgb))";
+      case "Private Rent":
+        return "rgb(var(--private-rent-land-color-rgb))";
+      case "Fairhold - Land Purchase":
+        return "rgb(var(--fairhold-equity-color-rgb))";
+      case "Fairhold - Land Rent":
+        return "rgb(var(--fairhold-equity-color-rgb))";
+      case "Social Rent":
+        return "rgb(var(--social-rent-land-color-rgb))";
+      default:
+        return "#666";
+    }
+  }
+
   return (
     <Card className="h-full w-full">
       <CardContent className="h-full w-full p-0 md:p-4">
@@ -85,22 +102,7 @@ const HowMuchPerMonthBarChart: React.FC<StackedBarChartProps> = ({
               interval={0} 
               height={60} 
               tick={({ x, y, payload }) => {
-                const labelColor = (() => {
-                  switch (payload.value) {
-                    case "Freehold":
-                      return "rgb(var(--freehold-equity-color-rgb))";
-                    case "Private Rent":
-                      return "rgb(var(--private-rent-land-color-rgb))";
-                    case "Fairhold - Land Purchase":
-                      return "rgb(var(--fairhold-equity-color-rgb))";
-                    case "Fairhold - Land Rent":
-                      return "rgb(var(--fairhold-equity-color-rgb))";
-                    case "Social Rent":
-                      return "rgb(var(--social-rent-land-color-rgb))";
-                    default:
-                      return "#666";
-                  }
-                })();
+                const labelColor = getLabelColor(payload.value);
                 const label = (() => {
                   switch (payload.value) {
                     case "Freehold":
@@ -158,22 +160,7 @@ const HowMuchPerMonthBarChart: React.FC<StackedBarChartProps> = ({
                   const value = typeof props.value === 'number' ? props.value : parseFloat(props.value as string);
                   const formattedValue = formatValue(value);
 
-                  const labelColor = (() => {
-                    switch (chartData[props.index].tenure) {
-                      case "Freehold":
-                        return "rgb(var(--freehold-equity-color-rgb))";
-                      case "Private Rent":
-                        return "rgb(var(--private-rent-land-color-rgb))";
-                      case "Fairhold - Land Purchase":
-                        return "rgb(var(--fairhold-equity-color-rgb))";
-                      case "Fairhold - Land Rent":
-                        return "rgb(var(--fairhold-equity-color-rgb))";
-                      case "Social Rent":
-                        return "rgb(var(--social-rent-land-color-rgb))";
-                      default:
-                        return "#666";
-                    }
-                  })();
+                  const labelColor = getLabelColor(chartData[props.index].tenure);
 
                   return (
                     <foreignObject x={xPos} y={yPos} width={100} height={30}>
