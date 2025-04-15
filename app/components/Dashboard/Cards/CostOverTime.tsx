@@ -97,7 +97,7 @@ export const CostOverTime: React.FC<DashboardProps> = ({ processedData }) => {
         <Drawer
           buttonTitle="Find out more about how we calculated these"
           title="How we calculated these figures"
-          description={<ReactMarkdown className="space-y-4">{processedContent}</ReactMarkdown>}
+          description={<div className="space-y-4"><ReactMarkdown>{processedContent}</ReactMarkdown></div>}
         />
       </div>
     </GraphCard>
