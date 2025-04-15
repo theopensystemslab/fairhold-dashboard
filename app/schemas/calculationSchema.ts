@@ -46,14 +46,14 @@ export const calculationSchema = z
       )                                                      
       .transform((postcode): PostcodeScales => {
         if (isValidPostcode(postcode)) {
-          const parsed = parsePostcode(postcode);
+          const parsed = parsePostcode(postcode) as PostcodeScales;
           return {
-            outcode: parsed.outcode as string,
-            incode: parsed.incode as string,
-            area: parsed.area as string,
-            district: parsed.district as string,
-            sector: parsed.sector as string,
-            postcode: parsed.postcode as string
+            outcode: parsed.outcode,
+            incode: parsed.incode,
+            area: parsed.area,
+            district: parsed.district,
+            sector: parsed.sector,
+            postcode: parsed.postcode
           };
         } else {
           const outcodeUpper = postcode.toUpperCase();
@@ -69,7 +69,7 @@ export const calculationSchema = z
             district: district,
             sector: null,
             postcode: null
-          };
+          } as PostcodeScales;
         }
       }),
     houseBedrooms: z.coerce
