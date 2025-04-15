@@ -3,6 +3,7 @@ import React from "react";
 import ErrorBoundary from "../ErrorBoundary";
 import { Household } from "@/app/models/Household";
 import HowMuchFHCostBarChart from "./HowMuchFHCostBarChart";
+import HowMuchFHCostNotViableBarChart from "./HowMuchFHCostNotViableBarChart";
 
 interface HowMuchFHCostWrapperProps {
   household: Household;
@@ -52,6 +53,15 @@ const HowMuchFHCostWrapper: React.FC<HowMuchFHCostWrapperProps> = ({
 
   const formattedData = formatData(household);
 
+  if(household.property.landPrice < 0) {
+    return (
+      <ErrorBoundary>
+        <div className="h-full w-full">
+          <HowMuchFHCostNotViableBarChart data={formattedData} />
+        </div>
+      </ErrorBoundary>
+    );
+  }
   return (
     <ErrorBoundary>
       <div className="h-full w-full">
