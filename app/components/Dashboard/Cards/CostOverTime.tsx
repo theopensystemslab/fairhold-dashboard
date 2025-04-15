@@ -17,8 +17,8 @@ const TENURES = ['marketPurchase', 'marketRent', 'fairholdLandPurchase', 'fairho
 const TENURE_LABELS = {
   marketPurchase: 'Freehold',
   marketRent: 'Private rent',
-  fairholdLandPurchase: 'Fairhold Land Purchase',
-  fairholdLandRent: 'Fairhold Land Rent',
+  fairholdLandPurchase: 'Fairhold /LP',
+  fairholdLandRent: 'Fairhold /LR',
   socialRent: 'Social rent'
 }
 
