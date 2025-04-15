@@ -54,7 +54,7 @@ export const HowMuchPerMonth: React.FC<ProcessedDataOnly> = ({
         <Drawer
           buttonTitle="Find out more about how we estimated these"
           title="How we estimated these figures"
-          description={<ReactMarkdown className="space-y-4">{processedContent}</ReactMarkdown>}
+          description={<div className="space-y-4"><ReactMarkdown>{processedContent}</ReactMarkdown></div>}
         />
       </div>
     </GraphCard>
