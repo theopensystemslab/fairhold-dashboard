@@ -18,19 +18,32 @@ export interface LifetimeBarData {
   maintenance?: number;
 }
 
-const CostOverTimeTooltip = ({ active, payload, label }: TooltipProps<ValueType, NameType>) => {
+export const CostOverTimeTooltip = ({ active, payload, label }: TooltipProps<ValueType, NameType>) => {
   if (!active || !payload) return null;
 
   return (
-    <div className="rounded-lg border bg-background p-2 shadow-sm">
-      <div className="grid grid-cols-2 gap-2">
-        <div className="font-medium">Year {label}{parseInt(label as string) === 1 ? " (with deposit)" : ""}</div>
-        {payload.map((entry, index) => (
+    <div className="rounded-xl bg-[rgb(var(--text-default-rgb))] p-2 shadow-sm">
+      <div className="grid grid-cols-1">
+        <div className="font-bold text-[rgb(var(--button-background-rgb))]"> Year {label}</div>
+        {payload.map((entry, index) => {
+          let barLabel 
+          if (entry.name === "Equity" && payload[0].payload.year === 1) {
+            barLabel = "Deposit"
+          } else if (entry.name === "Equity") {
+            barLabel = "Repayment"
+          } else {
+            barLabel = entry.name
+          }
+          return (
           <div key={`tooltip-${entry.name}-${index}`} className="grid grid-cols-2 gap-4">
-            <div style={{ color: entry.color }}>{entry.name}:</div>
-            <div>£{entry.value ? entry.value.toLocaleString() : '0'}</div>
+            <div style={{ color: "rgb(var(--button-background-rgb))" }}>
+              {barLabel}
+            </div>
+            <div style={{ color: entry.color }}>
+              £{entry.value ? Math.round(parseFloat(entry.value)).toLocaleString() : '0'}</div>
           </div>
-        ))}
+          )
+  })}
       </div>
     </div>
   );
