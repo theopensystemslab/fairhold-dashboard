@@ -11,6 +11,7 @@ import {
   StyledChartContainer,
 } from "../ui/StyledChartContainer";
 import { formatValue } from "@/app/lib/format";
+import { Props } from "recharts/types/component/LabelList";
 
 type DataInput = {
   category: string;
@@ -23,16 +24,32 @@ type DataInput = {
   [key: string]: string | number;
 };
 
+interface CustomLabelListProps 
+  extends Props<{value: number}> {
+  index: number;
+  x: number;
+  y: number;
+  value: number;
+}
+
 interface StackedBarChartProps {
   data: DataInput[];
   maxY: number;
+}
+
+type ChartData = {
+  tenure: string;
+  land: number;
+  house: number;
+  monthly: number;
+  fill: string;
 }
 
 const HowMuchPerMonthBarChart: React.FC<StackedBarChartProps> = ({ 
   data, 
   maxY 
 }) => {
-  const chartData = [
+  const chartData:ChartData[] = [
     {
       tenure: "Freehold",
       land: data[0].marketPurchase,
@@ -153,14 +170,13 @@ const HowMuchPerMonthBarChart: React.FC<StackedBarChartProps> = ({
                 dataKey="monthly"
                 position="top"
                 content={(props) => {
-                  if (!props.x || !props.y || !props.value || props.index === undefined ) return null;
+                  const { x, y, value, index } = props as CustomLabelListProps;
 
-                  const xPos = typeof props.x === 'number' ? props.x - 2 : 0;
-                  const yPos = typeof props.y === 'number' ? props.y - 30 : 0;
-                  const value = typeof props.value === 'number' ? props.value : parseFloat(props.value as string);
+                  const xPos = x - 2;
+                  const yPos = y - 30;
                   const formattedValue = formatValue(value);
 
-                  const labelColor = getLabelColor(chartData[props.index].tenure);
+                  const labelColor = getLabelColor(chartData[index].tenure);
 
                   return (
                     <foreignObject x={xPos} y={yPos} width={100} height={30}>
