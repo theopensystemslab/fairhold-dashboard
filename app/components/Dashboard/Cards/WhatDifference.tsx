@@ -1,7 +1,7 @@
 import { Household } from "@/app/models/Household";
 import { Drawer } from "../../ui/Drawer";
 import GraphCard from "../../ui/GraphCard"
-import { SOCIAL_VALUE_YEARS, DEFAULT_INTEREST_RATE, DEFAULT_MORTGAGE_TERM, DEFAULT_INITIAL_DEPOSIT } from "@/app/models/constants";
+import { DEFAULT_INTEREST_RATE, DEFAULT_MORTGAGE_TERM, DEFAULT_INITIAL_DEPOSIT } from "@/app/models/constants";
 import ReactMarkdown from 'react-markdown';
 import explanationContent from '../Help/WhatDifference.md';
 import { DEFAULT_FORECAST_PARAMETERS } from "@/app/models/ForecastParameters";
@@ -20,64 +20,54 @@ type WhatDifferenceProps = {
   data: Household;
 }
 
-const Card: React.FC<React.PropsWithChildren<CardProps>> = ({ title, figure, subfigure, children }) => (
-  <div className="flex flex-col w-1/5">
-    <p className="text-lg font-semibold mb-0">{title}</p>
+const Card: React.FC<React.PropsWithChildren<CardProps>> = ({ title, children }) => (
+  <div className="px-4 py-4 flex flex-col flex-1 max-w-[300px] bg-white drop-shadow-md">
+      <p className="text-2xl font-semibold mb-0 text-[rgb(var(--text-default-rgb))]">{title}</p>
     <div className="text-sm">{children}</div>
-    <div className="flex items-center gap-2">
-      {figure &&
-        <p className="text-4xl text-green-500 font-semibold">{figure}</p>
-      }
-      {figure && subfigure && 
-        <p className="text-sm text-green-500 font-semibold">{subfigure}</p>
-      }
-    </div>
+  </div>
+)
+
+const SubCard: React.FC<React.PropsWithChildren<CardProps>> = ({ figure, title, children})  => (
+  <div className="py-2">
+    <p className="text-2xl text-[rgb(var(--fairhold-equity-color-rgb))] font-semibold">{figure}</p>
+    <p className="text-xl text-[rgb(var(--fairhold-equity-color-rgb))] font-semibold">{title}</p>
+    <div className="text-sm">{children}</div>
   </div>
 )
 
 const Highlight: React.FC<React.PropsWithChildren> = ({ children }) => (
-  <span className="text-green-500 font-semibold">{children}</span>
+  <span className="text-[rgb(var(--fairhold-equity-color-rgb))] font-semibold">{children}</span>
 )
 
 const Cards: React.FC<CardsProps> = ({ household }) => {
-  const moneySaved = Math.max(Math.round(household.socialValue.moneySaved),0).toLocaleString(); // Using .toLocaleString() to separate decimals and thousands correctly
-  const communityWealthDecade = Math.round(household.socialValue.communityWealthDecade).toLocaleString();
-  const embodiedCarbonSavings = household.socialValue.embodiedCarbonSavings.toFixed(1);
-  const savingsEnergyPoundsYearly = Math.round(household.socialValue.savingsEnergyPoundsYearly).toLocaleString()
-  const savingsToNHSPerHouseLifetime = Math.round(household.lifetime.lifetimeData[household.lifetime.lifetimeData.length - 1].healthSavings.nhsCumulative).toLocaleString();
-  const savingsToSocietyPerHouseLifetime = Math.round(household.lifetime.lifetimeData[household.lifetime.lifetimeData.length - 1].healthSavings.socialCumulative).toLocaleString();
-  const newBuildPrice = Math.round(household.property.newBuildPrice).toLocaleString();
-  const operationalCarbonSavingsYearly = household.socialValue.operationalCarbonSavingsYearly.toFixed(1);
-  const maintenanceCost = Math.round(household.lifetime.lifetimeData[0].maintenanceCost[household.property.maintenanceLevel]).toLocaleString();
+  const lifetime = household.lifetime.lifetimeData.length;
+  const moneySaved = `£${Math.max(Math.round(household.socialValue.moneySaved),0).toLocaleString()}`; // Using .toLocaleString() to separate decimals and thousands correctly
+  const communityWealthLifetime = `£${Math.round(household.socialValue.communityWealthLifetime).toLocaleString()}`;
+  const embodiedCarbonSavings = `${household.socialValue.embodiedCarbonSavings.toFixed(1)} TCO₂e`;
+  const savingsEnergyPoundsYearly = `£${Math.round(household.socialValue.savingsEnergyPoundsYearly).toLocaleString()}`
+  const savingsToNHSYear1 = `£${Math.round(household.lifetime.lifetimeData[0].healthSavings.nhs)}`;
+  const savingsToNHSPerHouseLifetime = `£${Math.round(household.lifetime.lifetimeData[household.lifetime.lifetimeData.length - 1].healthSavings.nhsCumulative).toLocaleString()}`;
+  const savingsToSocietyPerHouseLifetime = `£${Math.round(household.lifetime.lifetimeData[household.lifetime.lifetimeData.length - 1].healthSavings.socialCumulative).toLocaleString()}`;
+  const newBuildPrice = `£${Math.round(household.property.newBuildPrice).toLocaleString()}`;
+  const operationalCarbonSavingsYearly = `${household.socialValue.operationalCarbonSavingsYearly.toFixed(1)} TCO₂e`;
+  const maintenanceCost = `£${Math.round(household.lifetime.lifetimeData[0].maintenanceCost[household.property.maintenanceLevel]).toLocaleString()}`;
   const localJobs = household.socialValue.localJobs.toFixed(1);
 
-  return <div className="flex flex-wrap gap-6">
-    <Card title="Money saved" figure={`£${moneySaved}`}>
-      <p>If Fairhold Land Purchase, on housing costs over {DEFAULT_FORECAST_PARAMETERS.yearsForecast} years compared to conventional ownership</p>
+  return <div className="flex md:flex-row flex-col gap-6 w-3/4 justify-center py-4">
+    <Card title="Economy">
+      <SubCard figure={moneySaved} title="Savings on housing costs">Over {lifetime} years.</SubCard>
+      <SubCard figure={savingsToNHSPerHouseLifetime} title="Health savings">If moving from substandard accommodation, the home would save the NHS <Highlight>{savingsToNHSYear1}</Highlight> per year and the wider economy <Highlight>{savingsToSocietyPerHouseLifetime}</Highlight> over {lifetime} years.</SubCard>
+      <SubCard figure={savingsEnergyPoundsYearly} title="Energy savings">Every year, if new build or retrofitted.</SubCard>
     </Card>
-    <Card title="Community wealth">
-      <p>
-        If Fairhold Land Rent, every {SOCIAL_VALUE_YEARS} years the house would contribute{" "}
-        <Highlight>£{communityWealthDecade}</Highlight> to community infrastructure and services
-      </p>
+
+    <Card title="Community">
+      <SubCard figure={communityWealthLifetime} title="Community wealth">Contributions to community infrastructure and services over {lifetime} years, if using Fairhold Land Rent.</SubCard>
+      <SubCard figure={newBuildPrice} title="Local economy boost">If new build, the home would add <Highlight>{newBuildPrice}</Highlight> to the local economy, and <Highlight>{maintenanceCost}</Highlight> every year, supporting <Highlight>{localJobs}</Highlight> full-time equivalent jobs in total.</SubCard>
     </Card>
-    <Card title="Embodied carbon savings" figure={`${embodiedCarbonSavings} TCO₂e`}>
-      <p>If new build, compared to typical development</p>
-    </Card>
-    <Card title="Energy savings" figure={`£${savingsEnergyPoundsYearly}`} subfigure="per year">
-      <p>Every year, if new build or retrofitted</p>
-    </Card>
-    <Card title="Health savings">
-    <p>
-        If moving from substandard accommodation, Fairhold would save the NHS {" "}
-        <Highlight>£{savingsToNHSPerHouseLifetime}</Highlight> and society at large {" "}<Highlight>£{savingsToSocietyPerHouseLifetime}</Highlight> over {DEFAULT_FORECAST_PARAMETERS.yearsForecast} years
-      </p>
-    </Card>
-    <Card title="Local economy">
-      <p>If new build, the home would add <Highlight>£{newBuildPrice}</Highlight> to the local economy, and <Highlight>£{maintenanceCost}</Highlight> every year, supporting <Highlight>{localJobs}</Highlight> full-time-equivalent jobs in total</p>
-    </Card>
-    <Card title="Annual carbon savings" figure={`${operationalCarbonSavingsYearly} TCO₂e`}>
-      <p>If new build or retrofit, compared to average home</p>
+
+    <Card title="Environment">
+      <SubCard figure={embodiedCarbonSavings} title={"Embodied carbon savings"}>If new build, compared to typical development.</SubCard>
+      <SubCard figure={operationalCarbonSavingsYearly} title={"Annual carbon savings"}>If new build or retrofit, compared to the average home.</SubCard>
     </Card>
   </div>
 }
@@ -103,12 +93,12 @@ export const WhatDifference: React.FC<WhatDifferenceProps> = ({ data }) => {
   
   return (
     <GraphCard 
-      title="What difference would Fairhold make to me, my community, and the world?"
-      subtitle="Social, environmental and economic impacts"  
+      title="What impact would Fairhold have?"
+      subtitle="The wider benefits for people and planet."  
     >
-      <div className="flex flex-col h-full w-3/4 justify-between">
+      <div className="flex flex-col h-full w-full">
         <Cards household={data}/>
-        <Drawer
+        <Drawer 
           buttonTitle="Find out more about how we estimated these"
           title="How we estimated these figures"
           description={<ReactMarkdown className="space-y-4">{processedContent}</ReactMarkdown>}
