@@ -31,6 +31,14 @@ const TENURE_COLORS = {
   socialRent: 'rgb(var(--social-rent-land-color-rgb))'
 } as const;
 
+const TENURE_COLORS_LIGHT = {
+  marketPurchase: 'rgb(var(--freehold-detail-color-rgb))',
+  marketRent: 'rgb(var(--private-rent-detail-color-rgb))',
+  fairholdLandPurchase: 'rgb(var(--fairhold-detail-color-rgb))',
+  fairholdLandRent: 'rgb(var(--fairhold-detail-color-rgb))',
+  socialRent: 'rgb(var(--social-rent-detail-color-rgb))'
+} as const;
+
 export const CostOverTime: React.FC<DashboardProps> = ({ processedData }) => {
   const [selectedTenure, setSelectedTenure] = useState<TenureType>('marketPurchase');
   const [isMobile, setIsMobile] = useState(false);
@@ -98,6 +106,7 @@ export const CostOverTime: React.FC<DashboardProps> = ({ processedData }) => {
               tenures={[...TENURES]}
               tenureLabels={TENURE_LABELS}
               tenureColors={TENURE_COLORS}
+              tenureColorsLight={TENURE_COLORS_LIGHT}
             />
           ) : (
             TENURES.map((tenure) => (

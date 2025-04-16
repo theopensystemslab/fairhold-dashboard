@@ -6,6 +6,7 @@ interface TenureSelectorMobileProps {
     tenures: string[];
     tenureLabels: Record<string, string>;
     tenureColors: Record<string, string>; 
+    tenureColorsLight: Record<string, string>;
     className?: string;
 }
 
@@ -15,6 +16,7 @@ const TenureSelectorMobile: React.FC<TenureSelectorMobileProps> = ({
     tenures,
     tenureLabels,
     tenureColors,
+    tenureColorsLight,
     className,
 }) => {
     return (
@@ -22,10 +24,10 @@ const TenureSelectorMobile: React.FC<TenureSelectorMobileProps> = ({
         <select
           value={selectedTenure}
           onChange={(e) => onChange(e.target.value)}
-          className={`w-full px-4 py-2 rounded-xl border border-gray-300 text-sm transition-colors duration-200 ${className}`}
+          className={`w-full px-4 py-2 rounded-xl border border-gray-300 text-sm font-medium transition-colors duration-200 ${className}`}
           style={{
-            backgroundColor: tenureColors[selectedTenure],
-            color: 'white',
+            backgroundColor: tenureColorsLight[selectedTenure],
+            color: tenureColors[selectedTenure],
             appearance: 'none',
         }}
         >
@@ -34,7 +36,7 @@ const TenureSelectorMobile: React.FC<TenureSelectorMobileProps> = ({
                 value={tenure}
                 style={{
                     backgroundColor: 'white',
-                    color: 'black',
+                    color: 'rgb(var(--text-default-rgb))',
                   }}
                 >
               {tenureLabels[tenure]}
@@ -47,7 +49,7 @@ const TenureSelectorMobile: React.FC<TenureSelectorMobileProps> = ({
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
-            stroke="white"
+            stroke={tenureColors[selectedTenure]}
             >
             <path
                 strokeLinecap="round"
