@@ -49,7 +49,7 @@ export const HowMuchPerMonth: React.FC<ProcessedDataOnly> = ({
       title="How much would Fairhold cost me every month?"
       subtitle="Monthly cost of housing, excluding bills and maintenance"
     >
-      <div className="flex flex-col h-full md:w-3/4 w-full justify-between">
+      <div className="flex flex-col h-full w-full justify-between">
         <HowMuchPerMonthWrapper household={processedData} />
         <Drawer
           buttonTitle="Find out more about how we estimated these"
