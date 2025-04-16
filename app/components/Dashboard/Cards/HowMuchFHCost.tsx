@@ -26,7 +26,7 @@ export const HowMuchFHCost: React.FC<DashboardProps> = ({ data }) => {
               </span>
             }
           >
-      <div className="flex flex-col h-full md:w-3/4 w-full justify-between">
+      <div className="flex flex-col h-full w-full justify-between">
         <HowMuchFHCostWrapper household={data} />
         <Drawer
           buttonTitle="Find out more about how we estimated these"
