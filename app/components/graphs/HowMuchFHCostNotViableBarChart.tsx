@@ -1,6 +1,6 @@
 "use client";
 
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis, LabelList, Tooltip } from "recharts";
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis, LabelList, Tooltip, ReferenceLine } from "recharts";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   ChartConfig,
@@ -31,11 +31,13 @@ type DataInput = {
 
 interface StackedBarChartProps { // TODO: refactor so there is only one exported StackedBarChartProps type?
   data: DataInput[];
+  newBuildPrice: number;
   maxY: number;
 }
 
 const HowMuchFHCostBarChart: React.FC<StackedBarChartProps> = ({
   data,
+  newBuildPrice,
   maxY
 }) => {
 
@@ -210,6 +212,26 @@ const HowMuchFHCostBarChart: React.FC<StackedBarChartProps> = ({
                 }}
               />
             </Bar>
+            <ReferenceLine 
+                y={newBuildPrice} 
+                stroke="rgb(var(--text-default-rgb))" 
+                label={(props) => {
+                  const { viewBox } = props;
+                  return (
+                    <g>
+                      <text
+                        x={viewBox.width}  
+                        y={viewBox.y - 15}
+                        textAnchor="end"
+                        fill="rgb(var(--text-default-rgb))"
+                        fontSize={12}
+                      >
+                        Build cost
+                      </text>
+                    </g>
+                  );
+                }}
+              />    
           </BarChart>
         </StyledChartContainer>
       </CardContent>

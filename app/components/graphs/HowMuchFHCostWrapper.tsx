@@ -27,7 +27,8 @@ const HowMuchFHCostWrapper: React.FC<HowMuchFHCostWrapperProps> = ({
   const scaleFactor = 1.1;
   const marketPurchase = household.property.averageMarketPrice;
   const fairholdLandPurchase = household.property.depreciatedBuildPrice + household.tenure.fairholdLandPurchase.discountedLandPrice;
-  const highestValue = Math.max(marketPurchase, fairholdLandPurchase)
+  const newBuildPrice = household.property.newBuildPrice
+  const highestValue = Math.max(marketPurchase, fairholdLandPurchase, newBuildPrice) // we need newBuildPrice here to ensure the reference line when not viable can be shown
   const maxY = highestValue * scaleFactor
 
   const formatData = (household: Household) => {
@@ -62,7 +63,7 @@ const HowMuchFHCostWrapper: React.FC<HowMuchFHCostWrapperProps> = ({
     return (
       <ErrorBoundary>
         <div className="h-full w-full">
-          <HowMuchFHCostNotViableBarChart data={formattedData} maxY={maxY}/>
+          <HowMuchFHCostNotViableBarChart data={formattedData} maxY={maxY} newBuildPrice={newBuildPrice}/>
         </div>
       </ErrorBoundary>
     );
