@@ -1,6 +1,6 @@
 "use client";
 
-import { Bar, BarChart, CartesianGrid, XAxis, LabelList, Tooltip } from "recharts";
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis, LabelList, Tooltip } from "recharts";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   ChartConfig,
@@ -29,29 +29,15 @@ type DataInput = {
   [key: string]: string | number;
 };
 
-interface StackedBarChartProps {
+interface StackedBarChartProps { // TODO: refactor so there is only one exported StackedBarChartProps type?
   data: DataInput[];
+  maxY: number;
 }
 
 const HowMuchFHCostBarChart: React.FC<StackedBarChartProps> = ({
   data,
+  maxY
 }) => {
-    console.log({data})
-//   const [hoveredBar, setHoveredBar] = useState<{ dataKey: string; value: number } | null>(null);
-//   const CustomTooltip: React.FC<{ hoveredBar: { dataKey: string; value: number } | null }> = ({ hoveredBar }) => {
-//     if (!hoveredBar) return null;
-  
-//     const { dataKey, value } = hoveredBar;
-//     const label = dataKey.includes("Land") ? "Land" : "House";
-  
-//     return (
-//       <div className="bg-[rgb(var(--text-default-rgb))] p-2 shadow-sm rounded-xl">
-//         <div style={{ color: "rgb(var(--button-background-rgb))" }}>
-//           {label} £{value.toLocaleString()}
-//         </div>
-//       </div>
-//     );
-//   };
 
   const chartData = [
     {
@@ -73,8 +59,6 @@ const HowMuchFHCostBarChart: React.FC<StackedBarChartProps> = ({
       fill: "rgb(var(--fairhold-interest-color-rgb))",
     },
   ];
-
-  console.log({chartData})
 
   return (
     <Card className="h-full w-full">
@@ -131,6 +115,14 @@ const HowMuchFHCostBarChart: React.FC<StackedBarChartProps> = ({
               }}
             >
             </XAxis>
+
+            <YAxis
+              domain={[0, maxY]}
+              tick={false}
+              axisLine={false}
+              tickLine={false}
+              hide={true}
+              ></YAxis>
 
             <Tooltip isAnimationActive={false} />
             <Bar

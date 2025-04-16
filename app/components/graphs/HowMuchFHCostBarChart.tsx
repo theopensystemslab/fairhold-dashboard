@@ -1,6 +1,6 @@
 "use client";
 
-import { Bar, BarChart, CartesianGrid, XAxis, LabelList, Tooltip } from "recharts";
+import { Bar, BarChart, CartesianGrid, XAxis, LabelList, Tooltip, YAxis } from "recharts";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   ChartConfig,
@@ -38,10 +38,12 @@ type DataInput = {
 
 interface StackedBarChartProps {
   data: DataInput[];
+  maxY: number;
 }
 
 const HowMuchFHCostBarChart: React.FC<StackedBarChartProps> = ({
   data,
+  maxY,
 }) => {
   const [hoveredBar, setHoveredBar] = useState<{ dataKey: string; value: number } | null>(null);
   const CustomTooltip: React.FC<{ hoveredBar: { dataKey: string; value: number } | null }> = ({ hoveredBar }) => {
@@ -140,6 +142,13 @@ const HowMuchFHCostBarChart: React.FC<StackedBarChartProps> = ({
             >
             </XAxis>
 
+            <YAxis
+              domain={[0, maxY]}
+              tick={false}
+              tickLine={false}
+              axisLine={false}
+              hide={true}
+              ></YAxis>  
             <Tooltip content={<CustomTooltip hoveredBar={hoveredBar} />} isAnimationActive={false} />
             <Bar
               dataKey="freeholdLand"

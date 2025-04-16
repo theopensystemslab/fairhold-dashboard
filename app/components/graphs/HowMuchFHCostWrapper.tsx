@@ -24,6 +24,11 @@ const HowMuchFHCostWrapper: React.FC<HowMuchFHCostWrapperProps> = ({
   if (!household) {
     return <div>No household data available</div>;
   }
+  const scaleFactor = 1.1;
+  const marketPurchase = household.property.averageMarketPrice;
+  const fairholdLandPurchase = household.property.depreciatedBuildPrice + household.tenure.fairholdLandPurchase.discountedLandPrice;
+  const highestValue = Math.max(marketPurchase, fairholdLandPurchase)
+  const maxY = highestValue * scaleFactor
 
   const formatData = (household: Household) => {
     return [
@@ -57,7 +62,7 @@ const HowMuchFHCostWrapper: React.FC<HowMuchFHCostWrapperProps> = ({
     return (
       <ErrorBoundary>
         <div className="h-full w-full">
-          <HowMuchFHCostNotViableBarChart data={formattedData} />
+          <HowMuchFHCostNotViableBarChart data={formattedData} maxY={maxY}/>
         </div>
       </ErrorBoundary>
     );
@@ -65,7 +70,7 @@ const HowMuchFHCostWrapper: React.FC<HowMuchFHCostWrapperProps> = ({
   return (
     <ErrorBoundary>
       <div className="h-full w-full">
-        <HowMuchFHCostBarChart data={formattedData} />
+        <HowMuchFHCostBarChart data={formattedData} maxY={maxY} />
       </div>
     </ErrorBoundary>
   );
