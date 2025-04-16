@@ -115,7 +115,7 @@ const CalculatorInput = () => {
 
   if (view === "form") {
     return (
-      <div className="flex flex-col justify-center max-w-2xl mx-auto px-10">
+      <div className="flex flex-col justify-center w-full md:w-2/3 mx-auto px-10">
         <div className="h1-style text-lg md:text-xl lg:text-2xl">
           Calculate how much a Fairhold home might cost you
         </div>
