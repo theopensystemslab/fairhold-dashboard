@@ -3,6 +3,7 @@ import GraphCard from "../../ui/GraphCard";
 import CostOverTimeWrapper, { TenureType } from "../../graphs/CostOverTimeWrapper";
 import { Drawer } from "../../ui/Drawer";
 import TenureSelector from "../../ui/TenureSelector";
+import TenureSelectorMobile from "../../ui/TenureSelectorMobile";
 import { DashboardProps } from "../../ui/Dashboard";
 import { formatValue } from "@/app/lib/format";
 import ReactMarkdown from 'react-markdown';
@@ -11,7 +12,7 @@ import { DEFAULT_FORECAST_PARAMETERS } from "@/app/models/ForecastParameters";
 import { SOCIAL_RENT_ADJUSTMENT_FORECAST } from "@/app/models/constants";
 import { remark } from "remark";
 import { visit } from 'unist-util-visit';
-import type { TextNode } from "./types";
+import { TENURE_COLORS_DARK, TENURE_COLORS_LIGHT, TextNode } from "./types";
 
 const TENURES = ['marketPurchase', 'marketRent', 'fairholdLandPurchase', 'fairholdLandRent', 'socialRent'] as const
 const TENURE_LABELS = {
@@ -22,16 +23,11 @@ const TENURE_LABELS = {
   socialRent: 'Social rent'
 }
 
-const TENURE_COLORS = {
-  marketPurchase: 'rgb(var(--freehold-equity-color-rgb))',
-  marketRent: 'rgb(var(--private-rent-land-color-rgb))',
-  fairholdLandPurchase: 'rgb(var(--fairhold-equity-color-rgb))',
-  fairholdLandRent: 'rgb(var(--fairhold-equity-color-rgb))',
-  socialRent: 'rgb(var(--social-rent-land-color-rgb))'
-} as const;
+
 
 export const CostOverTime: React.FC<DashboardProps> = ({ processedData }) => {
   const [selectedTenure, setSelectedTenure] = useState<TenureType>('marketPurchase');
+  const [isMobile, setIsMobile] = useState(false);
   const lifetimeTotal = processedData.lifetime.lifetimeData[processedData.lifetime.lifetimeData.length - 1].cumulativeCosts[selectedTenure];
   const [processedContent, setProcessedContent] = useState('');
   
@@ -67,30 +63,51 @@ export const CostOverTime: React.FC<DashboardProps> = ({ processedData }) => {
     processMarkdown();
   }, [replacements]);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768); // Adjust breakpoint as needed
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
     <GraphCard
       title="How would the cost change over my life?"
       subtitle={
         <span>
           Over {DEFAULT_FORECAST_PARAMETERS.yearsForecast} years, the home would cost{' '}
-          <span style={{ color: TENURE_COLORS[selectedTenure] }}>
+          <span style={{ color: TENURE_COLORS_DARK[selectedTenure] }}>
             {formatValue(lifetimeTotal)}
           </span>
         </span>
       }
       >
       <div className="flex flex-col h-full w-full md:w-3/4 justify-between">
-        <div className="flex gap-2 mb-4">
-        {TENURES.map(tenure => (
-          <TenureSelector
-            key={tenure}
-            isSelected={selectedTenure === tenure}
-            onClick={() => setSelectedTenure(tenure)}
-            tenureType={tenure}
-          >
-            {TENURE_LABELS[tenure]}
-          </TenureSelector>
-        ))}
+        <div className="flex gap-2 mb-4">{isMobile ? (
+            <TenureSelectorMobile
+              selectedTenure={selectedTenure}
+              onChange={(tenure) => setSelectedTenure(tenure as TenureType)}
+              tenures={[...TENURES]}
+              tenureLabels={TENURE_LABELS}
+              tenureColorsDark={TENURE_COLORS_DARK}
+              tenureColorsLight={TENURE_COLORS_LIGHT}
+            />
+          ) : (
+            TENURES.map((tenure) => (
+              <TenureSelector
+                key={tenure}
+                isSelected={selectedTenure === tenure}
+                onClick={() => setSelectedTenure(tenure)}
+                tenureType={tenure}
+                tenureColorsDark={TENURE_COLORS_DARK}
+                tenureColorsLight={TENURE_COLORS_LIGHT}
+              >
+                {TENURE_LABELS[tenure]}
+              </TenureSelector>
+            ))
+          )}
         </div>
 
         <CostOverTimeWrapper 
