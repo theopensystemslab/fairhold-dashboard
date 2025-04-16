@@ -21,7 +21,7 @@ type WhatDifferenceProps = {
 }
 
 const Card: React.FC<React.PropsWithChildren<CardProps>> = ({ title, children }) => (
-  <div className="px-4 py-4 flex flex-col flex-1 max-w-[300px] bg-white drop-shadow-md">
+  <div className="px-4 py-4 flex flex-col flex-1 flex-grow bg-white drop-shadow-md">
       <p className="text-2xl font-semibold mb-0 text-[rgb(var(--text-default-rgb))]">{title}</p>
     <div className="text-sm">{children}</div>
   </div>
@@ -53,7 +53,7 @@ const Cards: React.FC<CardsProps> = ({ household }) => {
   const maintenanceCost = `£${Math.round(household.lifetime.lifetimeData[0].maintenanceCost[household.property.maintenanceLevel]).toLocaleString()}`;
   const localJobs = household.socialValue.localJobs.toFixed(1);
 
-  return <div className="flex md:flex-row flex-col gap-6 w-3/4 justify-center py-4">
+  return <div className="flex md:flex-row flex-col gap-6 w-full justify-between items-start py-4">
     <Card title="Economy">
       <SubCard figure={moneySaved} title="Savings on housing costs">Over {lifetime} years.</SubCard>
       <SubCard figure={savingsToNHSPerHouseLifetime} title="Health savings">If moving from substandard accommodation, the home would save the NHS <Highlight>{savingsToNHSYear1}</Highlight> per year and the wider economy <Highlight>{savingsToSocietyPerHouseLifetime}</Highlight> over {lifetime} years.</SubCard>
