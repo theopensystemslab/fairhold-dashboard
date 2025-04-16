@@ -3,6 +3,7 @@ import GraphCard from "../../ui/GraphCard";
 import CostOverTimeWrapper, { TenureType } from "../../graphs/CostOverTimeWrapper";
 import { Drawer } from "../../ui/Drawer";
 import TenureSelector from "../../ui/TenureSelector";
+import TenureSelectorMobile from "../../ui/TenureSelectorMobile";
 import { DashboardProps } from "../../ui/Dashboard";
 import { formatValue } from "@/app/lib/format";
 import ReactMarkdown from 'react-markdown';
@@ -32,6 +33,7 @@ const TENURE_COLORS = {
 
 export const CostOverTime: React.FC<DashboardProps> = ({ processedData }) => {
   const [selectedTenure, setSelectedTenure] = useState<TenureType>('marketPurchase');
+  const [isMobile, setIsMobile] = useState(false);
   const lifetimeTotal = processedData.lifetime.lifetimeData[processedData.lifetime.lifetimeData.length - 1].cumulativeCosts[selectedTenure];
   const [processedContent, setProcessedContent] = useState('');
   
@@ -67,6 +69,15 @@ export const CostOverTime: React.FC<DashboardProps> = ({ processedData }) => {
     processMarkdown();
   }, [replacements]);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768); // Adjust breakpoint as needed
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
     <GraphCard
       title="How would the cost change over my life?"
@@ -79,7 +90,7 @@ export const CostOverTime: React.FC<DashboardProps> = ({ processedData }) => {
         </span>
       }
       >
-      <div className="flex flex-col h-full w-full justify-between">
+      <div className="flex flex-col h-full w-full md:w-3/4 justify-between">
         <div className="flex gap-2 mb-4">
         {TENURES.map(tenure => (
           <TenureSelector
