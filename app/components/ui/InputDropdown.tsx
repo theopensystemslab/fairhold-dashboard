@@ -17,6 +17,7 @@ interface InputDropdownProps {
   onValueChange: (value: number) => void;
   options: readonly DropdownOption[];
   placeholder: string;
+  className?: string;
 }
 
 const InputDropdown: React.FC<InputDropdownProps> = ({
@@ -24,6 +25,7 @@ const InputDropdown: React.FC<InputDropdownProps> = ({
   onValueChange,
   options,
   placeholder,
+  className,
 }) => {
   return (
     <Select
@@ -31,7 +33,7 @@ const InputDropdown: React.FC<InputDropdownProps> = ({
       onValueChange={(val) => onValueChange(Number(val))}
     >
       <SelectTrigger
-        className={`dropdown-style ${value !== undefined ? "selected" : ""}`}
+        className={`dropdown-style ${value !== undefined ? "selected" : ""} ${className}`}
       >
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>

@@ -204,19 +204,30 @@ const CalculatorInput = () => {
               <FormField
                 control={form.control}
                 name="housePostcode"
-                render={({ field }) => (
+                render={({ field, fieldState }) => (
                   <FormItem>
                     <FormLabel className="h3-style text-sm lg:text-base ">
                       Postcode
                     </FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder="e.g. SE17 1PE"
-                        {...field}
-                        className="inputfield-style text-xs"
-                      />
+                      <div
+                        className={`relative ${
+                          fieldState.error ? "border-red-500 pl-4" : ""
+                        }`}
+                      >
+                        {fieldState.error && (
+                          <div className="absolute left-0 top-0 bottom-0 w-1 bg-red-500"></div>
+                        )}
+                        <Input
+                          placeholder="e.g. SE17 1PE"
+                          {...field}
+                          className={`inputfield-style text-xs ${
+                            fieldState.error ? "border-red-500" : ""
+                          }`}
+                        />
+                      </div>
                     </FormControl>
-                    <FormMessage  className="error-message-style" />
+                    <FormMessage className="error-message-style" />
                   </FormItem>
                 )}
               />
@@ -224,20 +235,32 @@ const CalculatorInput = () => {
               <FormField
                 control={form.control}
                 name="houseAge"
-                render={({ field }) => (
+                render={({ field, fieldState }) => (
                   <FormItem>
                     <FormLabel className="h3-style text-sm lg:text-base">
                       When was the house built?
                     </FormLabel>
                     <FormControl>
-                      <InputDropdown
-                        value={field.value}
-                        onValueChange={field.onChange}
-                        options={AGE_OPTIONS}
-                        placeholder="Select house age"
-                      />
+                      <div
+                        className={`relative ${
+                          fieldState.error ? "border-red-500 pl-4" : ""
+                        }`}
+                      >
+                        {fieldState.error && (
+                          <div className="absolute left-0 top-0 bottom-0 w-1 bg-red-500"></div>
+                        )}
+                        <InputDropdown
+                          value={field.value}
+                          onValueChange={field.onChange}
+                          options={AGE_OPTIONS}
+                          placeholder="Select house age"
+                          className={`inputfield-style text-xs ${
+                            fieldState.error ? "border-red-500" : ""
+                          }`}
+                        />
+                      </div>
                     </FormControl>
-                    <FormMessage  className="error-message-style" />
+                    <FormMessage className="error-message-style" />
                   </FormItem>
                 )}
               />
@@ -245,22 +268,33 @@ const CalculatorInput = () => {
               <FormField
                 control={form.control}
                 name="houseBedrooms"
-                render={({ field }) => (
+                render={({ field, fieldState }) => (
                   <FormItem>
-                    <FormLabel className="h3-style text-sm lg:text-base">
+                    <FormLabel className="h3-style text-sm lg:text-base ">
                       Number of bedrooms
                     </FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder=" e.g. 2 for two bedrooms"
-                        {...field}
-                        value={field.value ?? ""}
-                        className="inputfield-style text-xs"
-                      />
+                      <div
+                        className={`relative ${
+                          fieldState.error ? "border-red-500 pl-4" : ""
+                        }`}
+                      >
+                        {fieldState.error && (
+                          <div className="absolute left-0 top-0 bottom-0 w-1 bg-red-500"></div>
+                        )}
+                        <Input
+                          placeholder="e.g. 2 for two bedrooms"
+                          {...field}
+                          className={`inputfield-style text-xs ${
+                            fieldState.error ? "border-red-500" : ""
+                          }`}
+                        />
+                      </div>
                     </FormControl>
-                    <FormMessage  className="error-message-style" />
+                    <FormMessage className="error-message-style" />
                   </FormItem>
                 )}
+                
               />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
