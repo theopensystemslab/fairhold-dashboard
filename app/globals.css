@@ -134,6 +134,7 @@ body {
   transition:
     transform 0.3s ease,
     background-color 0.3s ease;
+  border-radius: 20px;
 }
 
 .calculate-button-style:hover {
