@@ -31,6 +31,14 @@ const TENURE_COLORS = {
   socialRent: 'rgb(var(--social-rent-land-color-rgb))'
 } as const;
 
+const TENURE_COLORS_LIGHT = {
+  marketPurchase: 'rgb(var(--freehold-detail-color-rgb))',
+  marketRent: 'rgb(var(--private-rent-detail-color-rgb))',
+  fairholdLandPurchase: 'rgb(var(--fairhold-detail-color-rgb))',
+  fairholdLandRent: 'rgb(var(--fairhold-detail-color-rgb))',
+  socialRent: 'rgb(var(--social-rent-detail-color-rgb))'
+} as const;
+
 export const CostOverTime: React.FC<DashboardProps> = ({ processedData }) => {
   const [selectedTenure, setSelectedTenure] = useState<TenureType>('marketPurchase');
   const [isMobile, setIsMobile] = useState(false);
@@ -91,17 +99,27 @@ export const CostOverTime: React.FC<DashboardProps> = ({ processedData }) => {
       }
       >
       <div className="flex flex-col h-full w-full md:w-3/4 justify-between">
-        <div className="flex gap-2 mb-4">
-        {TENURES.map(tenure => (
-          <TenureSelector
-            key={tenure}
-            isSelected={selectedTenure === tenure}
-            onClick={() => setSelectedTenure(tenure)}
-            tenureType={tenure}
-          >
-            {TENURE_LABELS[tenure]}
-          </TenureSelector>
-        ))}
+        <div className="flex gap-2 mb-4">{isMobile ? (
+            <TenureSelectorMobile
+              selectedTenure={selectedTenure}
+              onChange={(tenure) => setSelectedTenure(tenure as TenureType)}
+              tenures={[...TENURES]}
+              tenureLabels={TENURE_LABELS}
+              tenureColors={TENURE_COLORS}
+              tenureColorsLight={TENURE_COLORS_LIGHT}
+            />
+          ) : (
+            TENURES.map((tenure) => (
+              <TenureSelector
+                key={tenure}
+                isSelected={selectedTenure === tenure}
+                onClick={() => setSelectedTenure(tenure)}
+                tenureType={tenure}
+              >
+                {TENURE_LABELS[tenure]}
+              </TenureSelector>
+            ))
+          )}
         </div>
 
         <CostOverTimeWrapper 
