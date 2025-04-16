@@ -3,6 +3,7 @@ import React from "react";
 import ErrorBoundary from "../ErrorBoundary";
 import { Household } from "@/app/models/Household";
 import HowMuchFHCostBarChart from "./HowMuchFHCostBarChart";
+import HowMuchFHCostNotViableBarChart from "./HowMuchFHCostNotViableBarChart";
 
 interface HowMuchFHCostWrapperProps {
   household: Household;
@@ -23,6 +24,12 @@ const HowMuchFHCostWrapper: React.FC<HowMuchFHCostWrapperProps> = ({
   if (!household) {
     return <div>No household data available</div>;
   }
+  const scaleFactor = 1.1;
+  const marketPurchase = household.property.averageMarketPrice;
+  const fairholdLandPurchase = household.property.depreciatedBuildPrice + household.tenure.fairholdLandPurchase.discountedLandPrice;
+  const newBuildPrice = household.property.newBuildPrice
+  const highestValue = Math.max(marketPurchase, fairholdLandPurchase, newBuildPrice) // we need newBuildPrice here to ensure the reference line when not viable can be shown
+  const maxY = highestValue * scaleFactor
 
   const formatData = (household: Household) => {
     return [
@@ -52,10 +59,19 @@ const HowMuchFHCostWrapper: React.FC<HowMuchFHCostWrapperProps> = ({
 
   const formattedData = formatData(household);
 
+  if(household.property.landPrice < 0) {
+    return (
+      <ErrorBoundary>
+        <div className="h-full w-full">
+          <HowMuchFHCostNotViableBarChart data={formattedData} maxY={maxY} newBuildPrice={newBuildPrice}/>
+        </div>
+      </ErrorBoundary>
+    );
+  }
   return (
     <ErrorBoundary>
       <div className="h-full w-full">
-        <HowMuchFHCostBarChart data={formattedData} />
+        <HowMuchFHCostBarChart data={formattedData} maxY={maxY} />
       </div>
     </ErrorBoundary>
   );
