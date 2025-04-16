@@ -12,7 +12,7 @@ import { DEFAULT_FORECAST_PARAMETERS } from "@/app/models/ForecastParameters";
 import { SOCIAL_RENT_ADJUSTMENT_FORECAST } from "@/app/models/constants";
 import { remark } from "remark";
 import { visit } from 'unist-util-visit';
-import type { TextNode } from "./types";
+import { TENURE_COLORS_DARK, TENURE_COLORS_LIGHT, TextNode } from "./types";
 
 const TENURES = ['marketPurchase', 'marketRent', 'fairholdLandPurchase', 'fairholdLandRent', 'socialRent'] as const
 const TENURE_LABELS = {
@@ -23,21 +23,7 @@ const TENURE_LABELS = {
   socialRent: 'Social rent'
 }
 
-const TENURE_COLORS = {
-  marketPurchase: 'rgb(var(--freehold-equity-color-rgb))',
-  marketRent: 'rgb(var(--private-rent-land-color-rgb))',
-  fairholdLandPurchase: 'rgb(var(--fairhold-equity-color-rgb))',
-  fairholdLandRent: 'rgb(var(--fairhold-equity-color-rgb))',
-  socialRent: 'rgb(var(--social-rent-land-color-rgb))'
-} as const;
 
-const TENURE_COLORS_LIGHT = {
-  marketPurchase: 'rgb(var(--freehold-detail-color-rgb))',
-  marketRent: 'rgb(var(--private-rent-detail-color-rgb))',
-  fairholdLandPurchase: 'rgb(var(--fairhold-detail-color-rgb))',
-  fairholdLandRent: 'rgb(var(--fairhold-detail-color-rgb))',
-  socialRent: 'rgb(var(--social-rent-detail-color-rgb))'
-} as const;
 
 export const CostOverTime: React.FC<DashboardProps> = ({ processedData }) => {
   const [selectedTenure, setSelectedTenure] = useState<TenureType>('marketPurchase');
@@ -92,7 +78,7 @@ export const CostOverTime: React.FC<DashboardProps> = ({ processedData }) => {
       subtitle={
         <span>
           Over {DEFAULT_FORECAST_PARAMETERS.yearsForecast} years, the home would cost{' '}
-          <span style={{ color: TENURE_COLORS[selectedTenure] }}>
+          <span style={{ color: TENURE_COLORS_DARK[selectedTenure] }}>
             {formatValue(lifetimeTotal)}
           </span>
         </span>
@@ -105,7 +91,7 @@ export const CostOverTime: React.FC<DashboardProps> = ({ processedData }) => {
               onChange={(tenure) => setSelectedTenure(tenure as TenureType)}
               tenures={[...TENURES]}
               tenureLabels={TENURE_LABELS}
-              tenureColors={TENURE_COLORS}
+              tenureColorsDark={TENURE_COLORS_DARK}
               tenureColorsLight={TENURE_COLORS_LIGHT}
             />
           ) : (
@@ -115,6 +101,8 @@ export const CostOverTime: React.FC<DashboardProps> = ({ processedData }) => {
                 isSelected={selectedTenure === tenure}
                 onClick={() => setSelectedTenure(tenure)}
                 tenureType={tenure}
+                tenureColorsDark={TENURE_COLORS_DARK}
+                tenureColorsLight={TENURE_COLORS_LIGHT}
               >
                 {TENURE_LABELS[tenure]}
               </TenureSelector>

@@ -10,6 +10,7 @@ import { DEFAULT_FORECAST_PARAMETERS } from "@/app/models/ForecastParameters";
 import { remark } from "remark";
 import { visit } from 'unist-util-visit';
 import type { TextNode } from "./types";
+import { TENURE_COLORS_DARK, TENURE_COLORS_LIGHT } from "./types";
 
 const TENURES = ['fairholdLandPurchase', 'fairholdLandRent'] as const;
 type Tenure = (typeof TENURES)[number];
@@ -58,7 +59,9 @@ export const ResaleValue: React.FC<DashboardProps> = ({ data }) => {
               key={tenure} 
               isSelected={selectedTenure === tenure} 
               tenureType={tenure}
-              onClick={() => setSelectedTenure(tenure)} 
+              onClick={() => setSelectedTenure(tenure)}
+              tenureColorsDark={TENURE_COLORS_DARK}
+              tenureColorsLight={TENURE_COLORS_LIGHT}
             > 
               {`Fairhold ${tenure === 'fairholdLandPurchase' ? 'Land Purchase' : 'Land Rent'}`} 
             </TenureSelector> 
