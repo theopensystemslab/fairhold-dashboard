@@ -25,9 +25,9 @@ export const Drawer: React.FC<React.PropsWithChildren<Props>> = ({
   descriptionClassName = "text-left" 
 }) => (
   <Sheet>
-    <SheetTrigger className="text-gray-400 text-xs underline flex">
-      <QuestionMarkCircledIcon/>
-      <span className="ml-1">{buttonTitle}</span>
+    <SheetTrigger className="text-gray-400 text-xs flex items-start text-left">
+      <QuestionMarkCircledIcon className="flex-shrink-0 mt-0.5"/>
+      <span className="ml-1 underline">{buttonTitle}</span>
     </SheetTrigger>
     <SheetContent className="overflow-y-auto">
       <SheetHeader>
