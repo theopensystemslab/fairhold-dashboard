@@ -54,14 +54,14 @@ const Cards: React.FC<CardsProps> = ({ household }) => {
   const localJobs = household.socialValue.localJobs.toFixed(1);
 
   return <div className="flex md:flex-row flex-col gap-6 w-full justify-between items-start py-4">
-    <Card title="Economy">
+    <Card title="Household">
       <SubCard figure={moneySaved} title="Savings on housing costs">Over {lifetime} years.</SubCard>
-      <SubCard figure={savingsToNHSPerHouseLifetime} title="Health savings">If moving from substandard accommodation, the home would save the NHS <Highlight>{savingsToNHSYear1}</Highlight> per year and the wider economy <Highlight>{savingsToSocietyPerHouseLifetime}</Highlight> over {lifetime} years.</SubCard>
       <SubCard figure={savingsEnergyPoundsYearly} title="Energy savings">Every year, if new build or retrofitted.</SubCard>
     </Card>
 
     <Card title="Community">
       <SubCard figure={communityWealthLifetime} title="Community wealth">Contributions to community infrastructure and services over {lifetime} years, if using Fairhold Land Rent.</SubCard>
+      <SubCard figure={savingsToNHSPerHouseLifetime} title="Health savings">If moving from substandard accommodation, the home would save the NHS <Highlight>{savingsToNHSYear1}</Highlight> per year and the wider economy <Highlight>{savingsToSocietyPerHouseLifetime}</Highlight> over {lifetime} years.</SubCard>
       <SubCard figure={newBuildPrice} title="Local economy boost">If new build, the home would add <Highlight>{newBuildPrice}</Highlight> to the local economy, and <Highlight>{maintenanceCost}</Highlight> every year, supporting <Highlight>{localJobs}</Highlight> full-time equivalent jobs in total.</SubCard>
     </Card>
 
