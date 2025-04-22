@@ -73,16 +73,15 @@ const ResaleValueLineChart: React.FC<ResaleValueLineChartProps> = ({
           if (typeof x !== "number" || typeof y !== "number") return null;
 
           const label = chartConfig[dataKey].label;
+          const longestLabel = Math.max(chartConfig['none'].label.length, chartConfig['low'].label.length, chartConfig['medium'].label.length, chartConfig['high'].label.length)
           const paddingX = 8;
           const paddingY = 4;
           const fontSize = 12;
 
-          // Roughly estimate text width (monospace approximation for now)
-          const textWidth = label.length * 7;
-          const rectWidth = textWidth + paddingX * 2;
+          const rectWidth = longestLabel * 7 + paddingX * 2;
           const rectHeight = fontSize + paddingY * 2;
           return (
-            <g transform={`translate(${x + 10}, ${y - rectHeight / 2})`}>
+            <g transform={`translate(${x}, ${y - rectHeight / 2})`}>
             <rect
               width={rectWidth}
               height={rectHeight}
