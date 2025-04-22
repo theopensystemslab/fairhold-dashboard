@@ -1,36 +1,27 @@
 import React from "react";
-import { UseFormRegister } from "react-hook-form";
-import { Calculation } from "@/app/schemas/calculationSchema";
+import { Input } from "@/components/ui/input";
 
 interface InputFieldProps {
-  id: keyof Calculation;
   placeholder: string;
-  type: string;
-  register: UseFormRegister<Calculation>;
-  error?: string;
+  error?: boolean; 
+  className?: string;
 }
 
 const InputField: React.FC<InputFieldProps> = ({
-  id,
   placeholder,
-  register,
-  type,
   error,
+  className,
+  ...rest
 }) => {
   return (
-    <>
-      <input
-        className="mb-3 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500
-      disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none
-       rounded-md "
-        type={type}
+    <div className={`relative ${error ? "pl-4" : ""}`}>
+      {error && <div className="absolute left-0 top-0 bottom-0 w-1 bg-red-500"></div>}
+      <Input
         placeholder={placeholder}
-        {...register(id)}
-        id={id}
-        key={id}
+        className={`${className || ""} ${error ? "border-red-500" : ""}`}
+        {...rest}
       />
-      {error && <p className="text-red-500">{error}</p>}
-    </>
+    </div>
   );
 };
 export default InputField;

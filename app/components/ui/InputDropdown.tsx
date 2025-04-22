@@ -17,6 +17,8 @@ interface InputDropdownProps {
   onValueChange: (value: number) => void;
   options: readonly DropdownOption[];
   placeholder: string;
+  className?: string;
+  error?: boolean;
 }
 
 const InputDropdown: React.FC<InputDropdownProps> = ({
@@ -24,29 +26,34 @@ const InputDropdown: React.FC<InputDropdownProps> = ({
   onValueChange,
   options,
   placeholder,
+  className,
+  error,
 }) => {
   return (
-    <Select
-      value={value?.toString() || ""}
-      onValueChange={(val) => onValueChange(Number(val))}
-    >
-      <SelectTrigger
-        className={`dropdown-style ${value !== undefined ? "selected" : ""}`}
+    <div className={`relative ${error ? "pl-4" : ""}`}>
+      {error && <div className="absolute left-0 top-0 bottom-0 w-1 bg-red-500"></div>}
+      <Select
+        value={value?.toString() || ""}
+        onValueChange={(val) => onValueChange(Number(val))}
       >
-        <SelectValue placeholder={placeholder} />
-      </SelectTrigger>
-      <SelectContent>
-        {options.map((option) => (
-          <SelectItem
-            key={option.value}
-            value={option.value.toString()}
-            className="text-xs"
-          >
-            {option.label}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
+        <SelectTrigger
+          className={`dropdown-style ${value !== undefined ? "selected" : ""} ${className} ${error ? "border-red-500" : ""}`}
+        >
+          <SelectValue placeholder={placeholder} />
+        </SelectTrigger>
+        <SelectContent>
+          {options.map((option) => (
+            <SelectItem
+              key={option.value}
+              value={option.value.toString()}
+              className="text-xs"
+            >
+              {option.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
   );
 };
 

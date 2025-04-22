@@ -31,6 +31,7 @@ import { APIError } from "@/app/lib/exceptions";
 import { BackgroundAssumptions } from "./BackgroundAssumptions";
 import { MaintenanceExplainerDrawer } from "./MaintenanceExplainerDrawer";
 import InputDropdown from "./InputDropdown";
+import InputField from "./InputField";
 import { Separator } from "@/components/ui/separator"
 
 type View = "form" | "loading" | "dashboard";
@@ -204,19 +205,20 @@ const CalculatorInput = () => {
               <FormField
                 control={form.control}
                 name="housePostcode"
-                render={({ field }) => (
+                render={({ field, fieldState }) => (
                   <FormItem>
                     <FormLabel className="h3-style text-sm lg:text-base ">
                       Postcode
                     </FormLabel>
                     <FormControl>
-                      <Input
+                      <InputField
                         placeholder="e.g. SE17 1PE"
                         {...field}
-                        className="inputfield-style text-xs"
+                        error={!!fieldState.error}
+                        className={`inputfield-style text-xs`}
                       />
                     </FormControl>
-                    <FormMessage  className="error-message-style" />
+                    <FormMessage className="error-message-style" />
                   </FormItem>
                 )}
               />
@@ -224,20 +226,22 @@ const CalculatorInput = () => {
               <FormField
                 control={form.control}
                 name="houseAge"
-                render={({ field }) => (
+                render={({ field, fieldState }) => (
                   <FormItem>
                     <FormLabel className="h3-style text-sm lg:text-base">
                       When was the house built?
                     </FormLabel>
                     <FormControl>
-                      <InputDropdown
-                        value={field.value}
-                        onValueChange={field.onChange}
-                        options={AGE_OPTIONS}
-                        placeholder="Select house age"
-                      />
+                    <InputDropdown
+                      value={field.value}
+                      onValueChange={field.onChange}
+                      options={AGE_OPTIONS}
+                      placeholder="Select house age"
+                      error={!!fieldState.error}
+                      className="inputfield-style text-xs"
+                    />
                     </FormControl>
-                    <FormMessage  className="error-message-style" />
+                    <FormMessage className="error-message-style" />
                   </FormItem>
                 )}
               />
@@ -245,22 +249,23 @@ const CalculatorInput = () => {
               <FormField
                 control={form.control}
                 name="houseBedrooms"
-                render={({ field }) => (
+                render={({ field, fieldState }) => (
                   <FormItem>
-                    <FormLabel className="h3-style text-sm lg:text-base">
+                    <FormLabel className="h3-style text-sm lg:text-base ">
                       Number of bedrooms
                     </FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder=" e.g. 2 for two bedrooms"
-                        {...field}
-                        value={field.value ?? ""}
-                        className="inputfield-style text-xs"
+                      <InputField
+                      placeholder="e.g. 2 for two bedrooms"
+                      {...field}
+                      error={!!fieldState.error}
+                      className="inputfield-style text-xs"
                       />
                     </FormControl>
-                    <FormMessage  className="error-message-style" />
+                    <FormMessage className="error-message-style" />
                   </FormItem>
                 )}
+                
               />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
