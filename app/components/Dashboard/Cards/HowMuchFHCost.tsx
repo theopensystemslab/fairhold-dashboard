@@ -15,11 +15,11 @@ export const HowMuchFHCost: React.FC<DashboardProps> = ({ data }) => {
 
   const subtitle = data.property.landPrice < 0 ? (
     <span>
-      In this area, homes cost less than construction, so&nbsp;
+      Here, freehold homes are worth less than their build cost.&nbsp;
       <span style={{ color: "rgb(var(--not-viable-dark-color-rgb))" }}>
-       conventional development is unviable
+        Conventional development is unviable
       </span>
-      . While Fairhold is less essential here, £1 Fairhold plots could help revitalise the local economy.
+      &nbsp;and Fairhold homes may be hard to sell or finance for their full value. While less needed here, £1 Fairhold plots could help revive the local economy.
     </span>
   ) : (
     <span>
