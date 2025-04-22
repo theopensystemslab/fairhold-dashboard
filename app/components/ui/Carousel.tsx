@@ -43,7 +43,7 @@ export const Carousel: React.FC<CarouselProps> = ({ scrollContainerRef, currentP
       <div className={cn("invisible", { "visible": currentPage > 0 })}>
         <NavigationIcon Icon={ArrowUpIcon} onClick={handlePrevious} />
       </div>
-      <div className="flex flex-col items-center">
+      <div className="hidden md:flex flex-col items-center">
         {Array.from({ length: totalPages + 1 }, (_, index) => (
           <button key={index} onClick={() => scrollTo(index)}>
             <DotFilledIcon 
