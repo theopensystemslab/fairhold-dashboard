@@ -1,5 +1,5 @@
 import React from "react";
-import { LineChart, Line, CartesianGrid, XAxis, YAxis, TooltipProps } from "recharts";
+import { LineChart, Line, CartesianGrid, XAxis, YAxis, TooltipProps, LabelList } from "recharts";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   ChartConfig,
@@ -21,19 +21,19 @@ type CustomTooltipProps = TooltipProps<number, string> & {
 
 const chartConfig = {
   none: {
-    label: "No maintenance",
+    label: "None",
     color: "rgb(var(--fairhold-equity-color-rgb))", 
   },
   low: {
-    label: "Low maintenance",
+    label: "Low",
     color: "rgb(var(--fairhold-equity-color-rgb))",
   },
   medium: {
-    label: "Medium maintenance",
+    label: "Medium",
     color: "rgb(var(--fairhold-equity-color-rgb))",
   },
   high: {
-    label: "High maintenance",
+    label: "High",
     color: "rgb(var(--fairhold-equity-color-rgb))",
   },
 } satisfies ChartConfig;
@@ -65,7 +65,46 @@ const ResaleValueLineChart: React.FC<ResaleValueLineChartProps> = ({
       strokeWidth={2}
       strokeDasharray={dataKey === selectedMaintenance ? "0" : "5 5"}
       dot={false}
-    />
+      >
+      <LabelList
+        content={({ x, y, index }) => {
+          const isLast = index === data.length - 1;
+          if (!isLast) return null;
+          if (typeof x !== "number" || typeof y !== "number") return null;
+
+          const label = chartConfig[dataKey].label;
+          const paddingX = 8;
+          const paddingY = 4;
+          const fontSize = 12;
+
+          // Roughly estimate text width (monospace approximation for now)
+          const textWidth = label.length * 7;
+          const rectWidth = textWidth + paddingX * 2;
+          const rectHeight = fontSize + paddingY * 2;
+          return (
+            <g transform={`translate(${x + 10}, ${y - rectHeight / 2})`}>
+            <rect
+              width={rectWidth}
+              height={rectHeight}
+              rx={rectHeight / 2}
+              ry={rectHeight / 2}
+              fill={`var(--color-${dataKey})`}
+            />
+            <text
+              x={rectWidth / 2}
+              y={rectHeight / 2 + fontSize / 3}
+              fill="#fff"
+              fontSize={fontSize}
+              textAnchor="middle"
+              dominantBaseline={"top"}
+            >
+              {label}
+            </text>
+          </g>
+          );
+        }}
+      />
+    </Line>
   );
   const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
     if (!active || !payload || !payload.length) return null;
@@ -100,6 +139,7 @@ const ResaleValueLineChart: React.FC<ResaleValueLineChartProps> = ({
         <StyledChartContainer config={chartConfig}  className="h-full w-full">
           <LineChart
             data={data}
+            margin={{ top: 20, right: 70, left: 20, bottom: 20 }}
           >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis 
