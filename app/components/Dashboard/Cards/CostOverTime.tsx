@@ -27,7 +27,6 @@ const TENURE_LABELS = {
 
 export const CostOverTime: React.FC<DashboardProps> = ({ processedData }) => {
   const [selectedTenure, setSelectedTenure] = useState<TenureType>('marketPurchase');
-  const [isMobile, setIsMobile] = useState(false);
   const lifetimeTotal = processedData.lifetime.lifetimeData[processedData.lifetime.lifetimeData.length - 1].cumulativeCosts[selectedTenure];
   const [processedContent, setProcessedContent] = useState('');
   
@@ -63,15 +62,6 @@ export const CostOverTime: React.FC<DashboardProps> = ({ processedData }) => {
     processMarkdown();
   }, [replacements]);
 
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768); // Adjust breakpoint as needed
-    };
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
   return (
     <GraphCard
       title="How would the cost change over my life?"
@@ -85,30 +75,33 @@ export const CostOverTime: React.FC<DashboardProps> = ({ processedData }) => {
       }
       >
       <div className="flex flex-col h-full w-full md:w-3/4 justify-between">
-        <div className="flex gap-2 mb-4">{isMobile ? (
-            <TenureSelectorMobile
-              selectedTenure={selectedTenure}
-              onChange={(tenure) => setSelectedTenure(tenure as TenureType)}
-              tenures={[...TENURES]}
-              tenureLabels={TENURE_LABELS}
-              tenureColorsDark={TENURE_COLORS_DARK}
-              tenureColorsLight={TENURE_COLORS_LIGHT}
-            />
-          ) : (
-            TENURES.map((tenure) => (
-              <TenureSelector
-                key={tenure}
-                isSelected={selectedTenure === tenure}
-                onClick={() => setSelectedTenure(tenure)}
-                tenureType={tenure}
+        <div className="flex gap-2 mb-4">
+            <div className="block md:hidden w-full">
+              <TenureSelectorMobile
+                selectedTenure={selectedTenure}
+                onChange={(tenure) => setSelectedTenure(tenure as TenureType)}
+                tenures={[...TENURES]}
+                tenureLabels={TENURE_LABELS}
                 tenureColorsDark={TENURE_COLORS_DARK}
                 tenureColorsLight={TENURE_COLORS_LIGHT}
-              >
-                {TENURE_LABELS[tenure]}
-              </TenureSelector>
-            ))
-          )}
-        </div>
+              />
+            </div>
+
+            <div className="hidden md:flex gap-2">
+              {TENURES.map((tenure) => (
+                <TenureSelector
+                  key={tenure}
+                  isSelected={selectedTenure === tenure}
+                  onClick={() => setSelectedTenure(tenure)}
+                  tenureType={tenure}
+                  tenureColorsDark={TENURE_COLORS_DARK}
+                  tenureColorsLight={TENURE_COLORS_LIGHT}
+                >
+                  {TENURE_LABELS[tenure]}
+                </TenureSelector>
+              ))}
+            </div>
+          </div>
 
         <CostOverTimeWrapper 
           household={processedData}
