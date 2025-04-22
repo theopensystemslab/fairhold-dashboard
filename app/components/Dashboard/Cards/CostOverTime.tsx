@@ -76,6 +76,7 @@ export const CostOverTime: React.FC<DashboardProps> = ({ processedData }) => {
           <span style={{ color: TENURE_COLORS[selectedTenure] }}>
             {formatValue(lifetimeTotal)}
           </span>
+          .
         </span>
       }
       >
