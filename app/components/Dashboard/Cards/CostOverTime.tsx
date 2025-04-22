@@ -17,8 +17,8 @@ const TENURES = ['marketPurchase', 'marketRent', 'fairholdLandPurchase', 'fairho
 const TENURE_LABELS = {
   marketPurchase: 'Freehold',
   marketRent: 'Private rent',
-  fairholdLandPurchase: 'Fairhold Land Purchase',
-  fairholdLandRent: 'Fairhold Land Rent',
+  fairholdLandPurchase: 'Fairhold /LP',
+  fairholdLandRent: 'Fairhold /LR',
   socialRent: 'Social rent'
 }
 
@@ -35,12 +35,16 @@ export const CostOverTime: React.FC<DashboardProps> = ({ processedData }) => {
   const lifetimeTotal = processedData.lifetime.lifetimeData[processedData.lifetime.lifetimeData.length - 1].cumulativeCosts[selectedTenure];
   const [processedContent, setProcessedContent] = useState('');
   
+  const constructionPriceGrowthPerYear = DEFAULT_FORECAST_PARAMETERS.constructionPriceGrowthPerYear * 100;
+  const rentGrowthPerYear = DEFAULT_FORECAST_PARAMETERS.rentGrowthPerYear * 100;
+  const propertyPriceGrowthPerYear = DEFAULT_FORECAST_PARAMETERS.propertyPriceGrowthPerYear * 100;
+  const incomeGrowthPerYear = (DEFAULT_FORECAST_PARAMETERS.incomeGrowthPerYear * 100).toString();
   // We don't hard code the variables in markdown because then we'd have to maintain them in multiple places
   const replacements = useMemo(() => ({
-    constructionPriceGrowthPerYear: (DEFAULT_FORECAST_PARAMETERS.constructionPriceGrowthPerYear * 100).toString(),
-    rentGrowthPerYear: (DEFAULT_FORECAST_PARAMETERS.rentGrowthPerYear * 100).toString(),
-    propertyPriceGrowthPerYear: (DEFAULT_FORECAST_PARAMETERS.propertyPriceGrowthPerYear * 100).toString(),
-    incomeGrowthPerYear: (DEFAULT_FORECAST_PARAMETERS.incomeGrowthPerYear * 100).toString(),
+    constructionPriceGrowthPerYear: constructionPriceGrowthPerYear.toString(),
+    rentGrowthPerYear: rentGrowthPerYear.toString(),
+    propertyPriceGrowthPerYear: propertyPriceGrowthPerYear.toString(),
+    incomeGrowthPerYear: incomeGrowthPerYear.toString(),
     SOCIAL_RENT_ADJUSTMENT_FORECAST: (SOCIAL_RENT_ADJUSTMENT_FORECAST * 100).toString()
   }), []);
 
@@ -95,7 +99,7 @@ export const CostOverTime: React.FC<DashboardProps> = ({ processedData }) => {
         />
 
         <Drawer
-          buttonTitle="Find out more about how we calculated these"
+          buttonTitle={`Assuming ${constructionPriceGrowthPerYear}% house price inflation and ${propertyPriceGrowthPerYear}% general inflation. Find out more about how we calculated these`}
           title="How we calculated these figures"
           description={<div className="space-y-4"><ReactMarkdown>{processedContent}</ReactMarkdown></div>}
         />

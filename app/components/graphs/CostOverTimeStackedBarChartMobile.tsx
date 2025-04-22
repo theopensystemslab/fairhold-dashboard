@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { StyledChartContainer } from "../ui/StyledChartContainer";
 import { formatValue } from "@/app/lib/format";
 import { LifetimeBarData } from "./CostOverTimeStackedBarChart";
+import { CostOverTimeTooltip } from "./CostOverTimeStackedBarChart";
 
 interface CostOverTimeHorizontalChartProps {
   data: LifetimeBarData[];
@@ -68,9 +69,7 @@ const CostOverTimeHorizontalChart: React.FC<CostOverTimeHorizontalChartProps> = 
               tickLine={false}
             >
             </YAxis>
-            <Tooltip 
-              formatter={(value) => formatValue(value as number)}
-              labelFormatter={(label) => `Year ${label}`}
+            <Tooltip content={<CostOverTimeTooltip />}
             />
             
             {Object.entries(config.colors).map(([key, color]) => (
