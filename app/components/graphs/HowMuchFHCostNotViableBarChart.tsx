@@ -127,6 +127,27 @@ const HowMuchFHCostBarChart: React.FC<StackedBarChartProps> = ({
               ></YAxis>
 
             <Tooltip isAnimationActive={false} />
+            <ReferenceLine 
+                y={newBuildPrice} 
+                z={0}
+                stroke="rgb(var(--text-default-rgb))" 
+                label={(props) => {
+                  const { viewBox } = props;
+                  return (
+                    <g>
+                      <text
+                        x={viewBox.width}  
+                        y={viewBox.y - 15}
+                        textAnchor="end"
+                        fill="rgb(var(--text-default-rgb))"
+                        fontSize={12}
+                      >
+                        Build cost
+                      </text>
+                    </g>
+                  );
+                }}
+              />   
             <Bar
               dataKey="total"
               >
@@ -200,9 +221,12 @@ const HowMuchFHCostBarChart: React.FC<StackedBarChartProps> = ({
                           left: 0,
                           top: 0,
                           color: labelColor,
+                          backgroundColor: "rgb(var(--background-end-rgb))",
                           fontSize: "18px",
                           fontWeight: 600,
                           whiteSpace: "nowrap",
+                          padding: "2px 6px",
+                          zIndex: 10,
                         }}
                       >
                         {formattedValue}
@@ -212,26 +236,7 @@ const HowMuchFHCostBarChart: React.FC<StackedBarChartProps> = ({
                 }}
               />
             </Bar>
-            <ReferenceLine 
-                y={newBuildPrice} 
-                stroke="rgb(var(--text-default-rgb))" 
-                label={(props) => {
-                  const { viewBox } = props;
-                  return (
-                    <g>
-                      <text
-                        x={viewBox.width}  
-                        y={viewBox.y - 15}
-                        textAnchor="end"
-                        fill="rgb(var(--text-default-rgb))"
-                        fontSize={12}
-                      >
-                        Build cost
-                      </text>
-                    </g>
-                  );
-                }}
-              />    
+             
           </BarChart>
         </StyledChartContainer>
       </CardContent>
