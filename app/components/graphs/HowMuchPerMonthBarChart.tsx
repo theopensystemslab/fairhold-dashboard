@@ -11,6 +11,7 @@ import {
   StyledChartContainer,
 } from "../ui/StyledChartContainer";
 import { formatValue } from "@/app/lib/format";
+import { Props } from "recharts/types/component/LabelList";
 
 type DataInput = {
   category: string;
@@ -23,16 +24,32 @@ type DataInput = {
   [key: string]: string | number;
 };
 
+interface CustomLabelListProps 
+  extends Props<{value: number}> {
+  index: number;
+  x: number;
+  y: number;
+  value: number;
+}
+
 interface StackedBarChartProps {
   data: DataInput[];
   maxY: number;
+}
+
+type ChartData = {
+  tenure: string;
+  land: number;
+  house: number;
+  monthly: number;
+  fill: string;
 }
 
 const HowMuchPerMonthBarChart: React.FC<StackedBarChartProps> = ({ 
   data, 
   maxY 
 }) => {
-  const chartData = [
+  const chartData:ChartData[] = [
     {
       tenure: "Freehold",
       land: data[0].marketPurchase,
@@ -72,6 +89,23 @@ const HowMuchPerMonthBarChart: React.FC<StackedBarChartProps> = ({
     },
   ];
 
+  const getLabelColor = (tenure: string): string => {
+    switch (tenure) {
+      case "Freehold":
+        return "rgb(var(--freehold-equity-color-rgb))";
+      case "Private Rent":
+        return "rgb(var(--private-rent-land-color-rgb))";
+      case "Fairhold - Land Purchase":
+        return "rgb(var(--fairhold-equity-color-rgb))";
+      case "Fairhold - Land Rent":
+        return "rgb(var(--fairhold-equity-color-rgb))";
+      case "Social Rent":
+        return "rgb(var(--social-rent-land-color-rgb))";
+      default:
+        return "#666";
+    }
+  }
+
   return (
     <Card className="h-full w-full">
       <CardContent className="h-full w-full p-0 md:p-4">
@@ -85,6 +119,7 @@ const HowMuchPerMonthBarChart: React.FC<StackedBarChartProps> = ({
               interval={0} 
               height={60} 
               tick={({ x, y, payload }) => {
+                const labelColor = getLabelColor(payload.value);
                 const label = (() => {
                   switch (payload.value) {
                     case "Freehold":
@@ -110,8 +145,9 @@ const HowMuchPerMonthBarChart: React.FC<StackedBarChartProps> = ({
                                       y={i * 20}
                                       dy={10}
                                       textAnchor="middle"
-                                      fill="#666"
+                                      style={{ fill: labelColor }}
                                       fontSize="12px"
+                                      fontWeight={600}
                                     >
                                       {line}
                                     </text>
@@ -132,37 +168,51 @@ const HowMuchPerMonthBarChart: React.FC<StackedBarChartProps> = ({
               <Bar dataKey="monthly" strokeWidth={2} activeIndex={2}>
               <LabelList
                 dataKey="monthly"
-                position="center"
-                formatter={formatValue}
-                fill="white"
-                fontSize={12}
+                position="top"
+                content={(props) => {
+                  const { x, y, value, index } = props as CustomLabelListProps;
+
+                  const xPos = x - 2;
+                  const yPos = y - 30;
+                  const formattedValue = formatValue(value);
+
+                  const labelColor = getLabelColor(chartData[index].tenure);
+
+                  return (
+                    <foreignObject x={xPos} y={yPos} width={100} height={30}>
+                      <div
+                        style={{
+                          position: "absolute",
+                          left: 0,
+                          top: 0,
+                          color: labelColor,
+                          fontSize: "18px",
+                          fontWeight: 600,
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        {formattedValue}
+                      </div>
+                    </foreignObject>
+                  );
+                }}
               />
             </Bar>
             <ReferenceLine 
               y={data[0].affordabilityMonthly} 
-              stroke="rgb(var(--text-inaccessible-rgb))" 
-              strokeDasharray="6 6" 
+              stroke="rgb(var(--text-default-rgb))" 
               label={(props) => { // formatting here is to ensure line break
                 const { viewBox } = props;
                 return (
                   <g>
                     <text
-                      x={viewBox.width + 30}  
-                      y={viewBox.y - 30}
-                      textAnchor="end"
-                      fill="rgb(var(--text-inaccessible-rgb))"
-                      fontSize={12}
-                    >
-                      Affordability threshold
-                    </text>
-                    <text
-                      x={viewBox.width + 30} 
+                      x={viewBox.width} 
                       y={viewBox.y - 15} 
                       textAnchor="end"
-                      fill="rgb(var(--text-inaccessible-rgb))"
+                      fill="rgb(var(--text-default-rgb))"
                       fontSize={12}
                     >
-                      (35% median household income)
+                      Affordable
                     </text>
                   </g>
                 );
