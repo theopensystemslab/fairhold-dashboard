@@ -6,6 +6,8 @@ interface TenureSelectorProps {
   onClick?: () => void;
   className?: string;
   children: React.ReactNode;
+  tenureColorsDark: Record<string, string>; 
+  tenureColorsLight: Record<string, string>;
   tenureType: 'marketPurchase' | 'marketRent' | 'fairholdLandPurchase' | 'fairholdLandRent' | 'socialRent';
 }
 
@@ -14,25 +16,14 @@ const TenureSelector: React.FC<TenureSelectorProps> = ({
   onClick,
   className,
   children,
+  tenureColorsDark,
+  tenureColorsLight,
   tenureType
 }) => {
   const getColors = () => {
     if (!isSelected) return "bg-[rgb(var(--button-background-rgb))] text-gray-700 hover:bg-gray-200";
     
-    switch (tenureType) {
-      case 'marketPurchase':
-        return "bg-[rgb(var(--freehold-detail-color-rgb))] text-[rgb(var(--freehold-equity-color-rgb))]";
-      case 'marketRent':
-          return "bg-[rgb(var(--private-rent-detail-color-rgb))] text-[rgb(var(--private-rent-land-color-rgb))]";
-      case 'fairholdLandPurchase':
-        return "bg-[rgb(var(--fairhold-detail-color-rgb))] text-[rgb(var(--fairhold-equity-color-rgb))]";
-      case 'fairholdLandRent':
-          return "bg-[rgb(var(--fairhold-detail-color-rgb))] text-[rgb(var(--fairhold-equity-color-rgb))]";
-      case 'socialRent':
-        return "bg-[rgb(var(--social-rent-detail-color-rgb))] text-[rgb(var(--social-rent-land-color-rgb))]";
-      default:
-        return "bg-gray-100 text-gray-700";
-    }
+    return `bg-[${tenureColorsLight[tenureType]}] text-[${tenureColorsDark[tenureType]}] hover:bg-[${tenureColorsLight[tenureType]}]`;
   };
 
   return (
