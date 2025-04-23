@@ -106,27 +106,20 @@ const ResaleValueLineChart: React.FC<ResaleValueLineChartProps> = ({
   );
   const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
     if (!active || !payload || !payload.length) return null;
+  
+    // Find the entry that matches the selected maintenance level
+    const selectedEntry = payload.find(entry => entry.name === selectedMaintenance);
+    // console.log({payload})
+    console.log({selectedEntry})
+    
+    // Only show tooltip if we're hovering over the selected line
+    if (!selectedEntry) return null;
 
     return (
-      <div className="bg-white p-3 border rounded shadow">
-        <p className="font-medium mb-2">Year {label}</p>
-        {payload.map((entry) => (
-          <div key={entry.name} className="flex items-center gap-2 mb-1">
-            <svg width="20" height="2" className="flex-shrink-0">
-              <line
-                x1="0"
-                y1="1"
-                x2="20"
-                y2="1"
-                stroke={entry.stroke}
-                strokeWidth="2"
-                strokeDasharray={entry.name === selectedMaintenance ? "0" : "5 5"}
-              />
-            </svg>
-            <span>{chartConfig[entry.name as keyof typeof chartConfig].label}:</span>
-            <span className="font-medium">{formatValue(entry.value ?? 0)}</span>
-          </div>
-        ))}
+      <div className="rounded-xl bg-[rgb(var(--text-default-rgb))] p-1 shadow">
+        <span className="mb-2 text-white">Year {label} </span>
+        <span className="text-[rgb(var(--fairhold-interest-color-rgb))] font-medium">{formatValue(selectedEntry.value ?? 0)}</span>
+
       </div>
     );
   };
