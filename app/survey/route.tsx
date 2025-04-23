@@ -1,6 +1,3 @@
-// list records https://api.airtable.com/v0/{baseId}/{tableIdOrName}
-// get record https://api.airtable.com/v0/{baseId}/{tableIdOrName}/{recordId}
-
 import { NextResponse } from 'next/server';
 import Airtable from 'airtable';
 
