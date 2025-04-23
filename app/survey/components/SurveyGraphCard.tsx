@@ -6,7 +6,7 @@ type Props = React.PropsWithChildren<{
   title: string;
   subtitle?: React.ReactNode;
   results: SurveyResults[];
-  children: ReactElement;
+  children?: ReactElement;
 }>;
 
 const SurveyGraphCard: React.FC<Props> = ({ title, subtitle, children }) => {
