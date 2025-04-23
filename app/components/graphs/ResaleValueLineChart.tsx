@@ -22,19 +22,15 @@ type CustomTooltipProps = TooltipProps<number, string> & {
 const chartConfig = {
   none: {
     label: "None",
-    color: "rgb(var(--fairhold-equity-color-rgb))", 
   },
   low: {
     label: "Low",
-    color: "rgb(var(--fairhold-equity-color-rgb))",
   },
   medium: {
     label: "Medium",
-    color: "rgb(var(--fairhold-equity-color-rgb))",
   },
   high: {
     label: "High",
-    color: "rgb(var(--fairhold-equity-color-rgb))",
   },
 } satisfies ChartConfig;
 
@@ -61,9 +57,10 @@ const ResaleValueLineChart: React.FC<ResaleValueLineChartProps> = ({
     <Line
       type="monotone"
       dataKey={dataKey}
-      stroke={`var(--color-${dataKey})`}
+      stroke={dataKey === selectedMaintenance 
+        ? `rgb(var(--fairhold-equity-color-rgb))` 
+        : `rgb(var(--fairhold-interest-color-rgb))`}
       strokeWidth={2}
-      strokeDasharray={dataKey === selectedMaintenance ? "0" : "5 5"}
       dot={false}
       >
       <LabelList
@@ -87,7 +84,9 @@ const ResaleValueLineChart: React.FC<ResaleValueLineChartProps> = ({
               height={rectHeight}
               rx={rectHeight / 2}
               ry={rectHeight / 2}
-              fill={`var(--color-${dataKey})`}
+              fill={dataKey === selectedMaintenance 
+                ? `rgb(var(--fairhold-equity-color-rgb))` 
+                : `rgb(var(--fairhold-interest-color-rgb))`}
             />
             <text
               x={rectWidth / 2}
