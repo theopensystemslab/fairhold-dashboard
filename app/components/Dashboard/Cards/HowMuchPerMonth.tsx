@@ -47,7 +47,7 @@ export const HowMuchPerMonth: React.FC<ProcessedDataOnly> = ({
   return (
     <GraphCard
       title="How much would it cost every month?"
-      subtitle="Not including bills"
+      subtitle="Not including bills."
     >
       <div className="flex flex-col h-full w-full justify-between">
         <HowMuchPerMonthWrapper household={processedData} />

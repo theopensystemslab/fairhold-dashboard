@@ -50,7 +50,7 @@ export const ResaleValue: React.FC<DashboardProps> = ({ data }) => {
   return (
     <GraphCard
       title="How much could I sell it for?"
-      subtitle="Estimated sale price at any time"
+      subtitle="Estimated sale price at any time."
     >
       <div className="flex flex-col h-full w-full justify-between">
       <div className="flex gap-2 mb-4">
