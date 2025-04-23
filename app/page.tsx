@@ -4,7 +4,7 @@ import { Suspense } from "react";
 import { Inter } from "next/font/google";
 import { Footer } from "./components/ui/Footer";
 
-export const inter = Inter({
+const inter = Inter({
   weight: ["500", "600", "700", "800"],
   subsets: ["greek", "greek-ext", "latin", "latin-ext"],
 });

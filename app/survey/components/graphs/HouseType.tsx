@@ -4,6 +4,6 @@ import SurveyGraphCard from "@/app/survey/components/SurveyGraphCard";
 
 export const HouseType: React.FC<SurveyComponentProps> = ({ results }) => {
     return (
-        <SurveyGraphCard title="Desire home type" results={results}></SurveyGraphCard>
+        <SurveyGraphCard title="What type of home do you want to live in?" results={results}></SurveyGraphCard>
     )
 }

@@ -1,13 +1,28 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { Inter } from "next/font/google";
 import ErrorBoundary from '../components/ErrorBoundary';
-import { inter } from '../page';
 import { SurveyResults } from './types';
-
+import { Age } from './components/graphs/Age';
+import { AffordFairhold } from './components/graphs/AffordFairhold';
+import { AnyMeansTenureChoice } from './components/graphs/AnyMeansTenureChoice';
+import { Country } from './components/graphs/Country';
+import { CurrentMeansTenureChoice } from './components/graphs/CurrentMeansTenureChoice';
+import { HouseType } from './components/graphs/HouseType';
+import { HousingOutcomes } from './components/graphs/HousingOutcomes';
+import { LiveWith } from './components/graphs/LiveWith';
+import { Postcode } from './components/graphs/Postcode';
+import { SupportDevelopment } from './components/graphs/SupportDevelopment';
+import { SupportDevelopmentFactors } from './components/graphs/SupportDevelopmentFactors';
+import { SupportNewFairhold } from './components/graphs/SupportNewFairhold';
 // list records https://api.airtable.com/v0/{baseId}/{tableIdOrName}
 // get record https://api.airtable.com/v0/{baseId}/{tableIdOrName}/{recordId}
 
+const inter = Inter({
+  weight: ["500", "600", "700", "800"],
+  subsets: ["greek", "greek-ext", "latin", "latin-ext"],
+});
 
 export default function SurveyPage() {
   const [surveyData, setSurveyData] = useState<SurveyResults[]>([]);
@@ -42,22 +57,48 @@ export default function SurveyPage() {
 
   return (
     <ErrorBoundary>
-        <main className={inter.className}>
-          <div className="flex flex-col items-center justify-center h-screen bg-[rgb(var(--background-end-rgb))]">
-            <h1 className="h1-style">Survey Results</h1>
+        <main className={`${inter.className} p-4 min-h-screen bg-[rgb(var(--background-end-rgb))]`}>
+          <div className="flex flex-col m-4">
+            <h1 className="h1-style text-2xl md:text-4xl">Fairhold survey results</h1>
               <div className="flex flex-col gap-4 mt-6">
               {surveyData.length === 0 ? (
             <p>No survey responses found.</p>
           ) : (
             <div>
-            <div className="flex flex-col gap-2">
-                <h2 className="h2-style">Survey Question 1</h2>
-                <p>Survey Answer 1</p>
-            </div>
-            <div className="flex flex-col gap-2">
-                <h2 className="h2-style">Survey Question 2</h2>
-                <p>Survey Answer 2</p>
-            </div>
+              <h2 className="text-xl md:text-2xl">So far, {surveyData.length} people have responded</h2>
+              <div className="flex flex-col py-4">
+                <h3 className="text-xl font-medium">Who has responded?</h3>
+                <div className="flex flex-col md:flex-row">
+                  <Country results={surveyData} />
+                  <Age results={surveyData} />
+                  <Postcode results={surveyData} />
+                </div>
+              </div>
+
+              <div className="flex flex-col">
+                <h3 className="text-xl font-medium">Housing preferences</h3>
+                <div className="flex flex-col md:flex-row">
+                  <HouseType results={surveyData} />
+                  <LiveWith results={surveyData} />
+                </div>
+                <div className="flex flex-col md:flex-row">
+                  <HousingOutcomes results={surveyData} />
+                  <AffordFairhold results={surveyData} />
+                </div>
+                <div className="flex flex-col md:flex-row">
+                  <CurrentMeansTenureChoice results={surveyData} />
+                  <AnyMeansTenureChoice results={surveyData} />
+                </div>
+              </div>
+
+              <div className="flex flex-col">
+                <h3 className="text-xl font-medium">Attitudes towards development</h3>
+                <div className="flex flex-col md:flex-row">
+                  <SupportDevelopment results={surveyData} />
+                  <SupportNewFairhold results={surveyData} />
+                </div>
+                <SupportDevelopmentFactors results={surveyData} />
+              </div>
           </div>
           )}
             </div>
