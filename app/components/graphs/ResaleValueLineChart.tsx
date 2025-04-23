@@ -1,9 +1,8 @@
-import React from "react";
-import { LineChart, Line, CartesianGrid, XAxis, YAxis, TooltipProps, LabelList } from "recharts";
+import React, { useState } from "react";
+import { LineChart, Line, CartesianGrid, XAxis, YAxis, TooltipProps, Tooltip, LabelList } from "recharts";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   ChartConfig,
-  ChartTooltip,
 } from "@/components/ui/chart";
 import {
   StyledChartContainer,
@@ -53,6 +52,8 @@ const ResaleValueLineChart: React.FC<ResaleValueLineChartProps> = ({
   selectedMaintenance,
   maxY
 }) => {
+  const [hoveredLine, setHoveredLine] = useState<string | null>(null); // We use useState to figure out what line is being hovered over for the tooltip
+
   const renderLine = (dataKey: keyof Omit<DataPoint, "year">) => (
     <Line
       type="monotone"
@@ -62,6 +63,9 @@ const ResaleValueLineChart: React.FC<ResaleValueLineChartProps> = ({
         : `rgb(var(--fairhold-interest-color-rgb))`}
       strokeWidth={2}
       dot={false}
+      activeDot={false}
+      onMouseOver={() => setHoveredLine(dataKey)}
+      onMouseOut={() => setHoveredLine(null)}
       >
       <LabelList
         content={({ x, y, index }) => {
@@ -104,15 +108,12 @@ const ResaleValueLineChart: React.FC<ResaleValueLineChartProps> = ({
       />
     </Line>
   );
-  const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
-    if (!active || !payload || !payload.length) return null;
-  
+  const CustomTooltip = ({ active, payload, label, hoveredLine }: CustomTooltipProps & { hoveredLine: string | null }) => {
+    if (!active || !payload || !payload.length || hoveredLine !== selectedMaintenance) return null; 
+
     // Find the entry that matches the selected maintenance level
     const selectedEntry = payload.find(entry => entry.name === selectedMaintenance);
-    // console.log({payload})
-    console.log({selectedEntry})
     
-    // Only show tooltip if we're hovering over the selected line
     if (!selectedEntry) return null;
 
     return (
@@ -149,7 +150,11 @@ const ResaleValueLineChart: React.FC<ResaleValueLineChartProps> = ({
               width={40}
             >
             </YAxis>
-            <ChartTooltip content={<CustomTooltip />} />
+            <Tooltip
+              content={<CustomTooltip hoveredLine={hoveredLine} />}
+              isAnimationActive={false}
+              cursor={false}
+            />
             {renderLine("high")}
             {renderLine("medium")}
             {renderLine("low")}
