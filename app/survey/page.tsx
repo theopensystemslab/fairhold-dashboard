@@ -12,7 +12,6 @@ import { CurrentMeansTenureChoice } from './components/graphs/CurrentMeansTenure
 import { HouseType } from './components/graphs/HouseType';
 import { HousingOutcomes } from './components/graphs/HousingOutcomes';
 import { LiveWith } from './components/graphs/LiveWith';
-import { Postcode } from './components/graphs/Postcode';
 import { SupportDevelopment } from './components/graphs/SupportDevelopment';
 import { SupportDevelopmentFactors } from './components/graphs/SupportDevelopmentFactors';
 import { SupportNewFairhold } from './components/graphs/SupportNewFairhold';
@@ -71,7 +70,6 @@ export default function SurveyPage() {
                 <div className="flex flex-col md:flex-row">
                   <Country results={surveyData} />
                   <Age results={surveyData} />
-                  <Postcode results={surveyData} />
                 </div>
               </div>
 
