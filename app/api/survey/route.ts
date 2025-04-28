@@ -16,7 +16,7 @@ export async function GET() {
     try {
         const base = new Airtable({ apiKey }).base(baseId);
 
-        const records = await base(process.env.AIRTABLE_TABLE_ID!)
+        const records = await base(tableId)
         .select({})
         .all();
         
