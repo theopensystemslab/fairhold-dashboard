@@ -28,7 +28,9 @@
   --social-rent-land-color-rgb: 255 97 118;
   --social-rent-house-color-rgb: 242 160 171;
   --social-rent-detail-color-rgb: 242 196 202;
-  --error-text-rgb: 230 5 5;
+  --error-text-rgb: 181 31 20;
+  --not-viable-light-color-rgb: 251 164 164;
+  --not-viable-dark-color-rgb: 255 0 0;
 }
 
 @layer utilities {
