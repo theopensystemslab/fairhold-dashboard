@@ -37,8 +37,11 @@ export default function SurveyPage() {
         if (!response.ok) {
           throw new Error(`Error: ${response.status}`);
         }
-        
+
         const data = await response.json();
+        if (!data.formattedResults) {
+          throw new Error('Invalid API response structure');
+        }
         setSurveyData(data.formattedResults);
       } catch (err) {
         setError('Failed to fetch survey data');
