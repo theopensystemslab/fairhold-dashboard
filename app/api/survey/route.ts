@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 import Airtable from 'airtable';
+import { formatSurveyResults } from '../../survey/utils';
+import { SurveyResults } from '@/app/survey/types';
 
 export async function GET() {
     const apiKey = process.env.AIRTABLE_PAT;
@@ -19,13 +21,13 @@ export async function GET() {
         const records = await base(tableId)
         .select({})
         .all();
-        
-        const formattedRecords = records.map(record => ({
-        id: record.id,
-        ...record.fields
+
+        const results = records.map(record => ({
+          ...record.fields as SurveyResults,
         }));
-        
-        return NextResponse.json({ results: formattedRecords });
+
+        const formattedResults = formatSurveyResults(results)
+        return NextResponse.json({ formattedResults });
     } catch (error) {
         console.error('Error fetching Airtable data:', error);
         return NextResponse.json(
