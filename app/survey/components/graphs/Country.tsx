@@ -4,7 +4,6 @@ import SurveyGraphCard from "@/app/survey/components/SurveyGraphCard";
 import { PieChart, Pie, Legend } from "recharts";
 
 export const Country: React.FC<SurveyComponentProps> = ({ results }) => {
-    console.log(results.country)
     return (
         <SurveyGraphCard title="Which country?" results={results}>
             <PieChart>
