@@ -67,8 +67,9 @@ export type AffordFairholdResults = [
 ]
 
 export type CountryResults = {
-    [key: string]: number;
-}
+    name: string;
+    value: number;
+}[]
 
 export type HousingOutcomesResults = [
     { name: "Security from being evicted"; value: number;},
