@@ -74,15 +74,23 @@ const formatAnyMeansTenureChoice = (results: SurveyResults[]): SankeyResults => 
 };
 
 const formatCountryResults = (results: SurveyResults[]): CountryResults => {
-    const countryData: CountryResults = {};
+    const countryCount: {[key: string]: number} = {};
+    
     results.forEach((result) => { 
         const country = result.uk === "United Kingdom" ? result.uk : result.nonUk;
-        if (countryData[country]) {
-            countryData[country]++;
+        
+        if (countryCount[country]) {
+            countryCount[country]++;
         } else {
-            countryData[country] = 1;
+            countryCount[country] = 1;
         }
-    })
+    });
+    
+    const countryData: CountryResults = Object.keys(countryCount).map(country => ({
+        name: country,
+        value: countryCount[country]
+    }));
+    
     return countryData;
 }
 
