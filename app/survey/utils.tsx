@@ -51,19 +51,38 @@ const formatAgeData = (results: SurveyResults[]): AgeResults => {
 
 const formatAnyMeansTenureChoice = (results: SurveyResults[]): SankeyResults => { 
     // The answers to the two relevant questions are different (first is a select, second is ranked), so must be mapped
-        const mappedResults = results.map((result) => {
+    const mappedResults = results.map((result) => {
         const targetArray = result.anyMeansTenureChoice as string[]; 
         const firstChoice = targetArray[0]; // Since it's a ranked choice answer, we only want the first choice for the Sankey
-        const mappedChoice = firstChoice
-            ? (firstChoice.includes("Fairhold") ? "Fairhold" :
-               firstChoice.includes("Freehold") ? "Freehold" :
-               firstChoice.includes("Private rent") ? "Private rent" :
-               firstChoice.includes("Social rent") ? "Social rent" :
-               firstChoice.includes("Shared ownership") ? "Shared ownership" :
-               "Other") // Default to "Other" if no match
-            : "Other"; // Handle case where targetArray is empty
+        
+        // Add prefix to current tenure
+        const currentTenureWithPrefix = "Current: " + result.currentTenure;
+        
+        // Map and add prefix to ideal tenure
+        let mappedChoice = "Other";
+        if (firstChoice) {
+            if (firstChoice.includes("Fairhold")) {
+                mappedChoice = "Ideal: Fairhold";
+            } else if (firstChoice.includes("Freehold")) {
+                mappedChoice = "Ideal: Freehold";
+            } else if (firstChoice.includes("Private rent")) {
+                mappedChoice = "Ideal: Private rent";
+            } else if (firstChoice.includes("Social rent")) {
+                mappedChoice = "Ideal: Social rent";
+            } else if (firstChoice.includes("Shared ownership")) {
+                mappedChoice = "Ideal: Shared ownership";
+            } else {
+                mappedChoice = "Ideal: Other";
+            }
+        } else {
+            mappedChoice = "Ideal: Other";
+        }
 
-        return { ...result, anyMeansTenureChoice: [mappedChoice] }; 
+        return { 
+            ...result, 
+            currentTenure: currentTenureWithPrefix,
+            anyMeansTenureChoice: [mappedChoice] 
+        }; 
     });
     
     return createSankeyData(
@@ -87,32 +106,64 @@ const formatCountryResults = (results: SurveyResults[]): CountryResults => {
 }
 
 const formatCurrentMeansTenureChoice = (results: SurveyResults[]): SankeyResults => {
+    const mappedResults = results.map((result) => {
+        // Add prefix to current tenure
+        const currentTenureWithPrefix = "Current: " + result.currentTenure;
+        
+        // Add prefix to potential tenure with current means
+        const currentMeansTenureWithPrefix = "Potential: " + result.currentMeansTenureChoice;
+        
+        return {
+            ...result,
+            currentTenure: currentTenureWithPrefix,
+            currentMeansTenureChoice: currentMeansTenureWithPrefix
+        };
+    });
+    
     return createSankeyData(
-        results,
+        mappedResults,
         "currentTenure",
         "currentMeansTenureChoice"
     ) as SankeyResults;
 };
 
 const formatHouseTypeResults = (results: SurveyResults[]): SankeyResults => {
-// Map single string answers to predefined node names
+// Map single string answers to predefined node names with prefixes
 const mappedResults = results.map((result) => {
-    const houseType = result.idealHouseType;
-    let mappedChoice: string;
-
-    if (houseType.includes("studio")) {
-        mappedChoice = "Studio";
-    } else if (houseType.includes("flat")) {
-        mappedChoice = "Flat";
-    } else if (houseType.includes("house")) {
-        mappedChoice = "House";
-    } else if (houseType.includes("I don't mind")) {
-        mappedChoice = "I don't mind";
+    const currentHouseType = result.houseType;
+    const idealHouseType = result.idealHouseType;
+    
+    // Add mappings for current house type
+    let mappedCurrentChoice: string;
+    if (currentHouseType.includes("studio")) {
+        mappedCurrentChoice = "Current: Studio";
+    } else if (currentHouseType.includes("flat")) {
+        mappedCurrentChoice = "Current: Flat";
+    } else if (currentHouseType.includes("house")) {
+        mappedCurrentChoice = "Current: House";
     } else {
-        mappedChoice = "Other";
+        mappedCurrentChoice = "Current: Other";
+    }
+    
+    // Add mappings for ideal house type
+    let mappedIdealChoice: string;
+    if (idealHouseType.includes("studio")) {
+        mappedIdealChoice = "Ideal: Studio";
+    } else if (idealHouseType.includes("flat")) {
+        mappedIdealChoice = "Ideal: Flat";
+    } else if (idealHouseType.includes("house")) {
+        mappedIdealChoice = "Ideal: House";
+    } else if (idealHouseType.includes("I don't mind")) {
+        mappedIdealChoice = "Ideal: I don't mind";
+    } else {
+        mappedIdealChoice = "Ideal: Other";
     }
 
-    return { ...result, idealHouseType: mappedChoice };
+    return { 
+        ...result, 
+        houseType: mappedCurrentChoice,
+        idealHouseType: mappedIdealChoice 
+    };
 });
     
     return createSankeyData(
@@ -150,24 +201,44 @@ const formatHousingOutcomesResults = (results: SurveyResults[]): HousingOutcomes
 }
 
 const formatLiveWithResults = (results: SurveyResults[]): SankeyResults => {
-    // Map single string answers to predefined node names
+    // Map single string answers to predefined node names with prefixes
     const mappedResults = results.map((result) => {
-        const liveWith = result.liveWith; // Assuming this is a single string
-        let mappedChoice: string;
-
-        if (liveWith.includes("alone")) {
-            mappedChoice = "Alone";
-        } else if (liveWith.includes("housemates")) {
-            mappedChoice = "With friends";
-        } else if (liveWith.includes("partner")) {
-            mappedChoice = "With partner / family";
-        } else if (liveWith.includes("parents")) {
-            mappedChoice = "With parents or extended family";
+        const currentLiveWith = result.liveWith;
+        const idealLiveWith = result.idealLiveWith;
+        
+        // Add mappings for current living arrangement
+        let mappedCurrentChoice: string;
+        if (currentLiveWith.includes("alone")) {
+            mappedCurrentChoice = "Current: Alone";
+        } else if (currentLiveWith.includes("housemates")) {
+            mappedCurrentChoice = "Current: With friends";
+        } else if (currentLiveWith.includes("partner")) {
+            mappedCurrentChoice = "Current: With partner/family";
+        } else if (currentLiveWith.includes("parents")) {
+            mappedCurrentChoice = "Current: With parents";
         } else {
-            mappedChoice = "Other"; // Default to "Other" if no match
+            mappedCurrentChoice = "Current: Other";
+        }
+        
+        // Add mappings for ideal living arrangement
+        let mappedIdealChoice: string;
+        if (idealLiveWith.includes("alone")) {
+            mappedIdealChoice = "Ideal: Alone";
+        } else if (idealLiveWith.includes("housemates")) {
+            mappedIdealChoice = "Ideal: With friends";
+        } else if (idealLiveWith.includes("partner")) {
+            mappedIdealChoice = "Ideal: With partner/family";
+        } else if (idealLiveWith.includes("parents")) {
+            mappedIdealChoice = "Ideal: With parents";
+        } else {
+            mappedIdealChoice = "Ideal: Other";
         }
 
-        return { ...result, idealHouseType: mappedChoice };
+        return { 
+            ...result, 
+            liveWith: mappedCurrentChoice,
+            idealLiveWith: mappedIdealChoice 
+        };
     });
     
     return createSankeyData(
