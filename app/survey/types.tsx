@@ -49,89 +49,89 @@ export type SankeyResults =  {
     links: { source: number; target: number; value: number }[];
 };
 
-export type AgeResults = {
-    "0-18": number;
-    "19-24": number;
-    "25-34": number;   
-    "35-44": number;
-    "45-54": number;
-    "55-64": number;
-    "65+": number;
-}
+export type AgeResults = [
+    { name: "0-18"; value: number; },
+    { name: "19-24"; value: number; },
+    { name: "25-34"; value: number; },
+    { name: "35-44"; value: number; },
+    { name: "45-54"; value: number; },
+    { name: "55-64"; value: number; },
+    { name: "65+"; value: number; }
+]
 
-export type AffordFairholdResults = {
-    "Yes": number;
-    "Yes, but Fairhold Land Rent only, because the deposit is lower": number;
-    "No, it's still too expensive": number;
-    "I don't know": number;
-}
+export type AffordFairholdResults = [
+    { name: "Yes"; value: number;},
+    { name: "Yes, but Fairhold Land Rent only, because the deposit is lower"; value: number;},
+    { name: "No, it's still too expensive"; value: number;},
+    { name: "I don't know"; value: number;}
+]
 
 export type CountryResults = {
     [key: string]: number;
 }
 
-export type HousingOutcomesResults = {
-    "Security from being evicted": number;
-    "Lower cost": number;
-    "Proximity to work": number;
-    "Proximity to friends and family": number;
-    "Proximity to good schools": number;
-    "To get my money back when I sell": number;
-    "To retire with low outgoings": number;
-    "Lower energy bills": number;
-    "Freedom to improve or repair my home myself": number;
-    "Home kept in good state of repair by others": number;
-    "Quality of space": number;
-    "More space": number;
-    "Sense of community / shared spaces within the neighbourhood": number;
-    "Better public transport connections": number;
-    "Walkable neighbourhood": number;
-    "Lower crime / antisocial behaviour": number;
-    "Being able to easily move home whenever I want to": number;
-    "My home to increase in value as an investment": number;
-    "Rent as a source of income": number;
-    "Freedom from stress or exploitation (for example, debt, maintenance responsibilities, toxic relationships, bad landlords, or exploitative management companies)": number;
-    "None of these. My current situation is fine.": number;
-    "Other": number;
-}
+export type HousingOutcomesResults = [
+    { name: "Security from being evicted"; value: number;},
+    { name: "Lower cost"; value: number;},
+    { name: "Proximity to work"; value: number;},
+    { name: "Proximity to friends and family"; value: number;},
+    { name: "Proximity to good schools"; value: number;},
+    { name: "To get my money back when I sell"; value: number;},
+    { name: "To retire with low outgoings"; value: number;},
+    { name: "Lower energy bills"; value: number;},
+    { name: "Freedom to improve or repair my home myself"; value: number;},
+    { name: "Home kept in good state of repair by others"; value: number;},
+    { name: "Quality of space"; value: number;},
+    { name: "More space"; value: number;},
+    { name: "Sense of community / shared spaces within the neighbourhood"; value: number;},
+    { name: "Better public transport connections"; value: number;},
+    { name: "Walkable neighbourhood"; value: number;},
+    { name: "Lower crime / antisocial behaviour"; value: number;},
+    { name: "Being able to easily move home whenever I want to"; value: number;},
+    { name: "My home to increase in value as an investment"; value: number;},
+    { name: "Rent as a source of income"; value: number;},
+    { name: "Freedom from stress or exploitation (for example, debt, maintenance responsibilities, toxic relationships, bad landlords, or exploitative management companies)"; value: number;},
+    { name: "None of these. My current situation is fine."; value: number;},
+    { name: "Other"; value: number;}
+]
 
-export type SupportDevelopmentResults = {
-    "Strongly supportive of any development": number;
-    "Quite supportive of most development": number;
-    "It depends": number;
-    "Quite opposed to most development": number;
-    "Strongly opposed to any development": number;
-    "Don't know": number;
-}
+export type SupportDevelopmentResults = [
+    { name: "Strongly supportive of any development"; value: number;},
+    { name: "Quite supportive of most development"; value: number;},
+    { name: "It depends"; value: number;},
+    { name: "Quite opposed to most development"; value: number;},
+    { name: "Strongly opposed to any development"; value: number;},
+    { name: "Don't know"; value: number;}
+]
 
-export type SupportDevelopmentFactorsResults = {
-    "Homes that are affordable to keyworkers": number;
-    "Affordable tenure homes for low-income families": number;
-    "Priority given to local residents and their families (to allow downsizing, for example)": number;
-    "Community-led or self-build development (designed for people, not profit)": number;
-    "Council or social housing provider led (designed for people, not profit)": number;
-    "Beautiful design that complements and improves the local character": number;
-    "Traditional design, with a heritage character": number;
-    "Well-supported by new infrastructure (eg. public transport, schools, GPs, parks)": number;
-    "Walkable streets with trees and green spaces": number;
-    "Includes shops, cafés and community facilities": number;
-    "Small-scale development spread across the area": number;
-    "Infill development on gap sites, increasing the density of existing neighbourhoods": number;
-    "Only build new neighbourhoods on sites away from existing homes": number;  
-    "Environmentally sustainable, zero-carbon homes, protecting biodiversity": number;
-    "Procured locally, sustaining local jobs": number;
-    "Includes a financial return for me and my family": number;
-    "Includes a financial return for the local community": number;
-    "No new build. We should only create new homes by converting existing buildings or bringing empty homes back into use.": number;
-    "None of these, there shouldn't be any new homes": number;
-    "Other": number;
-}
+export type SupportDevelopmentFactorsResults = [
+    { name: "Homes that are affordable to keyworkers"; value: number;},
+    { name: "Affordable tenure homes for low-income families"; value: number;},
+    { name: "Priority given to local residents and their families (to allow downsizing, for example)"; value: number;},
+    { name: "Community-led or self-build development (designed for people, not profit)"; value: number;},
+    { name: "Council or social housing provider led (designed for people, not profit)"; value: number;},
+    { name: "Beautiful design that complements and improves the local character"; value: number;},
+    { name: "Traditional design, with a heritage character"; value: number;},
+    { name: "Well-supported by new infrastructure (eg. public transport, schools, GPs, parks)"; value: number;},
+    { name: "Walkable streets with trees and green spaces"; value: number;},
+    { name: "Includes shops, cafés and community facilities"; value: number;},
+    { name: "Small-scale development spread across the area"; value: number;},
+    { name: "Infill development on gap sites, increasing the density of existing neighbourhoods"; value: number;},
+    { name: "Only build new neighbourhoods on sites away from existing homes"; value: number;},
+    { name: "Environmentally sustainable, zero-carbon homes, protecting biodiversity"; value: number;},
+    { name: "Procured locally, sustaining local jobs"; value: number;},
+    { name: "Includes a financial return for me and my family"; value: number;},
+    { name: "Includes a financial return for the local community"; value: number;},
+    { name: "No new build. We should only create new homes by converting existing buildings or bringing empty homes back into use."; value: number;},
+    { name: "None of these, there shouldn't be any new homes"; value: number;},
+    { name: "Other"; value: number;}
+]
 
-export type SupportNewFairholdResults = {
-    "Strongly support": number;
-    "Somewhat support": number;
-    "Neither support nor oppose": number;
-    "Somewhat oppose": number;
-    "Strongly oppose": number;
-    "Other": number;
-}
+export type SupportNewFairholdResults = [
+    { name: "Strongly support"; value: number;},
+    { name: "Somewhat support"; value: number;},
+    { name: "Neither support nor oppose"; value: number;},
+    { name: "Somewhat oppose"; value: number;},
+    { name: "Strongly oppose"; value: number;},
+    { name: "Other"; value: number;},
+]

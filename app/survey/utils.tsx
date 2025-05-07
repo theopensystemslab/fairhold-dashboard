@@ -27,13 +27,14 @@ export const formatSurveyResults = (results: SurveyResults[]): FormattedSurveyRe
     };
     return formattedResults;
 }
+
 const formatAffordFairhold = (results: SurveyResults[]): AffordFairholdResults => {
     return createPieOrBarChartData(results, "affordFairhold", [
         "Yes",
         "Yes, but Fairhold Land Rent only, because the deposit is lower",
         "No, it's still too expensive",
         "I don't know",
-    ])
+    ]) as AffordFairholdResults;
 };
 
 const formatAgeData = (results: SurveyResults[]): AgeResults => {
@@ -45,7 +46,7 @@ const formatAgeData = (results: SurveyResults[]): AgeResults => {
         "45-54",
         "55-64",
         "65+",
-    ])
+    ]) as AgeResults;
 }
 
 const formatAnyMeansTenureChoice = (results: SurveyResults[]): SankeyResults => { 
@@ -145,7 +146,7 @@ const formatHousingOutcomesResults = (results: SurveyResults[]): HousingOutcomes
         "Freedom from stress or exploitation (for example, debt, maintenance responsibilities, toxic relationships, bad landlords, or exploitative management companies)",
         "None of these. My current situation is fine.",
         "Other",
-    ])
+    ]) as HousingOutcomesResults
 }
 
 const formatLiveWithResults = (results: SurveyResults[]): SankeyResults => {
@@ -184,7 +185,7 @@ const formatSupportDevelopmentResults = (results: SurveyResults[]): SupportDevel
         "Quite opposed to most development",
         "Strongly opposed to any development",
         "Don't know",
-    ])
+    ]) as SupportDevelopmentResults
 }
 
 const formatSupportDevelopmentFactorsResults = (results: SurveyResults[]): SupportDevelopmentFactorsResults => {
@@ -209,7 +210,7 @@ const formatSupportDevelopmentFactorsResults = (results: SurveyResults[]): Suppo
         "No new build. We should only create new homes by converting existing buildings or bringing empty homes back into use.",
         "None of these, there shouldn't be any new homes",
         "Other"
-    ])
+    ]) as SupportDevelopmentFactorsResults
 }
     
 
@@ -221,14 +222,14 @@ const formatSupportNewFairholdResults = (results: SurveyResults[]): SupportNewFa
         "Somewhat oppose",
         "Strongly oppose",
         "Other",
-    ])
+    ]) as SupportNewFairholdResults
 }
 
 const createPieOrBarChartData = <T extends string>(
     results: SurveyResults[],
     key: keyof SurveyResults,
     predefinedKeys: T[]
-): Record<T, number> => {
+): { name: T; value: number }[] => {
     const data: Record<T, number> = Object.fromEntries(predefinedKeys.map((k) => [k, 0])) as Record<T, number>;
 
     for (const result of results) {
@@ -238,7 +239,10 @@ const createPieOrBarChartData = <T extends string>(
         }
     }
 
-    return data;
+    return predefinedKeys.map((key) => ({
+        name: key,
+        value: data[key],
+    }));
 };
 
 const createSankeyData = (
