@@ -4,6 +4,7 @@ import ResaleValueWrapper from "../../graphs/ResaleValueWrapper";
 import { Drawer } from "../../ui/Drawer";
 import { Household } from "@/app/models/Household";
 import TenureSelector from "../../ui/TenureSelector";
+import TenureSelectorMobile from "../../ui/TenureSelectorMobile";
 import ReactMarkdown from 'react-markdown';
 import explanationContent from '../Help/ResaleValue.md';
 import { DEFAULT_FORECAST_PARAMETERS } from "@/app/models/ForecastParameters";
@@ -13,6 +14,10 @@ import type { TextNode } from "./types";
 import { TENURE_COLORS_DARK, TENURE_COLORS_LIGHT } from "./types";
 
 const TENURES = ['fairholdLandPurchase', 'fairholdLandRent'] as const;
+const TENURE_LABELS = {
+  fairholdLandPurchase: 'Fairhold /LP',
+  fairholdLandRent: 'Fairhold /LR'
+}
 type Tenure = (typeof TENURES)[number];
 
 interface DashboardProps {
@@ -53,19 +58,32 @@ export const ResaleValue: React.FC<DashboardProps> = ({ data }) => {
       subtitle="Estimated sale price at any time."
     >
       <div className="flex flex-col h-full w-full justify-between">
-      <div className="flex gap-2 mb-4">
-          {TENURES.map(tenure => ( 
-            <TenureSelector 
-              key={tenure} 
-              isSelected={selectedTenure === tenure} 
-              tenureType={tenure}
-              onClick={() => setSelectedTenure(tenure)}
+        <div className="flex gap-2 mb-4">
+          <div className="block md:hidden w-full">
+            <TenureSelectorMobile
+              selectedTenure={selectedTenure}
+              onChange={(tenure) => setSelectedTenure(tenure as Tenure)}
+              tenures={[...TENURES]}
+              tenureLabels={TENURE_LABELS}
               tenureColorsDark={TENURE_COLORS_DARK}
               tenureColorsLight={TENURE_COLORS_LIGHT}
-            > 
-              {`Fairhold ${tenure === 'fairholdLandPurchase' ? 'Land Purchase' : 'Land Rent'}`} 
-            </TenureSelector> 
-          ))} 
+            />
+          </div>
+
+          <div className="hidden md:flex gap-2">
+            {TENURES.map(tenure => ( 
+              <TenureSelector 
+                key={tenure} 
+                isSelected={selectedTenure === tenure} 
+                tenureType={tenure}
+                onClick={() => setSelectedTenure(tenure)}
+                tenureColorsDark={TENURE_COLORS_DARK}
+                tenureColorsLight={TENURE_COLORS_LIGHT}
+              > 
+                {`Fairhold ${tenure === 'fairholdLandPurchase' ? 'Land Purchase' : 'Land Rent'}`} 
+              </TenureSelector> 
+            ))} 
+          </div>
         </div>
         
         <ResaleValueWrapper 
