@@ -49,34 +49,19 @@ const formatAgeData = (results: SurveyResults[]): AgeResults => {
 
 const formatAnyMeansTenureChoice = (results: SurveyResults[]): SankeyResults => { 
     // The answers to the two relevant questions are different (first is a select, second is ranked), so must be mapped
-    let mappedResults = results.map((result) => {
-        const targetArray = result.anyMeansTenureChoice as string[]; // Assuming this is an array of ranked choices
-        const mappedChoices = targetArray.map((choice) => {
-            if (choice.includes("Fairhold")) return "Fairhold";
-            if (choice.includes("Freehold")) return "Freehold";
-            if (choice.includes("Private rent")) return "Private rent";
-            if (choice.includes("Social rent")) return "Social rent";
-            if (choice.includes("Shared ownership")) return "Shared ownership";
-            return "Other"; // Default to "Other" if no match
-        });
-        return { ...result, anyMeansTenureChoice: mappedChoices };
-    });
+        const mappedResults = results.map((result) => {
+        const targetArray = result.anyMeansTenureChoice as string[]; 
+        const firstChoice = targetArray[0]; // Since it's a ranked choice answer, we only want the first choice for the Sankey
+        const mappedChoice = firstChoice
+            ? (firstChoice.includes("Fairhold") ? "Fairhold" :
+               firstChoice.includes("Freehold") ? "Freehold" :
+               firstChoice.includes("Private rent") ? "Private rent" :
+               firstChoice.includes("Social rent") ? "Social rent" :
+               firstChoice.includes("Shared ownership") ? "Shared ownership" :
+               "Other") // Default to "Other" if no match
+            : "Other"; // Handle case where targetArray is empty
 
-    mappedResults = mappedResults.map((result) => {
-        const currentTenure = result.currentTenure;
-        let mappedChoice: string;
-    
-        if (currentTenure.includes("own")) {
-            mappedChoice = "Ownership";
-        } else if (currentTenure.includes("rent")) {
-            mappedChoice = "Private rent";
-        } else if (currentTenure.includes("stable")) {
-            mappedChoice = "I do not have a stable home at the moment";
-        } else {
-            mappedChoice = "Other";
-        }
-    
-        return { ...result, idealHouseType: mappedChoice };
+        return { ...result, anyMeansTenureChoice: [mappedChoice] }; 
     });
     
     return createSankeyData(
