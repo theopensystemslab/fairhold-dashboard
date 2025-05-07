@@ -31,16 +31,21 @@ export type SurveyResults = {
 export type FormattedSurveyResults = {
     affordFairhold: AffordFairholdResults; // doughnut
     age: AgeResults; // doughnut
-    anyMeansTenureChoice: TenureChoiceResults; // sankey
+    anyMeansTenureChoice: SankeyResults; // sankey
     country: CountryResults; // tbc
-    currentMeansTenureChoice: TenureChoiceResults; // sankey
-    houseType: HouseTypeResults; // sankey
+    currentMeansTenureChoice: SankeyResults; // sankey
+    houseType: SankeyResults; // sankey
     housingOutcomes: HousingOutcomesResults; // bar 
-    liveWith: LiveWithResults; // sankey
+    liveWith: SankeyResults; // sankey
     // postcode: ; 
     supportDevelopment: SupportDevelopmentResults; // doughnut
     supportDevelopmentFactors: SupportDevelopmentFactorsResults; // bar
     supportNewFairhold: SupportNewFairholdResults; // doughnut
+};
+
+export type SankeyResults =  {
+    nodes: { name: string }[];
+    links: { source: number; target: number; value: number }[];
 };
 
 export type AgeResults = {
@@ -63,29 +68,6 @@ export type AffordFairholdResults = {
 export type CountryResults = {
     [key: string]: number;
 }
-
-export type TenureChoiceResults = {
-    nodes: [
-        {name: "Fairhold"},
-        {name: "Freehold"},
-        {name: "Private rent"},
-        {name: "Social rent"},
-        {name: "Shared ownership"},
-        {name: "Other"},
-    ];
-    links: { source: number; target: number; value: number }[];
-};
-
-export type HouseTypeResults = {
-    nodes: [
-        {name: "A studio"},
-        {name: "A flat"},
-        {name: "A house"},
-        {name: "I don't mind"},
-        {name: "Other"},
-    ];
-    links: { source: number; target: number; value: number }[];
-};
 
 export type HousingOutcomesResults = {
     "Security from being evicted": number;
@@ -111,17 +93,6 @@ export type HousingOutcomesResults = {
     "None of these. My current situation is fine.": number;
     "Other": number;
 }
-
-export type LiveWithResults = {
-    nodes: [
-        {name: "Alone"},
-        {name: "With friends"},
-        {name: "With partner / family"},
-        {name: "With parents or extended family"},
-        {name: "Other"},
-    ];
-    links: { source: number; target: number; value: number }[];
-};
 
 export type SupportDevelopmentResults = {
     "Strongly supportive of any development": number;

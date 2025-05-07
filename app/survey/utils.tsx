@@ -1,11 +1,9 @@
 import { AgeResults, 
     AffordFairholdResults, 
     CountryResults,
-    HouseTypeResults,
     HousingOutcomesResults,
-    LiveWithResults,
+    SankeyResults,
     SurveyResults, 
-    TenureChoiceResults,
     SupportDevelopmentResults,
     SupportDevelopmentFactorsResults,
     SupportNewFairholdResults,
@@ -49,9 +47,9 @@ const formatAgeData = (results: SurveyResults[]): AgeResults => {
     ])
 }
 
-const formatAnyMeansTenureChoice = (results: SurveyResults[]): TenureChoiceResults => { 
+const formatAnyMeansTenureChoice = (results: SurveyResults[]): SankeyResults => { 
     // The answers to the two relevant questions are different (first is a select, second is ranked), so must be mapped
-    const mappedResults = results.map((result) => {
+    let mappedResults = results.map((result) => {
         const targetArray = result.anyMeansTenureChoice as string[]; // Assuming this is an array of ranked choices
         const mappedChoices = targetArray.map((choice) => {
             if (choice.includes("Fairhold")) return "Fairhold";
@@ -63,20 +61,29 @@ const formatAnyMeansTenureChoice = (results: SurveyResults[]): TenureChoiceResul
         });
         return { ...result, anyMeansTenureChoice: mappedChoices };
     });
+
+    mappedResults = mappedResults.map((result) => {
+        const currentTenure = result.currentTenure;
+        let mappedChoice: string;
+    
+        if (currentTenure.includes("own")) {
+            mappedChoice = "Ownership";
+        } else if (currentTenure.includes("rent")) {
+            mappedChoice = "Private rent";
+        } else if (currentTenure.includes("stable")) {
+            mappedChoice = "I do not have a stable home at the moment";
+        } else {
+            mappedChoice = "Other";
+        }
+    
+        return { ...result, idealHouseType: mappedChoice };
+    });
     
     return createSankeyData(
         mappedResults,
         "currentTenure",
         "anyMeansTenureChoice",
-        [
-            { name: "Fairhold" },
-            { name: "Freehold" },
-            { name: "Private rent" },
-            { name: "Social rent" },
-            { name: "Shared ownership" },
-            { name: "Other" },
-        ]
-    ) as TenureChoiceResults;
+    ) as SankeyResults;
 };
 
 const formatCountryResults = (results: SurveyResults[]): CountryResults => {
@@ -92,23 +99,15 @@ const formatCountryResults = (results: SurveyResults[]): CountryResults => {
     return countryData;
 }
 
-const formatCurrentMeansTenureChoice = (results: SurveyResults[]): TenureChoiceResults => {
+const formatCurrentMeansTenureChoice = (results: SurveyResults[]): SankeyResults => {
     return createSankeyData(
         results,
         "currentTenure",
-        "currentMeansTenureChoice",
-        [
-            { name: "Fairhold" },
-            { name: "Freehold" },
-            { name: "Private rent" },
-            { name: "Social rent" },
-            { name: "Shared ownership" },
-            { name: "Other" },
-        ]
-    ) as TenureChoiceResults;
+        "currentMeansTenureChoice"
+    ) as SankeyResults;
 };
 
-const formatHouseTypeResults = (results: SurveyResults[]): HouseTypeResults => {
+const formatHouseTypeResults = (results: SurveyResults[]): SankeyResults => {
 // Map single string answers to predefined node names
 const mappedResults = results.map((result) => {
     const houseType = result.idealHouseType;
@@ -132,15 +131,8 @@ const mappedResults = results.map((result) => {
     return createSankeyData(
         mappedResults,
         "houseType",
-        "idealHouseType",
-        [
-            { name: "A studio" },
-            { name: "A flat" },
-            { name: "A house" },
-            { name: "I don't mind" },
-            { name: "Other" },
-        ]
-    ) as HouseTypeResults;
+        "idealHouseType"
+    ) as SankeyResults;
 };
 
 const formatHousingOutcomesResults = (results: SurveyResults[]): HousingOutcomesResults => {
@@ -170,7 +162,7 @@ const formatHousingOutcomesResults = (results: SurveyResults[]): HousingOutcomes
     ])
 }
 
-const formatLiveWithResults = (results: SurveyResults[]): LiveWithResults => {
+const formatLiveWithResults = (results: SurveyResults[]): SankeyResults => {
     // Map single string answers to predefined node names
     const mappedResults = results.map((result) => {
         const liveWith = result.liveWith; // Assuming this is a single string
@@ -195,14 +187,7 @@ const formatLiveWithResults = (results: SurveyResults[]): LiveWithResults => {
         mappedResults,
         "liveWith",
         "idealLiveWith",
-        [
-            { name: "Alone" },
-            { name: "With friends" },
-            { name: "With partner / family" },
-            { name: "With parents or extended family" },
-            { name: "Other" },
-        ]
-    ) as LiveWithResults;
+    ) as SankeyResults;
 };
 
 const formatSupportDevelopmentResults = (results: SurveyResults[]): SupportDevelopmentResults => {
@@ -270,47 +255,43 @@ const createPieOrBarChartData = <T extends string>(
     return data;
 };
 
-const createSankeyData = <T extends { name: string }>(
+const createSankeyData = (
     results: SurveyResults[],
     sourceKey: keyof SurveyResults,
-    targetKey: keyof SurveyResults,
-    predefinedNodes: T[]
-): { nodes: T[]; links: { source: number; target: number; value: number }[] } => {
-    const sankeyData: {
-        nodes: T[];
-        links: { source: number; target: number; value: number }[];
-    } = {
-        nodes: predefinedNodes,
-        links: [], 
-    };
+    targetKey: keyof SurveyResults
+): SankeyResults => {
+    const nodesMap: { [key: string]: number } = {};
+    const links: { source: number; target: number; value: number }[] = [];
 
-    const nodeIndexMap: { [key: string]: number } = predefinedNodes.reduce(
-        (map, node, index) => {
-            map[node.name] = index;
-            return map;
-        },
-        {} as { [key: string]: number }
-    );
-
+    // Dynamically create nodes and map them to indices
     results.forEach((result) => {
         const source = result[sourceKey] as string;
         const target = result[targetKey] as string;
 
-        const sourceIndex = nodeIndexMap[source];
-        const targetIndex = nodeIndexMap[target];
+        if (!(source in nodesMap)) {
+            nodesMap[source] = Object.keys(nodesMap).length;
+        }
+        if (!(target in nodesMap)) {
+            nodesMap[target] = Object.keys(nodesMap).length;
+        }
 
-        if (sourceIndex !== undefined && targetIndex !== undefined) {
-            const existingLink = sankeyData.links.find(
-                (link) => link.source === sourceIndex && link.target === targetIndex
-            );
+        const sourceIndex = nodesMap[source];
+        const targetIndex = nodesMap[target];
 
-            if (existingLink) {
-                existingLink.value++;
-            } else {
-                sankeyData.links.push({ source: sourceIndex, target: targetIndex, value: 1 });
-            }
+        // Find or create a link between the source and target
+        const existingLink = links.find(
+            (link) => link.source === sourceIndex && link.target === targetIndex
+        );
+
+        if (existingLink) {
+            existingLink.value++;
+        } else {
+            links.push({ source: sourceIndex, target: targetIndex, value: 1 });
         }
     });
 
-    return sankeyData;
+    // Convert nodesMap to an array of nodes
+    const nodes = Object.keys(nodesMap).map((name) => ({ name }));
+
+    return { nodes, links };
 };
