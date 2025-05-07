@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Inter } from "next/font/google";
 import ErrorBoundary from '../components/ErrorBoundary';
-import { SurveyResults } from './types';
+import { FormattedSurveyResults } from './types';
 import { Age } from './components/graphs/Age';
 import { AffordFairhold } from './components/graphs/AffordFairhold';
 import { AnyMeansTenureChoice } from './components/graphs/AnyMeansTenureChoice';
@@ -25,7 +25,7 @@ const inter = Inter({
 });
 
 export default function SurveyPage() {
-  const [surveyData, setSurveyData] = useState<SurveyResults[]>([]);
+  const [surveyData, setSurveyData] = useState<FormattedSurveyResults | null>(null); // using null as initial state since it seemed less verbose than an empty FormattedSurveyResults object
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -39,8 +39,7 @@ export default function SurveyPage() {
         }
         
         const data = await response.json();
-        setSurveyData(data.results);
-        console.log(data)
+        setSurveyData(data.formattedResults);
       } catch (err) {
         setError('Failed to fetch survey data');
         console.error(err);
@@ -55,17 +54,16 @@ export default function SurveyPage() {
   if (loading) return <div>Loading survey data...</div>;
   if (error) return <div>Error: {error}</div>;
 
+  if (!surveyData) return <div>No survey data available</div>;
+
   return (
     <ErrorBoundary>
         <main className={`${inter.className} p-4 min-h-screen bg-[rgb(var(--background-end-rgb))]`}>
           <div className="flex flex-col m-4">
             <h1 className="h1-style text-2xl md:text-4xl">Fairhold survey results</h1>
               <div className="flex flex-col gap-4 mt-6">
-              {surveyData.length === 0 ? (
-            <p>No survey responses found.</p>
-          ) : (
             <div>
-              <h2 className="text-xl md:text-2xl">So far, {surveyData.length} people have responded</h2>
+              <h2 className="text-xl md:text-2xl">So far, {surveyData.resultsCount} people have responded</h2>
               <div className="flex flex-col py-4">
                 <h3 className="text-xl font-medium">Who has responded?</h3>
                 <div className="flex flex-col md:flex-row">
@@ -100,10 +98,9 @@ export default function SurveyPage() {
                 <SupportDevelopmentFactors results={surveyData} />
               </div>
           </div>
-          )}
-            </div>
-          </div>
-        </main>
+        </div>
+      </div>
+    </main>
     </ErrorBoundary>
   );
 }

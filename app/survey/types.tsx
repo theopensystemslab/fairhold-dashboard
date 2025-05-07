@@ -1,5 +1,5 @@
 export type SurveyComponentProps = {
-    results: SurveyResults[];
+    results: FormattedSurveyResults;
 }
 
 export type SurveyResults = {
@@ -38,6 +38,7 @@ export type FormattedSurveyResults = {
     housingOutcomes: HousingOutcomesResults; // bar 
     liveWith: SankeyResults; // sankey
     // postcode: ; 
+    resultsCount: number;
     supportDevelopment: SupportDevelopmentResults; // doughnut
     supportDevelopmentFactors: SupportDevelopmentFactorsResults; // bar
     supportNewFairhold: SupportNewFairholdResults; // doughnut
