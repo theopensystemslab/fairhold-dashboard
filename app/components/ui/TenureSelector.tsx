@@ -30,15 +30,13 @@ const TenureSelector: React.FC<TenureSelectorProps> = ({
       color: tenureColorsDark[tenureType],
     };
   };
-    
 
   return (
     <button
       onClick={onClick}
       className={cn(
-        "px-4 py-2 rounded-xl transition-colors duration-200",
+        "px-4 py-1 rounded-2xl transition-colors duration-200 bg-gray-200",
         "text-sm font-medium",
-        !isSelected ? "hover:bg-gray-200" : "",
         className
       )}
       style={isSelected ? getColors() : undefined}
