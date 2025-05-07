@@ -20,6 +20,7 @@ export const formatSurveyResults = (results: SurveyResults[]): FormattedSurveyRe
         houseType: formatHouseTypeResults(results),
         housingOutcomes: formatHousingOutcomesResults(results), 
         liveWith: formatLiveWithResults(results), 
+        resultsCount: results.length,
         supportDevelopment: formatSupportDevelopmentResults(results),
         supportDevelopmentFactors: formatSupportDevelopmentFactorsResults(results), 
         supportNewFairhold: formatSupportNewFairholdResults(results),
