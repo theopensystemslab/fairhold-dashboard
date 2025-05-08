@@ -94,22 +94,23 @@ export class Property {
   }
 
   public calculateDepreciatedBuildPrice() {
-  // Initialise depreciatedBuildPrice; since we need the house breakdown even for a newbuild (to store and iterate on it in Lifetime), we run calculateComponentValue instead of just assigning depreciatedHousePrice = newBuildPrice
-  let depreciatedBuildPrice = 0;
 
-  // Calculate for each component using the public method
-  for (const key of Object.keys(HOUSE_BREAKDOWN_PERCENTAGES) as (keyof houseBreakdownType)[]) {
-    const result = this.calculateComponentValue(
-      key, 
-      this.newBuildPrice, 
-      this.age, 
-      this.maintenanceLevel
-    );
+    // Initialise depreciatedBuildPrice; since we need the house breakdown even for a newbuild (to store and iterate on it in Lifetime), we run calculateComponentValue instead of just assigning depreciatedHousePrice = newBuildPrice
+    let depreciatedBuildPrice = 0;
 
-    depreciatedBuildPrice += result.depreciatedComponentValue;
-  }
-    depreciatedBuildPrice = parseFloat(depreciatedBuildPrice.toFixed(PRECISION))
-  return depreciatedBuildPrice;
+    // Calculate for each component using the public method
+    for (const key of Object.keys(HOUSE_BREAKDOWN_PERCENTAGES) as (keyof houseBreakdownType)[]) {
+      const result = this.calculateComponentValue(
+        key, 
+        this.newBuildPrice, 
+        this.age, 
+        "low" // `calculateDepreciatedBuildPrice` is only used in `Property` and not in `Lifetime`, so we can use the default value for maintenanceLevel
+      );
+
+      depreciatedBuildPrice += result.depreciatedComponentValue;
+    }
+      depreciatedBuildPrice = parseFloat(depreciatedBuildPrice.toFixed(PRECISION))
+    return depreciatedBuildPrice;
 }
 
   public calculateComponentValue(
