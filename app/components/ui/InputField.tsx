@@ -1,7 +1,7 @@
 import React from "react";
 import { Input } from "@/components/ui/input";
 
-interface InputFieldProps {
+interface InputFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
   placeholder: string;
   error?: boolean; 
   className?: string;
