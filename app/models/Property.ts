@@ -39,6 +39,9 @@ export class Property {
    * Size of the house in square meters
    */
   size: number;
+  /**
+   * The maintenance level sets graph options (eg for resale value), not the initial depreciated house price (default low)
+   */
   maintenanceLevel: MaintenanceLevel;
   /**
    * Average build price per metre of a new house
