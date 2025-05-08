@@ -304,16 +304,27 @@ const createPieOrBarChartData = <T extends string>(
     const data: Record<T, number> = Object.fromEntries(predefinedKeys.map((k) => [k, 0])) as Record<T, number>;
 
     for (const result of results) {
-        const value = result[key] as T;
-        if (value in data) {
-            data[value]++;
+        const value = result[key];
+
+        if (value === undefined || value === null) continue; // Skip the record if it's missing 
+        
+        // Some of the results properties might just be strings, and some of them might be arrays of strings--we need to be able to count both
+        if (Array.isArray(value)) {
+            for (const item of value) {
+                if (item in data) {
+                    data[item as T]++;
+                }
+            }
+        } else if (value in data) {
+            data[value as T]++;
         }
     }
-
-    return predefinedKeys.map((key) => ({
+    
+    const formattedPieOrBarChartData = predefinedKeys.map((key) => ({
         name: key,
         value: data[key],
     }));
+    return formattedPieOrBarChartData;
 };
 
 const createSankeyData = (
