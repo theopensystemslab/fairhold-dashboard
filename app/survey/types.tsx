@@ -1,8 +1,4 @@
-export type SurveyComponentProps = {
-    results: SurveyResults[];
-}
-
-export type SurveyResults = {
+export type RawResults = {
     id: string;
     uk: string;
     nonUk: string;
@@ -10,8 +6,8 @@ export type SurveyResults = {
     ageGroup: string;
     houseType: string;
     currentTenure: string;
-    ownershipModel?: string | null;
-    rentalModel?: string | null;
+    ownershipModel?: string | undefined;
+    rentalModel?: string | undefined;
     liveWith: string;
     secondHomes: string;
     idealHouseType: string;
@@ -27,3 +23,8 @@ export type SurveyResults = {
     supportDevelopmentFactors: string[];
     supportNewFairhold: string;
 };
+
+export type Results = Record<keyof RawResults, {
+    response: string | string[] | null | undefined;
+    count: number;
+}[]>

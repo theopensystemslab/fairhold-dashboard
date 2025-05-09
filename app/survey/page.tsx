@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Inter } from "next/font/google";
 import ErrorBoundary from '../components/ErrorBoundary';
-import { SurveyResults } from './types';
+import { RawResults } from './types';
 import { Age } from './components/graphs/Age';
 import { AffordFairhold } from './components/graphs/AffordFairhold';
 import { AnyMeansTenureChoice } from './components/graphs/AnyMeansTenureChoice';
@@ -25,7 +25,7 @@ const inter = Inter({
 });
 
 export default function SurveyPage() {
-  const [surveyData, setSurveyData] = useState<SurveyResults[]>([]);
+  const [surveyData, setSurveyData] = useState<RawResults[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
