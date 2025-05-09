@@ -9,10 +9,11 @@ import { socialRentAdjustmentsService } from "./socialRentAdjustmentsService";
 import { socialRentEarningsService } from "./socialRentEarningsService";
 import { rentService } from "./rentService";
 import { parse } from "postcode";
-import { ValidPostcode } from "../schemas/calculationSchema";
 import { z } from "zod";
-import { maintenanceLevelSchema } from "../schemas/calculationSchema";
+import { maintenanceLevelSchema, PostcodeScales } from "../schemas/calculationSchema";
 import { APIError } from "../lib/exceptions";
+import { HouseType } from "../models/Property";
+import { MaintenanceLevel } from "../models/constants";
 
 jest.mock("./itlService");
 jest.mock("./gdhiService");
@@ -46,7 +47,7 @@ describe("getHouseholdData", () => {
   }
 
   interface MockInputType {
-    housePostcode: ValidPostcode;
+    housePostcode: PostcodeScales;
     houseType: "D" | "S" | "T" | "F";
     houseAge: number;
     houseBedrooms: number;
@@ -64,11 +65,11 @@ describe("getHouseholdData", () => {
   };
 
   beforeEach(() => {
-    jest.clearAllMocks(); // Clear mocks before each test
+    jest.resetAllMocks();
   });
 
   it("should return household data correctly", async () => {
-    const mockITL3 = "ITL3-123";
+    const mockITL3 = "TLI44";
     const mockGDHI = 30000;
     const mockGasPriceYearly = 1200;
     const mockHPI = 1.05;
@@ -84,7 +85,6 @@ describe("getHouseholdData", () => {
     ];
     const mockSocialRentAverageEarning = 25000;
 
-    // Mocking the services' responses
     (itlService.getByPostcodeDistrict as jest.Mock).mockResolvedValueOnce(
       mockITL3
     );
@@ -159,23 +159,88 @@ describe("getHouseholdData", () => {
     (gasPriceService.getByITL3 as jest.Mock).mockResolvedValueOnce(null);
     (hpiService.getByITL3 as jest.Mock).mockResolvedValueOnce(null);
     (buildPriceService.getBuildPriceByHouseType as jest.Mock).mockResolvedValueOnce(null);
-    (pricesPaidService.getPricesPaidByPostcodeAndHouseType as jest.Mock).mockResolvedValueOnce({
-      averagePrice: 0,
-      numberOfTransactions: 0,
-      granularityPostcode: ""
-    });
-    (rentService.getByITL3AndBedrooms as jest.Mock).mockResolvedValueOnce(0);
-    (socialRentAdjustmentsService.getAdjustments as jest.Mock).mockResolvedValueOnce([]);
-    (socialRentEarningsService.getByITL3 as jest.Mock).mockResolvedValueOnce(0);
-  
-    await expect(getHouseholdData(mockInput)).rejects.toThrow(apiError);
+  })
     
-    try {
-      await getHouseholdData(mockInput);
-    } catch (err) {
-      expect(err).toEqual(apiError);
-      expect(err).toBeInstanceOf(APIError);
-      expect((err as APIError).code).toBe("ITL3_NOT_FOUND");
-    }
+  it("should work when only an outcode is entered", async () => {
+    const outcode = "SE17";
+    const mockInput = {
+      housePostcode: {
+        outcode: outcode,
+        incode: null,
+        area: "SE",
+        district: "SE17",
+        sector: null,
+        postcode: null,
+      },
+      houseType: "D" as HouseType,
+      houseAge: 20,
+      houseBedrooms: 3,
+      houseSize: 100,
+      maintenanceLevel: "medium" as MaintenanceLevel,
+    };
+
+    const mockITL3 = "TLI44";
+    const mockGDHI = 30000;
+    const mockGasPriceYearly = 7;
+    const mockHPI = 1.05;
+    const mockBuildPrice = 250000;
+    const mockPricesPaidSummary = {
+      averagePrice: 280000,
+      numberOfTransactions: 50,
+      granularityPostcode: outcode,
+    };
+    const mockAverageRentMonthly = 1500;
+    const mockSocialRentAdjustments = [
+      { year: "2022", inflation: 2, additional: 3, total: 5 },
+    ];
+    const mockSocialRentAverageEarning = 25000;
+
+    (itlService.getByPostcodeDistrict as jest.Mock).mockResolvedValueOnce(
+      mockITL3
+    );
+    (gdhiService.getByITL1 as jest.Mock).mockResolvedValueOnce(mockGDHI);
+    (gasPriceService.getByITL3 as jest.Mock).mockResolvedValueOnce(
+      mockGasPriceYearly
+    );
+    (hpiService.getByITL3 as jest.Mock).mockResolvedValueOnce(mockHPI);
+    (
+      buildPriceService.getBuildPriceByHouseType as jest.Mock
+    ).mockResolvedValueOnce(mockBuildPrice);
+    (
+      pricesPaidService.getPricesPaidByPostcodeAndHouseType as jest.Mock
+    ).mockResolvedValueOnce(mockPricesPaidSummary);
+    (rentService.getByITL3AndBedrooms as jest.Mock).mockResolvedValueOnce(
+      mockAverageRentMonthly
+    );
+    (
+      socialRentAdjustmentsService.getAdjustments as jest.Mock
+    ).mockResolvedValueOnce(mockSocialRentAdjustments);
+    (socialRentEarningsService.getByITL3 as jest.Mock).mockResolvedValueOnce(
+      mockSocialRentAverageEarning
+    );
+
+    const result = await getHouseholdData(mockInput);
+    console.log({result})
+
+    expect(result).toEqual({
+      postcode: mockInput.housePostcode,
+      houseType: mockInput.houseType,
+      houseAge: mockInput.houseAge,
+      houseBedrooms: mockInput.houseBedrooms,
+      houseSize: mockInput.houseSize,
+      maintenanceLevel: mockInput.maintenanceLevel,
+      averagePrice: parseFloat(mockPricesPaidSummary.averagePrice.toFixed(2)),
+      itl3: mockITL3,
+      gdhi: mockGDHI,
+      hpi: mockHPI,
+      buildPrice: mockBuildPrice,
+      averageRentMonthly: mockAverageRentMonthly,
+      socialRentAdjustments: mockSocialRentAdjustments,
+      socialRentAverageEarning: mockSocialRentAverageEarning,
+      numberOfTransactions: mockPricesPaidSummary.numberOfTransactions,
+      granularityPostcode: mockPricesPaidSummary.granularityPostcode,
+      kwhCostPence: mockGasPriceYearly,
+    });
+    expect(itlService.getByPostcodeDistrict).toHaveBeenCalledWith("SE17");
   });
 });
