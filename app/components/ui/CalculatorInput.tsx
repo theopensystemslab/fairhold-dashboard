@@ -258,6 +258,7 @@ const CalculatorInput = () => {
                       <InputField
                       placeholder="e.g. 2 for two bedrooms"
                       {...field}
+                      value={field.value?.toString() || ''}
                       error={!!fieldState.error}
                       className="inputfield-style text-xs"
                       />
