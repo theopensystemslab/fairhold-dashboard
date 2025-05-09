@@ -25,8 +25,7 @@ export async function GET() {
         const resultsArray = rawResults.map(record => record.fields);
 
         const aggregatedResults = aggregateResults(resultsArray);
-        
-        return NextResponse.json({ results: aggregatedResults });
+        return NextResponse.json(aggregatedResults);
     } catch (error) {
         console.error('Error fetching Airtable data:', error);
         return NextResponse.json(
