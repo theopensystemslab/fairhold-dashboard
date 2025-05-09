@@ -39,6 +39,9 @@ export class Property {
    * Size of the house in square meters
    */
   size: number;
+  /**
+   * The maintenance level sets graph options (eg for resale value), not the initial depreciated house price (default low)
+   */
   maintenanceLevel: MaintenanceLevel;
   /**
    * Average build price per metre of a new house
@@ -94,31 +97,30 @@ export class Property {
   }
 
   public calculateDepreciatedBuildPrice() {
-  // Initialise depreciatedBuildPrice; since we need the house breakdown even for a newbuild (to store and iterate on it in Lifetime), we run calculateComponentValue instead of just assigning depreciatedHousePrice = newBuildPrice
-  let depreciatedBuildPrice = 0;
 
-  // Calculate for each component using the public method
-  for (const key of Object.keys(HOUSE_BREAKDOWN_PERCENTAGES) as (keyof houseBreakdownType)[]) {
-    const result = this.calculateComponentValue(
-      key, 
-      this.newBuildPrice, 
-      this.age, 
-      this.maintenanceLevel
-    );
+    // Initialise depreciatedBuildPrice; since we need the house breakdown even for a newbuild (to store and iterate on it in Lifetime), we run calculateComponentValue instead of just assigning depreciatedHousePrice = newBuildPrice
+    let depreciatedBuildPrice = 0;
 
-    depreciatedBuildPrice += result.depreciatedComponentValue;
-  }
-    depreciatedBuildPrice = parseFloat(depreciatedBuildPrice.toFixed(PRECISION))
-  return depreciatedBuildPrice;
+    // Calculate for each component using the public method
+    for (const key of Object.keys(HOUSE_BREAKDOWN_PERCENTAGES) as (keyof houseBreakdownType)[]) {
+      const result = this.calculateComponentValue(
+        key, 
+        this.newBuildPrice, 
+        this.age
+      );
+
+      depreciatedBuildPrice += result.depreciatedComponentValue;
+    }
+      depreciatedBuildPrice = parseFloat(depreciatedBuildPrice.toFixed(PRECISION))
+    return depreciatedBuildPrice;
 }
 
   public calculateComponentValue(
     componentKey: keyof houseBreakdownType,
     newBuildPrice: number,
-    age: number,
-    maintenanceLevel: MaintenanceLevel
+    age: number
   ): ComponentCalculation {
-    const maintenancePercentage = MAINTENANCE_LEVELS[maintenanceLevel]
+    const maintenancePercentage = MAINTENANCE_LEVELS["low"] // `calculateDepreciatedBuildPrice` is only used in `Property` and not in `Lifetime`, so we can use the default value for maintenanceLevel
 
     const component = HOUSE_BREAKDOWN_PERCENTAGES[componentKey];
     

@@ -155,7 +155,7 @@ export class Lifetime {
             MAINTENANCE_LEVELS.medium * newBuildPriceIterative;
         let maintenanceCostHighIterative = 
             MAINTENANCE_LEVELS.high * newBuildPriceIterative;
-        /* Each loop a new `Property` instance is created, this is updated by running the `calculateDepreciatedBuildPrice()` method on `iterativeProperty` */
+        /* Each loop updates the depreciated house resale values by applying depreciation methods directly to the `depreciatedHouseBreakdownOverTimeIterative` object. */        
         let depreciatedHouseResaleValueNoMaintenanceIterative = params.property.depreciatedBuildPrice;
         let depreciatedHouseResaleValueLowMaintenanceIterative = params.property.depreciatedBuildPrice;
         let depreciatedHouseResaleValueMediumMaintenanceIterative = params.property.depreciatedBuildPrice;
