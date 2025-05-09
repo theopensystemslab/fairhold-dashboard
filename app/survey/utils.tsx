@@ -2,6 +2,7 @@ import { Results, RawResults } from "./types"
 
 export const aggregateResults = (rawResults: RawResults[]) => {
     const results: Results = {} as Results;
+    const numberResponses = rawResults.length;
 
     for (const rawResult of rawResults) {
         for (const key in rawResult) {
@@ -33,6 +34,5 @@ export const aggregateResults = (rawResults: RawResults[]) => {
             }
         }
     }
-    console.log({results})
-    return results;
+    return { numberResponses, results };
 }
