@@ -25,8 +25,8 @@ export type RawResults = {
 };
 
 export type Results = Record<keyof RawResults, {
-    response: string | string[] | null | undefined;
-    count: number;
+    name: string | string[] | null | undefined;
+    value: number;
 }[]>
 
 export type SurveyData = {
