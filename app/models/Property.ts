@@ -106,8 +106,7 @@ export class Property {
       const result = this.calculateComponentValue(
         key, 
         this.newBuildPrice, 
-        this.age, 
-        "low" // `calculateDepreciatedBuildPrice` is only used in `Property` and not in `Lifetime`, so we can use the default value for maintenanceLevel
+        this.age
       );
 
       depreciatedBuildPrice += result.depreciatedComponentValue;
@@ -119,10 +118,9 @@ export class Property {
   public calculateComponentValue(
     componentKey: keyof houseBreakdownType,
     newBuildPrice: number,
-    age: number,
-    maintenanceLevel: MaintenanceLevel
+    age: number
   ): ComponentCalculation {
-    const maintenancePercentage = MAINTENANCE_LEVELS[maintenanceLevel]
+    const maintenancePercentage = MAINTENANCE_LEVELS["low"] // `calculateDepreciatedBuildPrice` is only used in `Property` and not in `Lifetime`, so we can use the default value for maintenanceLevel
 
     const component = HOUSE_BREAKDOWN_PERCENTAGES[componentKey];
     
