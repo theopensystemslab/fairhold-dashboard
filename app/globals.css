@@ -31,6 +31,8 @@
   --error-text-rgb: 181 31 20;
   --not-viable-light-color-rgb: 251 164 164;
   --not-viable-dark-color-rgb: 255 0 0;
+  
+  --survey-placeholder: 34 139 230;
 }
 
 @layer utilities {
