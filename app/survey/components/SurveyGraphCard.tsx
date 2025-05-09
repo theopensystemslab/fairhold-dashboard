@@ -1,10 +1,10 @@
 import React from "react";
-import { RawResults } from "@/app/survey/types";
+import { Results } from "@/app/survey/types";
 
 type Props = React.PropsWithChildren<{
   title: string;
   subtitle?: React.ReactNode;
-  results: RawResults[];
+  results: Results;
 }>;
 
 const SurveyGraphCard: React.FC<Props> = ({ title, subtitle, children }) => {

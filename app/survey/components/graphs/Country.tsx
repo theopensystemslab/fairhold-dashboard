@@ -1,8 +1,8 @@
 import React from "react"
-import { SurveyComponentProps } from "@/app/survey/types";
+import { Results } from "@/app/survey/types";
 import SurveyGraphCard from "@/app/survey/components/SurveyGraphCard";
 
-export const Country: React.FC<SurveyComponentProps> = ({ results }) => {
+export const Country: React.FC<Results> = (results) => {
     return (
         <SurveyGraphCard title="Which country?" results={results}></SurveyGraphCard>
     )
