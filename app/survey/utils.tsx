@@ -11,11 +11,25 @@ export const aggregateResults = (rawResults: RawResults[]) => {
             if (!results[validKey]) {
                 results[validKey] = [];
             }
-            const existingResult = results[validKey].find((result) => result.response === value);
-            if (existingResult) {
-                existingResult.count++;
+
+            if (Array.isArray(value)) {
+                // We need to handle arrays because some questions are multiple choice
+                for (const item of value) {
+                    const existingResult = results[validKey].find((result) => result.response === item);
+                    if (existingResult) {
+                        existingResult.count++;
+                    } else {
+                        results[validKey].push({ response: item, count: 1 });
+                    }
+                }
             } else {
-                results[validKey].push({ response: value, count: 1 });
+                // The rest of the answers are single strings
+                const existingResult = results[validKey].find((result) => result.response === value);
+                if (existingResult) {
+                    existingResult.count++;
+                } else {
+                    results[validKey].push({ response: value, count: 1 });
+                }
             }
         }
     }
