@@ -55,7 +55,7 @@ export const ResaleValue: React.FC<DashboardProps> = ({ data }) => {
   return (
     <GraphCard
       title="How much could I sell it for?"
-      subtitle="Estimated sale price at any time."
+      subtitle="With Fairhold, you can’t sell the land for more than you bought it for (adjusted for inflation). The value of the building is based on its condition."
     >
       <div className="flex flex-col h-full w-full justify-between">
         <div className="flex gap-2 mb-4">

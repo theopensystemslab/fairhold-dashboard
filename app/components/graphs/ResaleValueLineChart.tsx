@@ -1,9 +1,8 @@
-import React from "react";
-import { LineChart, Line, CartesianGrid, XAxis, YAxis, TooltipProps } from "recharts";
+import React, { useState } from "react";
+import { LineChart, Line, CartesianGrid, XAxis, YAxis, TooltipProps, Tooltip, LabelList } from "recharts";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   ChartConfig,
-  ChartTooltip,
 } from "@/components/ui/chart";
 import {
   StyledChartContainer,
@@ -21,20 +20,16 @@ type CustomTooltipProps = TooltipProps<number, string> & {
 
 const chartConfig = {
   none: {
-    label: "No maintenance",
-    color: "rgb(var(--fairhold-equity-color-rgb))", 
+    label: "None",
   },
   low: {
-    label: "Low maintenance",
-    color: "rgb(var(--fairhold-equity-color-rgb))",
+    label: "Low",
   },
   medium: {
-    label: "Medium maintenance",
-    color: "rgb(var(--fairhold-equity-color-rgb))",
+    label: "Medium",
   },
   high: {
-    label: "High maintenance",
-    color: "rgb(var(--fairhold-equity-color-rgb))",
+    label: "High",
   },
 } satisfies ChartConfig;
 
@@ -57,39 +52,75 @@ const ResaleValueLineChart: React.FC<ResaleValueLineChartProps> = ({
   selectedMaintenance,
   maxY
 }) => {
+  const [hoveredLine, setHoveredLine] = useState<string | null>(null); // We use useState to figure out what line is being hovered over for the tooltip
+
   const renderLine = (dataKey: keyof Omit<DataPoint, "year">) => (
     <Line
       type="monotone"
       dataKey={dataKey}
-      stroke={`var(--color-${dataKey})`}
+      stroke={dataKey === selectedMaintenance 
+        ? `rgb(var(--fairhold-equity-color-rgb))` 
+        : `rgb(var(--fairhold-interest-color-rgb))`}
       strokeWidth={2}
-      strokeDasharray={dataKey === selectedMaintenance ? "0" : "5 5"}
       dot={false}
-    />
+      activeDot={false}
+      onMouseOver={() => setHoveredLine(dataKey)}
+      onMouseOut={() => setHoveredLine(null)}
+      >
+      <LabelList
+        content={({ x, y, index }) => {
+          const isLast = index === data.length - 1;
+          if (!isLast) return null;
+          if (typeof x !== "number" || typeof y !== "number") return null;
+
+          const label = chartConfig[dataKey].label;
+          const longestLabel = Math.max(chartConfig['none'].label.length, chartConfig['low'].label.length, chartConfig['medium'].label.length, chartConfig['high'].label.length)
+          const paddingX = 8;
+          const paddingY = 4;
+          const fontSize = 12;
+
+          const rectWidth = longestLabel * 7 + paddingX * 2;
+          const rectHeight = fontSize + paddingY * 2;
+          return (
+            <g transform={`translate(${x}, ${y - rectHeight / 2})`}>
+            <rect
+              width={rectWidth}
+              height={rectHeight}
+              rx={rectHeight / 2}
+              ry={rectHeight / 2}
+              fill={dataKey === selectedMaintenance 
+                ? `rgb(var(--fairhold-equity-color-rgb))` 
+                : `rgb(var(--fairhold-interest-color-rgb))`}
+            />
+            <text
+              x={rectWidth / 2}
+              y={rectHeight / 2 + fontSize / 3}
+              fill="#fff"
+              fontSize={fontSize}
+              textAnchor="middle"
+              dominantBaseline={"top"}
+            >
+              {label}
+            </text>
+          </g>
+          );
+        }}
+      />
+    </Line>
   );
-  const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
-    if (!active || !payload || !payload.length) return null;
+  const CustomTooltip = ({ active, payload, label, hoveredLine }: CustomTooltipProps & { hoveredLine: string | null }) => {
+    if (!active || !payload || !payload.length || hoveredLine !== selectedMaintenance) return null; 
+
+    // Find the entry that matches the selected maintenance level
+    const selectedEntry = payload.find(entry => entry.name === selectedMaintenance);
+    
+    if (!selectedEntry) return null;
 
     return (
-      <div className="bg-white p-3 border rounded shadow">
-        <p className="font-medium mb-2">Year {label}</p>
-        {payload.map((entry) => (
-          <div key={entry.name} className="flex items-center gap-2 mb-1">
-            <svg width="20" height="2" className="flex-shrink-0">
-              <line
-                x1="0"
-                y1="1"
-                x2="20"
-                y2="1"
-                stroke={entry.stroke}
-                strokeWidth="2"
-                strokeDasharray={entry.name === selectedMaintenance ? "0" : "5 5"}
-              />
-            </svg>
-            <span>{chartConfig[entry.name as keyof typeof chartConfig].label}:</span>
-            <span className="font-medium">{formatValue(entry.value ?? 0)}</span>
-          </div>
-        ))}
+      <div className="rounded-xl bg-[rgb(var(--text-default-rgb))] p-1 shadow">
+        <span className="mb-2 text-white">Year {label} </span>
+        <span className="text-[rgb(var(--fairhold-interest-color-rgb))] font-medium">{formatValue(selectedEntry.value ?? 0)}</span>
+
       </div>
     );
   };
@@ -100,6 +131,7 @@ const ResaleValueLineChart: React.FC<ResaleValueLineChartProps> = ({
         <StyledChartContainer config={chartConfig}  className="h-full w-full">
           <LineChart
             data={data}
+            margin={{ top: 20, right: 70, left: 20, bottom: 20 }}
           >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis 
@@ -118,7 +150,11 @@ const ResaleValueLineChart: React.FC<ResaleValueLineChartProps> = ({
               width={40}
             >
             </YAxis>
-            <ChartTooltip content={<CustomTooltip />} />
+            <Tooltip
+              content={<CustomTooltip hoveredLine={hoveredLine} />}
+              isAnimationActive={false}
+              cursor={false}
+            />
             {renderLine("high")}
             {renderLine("medium")}
             {renderLine("low")}
