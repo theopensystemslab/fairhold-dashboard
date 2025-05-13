@@ -8,7 +8,7 @@ export const Age: React.FC<Results> = (results) => {
         <SurveyGraphCard title="How old are you?" results={results}>
             <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
-                <Pie data={results.ageGroup} dataKey="value" nameKey="name" fill="rgb(var(--survey-placeholder))" />
+                <Pie data={results.ageGroup} dataKey="value" nameKey="answer" fill="rgb(var(--survey-placeholder))" />
                 <Legend align="center" verticalAlign="bottom" />
             </PieChart>
         </ResponsiveContainer>
