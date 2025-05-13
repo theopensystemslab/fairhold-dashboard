@@ -1,9 +1,9 @@
 import React from "react"
-import { Results, TickProps } from "@/app/survey/types";
+import { BarOrPieResults, TickProps } from "@/app/survey/types";
 import SurveyGraphCard from "@/app/survey/components/SurveyGraphCard";
 import { Bar, BarChart, XAxis, YAxis, ResponsiveContainer } from "recharts";
 
-export const SupportDevelopmentFactors: React.FC<Results> = (results) => {
+export const SupportDevelopmentFactors: React.FC<BarOrPieResults> = (results) => {
     const Tick = (props: TickProps) => {
         const { x, y, payload } = props;
         return (
