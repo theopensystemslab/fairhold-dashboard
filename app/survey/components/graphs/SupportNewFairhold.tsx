@@ -9,7 +9,7 @@ export const SupportNewFairhold: React.FC<Results> = (results) => {
         <SurveyGraphCard title="Would you support the creation of Fairhold homes in the area where you want to live?" results={results}>
              <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
-                    <Pie data={results.supportNewFairhold} dataKey="value" nameKey="name" fill="rgb(var(--survey-placeholder))" />
+                    <Pie data={results.supportNewFairhold} dataKey="value" nameKey="answer" fill="rgb(var(--survey-placeholder))" />
                     <Legend align="center" verticalAlign="bottom" />
              </PieChart>
             </ResponsiveContainer>

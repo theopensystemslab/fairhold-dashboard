@@ -4,7 +4,7 @@ import SurveyGraphCard from "@/app/survey/components/SurveyGraphCard";
 import { Bar, BarChart, XAxis, YAxis, ResponsiveContainer } from "recharts";
 
 export const SupportDevelopmentFactors: React.FC<Results> = (results) => {
-    const tick = (props: TickProps) => {
+    const Tick = (props: TickProps) => {
         const { x, y, payload } = props;
         return (
           <g transform={`translate(${x},${y})`}>
@@ -34,11 +34,11 @@ export const SupportDevelopmentFactors: React.FC<Results> = (results) => {
                 <XAxis type="number" /> 
                 <YAxis 
                     type="category"    
-                    dataKey="name" 
+                    dataKey="answer" 
                     width={350} 
                     fontSize={10}
                     interval={0}
-                    tick={tick}/> 
+                    tick={Tick}/> 
                 <Bar dataKey="value" fill="rgb(var(--survey-placeholder))" /> 
             </BarChart>
             </ResponsiveContainer>
