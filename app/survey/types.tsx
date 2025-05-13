@@ -24,7 +24,7 @@ export type RawResults = {
     supportNewFairhold: string;
 };
 
-export type Results = Record<keyof RawResults, {
+export type Results = Record<Exclude<keyof RawResults, 'id'>, {
     answer: string | string[] | undefined;
     value: number;
 }[]>
