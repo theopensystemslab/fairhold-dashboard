@@ -8,28 +8,28 @@ export const aggregateResults = (rawResults: RawResults[]) => {
         for (const key in rawResult) {
             if (key === "id") continue; // Skip the id field (we don't need it)
             const validKey = key as keyof RawResults; // Explicitly assert key type
-            const name = rawResult[validKey];
+            const answer = rawResult[validKey];
             if (!results[validKey]) {
                 results[validKey] = [];
             }
 
-            if (Array.isArray(name)) {
+            if (Array.isArray(answer)) {
                 // We need to handle arrays because some questions are multiple choice
-                for (const item of name) {
-                    const existingResult = results[validKey].find((result) => result.name === item);
+                for (const item of answer) {
+                    const existingResult = results[validKey].find((result) => result.answer === item);
                     if (existingResult) {
                         existingResult.value++;
                     } else {
-                        results[validKey].push({ name: item, value: 1 });
+                        results[validKey].push({ answer: item, value: 1 });
                     }
                 }
             } else {
                 // The rest of the answers are single strings
-                const existingResult = results[validKey].find((result) => result.name === name);
+                const existingResult = results[validKey].find((result) => result.answer === answer);
                 if (existingResult) {
                     existingResult.value++;
                 } else {
-                    results[validKey].push({ name: name, value: 1 });
+                    results[validKey].push({ answer: answer, value: 1 });
                 }
             }
         }

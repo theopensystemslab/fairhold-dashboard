@@ -25,7 +25,7 @@ export type RawResults = {
 };
 
 export type Results = Record<keyof RawResults, {
-    name: string | string[] | null | undefined;
+    answer: string | string[] | null | undefined;
     value: number;
 }[]>
 
