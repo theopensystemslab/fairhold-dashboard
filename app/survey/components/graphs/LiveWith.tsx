@@ -8,10 +8,10 @@ export const LiveWith: React.FC<SankeyResults> = ({ liveWith }) => {
     return (
         <SurveyGraphCard title="Who do you want to live with?">
             <ResponsiveContainer>
-            <CustomSankey
-                nodes={liveWith.nodes}
-                links={liveWith.links}            >
-            </CustomSankey>
+                <CustomSankey
+                    nodes={liveWith.nodes}
+                    links={liveWith.links}            >
+                </CustomSankey>
             </ResponsiveContainer>
         </SurveyGraphCard>
     )
