@@ -9,31 +9,15 @@ const SANKEY_MAPPINGS = [
 
 export const aggregateResults = (rawResults: RawResults[]) => {
     // There are two different data types we might need, both need to be initialised then handled separately
-    const barOrPieResults = initializeBarOrPieResultsObject();
-    const sankeyResults = initializeSankeyResultsObject();
+    const barOrPie = initializeBarOrPieResultsObject();
+    const sankey = initializeSankeyResultsObject();
     const numberResponses = rawResults.length;
 
         for (const rawResult of rawResults) {
-        Object.entries(rawResult).forEach(([key, value]) => {
-            if (key === "id") return; // Skip the id field (we don't need it)
-
-            const validKey = key as keyof RawResults;
-
-            if (key in sankeyResults) {
-                addSankeyResult(sankeyResults, rawResult);
-            } 
-            else if (key in barOrPieResults) {
-                // Answers might be arrays (multiple choice) or single strings, have to handle both
-                if (Array.isArray(value)) {
-                    value.forEach((item) => addBarOrPieResult(barOrPieResults, validKey as keyof BarOrPieResults, item));
-                } else {
-                    addBarOrPieResult(barOrPieResults, validKey as keyof BarOrPieResults, value);
-                }
-            }
-        });
+            addBarOrPieResult(barOrPie, rawResult);
+            addSankeyResult(sankey, rawResult);
     }
-
-    return { numberResponses, barOrPieResults, sankeyResults };
+    return { numberResponses, barOrPie, sankey };
 }
 
 const initializeBarOrPieResultsObject = (): BarOrPieResults => {
@@ -58,23 +42,38 @@ const initializeBarOrPieResultsObject = (): BarOrPieResults => {
 
 const initializeSankeyResultsObject = (): SankeyResults => {
     return {
-        houseType: [{ nodes: [], links: [] }],
-        liveWith: [{ nodes: [], links: [] }],
-        currentMeansTenureChoice: [{ nodes: [], links: [] }],
-        anyMeansTenureChoice: [{ nodes: [], links: [] }],
+        houseType: { nodes: [], links: [] },
+        liveWith: { nodes: [], links: [] },
+        currentMeansTenureChoice: { nodes: [], links: [] },
+        anyMeansTenureChoice: { nodes: [], links: [] },
     } as SankeyResults;
 };
 
-const addBarOrPieResult = (results: BarOrPieResults, validKey: keyof BarOrPieResults, answer: string | string[] | undefined ) => {
-    const existingResult = results[validKey].find((result) => result.answer === answer);
+const addBarOrPieResult = (results: BarOrPieResults, rawResult: RawResults) => {
+    Object.entries(rawResult).forEach(([key, value]) => {
+        if (key === "id") return;
+        if (!(key in results)) return;
 
-    if (existingResult) {
-            existingResult.value++;
+        const validKey = key as keyof BarOrPieResults;
+        if (Array.isArray(value)) {
+            value.forEach((item) => {
+                const existingResult = results[validKey].find((result) => result.answer === item);
+                if (existingResult) {
+                    existingResult.value++;
+                } else {
+                    results[validKey].push({ answer: item, value: 1 });
+                }
+            });
         } else {
-            results[validKey].push({ answer, value: 1 });
+            const existingResult = results[validKey].find((result) => result.answer === value);
+            if (existingResult) {
+                existingResult.value++;
+            } else {
+                results[validKey].push({ answer: value, value: 1 });
+            }
         }
-
-}
+    });
+};
 
 const addSankeyResult = (results: SankeyResults, rawResult: RawResults) => {
     SANKEY_MAPPINGS.forEach(({ fromKey, toKey, newKey, isArray }) => {
@@ -85,10 +84,8 @@ const addSankeyResult = (results: SankeyResults, rawResult: RawResults) => {
 
         const sankeyResult = results[newKey as keyof SankeyResults];
 
-        if (isArray && Array.isArray(toValue)) {
-            toValue.forEach((toItem) => {
-                updateSankeyNodesAndLinks(sankeyResult, fromValue, toItem);
-            });
+        if (isArray && Array.isArray(toValue) && toValue.length > 0) {
+            updateSankeyNodesAndLinks(sankeyResult, fromValue, toValue[0]);
         } else {
             updateSankeyNodesAndLinks(sankeyResult, fromValue, toValue as string);
         }
@@ -96,12 +93,12 @@ const addSankeyResult = (results: SankeyResults, rawResult: RawResults) => {
 };
 
 const updateSankeyNodesAndLinks = (
-    sankeyResult: { nodes: { name: string }[]; links: { source: number; target: number; value: number }[] }[],
+    sankeyResult: { nodes: { name: string }[]; links: { source: number; target: number; value: number }[] },
     fromValue: string,
     toValue: string
 ) => {
-    const nodes = sankeyResult[0]?.nodes || [];
-    const links = sankeyResult[0]?.links || [];
+    const nodes = sankeyResult.nodes;
+    const links = sankeyResult.links;
 
     // Find or add the source node
     let sourceIndex = nodes.findIndex((node) => node.name === fromValue);
@@ -125,13 +122,5 @@ const updateSankeyNodesAndLinks = (
         existingLink.value++;
     } else {
         links.push({ source: sourceIndex, target: targetIndex, value: 1 });
-    }
-
-    // Update the sankey result
-    if (sankeyResult.length === 0) {
-        sankeyResult.push({ nodes, links });
-    } else {
-        sankeyResult[0].nodes = nodes;
-        sankeyResult[0].links = links;
     }
 };
