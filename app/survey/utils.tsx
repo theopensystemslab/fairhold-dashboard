@@ -9,8 +9,8 @@ const SANKEY_MAPPINGS = [
 
 export const aggregateResults = (rawResults: RawResults[]) => {
     // There are two different data types we might need, both need to be initialised then handled separately
-    const barOrPieResults = initializeBarOrPieResultsObject();
-    const sankeyResults = initializeSankeyResultsObject();
+    const barOrPie = initializeBarOrPieResultsObject();
+    const sankey = initializeSankeyResultsObject();
     const numberResponses = rawResults.length;
 
         for (const rawResult of rawResults) {
@@ -19,21 +19,21 @@ export const aggregateResults = (rawResults: RawResults[]) => {
 
             const validKey = key as keyof RawResults;
 
-            if (key in sankeyResults) {
-                addSankeyResult(sankeyResults, rawResult);
+            if (key in sankey) {
+                addSankeyResult(sankey, rawResult);
             } 
-            else if (key in barOrPieResults) {
+            else if (key in barOrPie) {
                 // Answers might be arrays (multiple choice) or single strings, have to handle both
                 if (Array.isArray(value)) {
-                    value.forEach((item) => addBarOrPieResult(barOrPieResults, validKey as keyof BarOrPieResults, item));
+                    value.forEach((item) => addBarOrPieResult(barOrPie, validKey as keyof BarOrPieResults, item));
                 } else {
-                    addBarOrPieResult(barOrPieResults, validKey as keyof BarOrPieResults, value);
+                    addBarOrPieResult(barOrPie, validKey as keyof BarOrPieResults, value);
                 }
             }
         });
     }
 
-    return { numberResponses, barOrPieResults, sankeyResults };
+    return { numberResponses, barOrPie, sankey };
 }
 
 const initializeBarOrPieResultsObject = (): BarOrPieResults => {
@@ -58,10 +58,10 @@ const initializeBarOrPieResultsObject = (): BarOrPieResults => {
 
 const initializeSankeyResultsObject = (): SankeyResults => {
     return {
-        houseType: [{ nodes: [], links: [] }],
-        liveWith: [{ nodes: [], links: [] }],
-        currentMeansTenureChoice: [{ nodes: [], links: [] }],
-        anyMeansTenureChoice: [{ nodes: [], links: [] }],
+        houseType: { nodes: [], links: [] },
+        liveWith: { nodes: [], links: [] },
+        currentMeansTenureChoice: { nodes: [], links: [] },
+        anyMeansTenureChoice: { nodes: [], links: [] },
     } as SankeyResults;
 };
 
@@ -96,12 +96,12 @@ const addSankeyResult = (results: SankeyResults, rawResult: RawResults) => {
 };
 
 const updateSankeyNodesAndLinks = (
-    sankeyResult: { nodes: { name: string }[]; links: { source: number; target: number; value: number }[] }[],
+    sankeyResult: { nodes: { name: string }[]; links: { source: number; target: number; value: number }[] },
     fromValue: string,
     toValue: string
 ) => {
-    const nodes = sankeyResult[0]?.nodes || [];
-    const links = sankeyResult[0]?.links || [];
+    const nodes = sankeyResult.nodes;
+    const links = sankeyResult.links;
 
     // Find or add the source node
     let sourceIndex = nodes.findIndex((node) => node.name === fromValue);
@@ -125,13 +125,5 @@ const updateSankeyNodesAndLinks = (
         existingLink.value++;
     } else {
         links.push({ source: sourceIndex, target: targetIndex, value: 1 });
-    }
-
-    // Update the sankey result
-    if (sankeyResult.length === 0) {
-        sankeyResult.push({ nodes, links });
-    } else {
-        sankeyResult[0].nodes = nodes;
-        sankeyResult[0].links = links;
     }
 };
