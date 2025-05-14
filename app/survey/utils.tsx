@@ -19,10 +19,7 @@ export const aggregateResults = (rawResults: RawResults[]) => {
 
             const validKey = key as keyof RawResults;
 
-            if (key in sankey) {
-                addSankeyResult(sankey, rawResult);
-            } 
-            else if (key in barOrPie) {
+            if (key in barOrPie) {
                 // Answers might be arrays (multiple choice) or single strings, have to handle both
                 if (Array.isArray(value)) {
                     value.forEach((item) => addBarOrPieResult(barOrPie, validKey as keyof BarOrPieResults, item));
@@ -31,8 +28,9 @@ export const aggregateResults = (rawResults: RawResults[]) => {
                 }
             }
         });
+        // Only call addSankeyResult ONCE per result
+        addSankeyResult(sankey, rawResult);
     }
-
     return { numberResponses, barOrPie, sankey };
 }
 
@@ -85,10 +83,8 @@ const addSankeyResult = (results: SankeyResults, rawResult: RawResults) => {
 
         const sankeyResult = results[newKey as keyof SankeyResults];
 
-        if (isArray && Array.isArray(toValue)) {
-            toValue.forEach((toItem) => {
-                updateSankeyNodesAndLinks(sankeyResult, fromValue, toItem);
-            });
+        if (isArray && Array.isArray(toValue) && toValue.length > 0) {
+            updateSankeyNodesAndLinks(sankeyResult, fromValue, toValue[0]);
         } else {
             updateSankeyNodesAndLinks(sankeyResult, fromValue, toValue as string);
         }
