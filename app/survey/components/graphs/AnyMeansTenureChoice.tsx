@@ -7,7 +7,7 @@ import { ResponsiveContainer } from "recharts";
 export const AnyMeansTenureChoice: React.FC<SankeyResults> = ({ anyMeansTenureChoice }) => {
     return (
         <SurveyGraphCard title="What tenure would you choose?">
-            <ResponsiveContainer>
+            <ResponsiveContainer width="100%" height="100%">
                 <CustomSankey
                     nodes={anyMeansTenureChoice.nodes}
                     links={anyMeansTenureChoice.links}            >

@@ -7,7 +7,7 @@ import { ResponsiveContainer } from "recharts";
 export const LiveWith: React.FC<SankeyResults> = ({ liveWith }) => {
     return (
         <SurveyGraphCard title="Who do you want to live with?">
-            <ResponsiveContainer>
+            <ResponsiveContainer width="100%" height="100%">
                 <CustomSankey
                     nodes={liveWith.nodes}
                     links={liveWith.links}            >
