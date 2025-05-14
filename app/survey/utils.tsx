@@ -14,22 +14,8 @@ export const aggregateResults = (rawResults: RawResults[]) => {
     const numberResponses = rawResults.length;
 
         for (const rawResult of rawResults) {
-        Object.entries(rawResult).forEach(([key, value]) => {
-            if (key === "id") return; // Skip the id field (we don't need it)
-
-            const validKey = key as keyof RawResults;
-
-            if (key in barOrPie) {
-                // Answers might be arrays (multiple choice) or single strings, have to handle both
-                if (Array.isArray(value)) {
-                    value.forEach((item) => addBarOrPieResult(barOrPie, validKey as keyof BarOrPieResults, item));
-                } else {
-                    addBarOrPieResult(barOrPie, validKey as keyof BarOrPieResults, value);
-                }
-            }
-        });
-        // Only call addSankeyResult ONCE per result
-        addSankeyResult(sankey, rawResult);
+            addBarOrPieResult(barOrPie, rawResult);
+            addSankeyResult(sankey, rawResult);
     }
     return { numberResponses, barOrPie, sankey };
 }
@@ -63,16 +49,31 @@ const initializeSankeyResultsObject = (): SankeyResults => {
     } as SankeyResults;
 };
 
-const addBarOrPieResult = (results: BarOrPieResults, validKey: keyof BarOrPieResults, answer: string | string[] | undefined ) => {
-    const existingResult = results[validKey].find((result) => result.answer === answer);
+const addBarOrPieResult = (results: BarOrPieResults, rawResult: RawResults) => {
+    Object.entries(rawResult).forEach(([key, value]) => {
+        if (key === "id") return;
+        if (!(key in results)) return;
 
-    if (existingResult) {
-            existingResult.value++;
+        const validKey = key as keyof BarOrPieResults;
+        if (Array.isArray(value)) {
+            value.forEach((item) => {
+                const existingResult = results[validKey].find((result) => result.answer === item);
+                if (existingResult) {
+                    existingResult.value++;
+                } else {
+                    results[validKey].push({ answer: item, value: 1 });
+                }
+            });
         } else {
-            results[validKey].push({ answer, value: 1 });
+            const existingResult = results[validKey].find((result) => result.answer === value);
+            if (existingResult) {
+                existingResult.value++;
+            } else {
+                results[validKey].push({ answer: value, value: 1 });
+            }
         }
-
-}
+    });
+};
 
 const addSankeyResult = (results: SankeyResults, rawResult: RawResults) => {
     SANKEY_MAPPINGS.forEach(({ fromKey, toKey, newKey, isArray }) => {
