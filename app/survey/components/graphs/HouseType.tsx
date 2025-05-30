@@ -6,7 +6,7 @@ import { ResponsiveContainer } from "recharts";
 
 export const HouseType: React.FC<SankeyResults> = ({ houseType }) => {
     return (
-        <SurveyGraphCard title="What type of home do you want to live in?" results={houseType}>
+        <SurveyGraphCard title="What type of home do you want to live in?">
             <ResponsiveContainer>
                 <CustomSankey
                     nodes={houseType.nodes}
