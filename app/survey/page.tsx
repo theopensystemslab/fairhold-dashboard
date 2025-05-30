@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Inter } from "next/font/google";
 import ErrorBoundary from '../components/ErrorBoundary';
-import { SurveyResults } from './types';
+import { Results, SurveyData } from './types';
 import { Age } from './components/graphs/Age';
 import { AffordFairhold } from './components/graphs/AffordFairhold';
 import { AnyMeansTenureChoice } from './components/graphs/AnyMeansTenureChoice';
@@ -12,7 +12,7 @@ import { CurrentMeansTenureChoice } from './components/graphs/CurrentMeansTenure
 import { HouseType } from './components/graphs/HouseType';
 import { HousingOutcomes } from './components/graphs/HousingOutcomes';
 import { LiveWith } from './components/graphs/LiveWith';
-import { Postcode } from './components/graphs/Postcode';
+// import { Postcode } from './components/graphs/Postcode';
 import { SupportDevelopment } from './components/graphs/SupportDevelopment';
 import { SupportDevelopmentFactors } from './components/graphs/SupportDevelopmentFactors';
 import { SupportNewFairhold } from './components/graphs/SupportNewFairhold';
@@ -25,7 +25,7 @@ const inter = Inter({
 });
 
 export default function SurveyPage() {
-  const [surveyData, setSurveyData] = useState<SurveyResults[]>([]);
+  const [surveyData, setSurveyData] = useState<SurveyData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -39,8 +39,8 @@ export default function SurveyPage() {
         }
         
         const data = await response.json();
-        setSurveyData(data.results);
-        console.log(data)
+
+        setSurveyData(data);
       } catch (err) {
         setError('Failed to fetch survey data');
         console.error(err);
@@ -54,50 +54,52 @@ export default function SurveyPage() {
 
   if (loading) return <div>Loading survey data...</div>;
   if (error) return <div>Error: {error}</div>;
-
+  if (!surveyData) return <div>No survey data available.</div>;
+  
+  const results = surveyData.results as Results;
   return (
     <ErrorBoundary>
         <main className={`${inter.className} p-4 min-h-screen bg-[rgb(var(--background-end-rgb))]`}>
           <div className="flex flex-col m-4">
             <h1 className="h1-style text-2xl md:text-4xl">Fairhold survey results</h1>
               <div className="flex flex-col gap-4 mt-6">
-              {surveyData.length === 0 ? (
+              {surveyData.numberResponses === 0 ? (
             <p>No survey responses found.</p>
           ) : (
             <div>
-              <h2 className="text-xl md:text-2xl">So far, {surveyData.length} people have responded</h2>
+              <h2 className="text-xl md:text-2xl">So far, {surveyData.numberResponses} people have responded</h2>
               <div className="flex flex-col py-4">
                 <h3 className="text-xl font-medium">Who has responded?</h3>
                 <div className="flex flex-col md:flex-row">
-                  <Country results={surveyData} />
-                  <Age results={surveyData} />
-                  <Postcode results={surveyData} />
+                  <Country {...results} />
+                  <Age {...results} />
+                  {/* <Postcode {...results} /> */}
                 </div>
               </div>
 
               <div className="flex flex-col">
                 <h3 className="text-xl font-medium">Housing preferences</h3>
                 <div className="flex flex-col md:flex-row">
-                  <HouseType results={surveyData} />
-                  <LiveWith results={surveyData} />
+                  <HouseType {...results} />
+                  <LiveWith {...results} />
                 </div>
                 <div className="flex flex-col md:flex-row">
-                  <HousingOutcomes results={surveyData} />
-                  <AffordFairhold results={surveyData} />
+                  <HousingOutcomes {...results} />
+                  <AffordFairhold {...results} />
                 </div>
                 <div className="flex flex-col md:flex-row">
-                  <CurrentMeansTenureChoice results={surveyData} />
-                  <AnyMeansTenureChoice results={surveyData} />
+                  <CurrentMeansTenureChoice {...results} />
+                  <AnyMeansTenureChoice {...results} />
                 </div>
               </div>
 
               <div className="flex flex-col">
                 <h3 className="text-xl font-medium">Attitudes towards development</h3>
                 <div className="flex flex-col md:flex-row">
-                  <SupportDevelopment results={surveyData} />
-                  <SupportNewFairhold results={surveyData} />
+                  <SupportDevelopment {...results} />
+                  <SupportNewFairhold {...results} />
                 </div>
-                <SupportDevelopmentFactors results={surveyData} />
+                <SupportDevelopmentFactors {...results} />
               </div>
           </div>
           )}
