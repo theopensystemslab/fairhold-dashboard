@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { isValid as isValidPostcode } from "postcode";
+import { isValid as isValidPostcode, validOutcode as isValidOutcode } from "postcode";
 import { HOUSE_TYPES } from "../models/Property";
 import { maintenanceLevelSchema } from "../schemas/calculationSchema";
 
@@ -9,7 +9,10 @@ export const formSchema = z.object({
   housePostcode: z
     .string()
     .min(1, "Enter a postcode.")
-    .refine(isValidPostcode, "Enter a valid postcode."),
+    .refine(
+      (postcode) => isValidPostcode(postcode) || isValidOutcode(postcode), 
+      "Enter a valid postcode (e.g. SW1 1AA) or outcode (e.g. SW1)"
+    ),
   houseSize: z.coerce
     .string()
     .transform((val) => (val === "" ? undefined : Number(val)))

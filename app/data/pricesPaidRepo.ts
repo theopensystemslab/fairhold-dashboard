@@ -12,7 +12,7 @@ interface PricesPaidParams {
 const getPricesPaidByPostcodeAndHouseType = async (
   postcodeDistrict: string,
   postcodeArea: string,
-  postcodeSector: string,
+  postcodeSector: string | null,
   houseType: string
 ): Promise<PricesPaidParams> => {
   try {
@@ -20,7 +20,10 @@ const getPricesPaidByPostcodeAndHouseType = async (
       where: {
         propertyType: houseType,
         postcode: {
-          in: [postcodeSector, postcodeDistrict, postcodeArea],
+          in: [
+            ...(postcodeSector ? [postcodeSector] : []),
+            postcodeDistrict,
+            postcodeArea],
         },
         transactionCount: {
           gte: MINIMUM_NUMBER_OF_POSTCODES,

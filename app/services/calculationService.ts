@@ -14,7 +14,6 @@ import { APIError } from "../lib/exceptions";
 
 const prisma = new PrismaClient();
 
-
 export const getHouseholdData = async (input: Calculation) => {
 
   try {
@@ -22,7 +21,10 @@ export const getHouseholdData = async (input: Calculation) => {
     const postcode = input.housePostcode;
     const postcodeArea = postcode.area; // extract only the characters for the area, e.g SE
     const postcodeDistrict = postcode.district; // extract only characters for the district, SE17
-    const postcodeSector = postcode.sector; // extract only the characters for the sector, SE17 1
+    
+    // may not be available (if user only enters outward postcode, aka district)
+    const postcodeSector = postcode.sector ?? null; // extract only the characters for the sector, SE17 1
+    
     const bedrooms = input.houseBedrooms <= 4 ? input.houseBedrooms : 4; // rental data only goes up to 4br TODO: do we want to increase the weight? 
 
     const itl3 = await itlService.getByPostcodeDistrict(postcodeDistrict);

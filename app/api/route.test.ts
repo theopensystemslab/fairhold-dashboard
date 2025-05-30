@@ -58,15 +58,12 @@ describe("POST API Route", () => {
       ...validApiInput,
       // Parsed postcode object
       housePostcode: {
+        outcode: "SE17",
+        incode: "1PE",
         area: "SE",
         district: "SE17",
-        incode: "1PE",
-        outcode: "SE17",
-        postcode: "SE17 1PE",
         sector: "SE17 1",
-        subDistrict: null,
-        unit: "PE",
-        valid: true,
+        postcode: "SE17 1PE"
       },
     });
     expect(calculateFairhold).toHaveBeenCalledWith(householdData);
@@ -116,15 +113,12 @@ describe("POST API Route", () => {
       ...validApiInput,
       // Parsed postcode object
       housePostcode: {
+        outcode: "SE17",
+        incode: "1PE",
         area: "SE",
         district: "SE17",
-        incode: "1PE",
-        outcode: "SE17",
-        postcode: "SE17 1PE",
         sector: "SE17 1",
-        subDistrict: null,
-        unit: "PE",
-        valid: true,
+        postcode: "SE17 1PE"
       },
     });
     expect(NextResponse.json).toHaveBeenCalledWith(
