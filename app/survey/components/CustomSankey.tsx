@@ -3,73 +3,73 @@ import { Sankey, Tooltip, Rectangle } from "recharts";
 
 
 type CustomNodeProps = {
-    "x": number;
-    "y": number;
-    "width": number;
-    "height": number;
-    "index": number;
-    "payload": NodePayload;
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    index: number;
+    payload: NodePayload;
 }
 
 type NodePayload = {
-    "name": string;
-    "sourceNodes": [];
-    "sourceLinks": [];
-    "targetLinks": [];
-    "targetNodes": [];
-    "value": number;
-    "depth": number;
-    "x": number;
-    "dx": number;
-    "y": number;
-    "dy": number;
+    name: string;
+    sourceNodes: [];
+    sourceLinks: [];
+    targetLinks: [];
+    targetNodes: [];
+    value: number;
+    depth: number;
+    x: number;
+    dx: number;
+    y: number;
+    dy: number;
 }
 
 type CustomLinkProps = {
-    "sourceX": number;
-    "targetX": number;
-    "sourceY": number;
-    "targetY": number;
-    "sourceControlX": number;
-    "targetControlX": number;
-    "sourceRelativeY": number;
-    "targetRelativeY": number;
-    "linkWidth": number;
-    "index": number;
-    "payload": CustomLinkPayload;
+    sourceX: number;
+    targetX: number;
+    sourceY: number;
+    targetY: number;
+    sourceControlX: number;
+    targetControlX: number;
+    sourceRelativeY: number;
+    targetRelativeY: number;
+    linkWidth: number;
+    index: number;
+    payload: CustomLinkPayload;
 }
 
 type CustomLinkPayload = {
-    "source": {
-        "name": string;
-        "sourceNodes": [];
-        "sourceLinks": [];
-        "targetLinks": [];
-        "targetNodes": [];
-        "value": number;
-        "depth": number;
-        "x": number;
-        "dx": number;
-        "y": number;
-        "dy": number;
+    source: {
+        name: string;
+        sourceNodes: [];
+        sourceLinks: [];
+        targetLinks: [];
+        targetNodes: [];
+        value: number;
+        depth: number;
+        x: number;
+        dx: number;
+        y: number;
+        dy: number;
     },
-    "target": {
-        "name": string;
-        "sourceNodes": [];
-        "sourceLinks": [];
-        "targetLinks": [];
-        "targetNodes": [];
-        "value": number;
-        "depth": number;
-        "x": number;
-        "dx": number;
-        "y": number;
-        "dy": number;
+    target: {
+        name: string;
+        sourceNodes: [];
+        sourceLinks: [];
+        targetLinks: [];
+        targetNodes: [];
+        value: number;
+        depth: number;
+        x: number;
+        dx: number;
+        y: number;
+        dy: number;
     },
-    "value": number;
-    "dy": number;
-    "sy": number;
-    "ty": number;
+    value: number;
+    dy: number;
+    sy: number;
+    ty: number;
 }
 
 type SankeyProps = {
