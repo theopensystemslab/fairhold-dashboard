@@ -2,8 +2,10 @@ import React from "react"
 import { BarOrPieResults } from "@/app/survey/types";
 import SurveyGraphCard from "@/app/survey/components/SurveyGraphCard";
 
-export const Postcode: React.FC<BarOrPieResults> = (results) => {
+export const Postcode: React.FC<BarOrPieResults> = ({ postcode }) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const placeholder = postcode;
     return (
-        <SurveyGraphCard title="What is your postcode?" results={results}></SurveyGraphCard>
+        <SurveyGraphCard title="What is your postcode?"></SurveyGraphCard>
     )
 }
