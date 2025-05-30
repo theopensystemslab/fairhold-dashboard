@@ -1,4 +1,4 @@
-import { RawResults, BarOrPieResults, SankeyResults } from "./types"
+import { RawResults, BarOrPieResults, SankeyResults, SankeyResult } from "./types"
 
 const SANKEY_MAPPINGS = [
   { fromKey: 'houseType', toKey: 'idealHouseType', newKey: 'idealHouseType', isArray: false },
@@ -50,28 +50,26 @@ const initializeSankeyResultsObject = (): SankeyResults => {
 };
 
 const addBarOrPieResult = (results: BarOrPieResults, rawResult: RawResults) => {
+    const getExistingResult = (key: keyof BarOrPieResults, answer: string) => 
+        results[key].find(result => result.answer === answer);
+
+    const addResultItem = (key: keyof BarOrPieResults, item: string) => {
+        const existingResult = getExistingResult(key, item);
+        existingResult
+            ? existingResult.value++
+            : results[key].push({ answer: item, value: 1 });
+    };
+
     Object.entries(rawResult).forEach(([key, value]) => {
-        if (key === "id") return;
-        if (!(key in results)) return;
+        if (key === "id" || !(key in results)) return;
 
         const validKey = key as keyof BarOrPieResults;
-        if (Array.isArray(value)) {
-            value.forEach((item) => {
-                const existingResult = results[validKey].find((result) => result.answer === item);
-                if (existingResult) {
-                    existingResult.value++;
-                } else {
-                    results[validKey].push({ answer: item, value: 1 });
-                }
-            });
-        } else {
-            const existingResult = results[validKey].find((result) => result.answer === value);
-            if (existingResult) {
-                existingResult.value++;
-            } else {
-                results[validKey].push({ answer: value, value: 1 });
-            }
-        }
+        
+        const isMultipleChoiceAnswer = Array.isArray(value);
+        
+        isMultipleChoiceAnswer
+            ? value.forEach(item => addResultItem(validKey, item))
+            : addResultItem(validKey, value);
     });
 };
 
@@ -93,12 +91,11 @@ const addSankeyResult = (results: SankeyResults, rawResult: RawResults) => {
 };
 
 const updateSankeyNodesAndLinks = (
-    sankeyResult: { nodes: { name: string }[]; links: { source: number; target: number; value: number }[] },
+    sankeyResult: SankeyResult,
     fromValue: string,
     toValue: string
 ) => {
-    const nodes = sankeyResult.nodes;
-    const links = sankeyResult.links;
+    const { nodes, links } = sankeyResult;
 
     // Find or add the source node
     let sourceIndex = nodes.findIndex((node) => node.name === fromValue);
