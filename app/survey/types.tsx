@@ -6,8 +6,8 @@ export type RawResults = {
     ageGroup: string;
     houseType: string;
     currentTenure: string;
-    ownershipModel?: string | undefined;
-    rentalModel?: string | undefined;
+    ownershipModel?: string;
+    rentalModel?: string;
     liveWith: string;
     secondHomes: string;
     idealHouseType: string;
