@@ -33,3 +33,25 @@ export type SurveyData = {
     numberResponses: number;
     results: Results;
 }
+
+export type TickProps = {
+    textAnchor: string;
+    verticalAnchor: string;
+    orientation: string;
+    width: number;
+    height: number;
+    fontSize: number;
+    x: number;
+    y: number;
+    className: string;
+    stroke: string;
+    fill: string;
+    index: number;
+    payload: {
+        coordinate: number;
+        value: string;
+        index: number;
+        offset: number;
+    },
+    visibleTicksCount: number;
+}
