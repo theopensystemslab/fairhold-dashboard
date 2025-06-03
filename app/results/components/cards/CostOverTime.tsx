@@ -1,13 +1,13 @@
 import { useState, useEffect, useMemo } from "react";
-import GraphCard from "../../ui/GraphCard";
-import CostOverTimeWrapper, { TenureType } from "../../graphs/CostOverTimeWrapper";
-import { Drawer } from "../../ui/Drawer";
-import TenureSelector from "../../ui/TenureSelector";
-import TenureSelectorMobile from "../../ui/TenureSelectorMobile";
-import { DashboardProps } from "../../ui/Dashboard";
+import GraphCard from "../ui/GraphCard";
+import CostOverTimeWrapper, { TenureType } from "../graphs/CostOverTimeWrapper";
+import { Drawer } from "../../../components/ui/Drawer";
+import TenureSelector from "../ui/TenureSelector";
+import TenureSelectorMobile from "../ui/TenureSelectorMobile";
+import { DashboardProps } from "../ui/Dashboard";
 import { formatValue } from "@/app/lib/format";
 import ReactMarkdown from 'react-markdown';
-import explanationContent from '../Help/CostOverTime.md';
+import explanationContent from '../help/CostOverTime.md';
 import { DEFAULT_FORECAST_PARAMETERS } from "@/app/models/ForecastParameters";
 import { SOCIAL_RENT_ADJUSTMENT_FORECAST } from "@/app/models/constants";
 import { remark } from "remark";
@@ -22,8 +22,6 @@ const TENURE_LABELS = {
   fairholdLandRent: 'Fairhold /LR',
   socialRent: 'Social rent'
 }
-
-
 
 export const CostOverTime: React.FC<DashboardProps> = ({ processedData }) => {
   const [selectedTenure, setSelectedTenure] = useState<TenureType>('marketPurchase');
@@ -41,7 +39,12 @@ export const CostOverTime: React.FC<DashboardProps> = ({ processedData }) => {
     propertyPriceGrowthPerYear: propertyPriceGrowthPerYear.toString(),
     incomeGrowthPerYear: incomeGrowthPerYear.toString(),
     SOCIAL_RENT_ADJUSTMENT_FORECAST: (SOCIAL_RENT_ADJUSTMENT_FORECAST * 100).toString()
-  }), []);
+  }), [
+  constructionPriceGrowthPerYear,
+  rentGrowthPerYear,
+  propertyPriceGrowthPerYear,
+  incomeGrowthPerYear,
+]);
 
   useEffect(() => {
     const processMarkdown = async () => {

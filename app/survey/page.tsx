@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Inter } from "next/font/google";
-import ErrorBoundary from '../components/ErrorBoundary';
+import ErrorBoundary from '../results/components/ErrorBoundary';
 import { Results, SurveyData } from './types';
 import { Age } from './components/graphs/Age';
 import { AffordFairhold } from './components/graphs/AffordFairhold';
