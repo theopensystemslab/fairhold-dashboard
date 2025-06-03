@@ -3,7 +3,7 @@ import { Drawer } from "../../../components/ui/Drawer";
 import GraphCard from "../ui/GraphCard"
 import { DEFAULT_INTEREST_RATE, DEFAULT_MORTGAGE_TERM, DEFAULT_INITIAL_DEPOSIT } from "@/app/models/constants";
 import ReactMarkdown from 'react-markdown';
-import explanationContent from '../Help/WhatDifference.md';
+import explanationContent from '../help/WhatDifference.md';
 import { DEFAULT_FORECAST_PARAMETERS } from "@/app/models/ForecastParameters";
 
 type CardsProps = {

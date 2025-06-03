@@ -6,7 +6,7 @@ import { Household } from "@/app/models/Household";
 import TenureSelector from "../ui/TenureSelector";
 import TenureSelectorMobile from "../ui/TenureSelectorMobile";
 import ReactMarkdown from 'react-markdown';
-import explanationContent from '../Help/ResaleValue.md';
+import explanationContent from '../help/ResaleValue.md';
 import { DEFAULT_FORECAST_PARAMETERS } from "@/app/models/ForecastParameters";
 import { remark } from "remark";
 import { visit } from 'unist-util-visit';
