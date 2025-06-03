@@ -1,13 +1,13 @@
 import React, { useRef, useState } from "react";
 import { Household } from "@/app/models/Household";
 import { FormFrontend } from "@/app/schemas/formSchema";
-import { WhatWouldYouChoose } from "../Dashboard/Cards/WhatWouldYouChoose";
-import { WhatDifference } from "../Dashboard/Cards/WhatDifference";
-import { HowMuchFHCost } from "../Dashboard/Cards/HowMuchFHCost";
+import { WhatWouldYouChoose } from "../cards/WhatWouldYouChoose";
+import { WhatDifference } from "../cards/WhatDifference";
+import { HowMuchFHCost } from "../cards/HowMuchFHCost";
 import { Carousel } from "./Carousel";
-import { HowMuchPerMonth } from "../Dashboard/Cards/HowMuchPerMonth";
-import { ResaleValue } from "../Dashboard/Cards/ResaleValue";
-import { CostOverTime } from "../Dashboard/Cards/CostOverTime";
+import { HowMuchPerMonth } from "../cards/HowMuchPerMonth";
+import { ResaleValue } from "../cards/ResaleValue";
+import { CostOverTime } from "../cards/CostOverTime";
 
 export interface DashboardProps {
   processedData: Household;

@@ -1,10 +1,10 @@
 import { useState, useEffect, useMemo } from "react";
-import GraphCard from "../../ui/GraphCard";
+import GraphCard from "../ui/GraphCard";
 import CostOverTimeWrapper, { TenureType } from "../graphs/CostOverTimeWrapper";
-import { Drawer } from "../../ui/Drawer";
-import TenureSelector from "../../ui/TenureSelector";
-import TenureSelectorMobile from "../../ui/TenureSelectorMobile";
-import { DashboardProps } from "../../ui/Dashboard";
+import { Drawer } from "../../../components/ui/Drawer";
+import TenureSelector from "../ui/TenureSelector";
+import TenureSelectorMobile from "../ui/TenureSelectorMobile";
+import { DashboardProps } from "../ui/Dashboard";
 import { formatValue } from "@/app/lib/format";
 import ReactMarkdown from 'react-markdown';
 import explanationContent from '../Help/CostOverTime.md';

@@ -1,17 +1,16 @@
 import { useState, useEffect, useMemo } from "react";
-import GraphCard from "../../ui/GraphCard";
+import GraphCard from "../ui/GraphCard";
 import ResaleValueWrapper from "../graphs/ResaleValueWrapper";
-import { Drawer } from "../../ui/Drawer";
+import { Drawer } from "../../../components/ui/Drawer";
 import { Household } from "@/app/models/Household";
-import TenureSelector from "../../ui/TenureSelector";
-import TenureSelectorMobile from "../../ui/TenureSelectorMobile";
+import TenureSelector from "../ui/TenureSelector";
+import TenureSelectorMobile from "../ui/TenureSelectorMobile";
 import ReactMarkdown from 'react-markdown';
 import explanationContent from '../Help/ResaleValue.md';
 import { DEFAULT_FORECAST_PARAMETERS } from "@/app/models/ForecastParameters";
 import { remark } from "remark";
 import { visit } from 'unist-util-visit';
-import type { TextNode } from "./types";
-import { TENURE_COLORS_DARK, TENURE_COLORS_LIGHT } from "./types";
+import { TENURE_COLORS_DARK, TENURE_COLORS_LIGHT, TextNode } from "./types";
 
 const TENURES = ['fairholdLandPurchase', 'fairholdLandRent'] as const;
 const TENURE_LABELS = {

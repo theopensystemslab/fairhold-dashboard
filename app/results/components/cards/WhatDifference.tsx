@@ -1,6 +1,6 @@
 import { Household } from "@/app/models/Household";
-import { Drawer } from "../../ui/Drawer";
-import GraphCard from "../../ui/GraphCard"
+import { Drawer } from "../../../components/ui/Drawer";
+import GraphCard from "../ui/GraphCard"
 import { DEFAULT_INTEREST_RATE, DEFAULT_MORTGAGE_TERM, DEFAULT_INITIAL_DEPOSIT } from "@/app/models/constants";
 import ReactMarkdown from 'react-markdown';
 import explanationContent from '../Help/WhatDifference.md';
