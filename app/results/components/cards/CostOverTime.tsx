@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import GraphCard from "../../ui/GraphCard";
-import CostOverTimeWrapper, { TenureType } from "../../graphs/CostOverTimeWrapper";
+import CostOverTimeWrapper, { TenureType } from "../graphs/CostOverTimeWrapper";
 import { Drawer } from "../../ui/Drawer";
 import TenureSelector from "../../ui/TenureSelector";
 import TenureSelectorMobile from "../../ui/TenureSelectorMobile";
