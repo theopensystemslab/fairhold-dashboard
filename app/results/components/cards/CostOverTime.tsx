@@ -39,7 +39,12 @@ export const CostOverTime: React.FC<DashboardProps> = ({ processedData }) => {
     propertyPriceGrowthPerYear: propertyPriceGrowthPerYear.toString(),
     incomeGrowthPerYear: incomeGrowthPerYear.toString(),
     SOCIAL_RENT_ADJUSTMENT_FORECAST: (SOCIAL_RENT_ADJUSTMENT_FORECAST * 100).toString()
-  }), []);
+  }), [
+  constructionPriceGrowthPerYear,
+  rentGrowthPerYear,
+  propertyPriceGrowthPerYear,
+  incomeGrowthPerYear,
+]);
 
   useEffect(() => {
     const processMarkdown = async () => {
