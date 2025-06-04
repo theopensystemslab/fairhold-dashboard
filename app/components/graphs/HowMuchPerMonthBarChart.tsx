@@ -1,5 +1,4 @@
 "use client";
-
 import React from "react";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis, LabelList, ReferenceLine } from "recharts";
 import { Card, CardContent } from "@/components/ui/card";
@@ -11,7 +10,6 @@ import {
   StyledChartContainer,
 } from "../ui/StyledChartContainer";
 import { formatValue } from "@/app/lib/format";
-import { Props } from "recharts/types/component/LabelList";
 
 type DataInput = {
   category: string;
@@ -23,14 +21,6 @@ type DataInput = {
   affordabilityMonthly: number;
   [key: string]: string | number;
 };
-
-interface CustomLabelListProps 
-  extends Props<{value: number}> {
-  index: number;
-  x: number;
-  y: number;
-  value: number;
-}
 
 interface StackedBarChartProps {
   data: DataInput[];
@@ -44,6 +34,46 @@ type ChartData = {
   monthly: number;
   fill: string;
 }
+
+interface CustomLabelListContentProps {
+  x?: number | string | undefined;
+  y?: number | string | undefined;
+  value?: number | string;
+  index?: number;
+  color: string;
+}
+
+const CustomLabelListContent: React.FC<CustomLabelListContentProps> = ({
+  x,
+  y,
+  value,
+  color
+}) => {
+  const xNum = typeof x === "number" ? x : Number(x);
+  const yNum = typeof y === "number" ? y : Number(y);
+  const xPos = xNum - 2;
+  const yPos = yNum - 30;
+
+  const numValue = typeof value === "number" ? value : Number(value);
+  const formattedValue = formatValue(numValue);
+
+  return (
+    <foreignObject x={xPos} y={yPos} width={100} height={30}>
+      <div
+        style={{
+          position: "absolute",
+          left: 0,
+          top: 0,
+          color: color,
+          fontSize: "18px",
+          fontWeight: 600,
+          whiteSpace: "nowrap",
+        }}
+      >
+        {formattedValue}
+      </div>
+    </foreignObject>
+  )};
 
 const HowMuchPerMonthBarChart: React.FC<StackedBarChartProps> = ({ 
   data, 
@@ -169,33 +199,12 @@ const HowMuchPerMonthBarChart: React.FC<StackedBarChartProps> = ({
               <LabelList
                 dataKey="monthly"
                 position="top"
-                content={(props) => {
-                  const { x, y, value, index } = props as CustomLabelListProps;
-
-                  const xPos = x - 2;
-                  const yPos = y - 30;
-                  const formattedValue = formatValue(value);
-
-                  const labelColor = getLabelColor(chartData[index].tenure);
-
-                  return (
-                    <foreignObject x={xPos} y={yPos} width={100} height={30}>
-                      <div
-                        style={{
-                          position: "absolute",
-                          left: 0,
-                          top: 0,
-                          color: labelColor,
-                          fontSize: "18px",
-                          fontWeight: 600,
-                          whiteSpace: "nowrap",
-                        }}
-                      >
-                        {formattedValue}
-                      </div>
-                    </foreignObject>
-                  );
-                }}
+                content={(props) => (
+                  <CustomLabelListContent
+                    {...props}
+                    color={props.index !== undefined ? chartData[props.index].fill : "#666"}
+                  />
+                )}
               />
             </Bar>
             <ReferenceLine 

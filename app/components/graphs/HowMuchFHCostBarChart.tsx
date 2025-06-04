@@ -1,5 +1,5 @@
 "use client";
-
+import React from "react";
 import { Bar, BarChart, CartesianGrid, XAxis, LabelList, Tooltip, YAxis } from "recharts";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -25,8 +25,39 @@ const chartConfig = {
     color: "rgb(var(--fairhold-interest-color-rgb))",
   },
 } satisfies ChartConfig;
+interface CustomLabelListContentProps {
+  x?: number | string | undefined;
+  y?: number | string | undefined;
+  value?: number | string;
+  color: string;
+}
 
-import React from "react";
+const CustomLabelListContent: React.FC<CustomLabelListContentProps> = ({ x, y, value, color }) => {
+  if (x === undefined || y === undefined || value === undefined) return null;
+
+  const xPos = typeof x === "number" ? x - 2 : Number(x) - 2;
+  const yPos = typeof y === "number" ? y - 30 : Number(y) - 30;
+  const numValue = typeof value === "number" ? value : parseFloat(value as string);
+  const formattedValue = formatValue(numValue);
+
+  return (
+    <foreignObject x={xPos} y={yPos} width={100} height={30}>
+      <div
+        style={{
+          position: "absolute",
+          left: 0,
+          top: 0,
+          color,
+          fontSize: "18px",
+          fontWeight: 600,
+          whiteSpace: "nowrap",
+        }}
+      >
+        {formattedValue}
+      </div>
+    </foreignObject>
+  );
+};
 
 type DataInput = {
   category: string;
@@ -183,32 +214,9 @@ const HowMuchFHCostBarChart: React.FC<StackedBarChartProps> = ({
               <LabelList
                 dataKey="freeholdTotal"
                 position="top"
-                content={(props) => {
-                  if (!props.x || !props.y || !props.value) return null;
-                  
-                  const xPos = typeof props.x === 'number' ? props.x - 2 : 0;
-                  const yPos = typeof props.y === 'number' ? props.y - 30 : 0;
-                  const value = typeof props.value === 'number' ? props.value : parseFloat(props.value as string);
-                  const formattedValue = formatValue(value);
-
-                  return (
-                    <foreignObject x={xPos} y={yPos} width={100} height={30}>
-                      <div
-                        style={{
-                          position: "absolute",
-                          left: 0,
-                          top: 0,
-                          color: "rgb(var(--freehold-equity-color-rgb))",
-                          fontSize: "18px",
-                          fontWeight: 600,
-                          whiteSpace: "nowrap",
-                        }}
-                      >
-                        {formattedValue}
-                      </div>
-                    </foreignObject>
-                  );
-                }}
+                content={(props) => (
+                  <CustomLabelListContent {...props} color="rgb(var(--freehold-equity-color-rgb))" />
+                )}
               />
             </Bar>
             <Bar
