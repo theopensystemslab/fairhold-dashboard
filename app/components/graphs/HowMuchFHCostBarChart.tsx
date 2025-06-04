@@ -72,6 +72,52 @@ interface StackedBarChartProps {
   maxY: number;
 }
 
+interface CustomTickProps {
+  x: number;
+  y: number;
+  payload: { value: string };
+}
+const CustomTick: React.FC<CustomTickProps> = ({ x, y, payload }) => {
+  const label = (() => {
+    switch (payload.value) {
+      case "freehold":
+        return "Freehold";
+      case "fairhold: land purchase":
+        return "Fairhold /\nLand Purchase";
+      case "fairhold: land rent":
+        return "Fairhold /\nLand Rent";
+      default:
+        return payload.value;
+    }
+  })();
+  const labelColor = (() => {
+    switch (payload.value) {
+      case "freehold":
+        return "rgb(var(--freehold-equity-color-rgb))";
+      default:
+        return "rgb(var(--fairhold-equity-color-rgb))";
+    }
+  })();
+
+  return (
+    <g transform={`translate(${x},${y})`}>
+      {label.split('\n').map((line: string, i: number) => (
+        <text
+          key={i}
+          x={0}
+          y={i * 20}
+          dy={10}
+          textAnchor="middle"
+          style={{ fill: labelColor }}
+          fontSize="12px"
+          fontWeight={600}
+        >
+          {line}
+        </text>
+      ))}
+    </g>
+  );
+}
 const HowMuchFHCostBarChart: React.FC<StackedBarChartProps> = ({
   data,
   maxY,
@@ -129,47 +175,9 @@ const HowMuchFHCostBarChart: React.FC<StackedBarChartProps> = ({
               tickLine={false}
               interval={0} 
               height={60}  
-              tick={({ x, y, payload }) => {
-                const label = (() => {
-                  switch (payload.value) {
-                    case "freehold":
-                      return "Freehold";
-                    case "fairhold: land purchase":
-                      return "Fairhold /\nLand Purchase";
-                    case "fairhold: land rent":
-                      return "Fairhold /\nLand Rent";
-                    default:
-                      return payload.value;
-                  }
-                })();
-                const labelColor = (() => {
-                  switch (payload.value) {
-                    case "freehold":
-                      return "rgb(var(--freehold-equity-color-rgb))";
-                    default:
-                      return "rgb(var(--fairhold-equity-color-rgb))";
-                  }
-                })();
-
-                return (
-                  <g transform={`translate(${x},${y})`}>
-                    {label.split('\n').map((line: string, i: number) => (
-                      <text
-                        key={i}
-                        x={0}
-                        y={i * 20}
-                        dy={10}
-                        textAnchor="middle"
-                        style={{ fill: labelColor }}
-                        fontSize="12px"
-                        fontWeight={600}
-                      >
-                        {line}
-                      </text>
-                    ))}
-                  </g>
-                );
-              }}
+                            tick={(props) => (
+                <CustomTick {...props} />
+              )}
             >
             </XAxis>
 

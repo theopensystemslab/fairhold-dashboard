@@ -43,6 +43,50 @@ interface CustomLabelListContentProps {
   color: string;
 }
 
+interface CustomTickProps {
+  x: number; 
+  y: number; 
+  payload: { value: string }; 
+  color: string
+}
+
+const CustomTick: React.FC<CustomTickProps> = ({ x, y, payload, color }) => {
+  const label = (() => {
+    switch (payload.value) {
+      case "Freehold":
+        return "Freehold";
+      case "Private Rent":
+        return "Private\nrent";
+      case "Fairhold - Land Purchase":
+        return "Fairhold \n/LP";
+      case "Fairhold - Land Rent":
+        return "Fairhold \n/LR";
+      case "Social Rent":
+        return "Social\nRent";
+      default:
+        return payload.value;
+    }
+  })();
+  return (
+    <g transform={`translate(${x},${y})`}>
+      {label.split('\n').map((line: string, i: number) => (
+        <text
+          key={i}
+          x={0}
+          y={i * 20}
+          dy={10}
+          textAnchor="middle"
+          style={{ fill: color }}
+          fontSize="12px"
+          fontWeight={600}
+        >
+          {line}
+        </text>
+      ))}
+    </g>
+  );
+  }
+
 const CustomLabelListContent: React.FC<CustomLabelListContentProps> = ({
   x,
   y,
@@ -119,23 +163,6 @@ const HowMuchPerMonthBarChart: React.FC<StackedBarChartProps> = ({
     },
   ];
 
-  const getLabelColor = (tenure: string): string => {
-    switch (tenure) {
-      case "Freehold":
-        return "rgb(var(--freehold-equity-color-rgb))";
-      case "Private Rent":
-        return "rgb(var(--private-rent-land-color-rgb))";
-      case "Fairhold - Land Purchase":
-        return "rgb(var(--fairhold-equity-color-rgb))";
-      case "Fairhold - Land Rent":
-        return "rgb(var(--fairhold-equity-color-rgb))";
-      case "Social Rent":
-        return "rgb(var(--social-rent-land-color-rgb))";
-      default:
-        return "#666";
-    }
-  }
-
   return (
     <Card className="h-full w-full">
       <CardContent className="h-full w-full p-0 md:p-4">
@@ -148,45 +175,12 @@ const HowMuchPerMonthBarChart: React.FC<StackedBarChartProps> = ({
               tickLine={false}
               interval={0} 
               height={60} 
-              tick={({ x, y, payload }) => {
-                const labelColor = getLabelColor(payload.value);
-                const label = (() => {
-                  switch (payload.value) {
-                    case "Freehold":
-                      return "Freehold";
-                    case "Private Rent":
-                      return "Private\nrent";
-                    case "Fairhold - Land Purchase":
-                      return "Fairhold \n/LP";
-                    case "Fairhold - Land Rent":
-                      return "Fairhold \n/LR";
-                    case "Social Rent":
-                      return "Social\nRent";
-                    default:
-                      return payload.value;
-                  }
-                })();
-                              return (
-                                <g transform={`translate(${x},${y})`}>
-                                  {label.split('\n').map((line: string, i: number) => (
-                                    <text
-                                      key={i}
-                                      x={0}
-                                      y={i * 20}
-                                      dy={10}
-                                      textAnchor="middle"
-                                      style={{ fill: labelColor }}
-                                      fontSize="12px"
-                                      fontWeight={600}
-                                    >
-                                      {line}
-                                    </text>
-                                  ))}
-                                </g>
-                              );
-                            }}
-                          >
-                          </XAxis>
+              tick={(props) => (
+                <CustomTick {...props}
+                color={props.index !== undefined ? chartData[props.index].fill : '#666'} />
+                )}
+              >
+            </XAxis>
             <YAxis 
               domain={[0, maxY]}
               tick={false}
@@ -231,7 +225,6 @@ const HowMuchPerMonthBarChart: React.FC<StackedBarChartProps> = ({
         </StyledChartContainer>
       </CardContent>
     </Card>
-  );
-};
+  )};
 
 export default HowMuchPerMonthBarChart;
