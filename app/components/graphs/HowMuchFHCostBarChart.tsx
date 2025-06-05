@@ -261,32 +261,9 @@ const HowMuchFHCostBarChart: React.FC<StackedBarChartProps> = ({
               <LabelList
                 dataKey="fairholdTotal"
                 position="top"
-                content={(props) => {
-                  if (!props.x || !props.y || !props.value) return null;
-                  
-                  const xPos = typeof props.x === 'number' ? props.x - 2 : 0;
-                  const yPos = typeof props.y === 'number' ? props.y - 30 : 0;
-                  const value = typeof props.value === 'number' ? props.value : parseFloat(props.value as string);
-                  const formattedValue = formatValue(value);
-
-                  return (
-                    <foreignObject x={xPos} y={yPos} width={100} height={30}>
-                      <div
-                        style={{
-                          position: "absolute",
-                          left: 0,
-                          top: 0,
-                          color: "rgb(var(--fairhold-equity-color-rgb))",
-                          fontSize: "18px",
-                          fontWeight: 600,
-                          whiteSpace: "nowrap",
-                        }}
-                      >
-                        {formattedValue}
-                      </div>
-                    </foreignObject>
-                  );
-                }}
+                content={(props) => (
+                  <CustomLabelListContent {...props} color="rgb(var(--fairhold-equity-color-rgb))" />
+                )}
               />
             </Bar>
           </BarChart>
