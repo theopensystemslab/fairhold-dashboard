@@ -1,9 +1,17 @@
 import React from "react"
-import { Results } from "@/app/survey/types";
+import { BarOrPieResults } from "@/app/survey/types";
 import SurveyGraphCard from "@/app/survey/components/SurveyGraphCard";
+import { PieChart, Pie, Legend, ResponsiveContainer } from "recharts";
 
-export const AffordFairhold: React.FC<Results> = ( results ) => {
+export const AffordFairhold: React.FC<BarOrPieResults> = ({ affordFairhold }) => {
     return (
-        <SurveyGraphCard title="Could you afford a Fairhold home in your area?" results={results}></SurveyGraphCard>
+        <SurveyGraphCard title="Could you afford a Fairhold home in your area?">
+            <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                    <Pie data={affordFairhold} dataKey="value" nameKey="answer" fill="rgb(var(--survey-placeholder))" />
+                    <Legend align="center" verticalAlign="bottom" />
+                </PieChart>
+            </ResponsiveContainer>
+        </SurveyGraphCard>
     )
 }

@@ -24,14 +24,46 @@ export type RawResults = {
     supportNewFairhold: string;
 };
 
-export type Results = Record<Exclude<keyof RawResults, 'id'>, {
+export type BarOrPieResults = Record<Exclude<keyof RawResults, 
+    'id' | 
+    'houseType' | 
+    'idealHouseType' | 
+    'liveWith' | 
+    'idealLiveWith' | 
+    'currentTenure' | 
+    'currentMeansTenureChoice' | 
+    'anyMeansTenureChoice'
+    >, 
+    BarOrPieResult[]>
+
+export type BarOrPieResult = {
     answer: string | string[] | undefined;
     value: number;
-}[]>
+}
 
-export type SurveyData = {
+export type SankeyResults = Record<Extract<keyof RawResults, 
+    'idealHouseType' | 
+    'idealLiveWith' | 
+    'currentMeansTenureChoice' | 
+    'anyMeansTenureChoice'
+    >, 
+    SankeyResult>
+
+export type SankeyResult = {
+    nodes: {
+        name: string
+    }[]
+    links: {
+        source: number;
+        target: number;
+        value: number;
+    }[]
+}
+
+export type SurveyResults = {
     numberResponses: number;
-    results: Results;
+    barOrPie: BarOrPieResults;
+    sankey: SankeyResults;
 }
 
 export type TickProps = {

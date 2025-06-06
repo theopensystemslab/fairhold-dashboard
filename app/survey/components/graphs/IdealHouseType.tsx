@@ -4,13 +4,13 @@ import SurveyGraphCard from "@/app/survey/components/SurveyGraphCard";
 import { CustomSankey } from "../CustomSankey";
 import { ResponsiveContainer } from "recharts";
 
-export const AnyMeansTenureChoice: React.FC<SankeyResults> = ({ anyMeansTenureChoice }) => {
+export const IdealHouseType: React.FC<SankeyResults> = ({ idealHouseType }) => {
     return (
-        <SurveyGraphCard title="What tenure would you choose?">
-            <ResponsiveContainer width="100%" height="100%">
+        <SurveyGraphCard title="What type of home do you want to live in?">
+            <ResponsiveContainer>
                 <CustomSankey
-                    nodes={anyMeansTenureChoice.nodes}
-                    links={anyMeansTenureChoice.links}            >
+                    nodes={idealHouseType.nodes}
+                    links={idealHouseType.links}            >
                 </CustomSankey>
             </ResponsiveContainer>
         </SurveyGraphCard>

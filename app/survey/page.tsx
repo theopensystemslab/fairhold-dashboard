@@ -3,15 +3,15 @@
 import { useState, useEffect } from 'react';
 import { Inter } from "next/font/google";
 import ErrorBoundary from '../components/ErrorBoundary';
-import { Results, SurveyData } from './types';
+import { SurveyResults } from './types';
 import { Age } from './components/graphs/Age';
 import { AffordFairhold } from './components/graphs/AffordFairhold';
 import { AnyMeansTenureChoice } from './components/graphs/AnyMeansTenureChoice';
 import { Country } from './components/graphs/Country';
 import { CurrentMeansTenureChoice } from './components/graphs/CurrentMeansTenureChoice';
-import { HouseType } from './components/graphs/HouseType';
+import { IdealHouseType } from './components/graphs/IdealHouseType';
 import { HousingOutcomes } from './components/graphs/HousingOutcomes';
-import { LiveWith } from './components/graphs/LiveWith';
+import { IdealLiveWith } from './components/graphs/IdealLiveWith';
 // import { Postcode } from './components/graphs/Postcode';
 import { SupportDevelopment } from './components/graphs/SupportDevelopment';
 import { SupportDevelopmentFactors } from './components/graphs/SupportDevelopmentFactors';
@@ -25,7 +25,7 @@ const inter = Inter({
 });
 
 export default function SurveyPage() {
-  const [surveyData, setSurveyData] = useState<SurveyData | null>(null);
+  const [surveyResults, setSurveyResults] = useState<SurveyResults | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -40,7 +40,7 @@ export default function SurveyPage() {
         
         const data = await response.json();
 
-        setSurveyData(data);
+        setSurveyResults(data);
       } catch (err) {
         setError('Failed to fetch survey data');
         console.error(err);
@@ -54,25 +54,27 @@ export default function SurveyPage() {
 
   if (loading) return <div>Loading survey data...</div>;
   if (error) return <div>Error: {error}</div>;
-  if (!surveyData) return <div>No survey data available.</div>;
+  if (!surveyResults) return <div>No survey data available.</div>;
   
-  const results = surveyData.results as Results;
+  const sankeyResults = surveyResults.sankey
+  const barOrPieResults = surveyResults.barOrPie
+
   return (
     <ErrorBoundary>
         <main className={`${inter.className} p-4 min-h-screen bg-[rgb(var(--background-end-rgb))]`}>
           <div className="flex flex-col m-4">
             <h1 className="h1-style text-2xl md:text-4xl">Fairhold survey results</h1>
               <div className="flex flex-col gap-4 mt-6">
-              {surveyData.numberResponses === 0 ? (
+              {surveyResults.numberResponses === 0 ? (
             <p>No survey responses found.</p>
           ) : (
             <div>
-              <h2 className="text-xl md:text-2xl">So far, {surveyData.numberResponses} people have responded</h2>
+              <h2 className="text-xl md:text-2xl">So far, {surveyResults.numberResponses} people have responded</h2>
               <div className="flex flex-col py-4">
                 <h3 className="text-xl font-medium">Who has responded?</h3>
                 <div className="flex flex-col md:flex-row">
-                  <Country {...results} />
-                  <Age {...results} />
+                  <Country {...barOrPieResults} />
+                  <Age {...barOrPieResults} />
                   {/* <Postcode {...results} /> */}
                 </div>
               </div>
@@ -80,26 +82,26 @@ export default function SurveyPage() {
               <div className="flex flex-col">
                 <h3 className="text-xl font-medium">Housing preferences</h3>
                 <div className="flex flex-col md:flex-row">
-                  <HouseType {...results} />
-                  <LiveWith {...results} />
+                  <IdealHouseType {...sankeyResults} />
+                  <IdealLiveWith {...sankeyResults} />
                 </div>
                 <div className="flex flex-col md:flex-row">
-                  <HousingOutcomes {...results} />
-                  <AffordFairhold {...results} />
+                  <HousingOutcomes {...barOrPieResults} />
+                  <AffordFairhold {...barOrPieResults} />
                 </div>
                 <div className="flex flex-col md:flex-row">
-                  <CurrentMeansTenureChoice {...results} />
-                  <AnyMeansTenureChoice {...results} />
+                  <CurrentMeansTenureChoice {...sankeyResults} />
+                  <AnyMeansTenureChoice {...sankeyResults} />
                 </div>
               </div>
 
               <div className="flex flex-col">
                 <h3 className="text-xl font-medium">Attitudes towards development</h3>
                 <div className="flex flex-col md:flex-row">
-                  <SupportDevelopment {...results} />
-                  <SupportNewFairhold {...results} />
+                  <SupportDevelopment {...barOrPieResults} />
+                  <SupportNewFairhold {...barOrPieResults} />
                 </div>
-                <SupportDevelopmentFactors {...results} />
+                <SupportDevelopmentFactors {...barOrPieResults} />
               </div>
           </div>
           )}
