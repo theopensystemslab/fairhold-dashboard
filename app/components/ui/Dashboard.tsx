@@ -33,7 +33,7 @@ const Dashboard: React.FC<DashboardProps> = ({ inputData, processedData }) => {
   return (
     <div className="snap-container md:h-screen overflow-hidden">
       <div
-        className="snap-y snap-mandatory h-full overflow-y-auto flex flex-col items-center align-center"
+        className="snap-y snap-mandatory h-full overflow-y-auto flex flex-col items-center align-center scrollbar-hide"
         ref={scrollContainerRef}
         onScroll={handleScroll}
       >
