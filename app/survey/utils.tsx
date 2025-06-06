@@ -1,8 +1,8 @@
 import { RawResults, BarOrPieResults, SankeyResults } from "./types"
 
 const SANKEY_MAPPINGS = [
-  { fromKey: 'houseType', toKey: 'idealHouseType', newKey: 'houseType', isArray: false },
-  { fromKey: 'liveWith', toKey: 'idealLiveWith', newKey: 'liveWith', isArray: false },
+  { fromKey: 'houseType', toKey: 'idealHouseType', newKey: 'idealHouseType', isArray: false },
+  { fromKey: 'liveWith', toKey: 'idealLiveWith', newKey: 'idealLiveWith', isArray: false },
   { fromKey: 'currentTenure', toKey: 'currentMeansTenureChoice', newKey: 'currentMeansTenureChoice', isArray: false },
   { fromKey: 'currentTenure', toKey: 'anyMeansTenureChoice', newKey: 'anyMeansTenureChoice', isArray: true }
 ];
