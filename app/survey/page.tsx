@@ -9,9 +9,9 @@ import { AffordFairhold } from './components/graphs/AffordFairhold';
 import { AnyMeansTenureChoice } from './components/graphs/AnyMeansTenureChoice';
 import { Country } from './components/graphs/Country';
 import { CurrentMeansTenureChoice } from './components/graphs/CurrentMeansTenureChoice';
-import { HouseType } from './components/graphs/HouseType';
+import { IdealHouseType } from './components/graphs/IdealHouseType';
 import { HousingOutcomes } from './components/graphs/HousingOutcomes';
-import { LiveWith } from './components/graphs/LiveWith';
+import { IdealLiveWith } from './components/graphs/IdealLiveWith';
 // import { Postcode } from './components/graphs/Postcode';
 import { SupportDevelopment } from './components/graphs/SupportDevelopment';
 import { SupportDevelopmentFactors } from './components/graphs/SupportDevelopmentFactors';
@@ -56,7 +56,9 @@ export default function SurveyPage() {
   if (error) return <div>Error: {error}</div>;
   if (!surveyResults) return <div>No survey data available.</div>;
   
-  const results = surveyResults as SurveyResults;
+  const sankeyResults = surveyResults.sankey
+  const barOrPieResults = surveyResults.barOrPie
+
   return (
     <ErrorBoundary>
         <main className={`${inter.className} p-4 min-h-screen bg-[rgb(var(--background-end-rgb))]`}>
@@ -71,8 +73,8 @@ export default function SurveyPage() {
               <div className="flex flex-col py-4">
                 <h3 className="text-xl font-medium">Who has responded?</h3>
                 <div className="flex flex-col md:flex-row">
-                  <Country {...results.barOrPie} />
-                  <Age {...results.barOrPie} />
+                  <Country {...barOrPieResults} />
+                  <Age {...barOrPieResults} />
                   {/* <Postcode {...results} /> */}
                 </div>
               </div>
@@ -80,26 +82,26 @@ export default function SurveyPage() {
               <div className="flex flex-col">
                 <h3 className="text-xl font-medium">Housing preferences</h3>
                 <div className="flex flex-col md:flex-row">
-                  <HouseType {...results.sankey} />
-                  <LiveWith {...results.sankey} />
+                  <IdealHouseType {...sankeyResults} />
+                  <IdealLiveWith {...sankeyResults} />
                 </div>
                 <div className="flex flex-col md:flex-row">
-                  <HousingOutcomes {...results.barOrPie} />
-                  <AffordFairhold {...results.barOrPie} />
+                  <HousingOutcomes {...barOrPieResults} />
+                  <AffordFairhold {...barOrPieResults} />
                 </div>
                 <div className="flex flex-col md:flex-row">
-                  <CurrentMeansTenureChoice {...results.sankey} />
-                  <AnyMeansTenureChoice {...results.sankey} />
+                  <CurrentMeansTenureChoice {...sankeyResults} />
+                  <AnyMeansTenureChoice {...sankeyResults} />
                 </div>
               </div>
 
               <div className="flex flex-col">
                 <h3 className="text-xl font-medium">Attitudes towards development</h3>
                 <div className="flex flex-col md:flex-row">
-                  <SupportDevelopment {...results.barOrPie} />
-                  <SupportNewFairhold {...results.barOrPie} />
+                  <SupportDevelopment {...barOrPieResults} />
+                  <SupportNewFairhold {...barOrPieResults} />
                 </div>
-                <SupportDevelopmentFactors {...results.barOrPie} />
+                <SupportDevelopmentFactors {...barOrPieResults} />
               </div>
           </div>
           )}
