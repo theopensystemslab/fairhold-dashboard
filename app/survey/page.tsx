@@ -9,9 +9,9 @@ import { AffordFairhold } from './components/graphs/AffordFairhold';
 import { AnyMeansTenureChoice } from './components/graphs/AnyMeansTenureChoice';
 import { Country } from './components/graphs/Country';
 import { CurrentMeansTenureChoice } from './components/graphs/CurrentMeansTenureChoice';
-import { HouseType } from './components/graphs/HouseType';
+import { IdealHouseType } from './components/graphs/IdealHouseType';
 import { HousingOutcomes } from './components/graphs/HousingOutcomes';
-import { LiveWith } from './components/graphs/LiveWith';
+import { IdealLiveWith } from './components/graphs/IdealLiveWith';
 // import { Postcode } from './components/graphs/Postcode';
 import { SupportDevelopment } from './components/graphs/SupportDevelopment';
 import { SupportDevelopmentFactors } from './components/graphs/SupportDevelopmentFactors';
@@ -82,8 +82,8 @@ export default function SurveyPage() {
               <div className="flex flex-col">
                 <h3 className="text-xl font-medium">Housing preferences</h3>
                 <div className="flex flex-col md:flex-row">
-                  <HouseType {...sankeyResults} />
-                  <LiveWith {...sankeyResults} />
+                  <IdealHouseType {...sankeyResults} />
+                  <IdealLiveWith {...sankeyResults} />
                 </div>
                 <div className="flex flex-col md:flex-row">
                   <HousingOutcomes {...barOrPieResults} />

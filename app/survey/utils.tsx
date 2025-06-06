@@ -42,8 +42,8 @@ const initializeBarOrPieResultsObject = (): BarOrPieResults => {
 
 const initializeSankeyResultsObject = (): SankeyResults => {
     return {
-        houseType: { nodes: [], links: [] },
-        liveWith: { nodes: [], links: [] },
+        idealHouseType: { nodes: [], links: [] },
+        idealLiveWith: { nodes: [], links: [] },
         currentMeansTenureChoice: { nodes: [], links: [] },
         anyMeansTenureChoice: { nodes: [], links: [] },
     } as SankeyResults;

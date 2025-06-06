@@ -42,8 +42,8 @@ export type BarOrPieResult = {
 }
 
 export type SankeyResults = Record<Extract<keyof RawResults, 
-    'houseType' | 
-    'liveWith' | 
+    'idealHouseType' | 
+    'idealLiveWith' | 
     'currentMeansTenureChoice' | 
     'anyMeansTenureChoice'
     >, 

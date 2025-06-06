@@ -4,13 +4,13 @@ import SurveyGraphCard from "@/app/survey/components/SurveyGraphCard";
 import { CustomSankey } from "../CustomSankey"
 import { ResponsiveContainer } from "recharts";
 
-export const LiveWith: React.FC<SankeyResults> = ({ liveWith }) => {
+export const IdealLiveWith: React.FC<SankeyResults> = ({ idealLiveWith }) => {
     return (
         <SurveyGraphCard title="Who do you want to live with?">
             <ResponsiveContainer width="100%" height="100%">
                 <CustomSankey
-                    nodes={liveWith.nodes}
-                    links={liveWith.links}            >
+                    nodes={idealLiveWith.nodes}
+                    links={idealLiveWith.links}            >
                 </CustomSankey>
             </ResponsiveContainer>
         </SurveyGraphCard>
