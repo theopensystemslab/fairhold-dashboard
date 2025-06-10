@@ -86,10 +86,10 @@ const CustomLabelListContent: React.FC<CustomLabelListContentProps> = ({
   value,
   color
 }) => {
-  const xNum = typeof x === "number" ? x : Number(x);
-  const yNum = typeof y === "number" ? y : Number(y);
-  const xPos = xNum - 2;
-  const yPos = yNum - 30;
+  const xAdjust = 2;
+  const yAdjust = 30;
+  const xPos = typeof x === "number" ? x - xAdjust : Number(x) - xAdjust;
+  const yPos = typeof y === "number" ? y - yAdjust : Number(y) - yAdjust;
 
   const numValue = typeof value === "number" ? value : Number(value);
   const formattedValue = formatValue(numValue);

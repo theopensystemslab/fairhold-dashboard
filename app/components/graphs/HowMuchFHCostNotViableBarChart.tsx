@@ -226,9 +226,10 @@ const HowMuchFHCostBarChart: React.FC<StackedBarChartProps> = ({
                         return "rgb(var(--fairhold-equity-color-rgb))";
                     }
                   })();
-
-                  const xPos = typeof props.x === 'number' ? props.x - 2 : 0;
-                  const yPos = typeof props.y === 'number' ? props.y - 30 : 0;
+                  const xAdjust = 2;
+                  const yAdjust = 30;
+                  const xPos = typeof props.x === 'number' ? props.x - xAdjust : 0;
+                  const yPos = typeof props.y === 'number' ? props.y - yAdjust : 0;
                   const value = typeof props.value === 'number' ? props.value : parseFloat(props.value as string);
                   const formattedValue = formatValue(value);
 

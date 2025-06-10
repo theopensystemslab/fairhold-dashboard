@@ -29,9 +29,10 @@ const chartConfig = {
 
 const CustomLabelListContent: React.FC<CustomLabelListContentProps> = ({ x, y, value, color }) => {
   if (x === undefined || y === undefined || value === undefined) return null;
-
-  const xPos = typeof x === "number" ? x - 2 : Number(x) - 2;
-  const yPos = typeof y === "number" ? y - 30 : Number(y) - 30;
+  const xAdjust = 2;
+  const yAdjust = 30;
+  const xPos = typeof x === "number" ? x - xAdjust : Number(x) - xAdjust;
+  const yPos = typeof y === "number" ? y - yAdjust : Number(y) - yAdjust;
   const numValue = typeof value === "number" ? value : parseFloat(value as string);
   const formattedValue = formatValue(numValue);
 
