@@ -1,61 +1,123 @@
-import { Results, RawResults } from "./types"
+import { RawResults, BarOrPieResults, SankeyResults, SankeyResult } from "./types"
+
+const SANKEY_MAPPINGS = [
+  { fromKey: 'houseType', toKey: 'idealHouseType', newKey: 'idealHouseType', isArray: false },
+  { fromKey: 'liveWith', toKey: 'idealLiveWith', newKey: 'idealLiveWith', isArray: false },
+  { fromKey: 'currentTenure', toKey: 'currentMeansTenureChoice', newKey: 'currentMeansTenureChoice', isArray: false },
+  { fromKey: 'currentTenure', toKey: 'anyMeansTenureChoice', newKey: 'anyMeansTenureChoice', isArray: true }
+];
 
 export const aggregateResults = (rawResults: RawResults[]) => {
-    const results = initializeResultsObject();
+    // There are two different data types we might need, both need to be initialised then handled separately
+    const barOrPie = initializeBarOrPieResultsObject();
+    const sankey = initializeSankeyResultsObject();
     const numberResponses = rawResults.length;
 
-    for (const rawResult of rawResults) {
-        Object.entries(rawResult).forEach(([key, value]) => {
-            if (key === "id") return; // Skip the id field (we don't need it)
-
-            const validKey = key as keyof Omit<RawResults, "id">; // Explicitly assert key type
-
-            if (Array.isArray(value)) {
-                // We need to handle arrays because some questions are multiple choice
-                value.map((item) => addResult(results, validKey, item))
-            } else {
-                // The rest of the answers are single strings
-                addResult(results, validKey, value)
-            }
-        })
+        for (const rawResult of rawResults) {
+            addBarOrPieResult(barOrPie, rawResult);
+            addSankeyResult(sankey, rawResult);
     }
-    return { numberResponses, results };
+    return { numberResponses, barOrPie, sankey };
 }
 
-const initializeResultsObject = (): Results => {
+const initializeBarOrPieResultsObject = (): BarOrPieResults => {
     return {
         uk: [],
         nonUk: [],
         postcode: [],
         ageGroup: [],
-        houseType: [],
-        currentTenure: [],
         ownershipModel: [],
         rentalModel: [],
-        liveWith: [],
         secondHomes: [],
-        idealHouseType: [],
-        idealLiveWith: [],
         housingOutcomes: [],
         fairholdCalculator: [],
         affordFairhold: [],
-        currentMeansTenureChoice: [],
         whyFairhold: [],
         whyNotFairhold: [],
-        anyMeansTenureChoice: [],
         supportDevelopment: [],
         supportDevelopmentFactors: [],
         supportNewFairhold: []
-    } as Results;
+    } as BarOrPieResults;
 };
 
-const addResult = (results: Results, validKey: keyof Results, answer: string | string[] | undefined ) => {
-    const existingResult = results[validKey].find((result) => result.answer === answer);
+const initializeSankeyResultsObject = (): SankeyResults => {
+    return {
+        idealHouseType: { nodes: [], links: [] },
+        idealLiveWith: { nodes: [], links: [] },
+        currentMeansTenureChoice: { nodes: [], links: [] },
+        anyMeansTenureChoice: { nodes: [], links: [] },
+    } as SankeyResults;
+};
 
-    if (existingResult) {
-            existingResult.value++;
+const addBarOrPieResult = (results: BarOrPieResults, rawResult: RawResults) => {
+    const getExistingResult = (key: keyof BarOrPieResults, answer: string) => 
+        results[key].find(result => result.answer === answer);
+
+    const addResultItem = (key: keyof BarOrPieResults, item: string) => {
+        const existingResult = getExistingResult(key, item);
+        existingResult
+            ? existingResult.value++
+            : results[key].push({ answer: item, value: 1 });
+    };
+
+    Object.entries(rawResult).forEach(([key, value]) => {
+        if (key === "id" || !(key in results)) return;
+
+        const validKey = key as keyof BarOrPieResults;
+        
+        const isMultipleChoiceAnswer = Array.isArray(value);
+        
+        isMultipleChoiceAnswer
+            ? value.forEach(item => addResultItem(validKey, item))
+            : addResultItem(validKey, value);
+    });
+};
+
+const addSankeyResult = (results: SankeyResults, rawResult: RawResults) => {
+    SANKEY_MAPPINGS.forEach(({ fromKey, toKey, newKey, isArray }) => {
+        const fromValue = rawResult[fromKey as keyof RawResults];
+        const toValue = rawResult[toKey as keyof RawResults];
+
+        if (!fromValue || Array.isArray(fromValue) || !toValue) return; // Skip if either value is missing
+
+        const sankeyResult = results[newKey as keyof SankeyResults];
+
+        if (isArray && Array.isArray(toValue) && toValue.length > 0) {
+            updateSankeyNodesAndLinks(sankeyResult, fromValue, toValue[0]);
         } else {
-            results[validKey].push({ answer, value: 1 });
+            updateSankeyNodesAndLinks(sankeyResult, fromValue, toValue as string);
         }
+    });
+};
 
-}
+const updateSankeyNodesAndLinks = (
+    sankeyResult: SankeyResult,
+    fromValue: string,
+    toValue: string
+) => {
+    const { nodes, links } = sankeyResult;
+
+    // Find or add the source node
+    let sourceIndex = nodes.findIndex((node) => node.name === fromValue);
+    if (sourceIndex === -1) {
+        sourceIndex = nodes.length;
+        nodes.push({ name: fromValue });
+    }
+
+    // Find or add the target node
+    let targetIndex = nodes.findIndex((node) => node.name === toValue);
+    if (targetIndex === -1) {
+        targetIndex = nodes.length;
+        nodes.push({ name: toValue });
+    }
+
+    // Find or add the link
+    const existingLink = links.find(
+        (link) => link.source === sourceIndex && link.target === targetIndex
+    );
+    if (existingLink) {
+        existingLink.value++;
+    } else {
+        links.push({ source: sourceIndex, target: targetIndex, value: 1 });
+    }
+};
