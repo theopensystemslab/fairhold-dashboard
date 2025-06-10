@@ -10,7 +10,10 @@ export const AnyMeansTenureChoice: React.FC<SankeyResults> = ({ anyMeansTenureCh
             <ResponsiveContainer width="100%" height="100%">
                 <CustomSankey
                     nodes={anyMeansTenureChoice.nodes}
-                    links={anyMeansTenureChoice.links}            >
+                    links={anyMeansTenureChoice.links}
+                    leftLabel="Current situation"
+                    rightLabel="Ideal, with any means"
+                    >
                 </CustomSankey>
             </ResponsiveContainer>
         </SurveyGraphCard>

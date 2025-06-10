@@ -75,9 +75,16 @@ type CustomLinkPayload = {
 type SankeyProps = {
     nodes: Array<{name: string}>;
     links: Array<{source: number, target: number, value: number}>;
+    leftLabel?: string;
+    rightLabel?: string;
 };
 
-export const CustomSankey: React.FC<SankeyProps> = ({ nodes, links }) => {
+export const CustomSankey: React.FC<SankeyProps> = ({ 
+    nodes, 
+    links, 
+    leftLabel, 
+    rightLabel
+    }) => {
 
     // Custom Node Component with Label 
     const CustomNode = (props: CustomNodeProps) => { 
@@ -136,6 +143,11 @@ export const CustomSankey: React.FC<SankeyProps> = ({ nodes, links }) => {
     }; 
 
     return (
+        <div>
+        <svg width={700} height={40} style={{ position: "absolute", pointerEvents: "none" }}>
+            <text x={30} y={30} textAnchor="start">{leftLabel}</text>
+            <text x={670} y={30} textAnchor="end">{rightLabel}</text>
+        </svg>
         <Sankey
             width={700}
             height={350}
@@ -155,5 +167,6 @@ export const CustomSankey: React.FC<SankeyProps> = ({ nodes, links }) => {
         >
             <Tooltip />
         </Sankey>
+        </div>
     )
 }
