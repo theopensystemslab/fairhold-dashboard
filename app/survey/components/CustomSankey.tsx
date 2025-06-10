@@ -88,6 +88,7 @@ export const CustomSankey: React.FC<SankeyProps> = ({
 
     // Custom Node Component with Label 
     const CustomNode = (props: CustomNodeProps) => { 
+        const isLeft = props.payload.depth === 0;
         return ( 
             <g> 
                 <Rectangle 
@@ -95,9 +96,9 @@ export const CustomSankey: React.FC<SankeyProps> = ({
                     fill={"rgb(var(--fairhold-equity-color-rgb))"} 
                 /> 
                 <text 
-                    x={props.x + props.width / 2} 
+                    x={isLeft ? props.x - 80 : props.x + props.width + 80}
                     y={props.y + props.height / 2} 
-                    textAnchor="middle" 
+                    textAnchor={props.payload.depth === 0 ? "start" : "end"}
                     dominantBaseline="middle" 
                     fill="rgb(var(--text-default-rgb))" 
                     fontSize={12} 
@@ -144,7 +145,7 @@ export const CustomSankey: React.FC<SankeyProps> = ({
 
     return (
         <div>
-        <svg width={700} height={40} style={{ position: "absolute", pointerEvents: "none" }}>
+        <svg width={900} height={40} style={{ position: "absolute", pointerEvents: "none" }}>
             <text x={30} y={30} textAnchor="start">{leftLabel}</text>
             <text x={670} y={30} textAnchor="end">{rightLabel}</text>
         </svg>
@@ -159,8 +160,8 @@ export const CustomSankey: React.FC<SankeyProps> = ({
             link={CustomLink}
             nodePadding={50}
             margin={{
-                left: 100,
-                right: 100,
+                left: 150,
+                right: 150,
                 top: 50,
                 bottom: 50,
             }}
