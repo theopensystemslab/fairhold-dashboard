@@ -170,7 +170,7 @@ const HowMuchPerMonthBarChart: React.FC<StackedBarChartProps> = ({
               height={60} 
               tick={(props) => (
                 <CustomTick {...props}
-                color={props.index !== undefined ? chartData[props.index].fill : '#666'} />
+                color={props.index >= 0 ? chartData[props.index].fill : '#666'} />
                 )}
               >
             </XAxis>
