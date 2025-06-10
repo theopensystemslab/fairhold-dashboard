@@ -9,6 +9,7 @@ import {
 } from "../ui/StyledChartContainer";
 import { formatValue } from "@/app/lib/format";
 import { MaintenanceLevel } from "@/app/models/constants";
+import { CustomLabelListContentProps } from "./types";
 
 type CustomTooltipProps = TooltipProps<number, string> & {
   payload?: Array<{
@@ -47,16 +48,13 @@ interface ResaleValueLineChartProps {
   maxY: number;
 }
 
-interface CustomLabelListContentProps {
-  x?: number | string | undefined;
-  y?: number | string | undefined;
-  index?: number;
+interface ResaleValueLabelListContentProps extends CustomLabelListContentProps {
   dataKey: keyof Omit<DataPoint, "year">;
   selectedMaintenance: MaintenanceLevel;
   data: DataPoint[];
 }
 
-const CustomLabelListContent: React.FC<CustomLabelListContentProps> = ({
+const CustomLabelListContent: React.FC<ResaleValueLabelListContentProps> = ({
   x,
   y,
   index,

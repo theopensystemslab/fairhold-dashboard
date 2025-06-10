@@ -9,6 +9,7 @@ import {
   StyledChartContainer,
 } from "../ui/StyledChartContainer";
 import { formatValue } from "@/app/lib/format";
+import { CustomLabelListContentProps } from "./types";
 
 const chartConfig = {
   freehold: {
@@ -18,12 +19,7 @@ const chartConfig = {
     color: "rgb(var(--fairhold-interest-color-rgb))",
   },
 } satisfies ChartConfig;
-interface CustomLabelListContentProps {
-  x?: number | string | undefined;
-  y?: number | string | undefined;
-  value?: number | string;
-  index?: number;
-}
+
 const CustomLabelListContent: React.FC<CustomLabelListContentProps> = ({
   x,
   y,

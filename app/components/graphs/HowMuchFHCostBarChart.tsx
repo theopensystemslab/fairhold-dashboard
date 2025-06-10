@@ -10,6 +10,7 @@ import {
 } from "../ui/StyledChartContainer";
 import { useState } from "react";
 import { formatValue } from "@/app/lib/format";
+import { CustomLabelListContentProps } from "./types";
 
 const chartConfig = {
   freeholdLand: {
@@ -25,12 +26,6 @@ const chartConfig = {
     color: "rgb(var(--fairhold-interest-color-rgb))",
   },
 } satisfies ChartConfig;
-interface CustomLabelListContentProps {
-  x?: number | string | undefined;
-  y?: number | string | undefined;
-  value?: number | string;
-  color: string;
-}
 
 const CustomLabelListContent: React.FC<CustomLabelListContentProps> = ({ x, y, value, color }) => {
   if (x === undefined || y === undefined || value === undefined) return null;

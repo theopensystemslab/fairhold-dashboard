@@ -10,6 +10,7 @@ import {
   StyledChartContainer,
 } from "../ui/StyledChartContainer";
 import { formatValue } from "@/app/lib/format";
+import { CustomLabelListContentProps } from "./types";
 
 type DataInput = {
   category: string;
@@ -33,14 +34,6 @@ type ChartData = {
   house: number;
   monthly: number;
   fill: string;
-}
-
-interface CustomLabelListContentProps {
-  x?: number | string | undefined;
-  y?: number | string | undefined;
-  value?: number | string;
-  index?: number;
-  color: string;
 }
 
 interface CustomTickProps {
