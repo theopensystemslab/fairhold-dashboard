@@ -9,6 +9,7 @@ import {
 } from "../ui/StyledChartContainer";
 import { formatValue } from "@/app/lib/format";
 import { MaintenanceLevel } from "@/app/models/constants";
+import { CustomLabelListContentProps } from "./types";
 
 type CustomTooltipProps = TooltipProps<number, string> & {
   payload?: Array<{
@@ -47,6 +48,57 @@ interface ResaleValueLineChartProps {
   maxY: number;
 }
 
+interface ResaleValueLabelListContentProps extends CustomLabelListContentProps {
+  dataKey: keyof Omit<DataPoint, "year">;
+  selectedMaintenance: MaintenanceLevel;
+  data: DataPoint[];
+}
+
+const CustomLabelListContent: React.FC<ResaleValueLabelListContentProps> = ({
+  x,
+  y,
+  index,
+  dataKey,
+  selectedMaintenance,
+  data,
+}) => {
+    const isLast = index === data.length - 1;
+    if (!isLast) return null;
+    if (typeof x !== "number" || typeof y !== "number") return null;
+
+    const label = chartConfig[dataKey].label;
+    const longestLabel = Math.max(chartConfig['none'].label.length, chartConfig['low'].label.length, chartConfig['medium'].label.length, chartConfig['high'].label.length)
+    const paddingX = 8;
+    const paddingY = 4;
+    const fontSize = 12;
+
+    const rectWidth = longestLabel * 7 + paddingX * 2;
+    const rectHeight = fontSize + paddingY * 2;
+    return (
+      <g transform={`translate(${x}, ${y - rectHeight / 2})`}>
+      <rect
+        width={rectWidth}
+        height={rectHeight}
+        rx={rectHeight / 2}
+        ry={rectHeight / 2}
+        fill={dataKey === selectedMaintenance 
+          ? `rgb(var(--fairhold-equity-color-rgb))` 
+          : `rgb(var(--fairhold-interest-color-rgb))`}
+      />
+      <text
+        x={rectWidth / 2}
+        y={rectHeight / 2 + fontSize / 3}
+        fill="#fff"
+        fontSize={fontSize}
+        textAnchor="middle"
+        dominantBaseline={"top"}
+      >
+        {label}
+      </text>
+    </g>
+    );
+  }
+
 const ResaleValueLineChart: React.FC<ResaleValueLineChartProps> = ({
   data,
   selectedMaintenance,
@@ -67,47 +119,18 @@ const ResaleValueLineChart: React.FC<ResaleValueLineChartProps> = ({
       onMouseOver={() => setHoveredLine(dataKey)}
       onMouseOut={() => setHoveredLine(null)}
       >
-      <LabelList
-        content={({ x, y, index }) => {
-          const isLast = index === data.length - 1;
-          if (!isLast) return null;
-          if (typeof x !== "number" || typeof y !== "number") return null;
-
-          const label = chartConfig[dataKey].label;
-          const longestLabel = Math.max(chartConfig['none'].label.length, chartConfig['low'].label.length, chartConfig['medium'].label.length, chartConfig['high'].label.length)
-          const paddingX = 8;
-          const paddingY = 4;
-          const fontSize = 12;
-
-          const rectWidth = longestLabel * 7 + paddingX * 2;
-          const rectHeight = fontSize + paddingY * 2;
-          return (
-            <g transform={`translate(${x}, ${y - rectHeight / 2})`}>
-            <rect
-              width={rectWidth}
-              height={rectHeight}
-              rx={rectHeight / 2}
-              ry={rectHeight / 2}
-              fill={dataKey === selectedMaintenance 
-                ? `rgb(var(--fairhold-equity-color-rgb))` 
-                : `rgb(var(--fairhold-interest-color-rgb))`}
-            />
-            <text
-              x={rectWidth / 2}
-              y={rectHeight / 2 + fontSize / 3}
-              fill="#fff"
-              fontSize={fontSize}
-              textAnchor="middle"
-              dominantBaseline={"top"}
-            >
-              {label}
-            </text>
-          </g>
-          );
-        }}
-      />
-    </Line>
-  );
+    <LabelList
+      content={(props) => (
+        <CustomLabelListContent
+          {...props}
+          dataKey={dataKey}
+          selectedMaintenance={selectedMaintenance}
+          data={data}
+        />
+      )}
+    />
+      </Line>
+    );  
   const CustomTooltip = ({ active, payload, label, hoveredLine }: CustomTooltipProps & { hoveredLine: string | null }) => {
     if (!active || !payload || !payload.length || hoveredLine !== selectedMaintenance) return null; 
 

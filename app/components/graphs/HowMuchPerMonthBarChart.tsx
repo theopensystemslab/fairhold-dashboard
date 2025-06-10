@@ -1,5 +1,4 @@
 "use client";
-
 import React from "react";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis, LabelList, ReferenceLine } from "recharts";
 import { Card, CardContent } from "@/components/ui/card";
@@ -11,7 +10,7 @@ import {
   StyledChartContainer,
 } from "../ui/StyledChartContainer";
 import { formatValue } from "@/app/lib/format";
-import { Props } from "recharts/types/component/LabelList";
+import { CustomLabelListContentProps } from "./types";
 
 type DataInput = {
   category: string;
@@ -23,14 +22,6 @@ type DataInput = {
   affordabilityMonthly: number;
   [key: string]: string | number;
 };
-
-interface CustomLabelListProps 
-  extends Props<{value: number}> {
-  index: number;
-  x: number;
-  y: number;
-  value: number;
-}
 
 interface StackedBarChartProps {
   data: DataInput[];
@@ -44,6 +35,82 @@ type ChartData = {
   monthly: number;
   fill: string;
 }
+
+interface CustomTickProps {
+  x: number; 
+  y: number; 
+  payload: { value: string }; 
+  color: string
+}
+
+const CustomTick: React.FC<CustomTickProps> = ({ x, y, payload, color }) => {
+  const label = (() => {
+    switch (payload.value) {
+      case "Freehold":
+        return "Freehold";
+      case "Private Rent":
+        return "Private\nrent";
+      case "Fairhold - Land Purchase":
+        return "Fairhold \n/LP";
+      case "Fairhold - Land Rent":
+        return "Fairhold \n/LR";
+      case "Social Rent":
+        return "Social\nRent";
+      default:
+        return payload.value;
+    }
+  })();
+  return (
+    <g transform={`translate(${x},${y})`}>
+      {label.split('\n').map((line: string, i: number) => (
+        <text
+          key={i}
+          x={0}
+          y={i * 20}
+          dy={10}
+          textAnchor="middle"
+          style={{ fill: color }}
+          fontSize="12px"
+          fontWeight={600}
+        >
+          {line}
+        </text>
+      ))}
+    </g>
+  );
+  }
+
+const CustomLabelListContent: React.FC<CustomLabelListContentProps> = ({
+  x,
+  y,
+  value,
+  color
+}) => {
+  const xAdjust = 2;
+  const yAdjust = 30;
+  const xPos = typeof x === "number" ? x - xAdjust : Number(x) - xAdjust;
+  const yPos = typeof y === "number" ? y - yAdjust : Number(y) - yAdjust;
+
+  const numValue = typeof value === "number" ? value : Number(value);
+  const formattedValue = formatValue(numValue);
+
+  return (
+    <foreignObject x={xPos} y={yPos} width={100} height={30}>
+      <div
+        style={{
+          position: "absolute",
+          left: 0,
+          top: 0,
+          color: color,
+          fontSize: "18px",
+          fontWeight: 600,
+          whiteSpace: "nowrap",
+        }}
+      >
+        {formattedValue}
+      </div>
+    </foreignObject>
+  )};
 
 const HowMuchPerMonthBarChart: React.FC<StackedBarChartProps> = ({ 
   data, 
@@ -89,23 +156,6 @@ const HowMuchPerMonthBarChart: React.FC<StackedBarChartProps> = ({
     },
   ];
 
-  const getLabelColor = (tenure: string): string => {
-    switch (tenure) {
-      case "Freehold":
-        return "rgb(var(--freehold-equity-color-rgb))";
-      case "Private Rent":
-        return "rgb(var(--private-rent-land-color-rgb))";
-      case "Fairhold - Land Purchase":
-        return "rgb(var(--fairhold-equity-color-rgb))";
-      case "Fairhold - Land Rent":
-        return "rgb(var(--fairhold-equity-color-rgb))";
-      case "Social Rent":
-        return "rgb(var(--social-rent-land-color-rgb))";
-      default:
-        return "#666";
-    }
-  }
-
   return (
     <Card className="h-full w-full">
       <CardContent className="h-full w-full p-0 md:p-4">
@@ -118,45 +168,12 @@ const HowMuchPerMonthBarChart: React.FC<StackedBarChartProps> = ({
               tickLine={false}
               interval={0} 
               height={60} 
-              tick={({ x, y, payload }) => {
-                const labelColor = getLabelColor(payload.value);
-                const label = (() => {
-                  switch (payload.value) {
-                    case "Freehold":
-                      return "Freehold";
-                    case "Private Rent":
-                      return "Private\nrent";
-                    case "Fairhold - Land Purchase":
-                      return "Fairhold \n/LP";
-                    case "Fairhold - Land Rent":
-                      return "Fairhold \n/LR";
-                    case "Social Rent":
-                      return "Social\nRent";
-                    default:
-                      return payload.value;
-                  }
-                })();
-                              return (
-                                <g transform={`translate(${x},${y})`}>
-                                  {label.split('\n').map((line: string, i: number) => (
-                                    <text
-                                      key={i}
-                                      x={0}
-                                      y={i * 20}
-                                      dy={10}
-                                      textAnchor="middle"
-                                      style={{ fill: labelColor }}
-                                      fontSize="12px"
-                                      fontWeight={600}
-                                    >
-                                      {line}
-                                    </text>
-                                  ))}
-                                </g>
-                              );
-                            }}
-                          >
-                          </XAxis>
+              tick={(props) => (
+                <CustomTick {...props}
+                color={props.index >= 0 ? chartData[props.index].fill : '#666'} />
+                )}
+              >
+            </XAxis>
             <YAxis 
               domain={[0, maxY]}
               tick={false}
@@ -169,33 +186,12 @@ const HowMuchPerMonthBarChart: React.FC<StackedBarChartProps> = ({
               <LabelList
                 dataKey="monthly"
                 position="top"
-                content={(props) => {
-                  const { x, y, value, index } = props as CustomLabelListProps;
-
-                  const xPos = x - 2;
-                  const yPos = y - 30;
-                  const formattedValue = formatValue(value);
-
-                  const labelColor = getLabelColor(chartData[index].tenure);
-
-                  return (
-                    <foreignObject x={xPos} y={yPos} width={100} height={30}>
-                      <div
-                        style={{
-                          position: "absolute",
-                          left: 0,
-                          top: 0,
-                          color: labelColor,
-                          fontSize: "18px",
-                          fontWeight: 600,
-                          whiteSpace: "nowrap",
-                        }}
-                      >
-                        {formattedValue}
-                      </div>
-                    </foreignObject>
-                  );
-                }}
+                content={(props) => (
+                  <CustomLabelListContent
+                    {...props}
+                    color={props.index !== undefined ? chartData[props.index].fill : "#666"}
+                  />
+                )}
               />
             </Bar>
             <ReferenceLine 
@@ -222,7 +218,6 @@ const HowMuchPerMonthBarChart: React.FC<StackedBarChartProps> = ({
         </StyledChartContainer>
       </CardContent>
     </Card>
-  );
-};
+  )};
 
 export default HowMuchPerMonthBarChart;
