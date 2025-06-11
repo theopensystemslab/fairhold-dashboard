@@ -243,3 +243,12 @@ export const PROPERTY_PRICE_WEIGHTS: BedroomWeights = { // from dwh https://www.
     6: 1.4
   }
 } as const;
+
+export const HOUSE_SIZE_MAPPINGS: { [key: number]: number } = {
+  1: 55,
+  2: 70,
+  3: 95,
+  4: 110,
+  5: 125,
+  6: 135,
+} as const;

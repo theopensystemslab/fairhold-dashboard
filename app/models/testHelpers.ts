@@ -11,7 +11,6 @@ import { Lifetime } from "./Lifetime";
 // import { Mortgage } from "./Mortgage";
 import { Property, PropertyParams } from "./Property";
 import { MarketPurchase } from "./tenure/MarketPurchase";
-import { assignHouseSize } from "../schemas/calculationSchema";
 
 const socialRentAdjustments: socialRentAdjustmentTypes = [
   {
@@ -195,21 +194,17 @@ export const createTestHousehold = (overrides = {}) => {
  * @returns
  */
 export const createTestProperty = (overrides: Partial<PropertyParams> = {}) => {
-    const numberOfBedrooms = overrides.numberOfBedrooms ?? 2;
-    const testProp = new Property ({ 
+    return new Property ({ 
       postcode: "SE15 1TX",
       houseType: "T",
       numberOfBedrooms: 2,
       age: 1,
-      size: assignHouseSize(numberOfBedrooms),
       maintenanceLevel: 'low',
       newBuildPricePerMetre: 2120,
       averageMarketPrice: 500000,
       itl3: "TLI44",
       ...overrides
     })
-    console.log(testProp)
-    return testProp
 }
 
 /**
