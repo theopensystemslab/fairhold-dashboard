@@ -30,6 +30,25 @@ describe('Property', () => {
     })
   });
 
+  
+  it("should auto-assign correct house size based on bedrooms", () => {
+    // Test all the size mappings
+    const testCases = [
+      { bedrooms: 1, expectedSize: 55 },
+      { bedrooms: 2, expectedSize: 70 },
+      { bedrooms: 3, expectedSize: 95 },
+      { bedrooms: 4, expectedSize: 110 },
+      { bedrooms: 5, expectedSize: 125 },
+      { bedrooms: 6, expectedSize: 135 },
+      { bedrooms: 7, expectedSize: 135 }, // more than 6 should get 135
+    ];
+
+    for (const { bedrooms, expectedSize } of testCases) {
+      const prop = createTestProperty({ numberOfBedrooms: bedrooms });
+      expect(prop.size).toBe(expectedSize);
+    }
+  });
+
   it("correctly returns newBuildPrice if newbuild", () => {
     property = createTestProperty({
       age: 0
@@ -97,5 +116,6 @@ describe('Property', () => {
       })
       expect(property.depreciatedBuildPrice).toBeCloseTo(136394.44);
     });
+
   });
 });

@@ -30,7 +30,6 @@ describe("POST API Route", () => {
     const validApiInput = {
       housePostcode: "SE17 1PE",
       houseAge: 3,
-      houseSize: 70,
       houseBedrooms: 2,
       houseType: "D",
       maintenanceLevel: "medium",
@@ -90,7 +89,6 @@ describe("POST API Route", () => {
   it("should handle service errors", async () => {
     const validApiInput = {
       housePostcode: "SE17 1PE",
-      houseSize: 70,
       houseAge: 3,
       houseBedrooms: 2,
       houseType: "D",
@@ -135,7 +133,6 @@ describe("POST API Route", () => {
   it("should handle APIError correctly", async () => {
     const validApiInput = {
       housePostcode: "SE17 1PE",
-      houseSize: 70,
       houseAge: 3,
       houseBedrooms: 2,
       houseType: "D",
