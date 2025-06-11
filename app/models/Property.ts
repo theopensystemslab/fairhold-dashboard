@@ -6,7 +6,7 @@ import { DepreciatedHouseBreakdownType } from "./Lifetime";
  */
 const PRECISION = 2;
 
-type PropertyParams = Pick<
+export type PropertyParams = Pick<
   Property,
   | "postcode"
   | "houseType"

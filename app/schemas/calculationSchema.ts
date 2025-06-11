@@ -14,7 +14,7 @@ export interface PostcodeScales {
 }
 
 const HouseTypeEnum = z.enum(HOUSE_TYPES);
-function assignHouseSize(numberOfBedrooms: number) {
+export function assignHouseSize(numberOfBedrooms: number) {
   const sizeMapping: { [key: number]: number } = {
     1: 55,
     2: 70,
