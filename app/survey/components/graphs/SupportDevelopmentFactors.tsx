@@ -1,27 +1,30 @@
 import React from "react"
-import { BarOrPieResults, TickProps } from "@/app/survey/types";
+import { TickProps } from "@/app/survey/types";
 import SurveyGraphCard from "@/app/survey/components/SurveyGraphCard";
 import { Bar, BarChart, XAxis, YAxis, ResponsiveContainer } from "recharts";
+import { useSurveyContext } from "@/app/survey/context";
 
-export const SupportDevelopmentFactors: React.FC<BarOrPieResults> = ({ supportDevelopmentFactors }) => {
-    const Tick = (props: TickProps) => {
-        const { x, y, payload } = props;
-        return (
-          <g transform={`translate(${x},${y})`}>
-            <text 
-              x={-10} 
-              y={0} 
-              dy={4} 
-              textAnchor="end" 
-              fill="#333" 
-              fontSize={10}
-              width={240}
-            >
-              {payload.value}
-            </text>
-          </g>
-        );
-    }
+export const SupportDevelopmentFactors = () => {
+  const supportDevelopmentFactors = useSurveyContext().barOrPie.supportDevelopmentFactors;
+  
+  const Tick = (props: TickProps) => {
+      const { x, y, payload } = props;
+      return (
+        <g transform={`translate(${x},${y})`}>
+          <text 
+            x={-10} 
+            y={0} 
+            dy={4} 
+            textAnchor="end" 
+            fill="#333" 
+            fontSize={10}
+            width={240}
+          >
+            {payload.value}
+          </text>
+        </g>
+      );
+  }
     
     return (
         <SurveyGraphCard title="Which of these factors would make you more likely to support new homes being created near where you live?">

@@ -18,6 +18,7 @@ import { SupportDevelopmentFactors } from './components/graphs/SupportDevelopmen
 import { SupportNewFairhold } from './components/graphs/SupportNewFairhold';
 import { WhyFairhold } from './components/graphs/WhyFairhold';
 import { WhyNotFairhold } from './components/graphs/WhyNotFairhold';
+import { SurveyContext } from './context';
 // list records https://api.airtable.com/v0/{baseId}/{tableIdOrName}
 // get record https://api.airtable.com/v0/{baseId}/{tableIdOrName}/{recordId}
 
@@ -57,12 +58,10 @@ export default function SurveyPage() {
   if (loading) return <div>Loading survey data...</div>;
   if (error) return <div>Error: {error}</div>;
   if (!surveyResults) return <div>No survey data available.</div>;
-  
-  const sankeyResults = surveyResults.sankey
-  const barOrPieResults = surveyResults.barOrPie
 
   return (
     <ErrorBoundary>
+      <SurveyContext.Provider value={surveyResults}>
         <main className={`${inter.className} p-4 min-h-screen bg-[rgb(var(--background-end-rgb))]`}>
           <div className="flex flex-col m-4">
             <h1 className="h1-style text-2xl md:text-4xl">Fairhold survey results</h1>
@@ -75,8 +74,8 @@ export default function SurveyPage() {
               <div className="flex flex-col py-4">
                 <h3 className="text-xl font-medium">Who has responded?</h3>
                 <div className="flex flex-col md:flex-row">
-                  <Country {...barOrPieResults} />
-                  <Age {...barOrPieResults} />
+                  <Country />
+                  <Age />
                   {/* <Postcode {...results} /> */}
                 </div>
               </div>
@@ -84,36 +83,37 @@ export default function SurveyPage() {
               <div className="flex flex-col">
                 <h3 className="text-xl font-medium">Housing preferences</h3>
                 <div className="flex flex-col md:flex-row">
-                  <IdealHouseType {...sankeyResults} />
-                  <IdealLiveWith {...sankeyResults} />
+                  <IdealHouseType />
+                  <IdealLiveWith />
                 </div>
                 <div className="flex flex-col md:flex-row">
-                  <HousingOutcomes {...barOrPieResults} />
-                  <AffordFairhold {...barOrPieResults} />
+                  <HousingOutcomes />
+                  <AffordFairhold />
                 </div>
                 <div className="flex flex-col md:flex-row">
-                  <WhyFairhold {...barOrPieResults} />
-                  <WhyNotFairhold {...barOrPieResults}/>
+                  <WhyFairhold />
+                  <WhyNotFairhold />
                 </div>
                 <div className="flex flex-col md:flex-row">
-                  <CurrentMeansTenureChoice {...sankeyResults} />
-                  <AnyMeansTenureChoice {...sankeyResults} />
+                  <CurrentMeansTenureChoice />
+                  <AnyMeansTenureChoice />
                 </div>
               </div>
 
               <div className="flex flex-col">
                 <h3 className="text-xl font-medium">Attitudes towards development</h3>
                 <div className="flex flex-col md:flex-row">
-                  <SupportDevelopment {...barOrPieResults} />
-                  <SupportNewFairhold {...barOrPieResults} />
+                  <SupportDevelopment />
+                  <SupportNewFairhold />
                 </div>
-                <SupportDevelopmentFactors {...barOrPieResults} />
+                <SupportDevelopmentFactors />
               </div>
           </div>
           )}
             </div>
           </div>
         </main>
+      </SurveyContext.Provider>
     </ErrorBoundary>
   );
 }

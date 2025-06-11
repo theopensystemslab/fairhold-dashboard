@@ -1,9 +1,11 @@
 import React from "react"
-import { BarOrPieResults } from "@/app/survey/types";
 import SurveyGraphCard from "@/app/survey/components/SurveyGraphCard";
 import { PieChart, Pie, Legend, ResponsiveContainer } from "recharts";
+import { useSurveyContext } from "../../context";
 
-export const Age: React.FC<BarOrPieResults> = ({ ageGroup }) => {
+export const Age = () => {
+    const ageGroup = useSurveyContext().barOrPie.ageGroup;
+    
     return (
         <SurveyGraphCard title="How old are you?">
             <ResponsiveContainer width="100%" height="100%">
