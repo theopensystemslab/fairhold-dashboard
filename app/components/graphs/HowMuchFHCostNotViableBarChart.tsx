@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis, LabelList, Tooltip, ReferenceLine } from "recharts";
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis, LabelList, ReferenceLine } from "recharts";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   ChartConfig,
@@ -224,7 +224,6 @@ const HowMuchFHCostBarChart: React.FC<StackedBarChartProps> = ({
               hide={true}
               ></YAxis>
 
-            <Tooltip isAnimationActive={false} />
             <ReferenceLine 
                 y={newBuildPrice} 
                 z={0}
