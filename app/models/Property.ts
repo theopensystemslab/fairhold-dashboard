@@ -124,7 +124,7 @@ export class Property {
 
     const component = HOUSE_BREAKDOWN_PERCENTAGES[componentKey];
     
-    // Calculate new component value
+    /** Not 'new' as in updated, but 'new' as in if component was brand new (age 0) */
     const newComponentValue = newBuildPrice * component.percentageOfHouse;
     
     // Calculate depreciation
