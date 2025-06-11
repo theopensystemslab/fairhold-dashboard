@@ -1,9 +1,11 @@
 import React from "react";
-import { BarOrPieResults } from "@/app/survey/types";
 import SurveyGraphCard from "@/app/survey/components/SurveyGraphCard";
 import { PieChart, Pie, Legend, ResponsiveContainer } from "recharts";
-  
-  export const Country: React.FC<BarOrPieResults> = ({ uk }) => {
+import { useSurveyContext } from "../../context";
+
+  export const Country = () => {
+    const uk = useSurveyContext().barOrPie.uk;
+    
     return (
       <SurveyGraphCard title="Which country?">
         <ResponsiveContainer width="100%" height="100%">

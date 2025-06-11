@@ -1,9 +1,12 @@
 import React from "react"
-import { BarOrPieResults, TickProps } from "@/app/survey/types";
+import { TickProps } from "@/app/survey/types";
 import SurveyGraphCard from "@/app/survey/components/SurveyGraphCard";
 import { Bar, BarChart, XAxis, YAxis, ResponsiveContainer } from "recharts";
+import { useSurveyContext } from "../../context";
 
-export const HousingOutcomes: React.FC<BarOrPieResults> = ({ housingOutcomes }) => {
+export const HousingOutcomes = () => {
+    const housingOutcomes = useSurveyContext().barOrPie.housingOutcomes;
+
     const Tick = (props: TickProps) => {
         const { x, y, payload } = props;
         return (

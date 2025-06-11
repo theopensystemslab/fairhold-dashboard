@@ -1,10 +1,13 @@
 import React from "react"
-import { SankeyResults } from "@/app/survey/types";
 import SurveyGraphCard from "@/app/survey/components/SurveyGraphCard";
 import { CustomSankey } from "../CustomSankey";
 import { ResponsiveContainer } from "recharts";
+import { useSurveyContext } from "../../context";
 
-export const IdealHouseType: React.FC<SankeyResults> = ({ idealHouseType }) => {
+
+export const IdealHouseType = () => {
+    const idealHouseType = useSurveyContext().sankey.idealHouseType;
+    
     return (
         <SurveyGraphCard title="What type of home do you want to live in?">
             <ResponsiveContainer>

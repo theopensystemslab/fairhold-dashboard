@@ -1,10 +1,12 @@
 import React from "react"
-import { SankeyResults } from "@/app/survey/types";
 import SurveyGraphCard from "@/app/survey/components/SurveyGraphCard";
 import { CustomSankey } from "../CustomSankey"
 import { ResponsiveContainer } from "recharts";
+import { useSurveyContext } from "../../context";
 
-export const CurrentMeansTenureChoice: React.FC<SankeyResults> = ({ currentMeansTenureChoice }) => {
+export const CurrentMeansTenureChoice = () => {
+    const currentMeansTenureChoice = useSurveyContext().sankey.currentMeansTenureChoice;
+    
     return (
         <SurveyGraphCard title="Could you afford a Fairhold home in your area?">
             <ResponsiveContainer width="100%" height="100%">
