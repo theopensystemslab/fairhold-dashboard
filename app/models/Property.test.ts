@@ -13,15 +13,15 @@ describe('Property', () => {
   });
   
   it("correctly calculates the newBuildPrice", () => {
-    expect(property.newBuildPrice).toBeCloseTo(186560);
+    expect(property.newBuildPrice).toBeCloseTo(148400);
   });
   
   it("correctly calculates the landPrice", () => {
-    expect(property.landPrice).toBeCloseTo(263440);
+    expect(property.landPrice).toBeCloseTo(301600);
   });
   
   it("correctly calculates the landToTotalRatio", () => {
-    expect(property.landToTotalRatio).toBeCloseTo(0.58542);
+    expect(property.landToTotalRatio).toBeCloseTo(0.67);
   });
   
   it("correctly calculates the values even for number of bedroooms exceeding the max ", () => {
@@ -45,10 +45,9 @@ describe('Property', () => {
         'foundations',
         property.newBuildPrice,
         property.age,
-        'low'
       );
 
-      expect(result.newComponentValue).toBe(39177.6);
+      expect(result.newComponentValue).toBe(31164);
       expect(result.maintenanceAddition).toBe(0); // Foundations should have no maintenance
     });
 
@@ -57,7 +56,6 @@ describe('Property', () => {
         'internalLinings',
         property.newBuildPrice,
         property.age,
-        'low'
       );
 
       expect(result.depreciationFactor).toBe(.968);
@@ -68,10 +66,9 @@ describe('Property', () => {
         'electricalAppliances',
         property.newBuildPrice,
         property.age,
-        'low'
       );
 
-      expect(result.maintenanceAddition).toBe(207.0816);
+      expect(result.maintenanceAddition).toBe(164.724);
     });
 
     it("correctly calculates depreciatedComponentValue for ventilation services", () => {
@@ -79,10 +76,9 @@ describe('Property', () => {
         'ventilationServices',
         property.newBuildPrice,
         property.age,
-        'low'
       );
 
-      expect(result.depreciatedComponentValue).toBeCloseTo(7171.739);
+      expect(result.depreciatedComponentValue).toBeCloseTo(5704.7928);
     });
 
     it("ensures depreciatedComponentValue never goes below 0", () => {
@@ -90,7 +86,6 @@ describe('Property', () => {
         'ventilationServices',
         property.newBuildPrice,
         100, // High age to test possible negative values
-        'low'
       );
 
       expect(result.depreciatedComponentValue).toBeGreaterThanOrEqual(0);
@@ -100,7 +95,7 @@ describe('Property', () => {
       property = createTestProperty({
         age: 10
       })
-      expect(property.depreciatedBuildPrice).toBeCloseTo(171467.3);
+      expect(property.depreciatedBuildPrice).toBeCloseTo(136394.44);
     });
   });
 });

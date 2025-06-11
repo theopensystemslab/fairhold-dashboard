@@ -10,18 +10,18 @@ describe('Social Value', () => {
     })
 
     it("calculates money saved", () => {
-        expect(socialValue.moneySaved).toBeCloseTo(481215.981)
+        expect(socialValue.moneySaved).toBeCloseTo(549796.967)
     })
     it("calculates money to community", () => {
-        expect(socialValue.communityWealthLifetime).toBeCloseTo(43270.08)
+        expect(socialValue.communityWealthLifetime).toBeCloseTo(46231.878)
     })
     it("calculates energy bill savings", () => {
-        expect(socialValue.savingsEnergyPoundsYearly).toBeCloseTo(554.4)
+        expect(socialValue.savingsEnergyPoundsYearly).toBeCloseTo(441)
     })
     it("calculates amount generated for local jobs", () => {
-        expect(socialValue.localJobs).toBeCloseTo(3.2)
+        expect(socialValue.localJobs).toBeCloseTo(2.5)
     })
     it("calculates operational carbon savings", () => {
-        expect(socialValue.operationalCarbonSavingsYearly).toBeCloseTo(1.465)
+        expect(socialValue.operationalCarbonSavingsYearly).toBeCloseTo(1.1655)
     })
 
