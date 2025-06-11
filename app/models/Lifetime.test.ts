@@ -27,10 +27,10 @@ describe("resale values", () => {
         lifetime = createTestLifetime({
             property: createTestProperty({ age: 0 })
         });
-        expect(lifetime.lifetimeData[0].depreciatedHouseResaleValue.none).toBe(186560);
-        expect(lifetime.lifetimeData[0].depreciatedHouseResaleValue.low).toBe(186560);
-        expect(lifetime.lifetimeData[0].depreciatedHouseResaleValue.medium).toBe(186560);
-        expect(lifetime.lifetimeData[0].depreciatedHouseResaleValue.high).toBe(186560);
+        expect(lifetime.lifetimeData[0].depreciatedHouseResaleValue.none).toBe(148400);
+        expect(lifetime.lifetimeData[0].depreciatedHouseResaleValue.low).toBe(148400);
+        expect(lifetime.lifetimeData[0].depreciatedHouseResaleValue.medium).toBe(148400);
+        expect(lifetime.lifetimeData[0].depreciatedHouseResaleValue.high).toBe(148400);
 
     });
     it("correctly calculates for a 10-year old house", () => {    // Test 10-year-old house
@@ -38,14 +38,12 @@ describe("resale values", () => {
             property: createTestProperty({ 
                 age: 10,
                 newBuildPricePerMetre: 2120,
-                size: 88 
             })
         }); 
         // Calculate expected depreciation running `calculateDepreciatedBuildPrice()` method on its own
         const houseY10 = createTestProperty({ 
             age: 10,
             newBuildPricePerMetre: 2120,
-            size: 88 
         })           
         const depreciatedHouseY10 = houseY10.calculateDepreciatedBuildPrice()
         expect(lifetime.lifetimeData[0].depreciatedHouseResaleValue.low).toBe(depreciatedHouseY10);
@@ -63,10 +61,10 @@ describe("resale values", () => {
 });
 
 it("correctly calculates depreciated house value for all maintenance levels", () => {
-    expect(lifetime.lifetimeData[3].depreciatedHouseResaleValue.none).toBeCloseTo(168906.62)
-    expect(lifetime.lifetimeData[20].depreciatedHouseResaleValue.low).toBeCloseTo(172168.596)
-    expect(lifetime.lifetimeData[27].depreciatedHouseResaleValue.medium).toBeCloseTo(206487.633)
-    expect(lifetime.lifetimeData[39].depreciatedHouseResaleValue.high).toBeCloseTo(326753.094) 
+    expect(lifetime.lifetimeData[3].depreciatedHouseResaleValue.none).toBeCloseTo(134357.541)
+    expect(lifetime.lifetimeData[20].depreciatedHouseResaleValue.low).toBeCloseTo(136952.292)
+    expect(lifetime.lifetimeData[27].depreciatedHouseResaleValue.medium).toBeCloseTo(164251.526)
+    expect(lifetime.lifetimeData[39].depreciatedHouseResaleValue.high).toBeCloseTo(259917.233) 
 
     expect(lifetime.lifetimeData[5].depreciatedHouseResaleValue.none).toBeLessThan(
         lifetime.lifetimeData[5].depreciatedHouseResaleValue.low);

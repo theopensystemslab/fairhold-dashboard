@@ -12,7 +12,6 @@ export interface ResponseData {
   houseBedrooms: number;
   buildPrice: number;
   houseAge: number;
-  houseSize: number;
   maintenanceLevel: MaintenanceLevel;
   averagePrice: number;
   itl3: string;
@@ -41,7 +40,6 @@ function calculateFairhold(responseData: ResponseData) {
     houseType: responseData.houseType,
     numberOfBedrooms: responseData.houseBedrooms,
     age: responseData.houseAge,
-    size: responseData.houseSize,
     maintenanceLevel: responseData.maintenanceLevel,
     newBuildPricePerMetre: responseData.buildPrice,
     averageMarketPrice: responseData.averagePrice,

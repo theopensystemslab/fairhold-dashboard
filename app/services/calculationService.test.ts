@@ -51,7 +51,6 @@ describe("getHouseholdData", () => {
     houseType: "D" | "S" | "T" | "F";
     houseAge: number;
     houseBedrooms: number;
-    houseSize: number;
     maintenanceLevel: z.infer<typeof maintenanceLevelSchema>;
   }
 
@@ -60,7 +59,6 @@ describe("getHouseholdData", () => {
     houseType: "D",
     houseAge: 20,
     houseBedrooms: 3,
-    houseSize: 100,
     maintenanceLevel: "medium"
   };
 
@@ -117,7 +115,6 @@ describe("getHouseholdData", () => {
       houseType: mockInput.houseType,
       houseAge: mockInput.houseAge,
       houseBedrooms: mockInput.houseBedrooms,
-      houseSize: mockInput.houseSize,
       maintenanceLevel: mockInput.maintenanceLevel,
       averagePrice: parseFloat(mockPricesPaidSummary.averagePrice.toFixed(2)),
       itl3: mockITL3,
@@ -175,7 +172,6 @@ describe("getHouseholdData", () => {
       houseType: "D" as HouseType,
       houseAge: 20,
       houseBedrooms: 3,
-      houseSize: 100,
       maintenanceLevel: "medium" as MaintenanceLevel,
     };
 
@@ -227,7 +223,6 @@ describe("getHouseholdData", () => {
       houseType: mockInput.houseType,
       houseAge: mockInput.houseAge,
       houseBedrooms: mockInput.houseBedrooms,
-      houseSize: mockInput.houseSize,
       maintenanceLevel: mockInput.maintenanceLevel,
       averagePrice: parseFloat(mockPricesPaidSummary.averagePrice.toFixed(2)),
       itl3: mockITL3,
