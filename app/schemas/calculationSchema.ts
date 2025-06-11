@@ -22,7 +22,7 @@ function assignHouseSize(numberOfBedrooms: number) {
     4: 110,
     5: 125,
     6: 135,
-  };
+  } as const;
 
   const size = numberOfBedrooms > 6 ? 135 : sizeMapping[numberOfBedrooms];
   return size;
@@ -75,7 +75,6 @@ export const calculationSchema = z
     houseBedrooms: z.coerce
       .number()
       .positive("houseBedrooms must be a positive integer"),
-    houseSize: z.coerce.number().optional(),
     houseAge: z.coerce
       .number()
       .nonnegative("houseAge must be a positive integer or 0"),
@@ -89,7 +88,7 @@ export const calculationSchema = z
   })
   .transform((data) => ({
     ...data,
-    houseSize: data.houseSize ?? assignHouseSize(data.houseBedrooms),
+    houseSize: assignHouseSize(data.houseBedrooms),
   }));
 
   export type Calculation = z.infer<typeof calculationSchema>;

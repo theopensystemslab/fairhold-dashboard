@@ -51,21 +51,6 @@ describe("calculationSchema", () => {
     });
   });
 
-  it("should validate input with explicit house size", () => {
-    const inputWithSize = {
-      housePostcode: "SE17 1PE",
-      houseBedrooms: 2,
-      houseSize: 100,
-      houseAge: 3,
-      houseType: "D",
-      maintenanceLevel: "medium",
-    };
-
-    const result = calculationSchema.parse(inputWithSize);
-    
-    expect(result.houseSize).toBe(100);
-  });
-
   it("should auto-assign correct house size based on bedrooms", () => {
     // Test all the size mappings
     const testCases = [
