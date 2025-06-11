@@ -20,15 +20,59 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-const CustomLabelListContent: React.FC<CustomLabelListContentProps> = ({
+const CenterLabelListContent: React.FC<CustomLabelListContentProps> = ({
   x,
   y,
   value,
-  index
+  width,
+  height,
 }) => {
+  if ( typeof x !== 'number' || 
+    typeof y !== 'number' || 
+    typeof width !== 'number' ||
+    typeof height !== 'number' ||
+    !value
+  ) return null;
 
-  if (x === undefined || y === undefined || value === undefined) return null;
+  const labelColor = (() => {
+      switch (value) {
+        case "Not viable":
+          return "rgb(var(--not-viable-dark-color-rgb))";
+        case "House":
+          return "white";
+        default:
+          return "black";
+      }
+    })();
 
+  const labelWidth = 80;
+  const xPos = x + width / 2 - labelWidth / 2;
+  const yPos = y + height / 2 - 10;
+
+  return (
+    <foreignObject x={xPos} y={yPos} width={80} height={20}>
+        <div
+        style={{
+            color: labelColor,
+            fontSize: "12px",
+            fontWeight: 600,
+            textAlign: "center",
+        }}
+        >
+        {value}
+        </div>
+    </foreignObject>
+  );
+}
+
+const TopLabelListContent: React.FC<CustomLabelListContentProps> = ({
+  x,
+  y,
+  index,
+  value  
+}) => {
+    if (!x || !y || !value) return null;
+                  
   const labelColor = (() => {
     switch (index) {
       case 0:
@@ -37,11 +81,12 @@ const CustomLabelListContent: React.FC<CustomLabelListContentProps> = ({
         return "rgb(var(--fairhold-equity-color-rgb))";
     }
   })();
-
-  const xPos = typeof x === 'number' ? x - 2 : 0;
-  const yPos = typeof y === 'number' ? y - 30 : 0;
-  const checkedValue = typeof value === 'number' ? value : parseFloat(value as string);
-  const formattedValue = formatValue(checkedValue);
+  const xAdjust = 2;
+  const yAdjust = 30;
+  const xPos = typeof x === 'number' ? x - xAdjust : 0;
+  const yPos = typeof y === 'number' ? y - yAdjust : 0;
+  value = typeof value === 'number' ? value : parseFloat(value as string);
+  const formattedValue = formatValue(value);
 
   return (
     <foreignObject x={xPos} y={yPos} width={100} height={30}>
@@ -209,51 +254,15 @@ const HowMuchFHCostBarChart: React.FC<StackedBarChartProps> = ({
                 position="center"
                 fontSize={12}
                 content={(props) => (
-                  <CustomLabelListContent {...props}/>
+                  <CenterLabelListContent {...props}/>
                 )}
               />
               <LabelList
                 dataKey="total"
                 position="top"
-                content={(props) => {
-                  if (!props.x || !props.y || !props.value) return null;
-                  
-                  const labelColor = (() => {
-                    switch (props.index) {
-                      case 0:
-                        return "rgb(var(--not-viable-dark-color-rgb))";
-                      default:
-                        return "rgb(var(--fairhold-equity-color-rgb))";
-                    }
-                  })();
-                  const xAdjust = 2;
-                  const yAdjust = 30;
-                  const xPos = typeof props.x === 'number' ? props.x - xAdjust : 0;
-                  const yPos = typeof props.y === 'number' ? props.y - yAdjust : 0;
-                  const value = typeof props.value === 'number' ? props.value : parseFloat(props.value as string);
-                  const formattedValue = formatValue(value);
-
-                  return (
-                    <foreignObject x={xPos} y={yPos} width={100} height={30}>
-                      <div
-                        style={{
-                          position: "absolute",
-                          left: 0,
-                          top: 0,
-                          color: labelColor,
-                          backgroundColor: "rgb(var(--background-end-rgb))",
-                          fontSize: "18px",
-                          fontWeight: 600,
-                          whiteSpace: "nowrap",
-                          padding: "2px 6px",
-                          zIndex: 10,
-                        }}
-                      >
-                        {formattedValue}
-                      </div>
-                    </foreignObject>
-                  );
-                }}
+                content={(props) => (
+                  <TopLabelListContent {...props} />
+                )}
               />
             </Bar>
              
