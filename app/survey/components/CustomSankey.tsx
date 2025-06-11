@@ -75,12 +75,20 @@ type CustomLinkPayload = {
 type SankeyProps = {
     nodes: Array<{name: string}>;
     links: Array<{source: number, target: number, value: number}>;
+    leftLabel?: string;
+    rightLabel?: string;
 };
 
-export const CustomSankey: React.FC<SankeyProps> = ({ nodes, links }) => {
+export const CustomSankey: React.FC<SankeyProps> = ({ 
+    nodes, 
+    links, 
+    leftLabel, 
+    rightLabel
+    }) => {
 
     // Custom Node Component with Label 
     const CustomNode = (props: CustomNodeProps) => { 
+        const isLeft = props.payload.depth === 0;
         return ( 
             <g> 
                 <Rectangle 
@@ -88,9 +96,9 @@ export const CustomSankey: React.FC<SankeyProps> = ({ nodes, links }) => {
                     fill={"rgb(var(--fairhold-equity-color-rgb))"} 
                 /> 
                 <text 
-                    x={props.x + props.width / 2} 
+                    x={isLeft ? props.x - 80 : props.x + props.width + 80}
                     y={props.y + props.height / 2} 
-                    textAnchor="middle" 
+                    textAnchor={props.payload.depth === 0 ? "start" : "end"}
                     dominantBaseline="middle" 
                     fill="rgb(var(--text-default-rgb))" 
                     fontSize={12} 
@@ -136,6 +144,11 @@ export const CustomSankey: React.FC<SankeyProps> = ({ nodes, links }) => {
     }; 
 
     return (
+        <div>
+        <svg width={900} height={40} style={{ position: "absolute", pointerEvents: "none" }}>
+            <text x={30} y={30} textAnchor="start">{leftLabel}</text>
+            <text x={670} y={30} textAnchor="end">{rightLabel}</text>
+        </svg>
         <Sankey
             width={700}
             height={350}
@@ -147,13 +160,14 @@ export const CustomSankey: React.FC<SankeyProps> = ({ nodes, links }) => {
             link={CustomLink}
             nodePadding={50}
             margin={{
-                left: 100,
-                right: 100,
+                left: 150,
+                right: 150,
                 top: 50,
                 bottom: 50,
             }}
         >
             <Tooltip />
         </Sankey>
+        </div>
     )
 }

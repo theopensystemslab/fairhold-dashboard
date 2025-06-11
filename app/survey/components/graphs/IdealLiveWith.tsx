@@ -10,7 +10,10 @@ export const IdealLiveWith: React.FC<SankeyResults> = ({ idealLiveWith }) => {
             <ResponsiveContainer width="100%" height="100%">
                 <CustomSankey
                     nodes={idealLiveWith.nodes}
-                    links={idealLiveWith.links}            >
+                    links={idealLiveWith.links}
+                    leftLabel="Current"
+                    rightLabel="Ideal"    
+                    >
                 </CustomSankey>
             </ResponsiveContainer>
         </SurveyGraphCard>
