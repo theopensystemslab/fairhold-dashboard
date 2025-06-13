@@ -16,6 +16,8 @@ import { IdealLiveWith } from './components/graphs/IdealLiveWith';
 import { SupportDevelopment } from './components/graphs/SupportDevelopment';
 import { SupportDevelopmentFactors } from './components/graphs/SupportDevelopmentFactors';
 import { SupportNewFairhold } from './components/graphs/SupportNewFairhold';
+import { WhyFairhold } from './components/graphs/WhyFairhold';
+import { WhyNotFairhold } from './components/graphs/WhyNotFairhold';
 // list records https://api.airtable.com/v0/{baseId}/{tableIdOrName}
 // get record https://api.airtable.com/v0/{baseId}/{tableIdOrName}/{recordId}
 
@@ -88,6 +90,10 @@ export default function SurveyPage() {
                 <div className="flex flex-col md:flex-row">
                   <HousingOutcomes {...barOrPieResults} />
                   <AffordFairhold {...barOrPieResults} />
+                </div>
+                <div className="flex flex-col md:flex-row">
+                  <WhyFairhold {...barOrPieResults} />
+                  <WhyNotFairhold {...barOrPieResults}/>
                 </div>
                 <div className="flex flex-col md:flex-row">
                   <CurrentMeansTenureChoice {...sankeyResults} />
