@@ -8,7 +8,14 @@ export const SupportDevelopment: React.FC<BarOrPieResults> = ({ supportDevelopme
         <SurveyGraphCard title="Would you support development in general?">
              <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
-                    <Pie data={supportDevelopment} dataKey="value" nameKey="answer" fill="rgb(var(--survey-placeholder))" />
+                    <Pie 
+                        data={supportDevelopment} 
+                        dataKey="value" 
+                        nameKey="answer" 
+                        fill="rgb(var(--survey-placeholder))"
+                        innerRadius="40%"
+                        outerRadius="80%"
+                        />
                     <Legend align="center" verticalAlign="bottom" />
              </PieChart>
             </ResponsiveContainer>

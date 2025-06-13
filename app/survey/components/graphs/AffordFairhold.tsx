@@ -8,7 +8,14 @@ export const AffordFairhold: React.FC<BarOrPieResults> = ({ affordFairhold }) =>
         <SurveyGraphCard title="Could you afford a Fairhold home in your area?">
             <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
-                    <Pie data={affordFairhold} dataKey="value" nameKey="answer" fill="rgb(var(--survey-placeholder))" />
+                    <Pie 
+                        data={affordFairhold} 
+                        dataKey="value" 
+                        nameKey="answer" 
+                        fill="rgb(var(--survey-placeholder))" 
+                        innerRadius="40%"
+                        outerRadius="80%"
+                        />
                     <Legend align="center" verticalAlign="bottom" />
                 </PieChart>
             </ResponsiveContainer>
