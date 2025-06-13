@@ -39,6 +39,27 @@ describe("pricesPaidRepo", () => {
     });
   });
 
+  it("should return prices paid data when postcodeSector is null", async () => {
+    (prisma.pricesPaidSummaryFiltered.findFirst as jest.Mock).mockResolvedValueOnce({
+      averagePrice: 400000,
+      transactionCount: 40,
+      postcode: postcodeDistrict,
+    });
+
+    const result = await pricesPaidRepo.getPricesPaidByPostcodeAndHouseType(
+      postcodeDistrict,
+      postcodeArea,
+      null, // postcodeSector is null
+      houseType
+    );
+
+    expect(result).toEqual({
+      averagePrice: 400000,
+      numberOfTransactions: 40,
+      granularityPostcode: postcodeDistrict,
+    });
+  });
+
   it("should throw an error if no transaction data is found", async () => {
     (prisma.pricesPaidSummaryFiltered.findFirst as jest.Mock).mockResolvedValueOnce(null);
 

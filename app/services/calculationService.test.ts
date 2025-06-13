@@ -10,7 +10,7 @@ import { socialRentEarningsService } from "./socialRentEarningsService";
 import { rentService } from "./rentService";
 import { parse } from "postcode";
 import { z } from "zod";
-import { maintenanceLevelSchema, PostcodeScales } from "../schemas/calculationSchema";
+import { Calculation, maintenanceLevelSchema, PostcodeScales } from "../schemas/calculationSchema";
 import { APIError } from "../lib/exceptions";
 import { HouseType } from "../models/Property";
 import { MaintenanceLevel } from "../models/constants";
@@ -133,6 +133,40 @@ describe("getHouseholdData", () => {
     });
   });
 
+  it("should use 4 bedrooms for rent lookup if houseBedrooms > 4", async () => {
+    const validPostcode = parse("SE17 1PE");
+    if (!validPostcode.valid) throw new Error("Invalid postcode");
+    const mockInput = {
+      housePostcode: validPostcode,
+      houseType: "D",
+      houseAge: 20,
+      houseBedrooms: 6, // > 4 triggers the else branch
+      houseSize: 100,
+      maintenanceLevel: "medium"
+    };
+
+    (itlService.getByPostcodeDistrict as jest.Mock).mockResolvedValueOnce("TLI44");
+    (gdhiService.getByITL1 as jest.Mock).mockResolvedValueOnce(30000);
+    (gasPriceService.getByITL3 as jest.Mock).mockResolvedValueOnce(1200);
+    (hpiService.getByITL3 as jest.Mock).mockResolvedValueOnce(1.05);
+    (buildPriceService.getBuildPriceByHouseType as jest.Mock).mockResolvedValueOnce(250000);
+    (pricesPaidService.getPricesPaidByPostcodeAndHouseType as jest.Mock).mockResolvedValueOnce({
+      averagePrice: 280000,
+      numberOfTransactions: 50,
+      granularityPostcode: "SE17",
+    });
+    (rentService.getByITL3AndBedrooms as jest.Mock).mockResolvedValueOnce(1500);
+    (socialRentAdjustmentsService.getAdjustments as jest.Mock).mockResolvedValueOnce([
+      { year: "2022", inflation: 2, additional: 3, total: 5 },
+    ]);
+    (socialRentEarningsService.getByITL3 as jest.Mock).mockResolvedValueOnce(25000);
+
+    await getHouseholdData(mockInput as Calculation);
+
+    // Check that rentService was called with 4 bedrooms, not 6
+    expect(rentService.getByITL3AndBedrooms).toHaveBeenCalledWith("TLI44", 4);
+  });
+
   it("should throw an error when service fails", async () => {
     const errorMessage = "Service error";
     (itlService.getByPostcodeDistrict as jest.Mock).mockRejectedValueOnce(
@@ -160,6 +194,30 @@ describe("getHouseholdData", () => {
     (hpiService.getByITL3 as jest.Mock).mockResolvedValueOnce(null);
     (buildPriceService.getBuildPriceByHouseType as jest.Mock).mockResolvedValueOnce(null);
   })
+
+  it("should throw APIError when ITL3 region is not found", async () => {
+    // Arrange: mock ITL3 service to return null (not found)
+    (itlService.getByPostcodeDistrict as jest.Mock).mockResolvedValueOnce(null);
+
+    // Use a valid mock input
+    const validPostcode = parse("SE17 1PE");
+    if (!validPostcode.valid) throw new Error("Invalid postcode");
+    const mockInput = {
+      housePostcode: validPostcode,
+      houseType: "D",
+      houseAge: 20,
+      houseBedrooms: 3,
+      houseSize: 100,
+      maintenanceLevel: "medium"
+    };
+
+    // Act & Assert
+    await expect(getHouseholdData(mockInput as Calculation)).rejects.toMatchObject({
+      code: "ITL3_NOT_FOUND",
+      message: "ITL3 region not found",
+      status: 400
+    });
+  });
     
   it("should work when only an outcode is entered", async () => {
     const outcode = "SE17";
@@ -243,4 +301,5 @@ describe("getHouseholdData", () => {
     });
     expect(itlService.getByPostcodeDistrict).toHaveBeenCalledWith("SE17");
   });
+
 });

@@ -58,9 +58,9 @@ export const calculationSchema = z
         } else {
           const outcodeUpper = postcode.toUpperCase();
           const districtMatch = outcodeUpper.match(/^[A-Z]+\d+/);
-          const district = districtMatch ? districtMatch[0] : outcodeUpper;
+          const district = districtMatch![0];
           const areaMatch = outcodeUpper.match(/^[A-Z]+/);
-          const area = areaMatch ? areaMatch[0] : outcodeUpper.charAt(0);
+          const area = areaMatch![0];
           
           return {
             outcode: outcodeUpper,
