@@ -9,8 +9,7 @@ import {
   StyledChartContainer,
 } from "../ui/StyledChartContainer";
 import { useState } from "react";
-import { formatValue } from "@/app/lib/format";
-import { CustomLabelListContentProps } from "./types";
+import { BarLabelListTopLeft } from "./types"
 
 const chartConfig = {
   freeholdLand: {
@@ -26,34 +25,6 @@ const chartConfig = {
     color: "rgb(var(--fairhold-interest-color-rgb))",
   },
 } satisfies ChartConfig;
-
-const CustomLabelListContent: React.FC<CustomLabelListContentProps> = ({ x, y, value, color }) => {
-  if (x === undefined || y === undefined || value === undefined) return null;
-  const xAdjust = 2;
-  const yAdjust = 30;
-  const xPos = typeof x === "number" ? x - xAdjust : Number(x) - xAdjust;
-  const yPos = typeof y === "number" ? y - yAdjust : Number(y) - yAdjust;
-  const numValue = typeof value === "number" ? value : parseFloat(value as string);
-  const formattedValue = formatValue(numValue);
-
-  return (
-    <foreignObject x={xPos} y={yPos} width={100} height={30}>
-      <div
-        style={{
-          position: "absolute",
-          left: 0,
-          top: 0,
-          color,
-          fontSize: "18px",
-          fontWeight: 600,
-          whiteSpace: "nowrap",
-        }}
-      >
-        {formattedValue}
-      </div>
-    </foreignObject>
-  );
-};
 
 type DataInput = {
   category: string;
@@ -219,7 +190,7 @@ const HowMuchFHCostBarChart: React.FC<StackedBarChartProps> = ({
                 dataKey="freeholdTotal"
                 position="top"
                 content={(props) => (
-                  <CustomLabelListContent {...props} color="rgb(var(--freehold-equity-color-rgb))" />
+                  <BarLabelListTopLeft {...props} color="rgb(var(--freehold-equity-color-rgb))" />
                 )}
               />
             </Bar>
@@ -258,7 +229,7 @@ const HowMuchFHCostBarChart: React.FC<StackedBarChartProps> = ({
                 dataKey="fairholdTotal"
                 position="top"
                 content={(props) => (
-                  <CustomLabelListContent {...props} color="rgb(var(--fairhold-equity-color-rgb))" />
+                  <BarLabelListTopLeft {...props} color="rgb(var(--fairhold-equity-color-rgb))" />
                 )}
               />
             </Bar>

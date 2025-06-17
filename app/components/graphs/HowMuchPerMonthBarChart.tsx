@@ -9,8 +9,7 @@ import {
 import {
   StyledChartContainer,
 } from "../ui/StyledChartContainer";
-import { formatValue } from "@/app/lib/format";
-import { CustomLabelListContentProps } from "./types";
+import { BarLabelListTopLeft } from "./types";
 
 type DataInput = {
   category: string;
@@ -79,38 +78,6 @@ const CustomTick: React.FC<CustomTickProps> = ({ x, y, payload, color }) => {
     </g>
   );
   }
-
-const CustomLabelListContent: React.FC<CustomLabelListContentProps> = ({
-  x,
-  y,
-  value,
-  color
-}) => {
-  const xAdjust = 2;
-  const yAdjust = 30;
-  const xPos = typeof x === "number" ? x - xAdjust : Number(x) - xAdjust;
-  const yPos = typeof y === "number" ? y - yAdjust : Number(y) - yAdjust;
-
-  const numValue = typeof value === "number" ? value : Number(value);
-  const formattedValue = formatValue(numValue);
-
-  return (
-    <foreignObject x={xPos} y={yPos} width={100} height={30}>
-      <div
-        style={{
-          position: "absolute",
-          left: 0,
-          top: 0,
-          color: color,
-          fontSize: "18px",
-          fontWeight: 600,
-          whiteSpace: "nowrap",
-        }}
-      >
-        {formattedValue}
-      </div>
-    </foreignObject>
-  )};
 
 const HowMuchPerMonthBarChart: React.FC<StackedBarChartProps> = ({ 
   data, 
@@ -187,7 +154,7 @@ const HowMuchPerMonthBarChart: React.FC<StackedBarChartProps> = ({
                 dataKey="monthly"
                 position="top"
                 content={(props) => (
-                  <CustomLabelListContent
+                  <BarLabelListTopLeft
                     {...props}
                     color={props.index !== undefined ? chartData[props.index].fill : "#666"}
                   />

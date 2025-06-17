@@ -1,3 +1,5 @@
+import { formatValue } from "@/app/lib/format";
+
 export interface CustomLabelListContentProps {
     x?: number | string | undefined;
     y?: number | string | undefined;
@@ -7,3 +9,31 @@ export interface CustomLabelListContentProps {
     width?: string | number | undefined;
     height?: string | number | undefined;
 }
+
+export const BarLabelListTopLeft: React.FC<CustomLabelListContentProps> = ({ x, y, value, color }) => {
+  if (x === undefined || y === undefined || value === undefined) return null;
+  const xAdjust = 2;
+  const yAdjust = 30;
+  const xPos = typeof x === "number" ? x - xAdjust : Number(x) - xAdjust;
+  const yPos = typeof y === "number" ? y - yAdjust : Number(y) - yAdjust;
+  const numValue = typeof value === "number" ? value : parseFloat(value as string);
+  const formattedValue = formatValue(numValue);
+
+  return (
+    <foreignObject x={xPos} y={yPos} width={100} height={30}>
+      <div
+        style={{
+          position: "absolute",
+          left: 0,
+          top: 0,
+          color,
+          fontSize: "18px",
+          fontWeight: 600,
+          whiteSpace: "nowrap",
+        }}
+      >
+        {formattedValue}
+      </div>
+    </foreignObject>
+  );
+};

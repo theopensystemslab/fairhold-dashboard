@@ -8,7 +8,7 @@ import {
 import {
   StyledChartContainer,
 } from "../ui/StyledChartContainer";
-import { formatValue } from "@/app/lib/format";
+import { BarLabelListTopLeft } from "./types"
 import { CustomLabelListContentProps } from "./types";
 
 const chartConfig = {
@@ -63,52 +63,7 @@ const CenterLabelListContent: React.FC<CustomLabelListContentProps> = ({
         </div>
     </foreignObject>
   );
-}
-
-const TopLabelListContent: React.FC<CustomLabelListContentProps> = ({
-  x,
-  y,
-  index,
-  value  
-}) => {
-    if (!x || !y || !value) return null;
-                  
-  const labelColor = (() => {
-    switch (index) {
-      case 0:
-        return "rgb(var(--not-viable-dark-color-rgb))";
-      default:
-        return "rgb(var(--fairhold-equity-color-rgb))";
-    }
-  })();
-  const xAdjust = 2;
-  const yAdjust = 30;
-  const xPos = typeof x === 'number' ? x - xAdjust : 0;
-  const yPos = typeof y === 'number' ? y - yAdjust : 0;
-  value = typeof value === 'number' ? value : parseFloat(value as string);
-  const formattedValue = formatValue(value);
-
-  return (
-    <foreignObject x={xPos} y={yPos} width={100} height={30}>
-      <div
-        style={{
-          position: "absolute",
-          left: 0,
-          top: 0,
-          color: labelColor,
-          backgroundColor: "rgb(var(--background-end-rgb))",
-          fontSize: "18px",
-          fontWeight: 600,
-          whiteSpace: "nowrap",
-          padding: "2px 6px",
-          zIndex: 10,
-        }}
-      >
-        {formattedValue}
-      </div>
-    </foreignObject>
-  );
-}
+};
 
 type DataInput = {
   category: string;
@@ -183,18 +138,21 @@ const HowMuchFHCostBarChart: React.FC<StackedBarChartProps> = ({
       total: data[0].marketPurchase + data[1].marketPurchase,
       label: "Not viable",    
       fill: "rgb(var(--not-viable-light-color-rgb))",
+      color: "rgb(var(--not-viable-dark-color-rgb))",
     },
     {
       tenure: "fairhold: land purchase",
       total: data[2].fairholdLandPurchase,
       label: "House",
       fill: "rgb(var(--fairhold-interest-color-rgb))",
+      color: "rgb(var(--fairhold-equity-color-rgb))",
     },
     {
       tenure: "fairhold: land rent",
       total: data[2].fairholdLandRent,
       label: "House",
       fill: "rgb(var(--fairhold-interest-color-rgb))",
+      color: "rgb(var(--fairhold-equity-color-rgb))",
     },
   ];
 
@@ -260,7 +218,7 @@ const HowMuchFHCostBarChart: React.FC<StackedBarChartProps> = ({
                 dataKey="total"
                 position="top"
                 content={(props) => (
-                  <TopLabelListContent {...props} />
+                  <BarLabelListTopLeft {...props} color={props.index !== undefined ? chartData[props.index].color : "#666"}/>
                 )}
               />
             </Bar>
