@@ -37,3 +37,43 @@ export const BarLabelListTopLeft: React.FC<CustomLabelListContentProps> = ({ x, 
     </foreignObject>
   );
 };
+
+export interface CustomTickProps {
+  x: number;
+  y: number;
+  payload: { value: string };
+  getLabel: (value: string) => string;
+  getColor: (value: string, index?: number) => string;
+  index?: number;
+}
+
+export const CustomTick: React.FC<CustomTickProps> = ({
+  x,
+  y,
+  payload,
+  getLabel,
+  getColor,
+  index,
+}) => {
+  const label = getLabel(payload.value);
+  const color = getColor(payload.value, index);
+
+  return (
+    <g transform={`translate(${x},${y})`}>
+      {label.split('\n').map((line: string, i: number) => (
+        <text
+          key={i}
+          x={0}
+          y={i * 20}
+          dy={10}
+          textAnchor="middle"
+          style={{ fill: color }}
+          fontSize="12px"
+          fontWeight={600}
+        >
+          {line}
+        </text>
+      ))}
+    </g>
+  );
+};
