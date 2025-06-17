@@ -8,8 +8,7 @@ import {
 import {
   StyledChartContainer,
 } from "../ui/StyledChartContainer";
-import { formatValue } from "@/app/lib/format";
-import { CustomLabelListContentProps } from "./types";
+import { BarLabelListTopLeft, CustomLabelListContentProps, CustomTick, getLabel } from "./shared"
 
 const chartConfig = {
   freehold: {
@@ -63,52 +62,7 @@ const CenterLabelListContent: React.FC<CustomLabelListContentProps> = ({
         </div>
     </foreignObject>
   );
-}
-
-const TopLabelListContent: React.FC<CustomLabelListContentProps> = ({
-  x,
-  y,
-  index,
-  value  
-}) => {
-    if (!x || !y || !value) return null;
-                  
-  const labelColor = (() => {
-    switch (index) {
-      case 0:
-        return "rgb(var(--not-viable-dark-color-rgb))";
-      default:
-        return "rgb(var(--fairhold-equity-color-rgb))";
-    }
-  })();
-  const xAdjust = 2;
-  const yAdjust = 30;
-  const xPos = typeof x === 'number' ? x - xAdjust : 0;
-  const yPos = typeof y === 'number' ? y - yAdjust : 0;
-  value = typeof value === 'number' ? value : parseFloat(value as string);
-  const formattedValue = formatValue(value);
-
-  return (
-    <foreignObject x={xPos} y={yPos} width={100} height={30}>
-      <div
-        style={{
-          position: "absolute",
-          left: 0,
-          top: 0,
-          color: labelColor,
-          backgroundColor: "rgb(var(--background-end-rgb))",
-          fontSize: "18px",
-          fontWeight: 600,
-          whiteSpace: "nowrap",
-          padding: "2px 6px",
-          zIndex: 10,
-        }}
-      >
-        {formattedValue}
-      </div>
-    </foreignObject>
-  );
-}
+};
 
 type DataInput = {
   category: string;
@@ -124,54 +78,6 @@ interface StackedBarChartProps { // TODO: refactor so there is only one exported
   maxY: number;
 }
 
-interface CustomTickProps {
-  x: number; 
-  y: number; 
-  payload: { value: string } 
-}
-
-const CustomTick: React.FC<CustomTickProps> = ({ x, y, payload }) => {
-    const label = (() => {
-      switch (payload.value) {
-        case "freehold":
-          return "Freehold";
-        case "fairhold: land purchase":
-          return "Fairhold /\nLand Purchase";
-        case "fairhold: land rent":
-          return "Fairhold /\nLand Rent";
-        default:
-          return payload.value;
-      }
-    })();
-    const labelColor = (() => {
-      switch (payload.value) {
-        case "freehold":
-          return "rgb(var(--not-viable-dark-color-rgb))";
-        default:
-          return "rgb(var(--fairhold-equity-color-rgb))";
-      }
-    })();
-
-    return (
-      <g transform={`translate(${x},${y})`}>
-        {label.split('\n').map((line: string, i: number) => (
-          <text
-            key={i}
-            x={0}
-            y={i * 20}
-            dy={10}
-            textAnchor="middle"
-            style={{ fill: labelColor }}
-            fontSize="12px"
-            fontWeight={600}
-          >
-            {line}
-          </text>
-        ))}
-      </g>
-    );
-  }
-
 const HowMuchFHCostBarChart: React.FC<StackedBarChartProps> = ({
   data,
   newBuildPrice,
@@ -179,22 +85,25 @@ const HowMuchFHCostBarChart: React.FC<StackedBarChartProps> = ({
 }) => {
   const chartData = [
     {
-      tenure: "freehold",
+      tenure: "Freehold",
       total: data[0].marketPurchase + data[1].marketPurchase,
       label: "Not viable",    
       fill: "rgb(var(--not-viable-light-color-rgb))",
+      color: "rgb(var(--not-viable-dark-color-rgb))",
     },
     {
-      tenure: "fairhold: land purchase",
+      tenure: "Fairhold - Land Purchase",
       total: data[2].fairholdLandPurchase,
       label: "House",
       fill: "rgb(var(--fairhold-interest-color-rgb))",
+      color: "rgb(var(--fairhold-equity-color-rgb))",
     },
     {
-      tenure: "fairhold: land rent",
+      tenure: "Fairhold - Land Rent",
       total: data[2].fairholdLandRent,
       label: "House",
       fill: "rgb(var(--fairhold-interest-color-rgb))",
+      color: "rgb(var(--fairhold-equity-color-rgb))",
     },
   ];
 
@@ -211,8 +120,17 @@ const HowMuchFHCostBarChart: React.FC<StackedBarChartProps> = ({
               interval={0} 
               height={60}  
               tick={(props) => (
-                  <CustomTick {...props} />
-                )}
+                <CustomTick
+                  {...props}
+                  getLabel={getLabel}
+                  getColor={(value) =>
+                    value === "Freehold"
+                      ? "rgb(var(--not-viable-dark-color-rgb))"
+                      : "rgb(var(--fairhold-equity-color-rgb))"
+                  }
+                  index={props.index}
+                />
+              )}
             >
             </XAxis>
 
@@ -260,7 +178,7 @@ const HowMuchFHCostBarChart: React.FC<StackedBarChartProps> = ({
                 dataKey="total"
                 position="top"
                 content={(props) => (
-                  <TopLabelListContent {...props} />
+                  <BarLabelListTopLeft {...props} color={props.index !== undefined ? chartData[props.index].color : "#666"}/>
                 )}
               />
             </Bar>
