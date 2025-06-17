@@ -9,7 +9,7 @@ import {
   StyledChartContainer,
 } from "../ui/StyledChartContainer";
 import { useState } from "react";
-import { BarLabelListTopLeft, CustomTick} from "./types"
+import { BarLabelListTopLeft, CustomTick, getLabel, getColor } from "./shared"
 
 const chartConfig = {
   freeholdLand: {
@@ -58,28 +58,6 @@ const HowMuchFHCostBarChart: React.FC<StackedBarChartProps> = ({
       </div>
     );
   };
-
-    const getLabel = (value: string) => {
-    switch (value) {
-      case "Freehold":
-        return "Freehold";
-      case "Fairhold - Land Purchase":
-        return "Fairhold /\nLand Purchase";
-      case "Fairhold - Land Rent":
-        return "Fairhold /\nLand Rent";
-      default:
-        return value;
-    }
-  };
-
-    const getColor = (value: string) => {
-      switch (value) {
-        case "freehold":
-          return "rgb(var(--not-viable-dark-color-rgb))";
-        default:
-          return "rgb(var(--fairhold-equity-color-rgb))";
-      }
-    };
 
   const chartData = [
     {

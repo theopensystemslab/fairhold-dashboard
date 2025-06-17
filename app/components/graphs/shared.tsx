@@ -77,3 +77,37 @@ export const CustomTick: React.FC<CustomTickProps> = ({
     </g>
   );
 };
+
+export const getLabel = (value: string) => {
+    switch (value) {
+      case "Freehold":
+        return "Freehold";
+      case "Private Rent":
+        return "Private Rent";
+      case "Fairhold - Land Purchase":
+        return "Fairhold /\nLand Purchase";
+      case "Fairhold - Land Rent":
+        return "Fairhold /\nLand Rent";
+      case "Social Rent":
+        return "Social Rent";
+      default:
+        return value;
+    }
+  };
+
+export const getColor = (value: string) => {
+    switch (value) {
+      case "Freehold":
+        return "rgb(var(--freehold-equity-color-rgb))";
+      case "Private Rent":
+        return "rgb(var(--private-rent-land-color-rgb))";
+      case "Fairhold - Land Purchase":
+        return "rgb(var(--fairhold-equity-color-rgb))";
+      case "Fairhold - Land Rent":
+        return "rgb(var(--fairhold-interest-color-rgb))";
+      case "Social Rent":
+        return "rgb(var(--social-rent-land-color-rgb))";
+      default:
+        return "rgb(var(--fairhold-equity-color-rgb))";
+    }
+  };

@@ -8,7 +8,7 @@ import {
 import {
   StyledChartContainer,
 } from "../ui/StyledChartContainer";
-import { BarLabelListTopLeft, CustomLabelListContentProps, CustomTick } from "./types"
+import { BarLabelListTopLeft, CustomLabelListContentProps, CustomTick, getLabel } from "./shared"
 
 const chartConfig = {
   freehold: {
@@ -85,49 +85,27 @@ const HowMuchFHCostBarChart: React.FC<StackedBarChartProps> = ({
 }) => {
   const chartData = [
     {
-      tenure: "freehold",
+      tenure: "Freehold",
       total: data[0].marketPurchase + data[1].marketPurchase,
       label: "Not viable",    
       fill: "rgb(var(--not-viable-light-color-rgb))",
       color: "rgb(var(--not-viable-dark-color-rgb))",
     },
     {
-      tenure: "fairhold: land purchase",
+      tenure: "Fairhold - Land Purchase",
       total: data[2].fairholdLandPurchase,
       label: "House",
       fill: "rgb(var(--fairhold-interest-color-rgb))",
       color: "rgb(var(--fairhold-equity-color-rgb))",
     },
     {
-      tenure: "fairhold: land rent",
+      tenure: "Fairhold - Land Rent",
       total: data[2].fairholdLandRent,
       label: "House",
       fill: "rgb(var(--fairhold-interest-color-rgb))",
       color: "rgb(var(--fairhold-equity-color-rgb))",
     },
   ];
-
-  const getLabel = (value: string) => {
-    switch (value) {
-      case "freehold":
-        return "Freehold";
-      case "fairhold: land purchase":
-        return "Fairhold /\nLand Purchase";
-      case "fairhold: land rent":
-        return "Fairhold /\nLand Rent";
-      default:
-        return value;
-    }
-  };
-
-  const getColor = (value: string) => {
-    switch (value) {
-      case "freehold":
-        return "rgb(var(--not-viable-dark-color-rgb))";
-      default:
-        return "rgb(var(--fairhold-equity-color-rgb))";
-    }
-  };
 
   return (
     <Card className="h-full w-full">
@@ -145,7 +123,11 @@ const HowMuchFHCostBarChart: React.FC<StackedBarChartProps> = ({
                 <CustomTick
                   {...props}
                   getLabel={getLabel}
-                  getColor={getColor}
+                  getColor={(value) =>
+                    value === "Freehold"
+                      ? "rgb(var(--not-viable-dark-color-rgb))"
+                      : "rgb(var(--fairhold-equity-color-rgb))"
+                  }
                   index={props.index}
                 />
               )}
