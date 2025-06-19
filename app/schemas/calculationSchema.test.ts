@@ -22,7 +22,6 @@ describe("calculationSchema", () => {
         sector: "SE17 1",
         postcode: "SE17 1PE"
       },
-      houseSize: 70, // auto-assigned for 2 bedrooms
     });
   });
 
@@ -36,7 +35,6 @@ describe("calculationSchema", () => {
     };
 
     const result = calculationSchema.parse(validInput);
-    console.log({result})
     expect(result).toEqual({
       ...validInput,
       housePostcode: {
@@ -47,49 +45,7 @@ describe("calculationSchema", () => {
         sector: null,
         postcode: null
       },
-      houseSize: 70, // auto-assigned for 2 bedrooms
     });
-  });
-
-  it("should validate input with explicit house size", () => {
-    const inputWithSize = {
-      housePostcode: "SE17 1PE",
-      houseBedrooms: 2,
-      houseSize: 100,
-      houseAge: 3,
-      houseType: "D",
-      maintenanceLevel: "medium",
-    };
-
-    const result = calculationSchema.parse(inputWithSize);
-    
-    expect(result.houseSize).toBe(100);
-  });
-
-  it("should auto-assign correct house size based on bedrooms", () => {
-    // Test all the size mappings
-    const testCases = [
-      { bedrooms: 1, expectedSize: 55 },
-      { bedrooms: 2, expectedSize: 70 },
-      { bedrooms: 3, expectedSize: 95 },
-      { bedrooms: 4, expectedSize: 110 },
-      { bedrooms: 5, expectedSize: 125 },
-      { bedrooms: 6, expectedSize: 135 },
-      { bedrooms: 7, expectedSize: 135 }, // more than 6 should get 135
-    ];
-
-    for (const { bedrooms, expectedSize } of testCases) {
-      const input = {
-        housePostcode: "SE17 1PE",
-        houseBedrooms: bedrooms,
-        houseAge: 3,
-        houseType: "D",
-        maintenanceLevel: "medium",
-      };
-      
-      const result = calculationSchema.parse(input);
-      expect(result.houseSize).toBe(expectedSize);
-    }
   });
 
   it("should throw error for invalid postcode", () => {

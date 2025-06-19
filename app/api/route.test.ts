@@ -29,7 +29,6 @@ describe("POST API Route", () => {
   it("should return processed data for valid apiSchema input", async () => {
     const validApiInput = {
       housePostcode: "SE17 1PE",
-      houseSize: 100,
       houseAge: 3,
       houseBedrooms: 2,
       houseType: "D",
@@ -90,7 +89,6 @@ describe("POST API Route", () => {
   it("should handle service errors", async () => {
     const validApiInput = {
       housePostcode: "SE17 1PE",
-      houseSize: 100,
       houseAge: 3,
       houseBedrooms: 2,
       houseType: "D",
@@ -135,7 +133,6 @@ describe("POST API Route", () => {
   it("should handle APIError correctly", async () => {
     const validApiInput = {
       housePostcode: "SE17 1PE",
-      houseSize: 100,
       houseAge: 3,
       houseBedrooms: 2,
       houseType: "D",

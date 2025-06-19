@@ -1,4 +1,4 @@
-import { MAINTENANCE_LEVELS, HOUSE_BREAKDOWN_PERCENTAGES, MaintenanceLevel, PROPERTY_PRICE_WEIGHTS } from "./constants";
+import { MAINTENANCE_LEVELS, HOUSE_BREAKDOWN_PERCENTAGES, MaintenanceLevel, PROPERTY_PRICE_WEIGHTS, HOUSE_SIZE_MAPPINGS } from "./constants";
 import { houseBreakdownType } from "./constants";
 import { DepreciatedHouseBreakdownType } from "./Lifetime";
 /**
@@ -6,13 +6,12 @@ import { DepreciatedHouseBreakdownType } from "./Lifetime";
  */
 const PRECISION = 2;
 
-type PropertyParams = Pick<
+export type PropertyParams = Pick<
   Property,
   | "postcode"
   | "houseType"
   | "numberOfBedrooms"
   | "age"
-  | "size"
   | "maintenanceLevel"
   | "newBuildPricePerMetre"
   | "averageMarketPrice"
@@ -72,19 +71,25 @@ export class Property {
     this.houseType = params.houseType;
     this.numberOfBedrooms = params.numberOfBedrooms;
     this.age = params.age // TODO: update frontend so that newbuild = 0
-    this.size = params.size;
     this.maintenanceLevel = params.maintenanceLevel;
     this.newBuildPricePerMetre = params.newBuildPricePerMetre;
     this.itl3 = params.itl3;
     this.depreciatedHouseBreakdown = {} as DepreciatedHouseBreakdownType
 
     // Computed properties, order is significant
+    this.size = this.assignHouseSize(params.numberOfBedrooms);
     this.averageMarketPrice = this.weightAverageMarketPrice(params);
     this.newBuildPrice = this.calculateNewBuildPrice();
     this.depreciatedBuildPrice = this.calculateDepreciatedBuildPrice();
     this.landPrice = this.averageMarketPrice - this.newBuildPrice;
     this.landToTotalRatio = this.landPrice / this.averageMarketPrice;
   }
+
+  private assignHouseSize(numberOfBedrooms: number) {
+    const size = numberOfBedrooms > 6 ? 135 : HOUSE_SIZE_MAPPINGS[numberOfBedrooms];
+    return size;
+  }
+
   private weightAverageMarketPrice(params: PropertyParams) {
     const weightedAverageMarketPrice = params.averageMarketPrice * PROPERTY_PRICE_WEIGHTS[this.houseType][this.numberOfBedrooms]
     return weightedAverageMarketPrice
@@ -124,7 +129,7 @@ export class Property {
 
     const component = HOUSE_BREAKDOWN_PERCENTAGES[componentKey];
     
-    // Calculate new component value
+    /** Not 'new' as in updated, but 'new' as in if component was brand new (age 0) */
     const newComponentValue = newBuildPrice * component.percentageOfHouse;
     
     // Calculate depreciation
