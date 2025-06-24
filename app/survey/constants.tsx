@@ -1,3 +1,10 @@
+export const TENURE_COLORS: Record<string, string> = {
+    "Social rent": "rgb(var(--social-rent-land-color-rgb))",
+    "Shared ownership": "rgb(var(--shared-ownership-color-rgb))",
+    "Private rent": "rgb(var(--private-rent-land-color-rgb))",
+    "Market purchase": "rgb(var(--freehold-equity-color-rgb))",
+};
+
 export const AGE_ORDER = [
   "0-18",
   "19-24",
