@@ -14,19 +14,6 @@ export interface PostcodeScales {
 }
 
 const HouseTypeEnum = z.enum(HOUSE_TYPES);
-function assignHouseSize(numberOfBedrooms: number) {
-  const sizeMapping: { [key: number]: number } = {
-    1: 55,
-    2: 70,
-    3: 95,
-    4: 110,
-    5: 125,
-    6: 135,
-  };
-
-  const size = numberOfBedrooms > 6 ? 135 : sizeMapping[numberOfBedrooms];
-  return size;
-}
 
 export const maintenanceLevelSchema = z.enum(
   Object.keys(MAINTENANCE_LEVELS) as [
@@ -75,7 +62,6 @@ export const calculationSchema = z
     houseBedrooms: z.coerce
       .number()
       .positive("houseBedrooms must be a positive integer"),
-    houseSize: z.coerce.number().optional(),
     houseAge: z.coerce
       .number()
       .nonnegative("houseAge must be a positive integer or 0"),
@@ -87,9 +73,5 @@ export const calculationSchema = z
     ),
     maintenanceLevel: maintenanceLevelSchema,
   })
-  .transform((data) => ({
-    ...data,
-    houseSize: data.houseSize ?? assignHouseSize(data.houseBedrooms),
-  }));
 
   export type Calculation = z.infer<typeof calculationSchema>;
