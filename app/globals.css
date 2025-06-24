@@ -31,8 +31,18 @@
   --error-text-rgb: 181 31 20;
   --not-viable-light-color-rgb: 251 164 164;
   --not-viable-dark-color-rgb: 255 0 0;
+
+  --survey-black: 0, 0, 0;
+  --survey-grey-dark: 0, 0, 0, 0.68;
+  --survey-grey-mid: 0, 0, 0, 0.54;
+  --survey-grey-light: 0, 0, 0, 0.15;
+  --survey-grey-lightest: 0, 0, 0, 0.05;
+  --survey-orange: 255, 164, 53;
+  --survey-pink: 255, 170, 179;
   
-  --survey-placeholder: 34 139 230;
+  --survey-blue: 34 138 230;
+  --survey-blue-light: 141 193 239;
+  
 }
 
 @layer utilities {
