@@ -5,7 +5,11 @@ import { Bar, BarChart, XAxis, YAxis, ResponsiveContainer } from "recharts";
 import { useSurveyContext } from "../../context";
 
 export const WhyNotFairhold = () => {
-  const whyNotFairhold = useSurveyContext().barOrPie.whyNotFairhold;
+  let whyNotFairhold = useSurveyContext().barOrPie.whyNotFairhold;
+  whyNotFairhold = whyNotFairhold.slice(0,5)
+  const maxValue = whyNotFairhold.length > 0 ? whyNotFairhold[0].value : 0;
+  const maxResponses = Math.ceil(maxValue / 10) * 10;
+  const xDomainMax = maxResponses < 10 ? 10 : maxResponses;
 
   const Tick = (props: TickProps) => {
       const { x, y, payload } = props;
@@ -27,16 +31,25 @@ export const WhyNotFairhold = () => {
   }
   
   return (
-      <SurveyGraphCard title="Why <em>not</em> Fairhold?">
-          <ResponsiveContainer>
+      <SurveyGraphCard 
+        title="Why <em>not</em> Fairhold?"
+        subtitle="Top 5 responses from people who would not choose Fairhold">
+          <ResponsiveContainer height={whyNotFairhold.length * 30}>
           <BarChart
               data={whyNotFairhold}
               barSize={20}
+              barGap={0}
               layout="vertical"
           >
               <XAxis 
-                  type="number" 
-                  hide={true}
+                  type="number"
+                  height={20}
+                  fontSize={10}
+                  interval={10}
+                  domain={[0, xDomainMax]}
+                  axisLine={false}
+                  tickLine={false}
+                  tick={true}
                   /> 
               <YAxis 
                   type="category"    
@@ -44,6 +57,8 @@ export const WhyNotFairhold = () => {
                   width={350} 
                   fontSize={10}
                   interval={0}
+                   tickLine={false}
+                  axisLine={false}
                   tick={Tick}/> 
               <Bar dataKey="value" fill="rgb(var(--survey-placeholder))" /> 
           </BarChart>
