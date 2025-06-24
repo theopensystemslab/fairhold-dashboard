@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis, LabelList, Tooltip, ReferenceLine } from "recharts";
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis, LabelList, ReferenceLine } from "recharts";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   ChartConfig,
@@ -8,8 +8,7 @@ import {
 import {
   StyledChartContainer,
 } from "../ui/StyledChartContainer";
-import { formatValue } from "@/app/lib/format";
-import { CustomLabelListContentProps } from "./types";
+import { BarLabelListTopLeft, CustomLabelListContentProps, CustomTick, getLabel } from "./shared"
 
 const chartConfig = {
   freehold: {
@@ -20,50 +19,50 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-const CustomLabelListContent: React.FC<CustomLabelListContentProps> = ({
+const CenterLabelListContent: React.FC<CustomLabelListContentProps> = ({
   x,
   y,
   value,
-  index
+  width,
+  height,
 }) => {
-
-  if (x === undefined || y === undefined || value === undefined) return null;
+  if ( typeof x !== 'number' || 
+    typeof y !== 'number' || 
+    typeof width !== 'number' ||
+    typeof height !== 'number' ||
+    !value
+  ) return null;
 
   const labelColor = (() => {
-    switch (index) {
-      case 0:
-        return "rgb(var(--not-viable-dark-color-rgb))";
-      default:
-        return "rgb(var(--fairhold-equity-color-rgb))";
-    }
-  })();
+      switch (value) {
+        case "Not viable":
+          return "rgb(var(--not-viable-dark-color-rgb))";
+        case "House":
+          return "white";
+        default:
+          return "black";
+      }
+    })();
 
-  const xPos = typeof x === 'number' ? x - 2 : 0;
-  const yPos = typeof y === 'number' ? y - 30 : 0;
-  const checkedValue = typeof value === 'number' ? value : parseFloat(value as string);
-  const formattedValue = formatValue(checkedValue);
+  const labelWidth = 80;
+  const xPos = x + width / 2 - labelWidth / 2;
+  const yPos = y + height / 2 - 10;
 
   return (
-    <foreignObject x={xPos} y={yPos} width={100} height={30}>
-      <div
+    <foreignObject x={xPos} y={yPos} width={80} height={20}>
+        <div
         style={{
-          position: "absolute",
-          left: 0,
-          top: 0,
-          color: labelColor,
-          backgroundColor: "rgb(var(--background-end-rgb))",
-          fontSize: "18px",
-          fontWeight: 600,
-          whiteSpace: "nowrap",
-          padding: "2px 6px",
-          zIndex: 10,
+            color: labelColor,
+            fontSize: "12px",
+            fontWeight: 600,
+            textAlign: "center",
         }}
-      >
-        {formattedValue}
-      </div>
+        >
+        {value}
+        </div>
     </foreignObject>
   );
-}
+};
 
 type DataInput = {
   category: string;
@@ -79,54 +78,6 @@ interface StackedBarChartProps { // TODO: refactor so there is only one exported
   maxY: number;
 }
 
-interface CustomTickProps {
-  x: number; 
-  y: number; 
-  payload: { value: string } 
-}
-
-const CustomTick: React.FC<CustomTickProps> = ({ x, y, payload }) => {
-    const label = (() => {
-      switch (payload.value) {
-        case "freehold":
-          return "Freehold";
-        case "fairhold: land purchase":
-          return "Fairhold /\nLand Purchase";
-        case "fairhold: land rent":
-          return "Fairhold /\nLand Rent";
-        default:
-          return payload.value;
-      }
-    })();
-    const labelColor = (() => {
-      switch (payload.value) {
-        case "freehold":
-          return "rgb(var(--not-viable-dark-color-rgb))";
-        default:
-          return "rgb(var(--fairhold-equity-color-rgb))";
-      }
-    })();
-
-    return (
-      <g transform={`translate(${x},${y})`}>
-        {label.split('\n').map((line: string, i: number) => (
-          <text
-            key={i}
-            x={0}
-            y={i * 20}
-            dy={10}
-            textAnchor="middle"
-            style={{ fill: labelColor }}
-            fontSize="12px"
-            fontWeight={600}
-          >
-            {line}
-          </text>
-        ))}
-      </g>
-    );
-  }
-
 const HowMuchFHCostBarChart: React.FC<StackedBarChartProps> = ({
   data,
   newBuildPrice,
@@ -134,22 +85,25 @@ const HowMuchFHCostBarChart: React.FC<StackedBarChartProps> = ({
 }) => {
   const chartData = [
     {
-      tenure: "freehold",
+      tenure: "Freehold",
       total: data[0].marketPurchase + data[1].marketPurchase,
       label: "Not viable",    
       fill: "rgb(var(--not-viable-light-color-rgb))",
+      color: "rgb(var(--not-viable-dark-color-rgb))",
     },
     {
-      tenure: "fairhold: land purchase",
+      tenure: "Fairhold - Land Purchase",
       total: data[2].fairholdLandPurchase,
       label: "House",
       fill: "rgb(var(--fairhold-interest-color-rgb))",
+      color: "rgb(var(--fairhold-equity-color-rgb))",
     },
     {
-      tenure: "fairhold: land rent",
+      tenure: "Fairhold - Land Rent",
       total: data[2].fairholdLandRent,
       label: "House",
       fill: "rgb(var(--fairhold-interest-color-rgb))",
+      color: "rgb(var(--fairhold-equity-color-rgb))",
     },
   ];
 
@@ -166,8 +120,17 @@ const HowMuchFHCostBarChart: React.FC<StackedBarChartProps> = ({
               interval={0} 
               height={60}  
               tick={(props) => (
-                  <CustomTick {...props} />
-                )}
+                <CustomTick
+                  {...props}
+                  getLabel={getLabel}
+                  getColor={(value) =>
+                    value === "Freehold"
+                      ? "rgb(var(--not-viable-dark-color-rgb))"
+                      : "rgb(var(--fairhold-equity-color-rgb))"
+                  }
+                  index={props.index}
+                />
+              )}
             >
             </XAxis>
 
@@ -179,7 +142,6 @@ const HowMuchFHCostBarChart: React.FC<StackedBarChartProps> = ({
               hide={true}
               ></YAxis>
 
-            <Tooltip isAnimationActive={false} />
             <ReferenceLine 
                 y={newBuildPrice} 
                 z={0}
@@ -209,51 +171,15 @@ const HowMuchFHCostBarChart: React.FC<StackedBarChartProps> = ({
                 position="center"
                 fontSize={12}
                 content={(props) => (
-                  <CustomLabelListContent {...props}/>
+                  <CenterLabelListContent {...props}/>
                 )}
               />
               <LabelList
                 dataKey="total"
                 position="top"
-                content={(props) => {
-                  if (!props.x || !props.y || !props.value) return null;
-                  
-                  const labelColor = (() => {
-                    switch (props.index) {
-                      case 0:
-                        return "rgb(var(--not-viable-dark-color-rgb))";
-                      default:
-                        return "rgb(var(--fairhold-equity-color-rgb))";
-                    }
-                  })();
-                  const xAdjust = 2;
-                  const yAdjust = 30;
-                  const xPos = typeof props.x === 'number' ? props.x - xAdjust : 0;
-                  const yPos = typeof props.y === 'number' ? props.y - yAdjust : 0;
-                  const value = typeof props.value === 'number' ? props.value : parseFloat(props.value as string);
-                  const formattedValue = formatValue(value);
-
-                  return (
-                    <foreignObject x={xPos} y={yPos} width={100} height={30}>
-                      <div
-                        style={{
-                          position: "absolute",
-                          left: 0,
-                          top: 0,
-                          color: labelColor,
-                          backgroundColor: "rgb(var(--background-end-rgb))",
-                          fontSize: "18px",
-                          fontWeight: 600,
-                          whiteSpace: "nowrap",
-                          padding: "2px 6px",
-                          zIndex: 10,
-                        }}
-                      >
-                        {formattedValue}
-                      </div>
-                    </foreignObject>
-                  );
-                }}
+                content={(props) => (
+                  <BarLabelListTopLeft {...props} color={props.index !== undefined ? chartData[props.index].color : "#666"}/>
+                )}
               />
             </Bar>
              
