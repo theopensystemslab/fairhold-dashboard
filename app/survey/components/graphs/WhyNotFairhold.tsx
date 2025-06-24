@@ -27,7 +27,7 @@ export const WhyNotFairhold = () => {
   }
   
   return (
-      <SurveyGraphCard title="Why wouldn't you choose Fairhold?">
+      <SurveyGraphCard title="Why <em>not</em> Fairhold?">
           <ResponsiveContainer>
           <BarChart
               data={whyNotFairhold}

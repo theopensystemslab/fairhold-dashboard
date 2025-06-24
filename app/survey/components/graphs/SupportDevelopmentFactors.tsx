@@ -27,7 +27,7 @@ export const SupportDevelopmentFactors = () => {
   }
     
     return (
-        <SurveyGraphCard title="Which of these factors would make you more likely to support new homes being created near where you live?">
+        <SurveyGraphCard title="Which of these factors would make you more likely to support new homes near where you live?">
             <ResponsiveContainer>
             <BarChart
                 data={supportDevelopmentFactors}
