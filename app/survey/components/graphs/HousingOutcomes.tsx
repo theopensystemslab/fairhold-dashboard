@@ -41,13 +41,16 @@ export const HousingOutcomes = () => {
         <SurveyGraphCard 
             title="What do you most want from housing that you don't currently get?" 
             subtitle="Showing top 10 responses for"
-            >
+            action={
             <TenureSelector
                 options={tenureOptions}
                 value={selectedTenure}
                 onChange={setSelectedTenure}
                 color={color}
             />
+            }  
+            >
+
             <ResponsiveContainer width="100%" height="100%">
                 <BarChart
                     data={housingOutcomes[selectedTenure].slice(0,5)}
