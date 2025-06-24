@@ -24,17 +24,21 @@ export type RawResults = {
     supportNewFairhold: string;
 };
 
-export type BarOrPieResults = Record<Exclude<keyof RawResults, 
-    'id' | 
-    'houseType' | 
-    'idealHouseType' | 
-    'liveWith' | 
-    'idealLiveWith' | 
-    'currentTenure' | 
-    'currentMeansTenureChoice' | 
-    'anyMeansTenureChoice'
-    >, 
-    BarOrPieResult[]>
+export type BarOrPieResults = {
+  [K in Exclude<
+    keyof RawResults,
+    | 'id'
+    | 'houseType'
+    | 'idealHouseType'
+    | 'liveWith'
+    | 'idealLiveWith'
+    | 'currentTenure'
+    | 'currentMeansTenureChoice'
+    | 'anyMeansTenureChoice'
+  >]: K extends 'housingOutcomes'
+    ? Record<string, BarOrPieResult[]>
+    : BarOrPieResult[];
+};
 
 export type BarOrPieResult = {
     answer: string | string[] | undefined;

@@ -1,11 +1,10 @@
-import { RawResults, BarOrPieResults, SankeyResults, SankeyResult } from "./types"
+import { RawResults, BarOrPieResults, BarOrPieResult, SankeyResults, SankeyResult } from "./types"
 import {
   AFFORD_FAIRHOLD_ORDER,
   AGE_ORDER,
   SUPPORT_DEVELOPMENT_ORDER,
   SUPPORT_FAIRHOLD_ORDER,
 } from "./constants";
-import { BarOrPieResult } from "./types";
 
 const SANKEY_MAPPINGS = [
   { fromKey: 'houseType', toKey: 'idealHouseType', newKey: 'idealHouseType', isArray: false },
@@ -46,6 +45,11 @@ export const aggregateResults = (rawResults: RawResults[]) => {
             }
         }
     });
+
+    Object.values(barOrPie.housingOutcomes).forEach((arr) => {
+        arr.sort((a, b) => b.value - a.value);
+    });
+
     return { numberResponses, barOrPie, sankey };
 }
 
@@ -58,7 +62,7 @@ const initializeBarOrPieResultsObject = (): BarOrPieResults => {
         ownershipModel: [],
         rentalModel: [],
         secondHomes: [],
-        housingOutcomes: [],
+        housingOutcomes: {},
         fairholdCalculator: [],
         affordFairhold: [],
         whyFairhold: [],
@@ -79,26 +83,40 @@ const initializeSankeyResultsObject = (): SankeyResults => {
 };
 
 const addBarOrPieResult = (results: BarOrPieResults, rawResult: RawResults) => {
-    const getExistingResult = (key: keyof BarOrPieResults, answer: string) => 
-        results[key].find(result => result.answer === answer);
+    const getExistingResult = (arr: BarOrPieResult[], answer: string) =>
+        arr.find((result) => result.answer === answer);
 
-    const addResultItem = (key: keyof BarOrPieResults, item: string) => {
-        const existingResult = getExistingResult(key, item);
+    const addResultItem = (arr: BarOrPieResult[], item: string) => {
+        const existingResult = getExistingResult(arr, item);
         existingResult
             ? existingResult.value++
-            : results[key].push({ answer: item, value: 1 });
+            : arr.push({ answer: item, value: 1 });
     };
 
     Object.entries(rawResult).forEach(([key, value]) => {
         if (key === "id" || !(key in results)) return;
 
+        // We need to handle housingOutcomes separately since we are separating output graphs by currentTenure
+        if (key === "housingOutcomes") {
+            const tenure = mapTenureCategory(rawResult.currentTenure || "Unknown");
+            if (!results.housingOutcomes[tenure]) {
+                results.housingOutcomes[tenure] = [];
+            }
+            if (Array.isArray(value)) {
+                value.forEach(item => addResultItem(results.housingOutcomes[tenure], item));
+            }
+            return;
+        }
+
         const validKey = key as keyof BarOrPieResults;
         
-        const isMultipleChoiceAnswer = Array.isArray(value);
-        
-        isMultipleChoiceAnswer
-            ? value.forEach(item => addResultItem(validKey, item))
-            : addResultItem(validKey, value);
+        if (validKey !== "housingOutcomes" && Array.isArray(results[validKey])) {
+            const arr = results[validKey] as BarOrPieResult[];
+            const isMultipleChoiceAnswer = Array.isArray(value);
+            isMultipleChoiceAnswer
+                ? value.forEach(item => addResultItem(arr, item))
+                : addResultItem(arr, value);
+        }
     });
 };
 
@@ -159,3 +177,25 @@ const maxResponses = Math.ceil(maxValue / 10) * 10;
 const chartMax = maxResponses < 10 ? 10 : maxResponses;
 return chartMax;
 }
+
+const mapTenureCategory = (tenure: string): string => {
+    tenure = tenure.trim();
+    
+    if (tenure === "I own it outright" || tenure === "I own it with a mortgage") {
+        return "Market purchase";
+    }
+    if (tenure === "I rent it") {
+        return "Private rent";
+    }
+    if (tenure === "Part own, part rent") {
+        return "Shared ownership";
+    }
+    if (
+        tenure === "I live for free in a home" ||
+        tenure === "I do not have a stable home at the moment" ||
+        tenure === "Other"
+    ) {
+        return "Other";
+    }
+    return tenure || "Other";
+};
