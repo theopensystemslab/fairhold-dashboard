@@ -19,7 +19,7 @@ export const SupportNewFairhold = () => {
     ];
     
     return (
-        <SurveyGraphCard title="Would you support the creation of Fairhold homes in the area where you want to live?">
+        <SurveyGraphCard title="Would you support the creation of new Fairhold homes (or plots) in your area?">
              <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                     <Pie 

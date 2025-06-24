@@ -11,7 +11,7 @@ import { useSurveyContext } from "../../context";
     ];
   
     return (
-      <SurveyGraphCard title="Which country?">
+      <SurveyGraphCard title="Where do you live?">
         <ResponsiveContainer width="100%" height="100%">
             <PieChart>
             <Pie 

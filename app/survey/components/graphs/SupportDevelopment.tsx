@@ -18,7 +18,7 @@ export const SupportDevelopment = () => {
     ];
 
     return (
-        <SurveyGraphCard title="Would you support development in general?">
+        <SurveyGraphCard title="In general, do you support the development of new homes in your area?">
              <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                     <Pie 

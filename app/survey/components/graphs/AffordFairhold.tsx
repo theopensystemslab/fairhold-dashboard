@@ -18,7 +18,7 @@ export const AffordFairhold = () => {
     ];
 
     return (
-        <SurveyGraphCard title="Could you afford a Fairhold home in your area?">
+        <SurveyGraphCard title="Could you afford to buy a Fairhold home in your area?">
             <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                     <Pie 
