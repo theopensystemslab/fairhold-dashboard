@@ -1,9 +1,10 @@
 import React from "react"
-import { BarOrPieResults } from "@/app/survey/types";
 import SurveyGraphCard from "@/app/survey/components/SurveyGraphCard";
 import { PieChart, Pie, Legend, ResponsiveContainer } from "recharts";
+import { useSurveyContext } from "../../context";
+export const AffordFairhold = () => {
+    const affordFairhold = useSurveyContext().barOrPie.affordFairhold;
 
-export const AffordFairhold: React.FC<BarOrPieResults> = ({ affordFairhold }) => {
     return (
         <SurveyGraphCard title="Could you afford a Fairhold home in your area?">
             <ResponsiveContainer width="100%" height="100%">

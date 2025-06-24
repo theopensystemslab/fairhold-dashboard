@@ -1,9 +1,11 @@
 import React from "react"
-import { BarOrPieResults } from "@/app/survey/types";
 import SurveyGraphCard from "@/app/survey/components/SurveyGraphCard";
 import { PieChart, Pie, Legend, ResponsiveContainer } from "recharts";
+import { useSurveyContext } from "../../context";
 
-export const SupportDevelopment: React.FC<BarOrPieResults> = ({ supportDevelopment }) => {
+export const SupportDevelopment = () => {
+    const supportDevelopment = useSurveyContext().barOrPie.supportDevelopment;
+    
     return (
         <SurveyGraphCard title="Would you support development in general?">
              <ResponsiveContainer width="100%" height="100%">
