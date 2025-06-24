@@ -12,3 +12,12 @@ export const SUPPORT_DEVELOPMENT_ORDER = [
     "Strongly opposed to any development",
     "Don't know",
 ]
+
+export const SUPPORT_FAIRHOLD_ORDER = [
+    "Strongly support", 
+    "Somewhat support", 
+    "Neighter support nor oppose", 
+    "Somewhat oppose",
+    "Strongly oppose",
+    "Other",
+]
