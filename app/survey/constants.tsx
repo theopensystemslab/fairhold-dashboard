@@ -1,3 +1,12 @@
+export const AGE_ORDER = [
+  "0-18",
+  "19-24",
+  "25-34",
+  "35-44",
+  "45-54",
+  "65+"
+]
+
 export const AFFORD_FAIRHOLD_ORDER = [
   "Yes",
   "Yes, but Fairhold Land Rent only, because the deposit is lower",
