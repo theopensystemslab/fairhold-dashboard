@@ -86,6 +86,18 @@ const addBarOrPieResult = (results: BarOrPieResults, rawResult: RawResults) => {
     Object.entries(rawResult).forEach(([key, value]) => {
         if (key === "id" || !(key in results)) return;
 
+        // We need to handle housingOutcomes separately since we are separating output graphs by currentTenure
+        if (key === "housingOutcomes") {
+            const tenure = mapTenureCategory(rawResult.currentTenure || "Unknown");
+            if (!results.housingOutcomes[tenure]) {
+                results.housingOutcomes[tenure] = [];
+            }
+            if (Array.isArray(value)) {
+                value.forEach(item => addResultItem(results.housingOutcomes[tenure], item));
+            }
+            return;
+        }
+
         const validKey = key as keyof BarOrPieResults;
 
         if (validKey === "housingOutcomes") {
