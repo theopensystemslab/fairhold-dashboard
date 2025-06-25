@@ -10,7 +10,6 @@ const SANKEY_MAPPINGS = [
   { fromKey: 'houseType', toKey: 'idealHouseType', newKey: 'idealHouseType', isArray: false },
   { fromKey: 'liveWith', toKey: 'idealLiveWith', newKey: 'idealLiveWith', isArray: false },
   { fromKey: 'currentTenure', toKey: 'currentMeansTenureChoice', newKey: 'currentMeansTenureChoice', isArray: false },
-  { fromKey: 'currentTenure', toKey: 'anyMeansTenureChoice', newKey: 'anyMeansTenureChoice', isArray: true }
 ];
 
 const CUSTOM_ORDERS: Record<string, string[]> = {
@@ -59,6 +58,7 @@ const initializeBarOrPieResultsObject = (): BarOrPieResults => {
         nonUk: [],
         postcode: [],
         ageGroup: [],
+        anyMeansTenureChoice: [],
         ownershipModel: [],
         rentalModel: [],
         secondHomes: [],
@@ -78,15 +78,35 @@ const initializeSankeyResultsObject = (): SankeyResults => {
         idealHouseType: { nodes: [], links: [] },
         idealLiveWith: { nodes: [], links: [] },
         currentMeansTenureChoice: { nodes: [], links: [] },
-        anyMeansTenureChoice: { nodes: [], links: [] },
     } as SankeyResults;
 };
 
 const addBarOrPieResult = (results: BarOrPieResults, rawResult: RawResults) => {
+
+    const addResultItem = (arr: BarOrPieResult[], item: string, points: number = 1) => {
+        const existingResult = getExistingResult(arr, item);
+        existingResult
+            ? existingResult.value += points
+            : arr.push({ answer: item, value: points });
+    };
+
     Object.entries(rawResult).forEach(([key, value]) => {
         if (key === "id" || !(key in results)) return;
 
-        // We need to handle housingOutcomes separately since we are separating output graphs by currentTenure
+        // We handle anyMeansTenureChoice differently because it's ranked choice, and each rank has points
+        if (key === "anyMeansTenureChoice" && Array.isArray(value)) {
+            value.forEach((item, idx) => {
+                // Tidying the string
+                let shortAnswer = item.split("––")[0].trim();
+                shortAnswer = shortAnswer.replace("Freehold", "Market purchase")
+                // For now: 5 points for position 1, 4 for position 2, etc. 
+                const points = Math.max(5 - idx, 1);
+                addResultItem(results.anyMeansTenureChoice, shortAnswer, points);
+            });
+            return;
+        }
+
+        // We also handle housingOutcomes separately since we are separating output graphs by currentTenure
         if (key === "housingOutcomes") {
             const tenure = mapTenureCategory(rawResult.currentTenure || "Unknown");
             if (!results.housingOutcomes[tenure]) {
