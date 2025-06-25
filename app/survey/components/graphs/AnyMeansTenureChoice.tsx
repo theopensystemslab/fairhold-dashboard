@@ -33,7 +33,7 @@ const ColoredYAxisTick: React.FC<CustomYTickProps> = ({ x, y, payload }) => {
         <text
             x={x}
             y={y + 5}
-            fill={TENURE_COLORS[answerStr] || "#ccc"}
+            fill={TENURE_COLORS[answerStr] || "rgb(var(--text-inaccessible-rgb))"}
             fontSize={10}
             textAnchor="end"
         >
@@ -90,7 +90,7 @@ export const AnyMeansTenureChoice = () => {
                     return (
                         <Cell
                             key={`cell-${index}`}
-                            fill={TENURE_COLORS[answerStr] || "#ccc"}
+                            fill={TENURE_COLORS[answerStr] || "rgb(var(--text-inaccessible-rgb))"}
                         />
                     );
                 })}
