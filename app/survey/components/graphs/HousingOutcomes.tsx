@@ -61,6 +61,8 @@ export const HousingOutcomes = () => {
                         type="number"
                         tickLine={false}
                         axisLine={false}
+                        tickCount={2}
+                        tickFormatter={(value: number) => Math.round(value).toString()}
                         /> 
                     <YAxis 
                         type="category"    
