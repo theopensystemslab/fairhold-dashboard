@@ -8,7 +8,7 @@ interface TenureSelectorProps {
 }
 
 const TenureSelector: React.FC<TenureSelectorProps> = ({ options, value, onChange, color }) => (
-  <div style={{ marginBottom: 16 }}>
+  <div>
     <label>
       <Select value={value} onValueChange={onChange}>
         <SelectTrigger className="w-[180px]" style={{ color, border: 'none' }}>
