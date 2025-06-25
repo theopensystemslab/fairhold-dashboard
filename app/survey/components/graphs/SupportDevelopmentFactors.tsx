@@ -51,7 +51,7 @@ export const SupportDevelopmentFactors = () => {
                     tickLine={false}
                     axisLine={false}
                     /> 
-                <Bar dataKey="value" fill="rgb(var(--survey-placeholder))" /> 
+                <Bar dataKey="value" fill="rgb(var(--fairhold-equity-color-rgb))" /> 
             </BarChart>
             </ResponsiveContainer>
         </SurveyGraphCard>
