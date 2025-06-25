@@ -27,22 +27,31 @@ export const SupportDevelopmentFactors = () => {
   }
     
     return (
-        <SurveyGraphCard title="Which of these factors would make you more likely to support new homes being created near where you live?">
-            <ResponsiveContainer>
+        <SurveyGraphCard title="Which of these factors would make you more likely to support new homes near where you live?">
+          <ResponsiveContainer height={supportDevelopmentFactors.length * 30}>
             <BarChart
                 data={supportDevelopmentFactors}
                 barSize={20}
+                barGap={0}
                 layout="vertical"
             >
-                <XAxis type="number" /> 
+                <XAxis 
+                  type="number" 
+                  tickLine={false}
+                  axisLine={false}
+                  hide={true}
+                  /> 
                 <YAxis 
                     type="category"    
                     dataKey="answer" 
                     width={350} 
                     fontSize={10}
                     interval={0}
-                    tick={Tick}/> 
-                <Bar dataKey="value" fill="rgb(var(--survey-placeholder))" /> 
+                    tick={Tick}
+                    tickLine={false}
+                    axisLine={false}
+                    /> 
+                <Bar dataKey="value" fill="rgb(var(--fairhold-equity-color-rgb))" /> 
             </BarChart>
             </ResponsiveContainer>
         </SurveyGraphCard>
