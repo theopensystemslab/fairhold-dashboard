@@ -1,8 +1,23 @@
 import React from "react"
 import SurveyGraphCard from "@/app/survey/components/SurveyGraphCard";
-import { Bar, BarChart, XAxis, YAxis, ResponsiveContainer, Cell } from "recharts";
+import { Bar, BarChart, XAxis, YAxis, ResponsiveContainer, Cell, LabelList } from "recharts";
 import { useSurveyContext } from "../../context";
 import { TENURE_COLORS } from "../../constants"
+import { CustomLabelListContentProps } from "@/app/components/graphs/shared";
+
+const RankLabel: React.FC<CustomLabelListContentProps> = ({ index, x, y }) => {
+    const rank = typeof index === "number" ? index + 1 : "";
+    return (
+        <text
+            x={Number(x) + 5}
+            y={Number(y) + 15}
+            fill="white"
+            fontSize={12}
+        >
+            {rank}
+        </text>
+    );
+};
 
 export const AnyMeansTenureChoice = () => {
     const { anyMeansTenureChoice } = useSurveyContext().barOrPie;
@@ -25,7 +40,7 @@ export const AnyMeansTenureChoice = () => {
                   interval={10}
                   axisLine={false}
                   tickLine={false}
-                  tick={true}
+                  tick={false}
                   /> 
               <YAxis 
                   type="category"    
@@ -37,22 +52,27 @@ export const AnyMeansTenureChoice = () => {
                   axisLine={false}
                   /> 
               <Bar dataKey="value">
-                        {anyMeansTenureChoice.map((entry, index) => {
-                            let answerStr = "";
-                            if (Array.isArray(entry.answer)) {
-                                answerStr = entry.answer[0] ?? "";
-                            } else if (typeof entry.answer === "string") {
-                                answerStr = entry.answer;
-                            }
-                            return (
-                                <Cell
-                                    key={`cell-${index}`}
-                                    fill={TENURE_COLORS[answerStr] || "#ccc"}
-                                />
-                            );
-                        }
-                    )}
-                    </Bar>  
+                {anyMeansTenureChoice.map((entry, index) => {
+                    let answerStr = "";
+                    if (Array.isArray(entry.answer)) {
+                        answerStr = entry.answer[0] ?? "";
+                    } else if (typeof entry.answer === "string") {
+                        answerStr = entry.answer;
+                    }
+                    return (
+                        <Cell
+                            key={`cell-${index}`}
+                            fill={TENURE_COLORS[answerStr] || "#ccc"}
+                        />
+                    );
+                })}
+                <LabelList 
+                    dataKey="value"
+                    position="insideStart"
+                    fill="white"    
+                    content={RankLabel}
+                />
+                </Bar>  
           </BarChart>
           </ResponsiveContainer>
         </SurveyGraphCard>
