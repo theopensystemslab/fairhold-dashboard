@@ -11,7 +11,7 @@ const TenureSelector: React.FC<TenureSelectorProps> = ({ options, value, onChang
   <div style={{ marginBottom: 16 }}>
     <label>
       <Select value={value} onValueChange={onChange}>
-        <SelectTrigger className="w-[180px]" style={{ color }}>
+        <SelectTrigger className="w-[180px]" style={{ color, border: 'none' }}>
           <SelectValue placeholder="Select tenure" />
         </SelectTrigger>
         <SelectContent>
