@@ -5,6 +5,13 @@ import { useSurveyContext } from "../../context";
 import { TENURE_COLORS } from "../../constants"
 import { CustomLabelListContentProps } from "@/app/components/graphs/shared";
 
+export interface CustomYTickProps {
+  x: number;
+  y: number;
+  payload: { value: string };
+  index?: number;
+}
+
 const RankLabel: React.FC<CustomLabelListContentProps> = ({ index, x, y }) => {
     const rank = typeof index === "number" ? index + 1 : "";
     return (
@@ -15,6 +22,22 @@ const RankLabel: React.FC<CustomLabelListContentProps> = ({ index, x, y }) => {
             fontSize={12}
         >
             {rank}
+        </text>
+    );
+};
+
+const ColoredYAxisTick: React.FC<CustomYTickProps> = ({ x, y, payload }) => {
+    // payload.value is the label (answer)
+    const answerStr = Array.isArray(payload.value) ? payload.value[0] : payload.value;
+    return (
+        <text
+            x={x}
+            y={y + 5}
+            fill={TENURE_COLORS[answerStr] || "#ccc"}
+            fontSize={10}
+            textAnchor="end"
+        >
+            {answerStr}
         </text>
     );
 };
@@ -50,6 +73,11 @@ export const AnyMeansTenureChoice = () => {
                   interval={0}
                   tickLine={false}
                   axisLine={false}
+                  tick={(props) => (
+                    <ColoredYAxisTick 
+                    {...props}
+                    />
+                )}
                   /> 
               <Bar dataKey="value">
                 {anyMeansTenureChoice.map((entry, index) => {
