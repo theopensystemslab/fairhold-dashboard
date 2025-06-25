@@ -34,7 +34,6 @@ export type BarOrPieResults = {
     | 'idealLiveWith'
     | 'currentTenure'
     | 'currentMeansTenureChoice'
-    | 'anyMeansTenureChoice'
   >]: K extends 'housingOutcomes'
     ? Record<string, BarOrPieResult[]>
     : BarOrPieResult[];
@@ -48,8 +47,7 @@ export type BarOrPieResult = {
 export type SankeyResults = Record<Extract<keyof RawResults, 
     'idealHouseType' | 
     'idealLiveWith' | 
-    'currentMeansTenureChoice' | 
-    'anyMeansTenureChoice'
+    'currentMeansTenureChoice'
     >, 
     SankeyResult>
 
