@@ -25,7 +25,7 @@ export const SUPPORT_DEVELOPMENT_ORDER = [
 export const SUPPORT_FAIRHOLD_ORDER = [
     "Strongly support", 
     "Somewhat support", 
-    "Neighter support nor oppose", 
+    "Neither support nor oppose", 
     "Somewhat oppose",
     "Strongly oppose",
     "Other",
