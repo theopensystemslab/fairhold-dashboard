@@ -46,7 +46,7 @@ export const AnyMeansTenureChoice = () => {
     const { anyMeansTenureChoice } = useSurveyContext().barOrPie;
     return (
         <SurveyGraphCard 
-            title="What tenure would you choose?"
+            title="Rank the tenures by preference"
             subtitle="If you could afford (and were eligible for) any type of home, which would you prefer?"
             >
           <ResponsiveContainer height={anyMeansTenureChoice.length * 30}>
