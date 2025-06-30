@@ -82,7 +82,7 @@
     "tailwindcss": "^3.4.17",
     "ts-jest": "^29.4.0",
     "tsuml2": "^0.17.1",
-    "typedoc": "^0.28.5",
+    "typedoc": "^0.28.7",
     "typescript": "^5"
   }
 }
