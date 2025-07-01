@@ -63,61 +63,61 @@ export default function SurveyPage() {
 
   return (
     <ErrorBoundary>
-      <SurveyContext.Provider value={surveyResults}>
-        <main className={`${inter.className} min-h-screen bg-[rgb(var(--background-end-rgb))]`}>
-          <Header />
-          <div className="flex flex-col m-4">
-            <h1 className="h1-style text-2xl md:text-4xl">Fairhold survey results</h1>
-              <div className="flex flex-col gap-4 mt-6">
-              {surveyResults.numberResponses === 0 ? (
-            <p>No survey responses found.</p>
-          ) : (
-            <div>
-              <h2 className="text-xl md:text-2xl">So far, {surveyResults.numberResponses} people have responded</h2>
-              <div className="flex flex-col py-4">
-                <h3 className="text-xl font-medium">Who has responded?</h3>
-                <div className="flex flex-col md:flex-row">
-                  <Country />
-                  <Age />
-                  {/* <Postcode {...results} /> */}
+      <Header />
+        <SurveyContext.Provider value={surveyResults}>
+          <main className={`${inter.className} min-h-screen bg-[rgb(var(--background-end-rgb))]`}>
+            <div className="flex flex-col m-4">
+              <h1 className="h1-style text-2xl md:text-4xl">Fairhold survey results</h1>
+                <div className="flex flex-col gap-4 mt-6">
+                {surveyResults.numberResponses === 0 ? (
+              <p>No survey responses found.</p>
+            ) : (
+              <div>
+                <h2 className="text-xl md:text-2xl">So far, {surveyResults.numberResponses} people have responded</h2>
+                <div className="flex flex-col py-4">
+                  <h3 className="text-xl font-medium">Who has responded?</h3>
+                  <div className="flex flex-col md:flex-row">
+                    <Country />
+                    <Age />
+                    {/* <Postcode {...results} /> */}
+                  </div>
                 </div>
-              </div>
 
-              <div className="flex flex-col">
-                <h3 className="text-xl font-medium">Housing preferences</h3>
-                <div className="flex flex-col md:flex-row">
-                  <IdealHouseType />
-                  <IdealLiveWith />
+                <div className="flex flex-col">
+                  <h3 className="text-xl font-medium">Housing preferences</h3>
+                  <div className="flex flex-col md:flex-row">
+                    <IdealHouseType />
+                    <IdealLiveWith />
+                  </div>
+                  <div className="flex flex-col md:flex-row">
+                    <HousingOutcomes />
+                    <AffordFairhold />
+                  </div>
+                  <div className="flex flex-col md:flex-row">
+                    <WhyFairhold />
+                    <WhyNotFairhold />
+                  </div>
+                  <div className="flex flex-col md:flex-row">
+                    <CurrentMeansTenureChoice />
+                    <AnyMeansTenureChoice />
+                  </div>
                 </div>
-                <div className="flex flex-col md:flex-row">
-                  <HousingOutcomes />
-                  <AffordFairhold />
-                </div>
-                <div className="flex flex-col md:flex-row">
-                  <WhyFairhold />
-                  <WhyNotFairhold />
-                </div>
-                <div className="flex flex-col md:flex-row">
-                  <CurrentMeansTenureChoice />
-                  <AnyMeansTenureChoice />
-                </div>
-              </div>
 
-              <div className="flex flex-col">
-                <h3 className="text-xl font-medium">Attitudes towards development</h3>
-                <div className="flex flex-col md:flex-row">
-                  <SupportDevelopment />
-                  <SupportNewFairhold />
+                <div className="flex flex-col">
+                  <h3 className="text-xl font-medium">Attitudes towards development</h3>
+                  <div className="flex flex-col md:flex-row">
+                    <SupportDevelopment />
+                    <SupportNewFairhold />
+                  </div>
+                  <SupportDevelopmentFactors />
                 </div>
-                <SupportDevelopmentFactors />
-              </div>
-          </div>
-          )}
             </div>
-          </div>
-        <Footer />
-        </main>
-      </SurveyContext.Provider>
+            )}
+              </div>
+            </div>
+          </main>
+        </SurveyContext.Provider>
+      <Footer />
     </ErrorBoundary>
   );
 }

@@ -12,12 +12,14 @@ const inter = Inter({
 
 export default function Home() {
   return (
+    <>
+    <Header />
     <main className={inter.className}>
-      <Header />
       <Suspense fallback={<ClipLoader />}>
         <CalculatorInput />
-        <Footer/>
       </Suspense>
     </main>
+    <Footer/>
+    </>
   );
 }
