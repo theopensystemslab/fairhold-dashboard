@@ -83,17 +83,17 @@ export default function SurveyPage() {
                   </div>
                 </div>
 
-                    <div className="flex flex-col">
-                      <h3 className="text-xl font-medium">Housing preferences</h3>
-                      <div className="flex flex-col md:flex-row">
-                        <IdealHouseType />
-                        <IdealLiveWith />
-                      </div>
-                      <div className="flex flex-col md:flex-row">
-                        <HousingOutcomes />
-                        <AffordFairhold />
-                      </div>
-                      <div>
+                  <div className="flex flex-col">
+                    <h3 className="text-xl font-medium">Housing preferences</h3>
+                    <div className="flex flex-col md:flex-row">
+                      <IdealHouseType />
+                      <IdealLiveWith />
+                    </div>
+                    <div className="flex flex-col md:flex-row">
+                      <HousingOutcomes />
+                      <AffordFairhold />
+                    </div>
+                    <div className="flex flex-col md:flex-row">
                       <CurrentMeansTenureChoice />
                     </div>
                     <div className="flex flex-col md:flex-row">
@@ -108,20 +108,22 @@ export default function SurveyPage() {
                     </div>
                     </div>
 
-                <div className="flex flex-col">
-                  <h3 className="text-xl font-medium">Attitudes towards development</h3>
-                  <div className="flex flex-col md:flex-row">
-                    <SupportDevelopment />
-                    <SupportNewFairhold />
+                  <div className="flex flex-col">
+                    <h3 className="text-xl font-medium">Attitudes towards development</h3>
+                  <div className="flex flex-row md:gap-8">
+                      <div className="flex flex-col w-1/2 md:flex-row">
+                        <SupportDevelopment />
+                        <SupportNewFairhold />
+                      </div>
+                      <SupportDevelopmentFactors />
+                    </div>
                   </div>
-                  <SupportDevelopmentFactors />
+            </div>
+              )}
                 </div>
-            </div>
-            )}
               </div>
-            </div>
-          </main>
-        </SurveyContext.Provider>
+            </main>
+          </SurveyContext.Provider>
       <Footer />
     </ErrorBoundary>
   );
