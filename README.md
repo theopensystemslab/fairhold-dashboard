@@ -84,3 +84,5 @@ flowchart LR
     PrismaLocal -- "Migration files" --> GitHub
     GitHub -- "Merge to main" --> ProdDB
 ```
+## Calculator docs
+See our [Github Wiki](https://github.com/theopensystemslab/fairhold-dashboard/wiki).
