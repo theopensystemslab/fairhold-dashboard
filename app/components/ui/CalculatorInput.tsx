@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Household } from "@/app/models/Household";
@@ -39,6 +39,12 @@ type View = "form" | "loading" | "dashboard";
 const CalculatorInput = () => {
   const [view, setView] = useState<View>("form");
   const [data, setData] = useState<Household | null>(null);
+  const [mounted, setMounted] = useState(false);  
+
+  // Was getting a hydration error, so using client-side rendering
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const searchParams = useSearchParams();
   const urlPostcode = searchParams.get("postcode");
@@ -113,6 +119,17 @@ const CalculatorInput = () => {
 
     setView("form");
   };
+
+  if (!mounted) {
+    return (
+      <div className="flex items-center justify-center h-64 text-black">
+        <div className="text-center">
+          <ClipLoader color="black" size={30} />
+          <p className="mt-2 text-sm text-gray-600">Loading calculator...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (view === "form") {
     return (
