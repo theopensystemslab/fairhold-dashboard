@@ -67,11 +67,10 @@ export default function SurveyPage() {
         <main className={`${inter.className} min-h-screen w-full bg-[rgb(var(--background-end-rgb))]`}>
           <Header />
           <div className="flex flex-row">
-            <div className="w-1/4">
-            </div>
-            <div className="w-3/4 flex-1 flex justify-center">
-              <div className="w-full max-w-1280 flex flex-col m-4">
+            <div className="hidden md:block w-1/4"></div>
 
+            <div className="w-3/4 flex-1 flex justify-center">
+              <div className="w-full max-w-1280 flex flex-col p-4">
                 <h1 className="h1-style text-2xl md:text-4xl">Fairhold survey results</h1>
                   <div className="flex flex-col gap-4 mt-6">
                   {surveyResults.numberResponses === 0 ? (
@@ -79,6 +78,7 @@ export default function SurveyPage() {
               ) : (
                 <div>
                   <h2 className="text-xl md:text-2xl">So far, {surveyResults.numberResponses} people have responded</h2>
+                  
                   <div className="flex flex-col py-4">
                     <h3 className="text-xl font-medium">Who has responded?</h3>
                     <div className="flex flex-col md:flex-row h-240">
@@ -90,22 +90,22 @@ export default function SurveyPage() {
 
                   <div className="flex flex-col">
                     <h3 className="text-xl font-medium">Housing preferences</h3>
-                    <div className="flex flex-col md:flex-row">
+                    <div className="flex flex-col md:flex-row w-full h-240">
                       <IdealHouseType />
                       <IdealLiveWith />
                     </div>
-                    <div className="flex flex-col md:flex-row">
+                    <div className="flex flex-col md:flex-row h-240">
                       <HousingOutcomes />
                       <AffordFairhold />
                     </div>
-                    <div className="flex flex-col md:flex-row">
+                    <div className="flex flex-col md:flex-row h-240">
                       <CurrentMeansTenureChoice />
                     </div>
-                    <div className="flex flex-col md:flex-row">
+                    <div className="flex flex-col md:flex-row h-240">
                       <WhyFairhold />
                       <WhyNotFairhold />
                     </div>
-                    <div className="flex flex-col md:flex-row">
+                    <div className="flex flex-col md:flex-row  h-240">
                       <div className="md:w-1/2 w-full mr-4">
                         <AnyMeansTenureChoice />
                       </div>
@@ -116,11 +116,11 @@ export default function SurveyPage() {
                   <div className="flex flex-col">
                     <h3 className="text-xl font-medium">Attitudes towards development</h3>
                     <div className="flex flex-row md:gap-8">
-                      <div className="flex flex-col w-1/2">
+                      <div className="flex flex-col w-1/2 h-480">
                         <SupportDevelopment />
                         <SupportNewFairhold />
                       </div>
-                      <div className="flex flex-col md:flex-row w-1/2">
+                      <div className="flex flex-col md:flex-row w-1/ h-480">
                         <SupportDevelopmentFactors />
                       </div>
                     </div>
