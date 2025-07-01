@@ -64,55 +64,67 @@ export default function SurveyPage() {
   return (
     <ErrorBoundary>
       <SurveyContext.Provider value={surveyResults}>
-        <main className={`${inter.className} min-h-screen bg-[rgb(var(--background-end-rgb))]`}>
+        <main className={`${inter.className} min-h-screen w-full bg-[rgb(var(--background-end-rgb))]`}>
           <Header />
-          <div className="flex flex-col m-4">
-            <h1 className="h1-style text-2xl md:text-4xl">Fairhold survey results</h1>
-              <div className="flex flex-col gap-4 mt-6">
-              {surveyResults.numberResponses === 0 ? (
-            <p>No survey responses found.</p>
-          ) : (
-            <div>
-              <h2 className="text-xl md:text-2xl">So far, {surveyResults.numberResponses} people have responded</h2>
-              <div className="flex flex-col py-4">
-                <h3 className="text-xl font-medium">Who has responded?</h3>
-                <div className="flex flex-col md:flex-row">
-                  <Country />
-                  <Age />
-                  {/* <Postcode {...results} /> */}
-                </div>
-              </div>
+          <div className="flex flex-row">
+            <div className="w-1/4">
+            </div>
+            <div className="w-3/4 flex-1 flex justify-center">
+              <div className="w-full max-w-1280 flex flex-col m-4">
 
-              <div className="flex flex-col">
-                <h3 className="text-xl font-medium">Housing preferences</h3>
-                <div className="flex flex-col md:flex-row">
-                  <IdealHouseType />
-                  <IdealLiveWith />
-                </div>
-                <div className="flex flex-col md:flex-row">
-                  <HousingOutcomes />
-                  <AffordFairhold />
-                </div>
-                <div className="flex flex-col md:flex-row">
-                  <WhyFairhold />
-                  <WhyNotFairhold />
-                </div>
-                <div className="flex flex-col md:flex-row">
-                  <CurrentMeansTenureChoice />
-                  <AnyMeansTenureChoice />
-                </div>
-              </div>
+                <h1 className="h1-style text-2xl md:text-4xl">Fairhold survey results</h1>
+                  <div className="flex flex-col gap-4 mt-6">
+                  {surveyResults.numberResponses === 0 ? (
+                <p>No survey responses found.</p>
+              ) : (
+                <div>
+                  <h2 className="text-xl md:text-2xl">So far, {surveyResults.numberResponses} people have responded</h2>
+                  <div className="flex flex-col py-4">
+                    <h3 className="text-xl font-medium">Who has responded?</h3>
+                    <div className="flex flex-col md:flex-row h-240">
+                      <Country />
+                      <Age />
+                      {/* <Postcode {...results} /> */}
+                    </div>
+                  </div>
 
-              <div className="flex flex-col">
-                <h3 className="text-xl font-medium">Attitudes towards development</h3>
-                <div className="flex flex-col md:flex-row">
-                  <SupportDevelopment />
-                  <SupportNewFairhold />
-                </div>
-                <SupportDevelopmentFactors />
+                  <div className="flex flex-col">
+                    <h3 className="text-xl font-medium">Housing preferences</h3>
+                    <div className="flex flex-col md:flex-row">
+                      <IdealHouseType />
+                      <IdealLiveWith />
+                    </div>
+                    <div className="flex flex-col md:flex-row">
+                      <HousingOutcomes />
+                      <AffordFairhold />
+                    </div>
+                    <div>
+                      <CurrentMeansTenureChoice />
+                    </div>
+                    <div className="flex flex-col md:flex-row">
+                      <WhyFairhold />
+                      <WhyNotFairhold />
+                    </div>
+                    <div className="flex flex-col md:flex-row">
+                      <div className="md:w-1/2 w-full mr-4">
+                        <AnyMeansTenureChoice />
+                      </div>
+                      <div className="md:w-1/2 md:mr-4 hidden"></div>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col">
+                    <h3 className="text-xl font-medium">Attitudes towards development</h3>
+                    <div className="flex flex-col md:flex-row">
+                      <SupportDevelopment />
+                      <SupportNewFairhold />
+                    </div>
+                    <SupportDevelopmentFactors />
+                  </div>
               </div>
-          </div>
-          )}
+              )}
+                </div>
+              </div>
             </div>
           </div>
         <Footer />
