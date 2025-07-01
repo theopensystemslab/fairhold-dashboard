@@ -83,25 +83,30 @@ export default function SurveyPage() {
                   </div>
                 </div>
 
-                <div className="flex flex-col">
-                  <h3 className="text-xl font-medium">Housing preferences</h3>
-                  <div className="flex flex-col md:flex-row">
-                    <IdealHouseType />
-                    <IdealLiveWith />
-                  </div>
-                  <div className="flex flex-col md:flex-row">
-                    <HousingOutcomes />
-                    <AffordFairhold />
-                  </div>
-                  <div className="flex flex-col md:flex-row">
-                    <WhyFairhold />
-                    <WhyNotFairhold />
-                  </div>
-                  <div className="flex flex-col md:flex-row">
-                    <CurrentMeansTenureChoice />
-                    <AnyMeansTenureChoice />
-                  </div>
-                </div>
+                    <div className="flex flex-col">
+                      <h3 className="text-xl font-medium">Housing preferences</h3>
+                      <div className="flex flex-col md:flex-row">
+                        <IdealHouseType />
+                        <IdealLiveWith />
+                      </div>
+                      <div className="flex flex-col md:flex-row">
+                        <HousingOutcomes />
+                        <AffordFairhold />
+                      </div>
+                      <div>
+                      <CurrentMeansTenureChoice />
+                    </div>
+                    <div className="flex flex-col md:flex-row">
+                        <WhyFairhold />
+                        <WhyNotFairhold />
+                      </div>
+                      <div className="flex flex-col md:flex-row">
+                        <div className="md:w-1/2 w-full mr-4">
+                          <AnyMeansTenureChoice />
+                        </div>
+                      <div className="md:w-1/2 md:mr-4 hidden"></div>
+                    </div>
+                    </div>
 
                 <div className="flex flex-col">
                   <h3 className="text-xl font-medium">Attitudes towards development</h3>
