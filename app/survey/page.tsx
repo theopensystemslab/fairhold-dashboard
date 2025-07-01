@@ -21,7 +21,7 @@ import { WhyNotFairhold } from './components/graphs/WhyNotFairhold';
 import { SurveyContext } from './context';
 // list records https://api.airtable.com/v0/{baseId}/{tableIdOrName}
 // get record https://api.airtable.com/v0/{baseId}/{tableIdOrName}/{recordId}
-import { Header } from "../shared";
+import { Header } from "../components/ui/Header";
 
 const inter = Inter({
   weight: ["500", "600", "700", "800"],
