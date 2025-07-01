@@ -22,6 +22,7 @@ import { SurveyContext } from './context';
 // list records https://api.airtable.com/v0/{baseId}/{tableIdOrName}
 // get record https://api.airtable.com/v0/{baseId}/{tableIdOrName}/{recordId}
 import { Header } from "../components/ui/Header";
+import { Footer } from "../components/ui/Footer";
 
 const inter = Inter({
   weight: ["500", "600", "700", "800"],
@@ -63,7 +64,7 @@ export default function SurveyPage() {
   return (
     <ErrorBoundary>
       <SurveyContext.Provider value={surveyResults}>
-        <main className={`${inter.className} p-4 min-h-screen bg-[rgb(var(--background-end-rgb))]`}>
+        <main className={`${inter.className} min-h-screen bg-[rgb(var(--background-end-rgb))]`}>
           <Header />
           <div className="flex flex-col m-4">
             <h1 className="h1-style text-2xl md:text-4xl">Fairhold survey results</h1>
@@ -114,6 +115,7 @@ export default function SurveyPage() {
           )}
             </div>
           </div>
+        <Footer />
         </main>
       </SurveyContext.Provider>
     </ErrorBoundary>
