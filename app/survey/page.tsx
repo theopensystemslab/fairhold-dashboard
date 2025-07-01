@@ -82,25 +82,24 @@ export default function SurveyPage() {
                     {/* <Postcode {...results} /> */}
                   </div>
                 </div>
-
                   <div className="flex flex-col">
                     <h3 className="text-xl font-medium">Housing preferences</h3>
-                    <div className="flex flex-col md:flex-row w-full h-240">
+                    <div className="flex flex-col md:flex-row w-full h-240 p-4">
                       <IdealHouseType />
                       <IdealLiveWith />
                     </div>
-                    <div className="flex flex-col md:flex-row h-240">
+                    <div className="flex flex-col md:flex-row h-240 p-4">
                       <HousingOutcomes />
                       <AffordFairhold />
                     </div>
-                    <div className="flex flex-col md:flex-row h-240">
+                    <div className="flex flex-col md:flex-row h-240 p-4">
                       <CurrentMeansTenureChoice />
                     </div>
-                    <div className="flex flex-col md:flex-row h-240">
+                    <div className="flex flex-col md:flex-row h-240 p-4">
                       <WhyFairhold />
                       <WhyNotFairhold />
                     </div>
-                    <div className="flex flex-col md:flex-row  h-240">
+                    <div className="flex flex-col md:flex-row  h-240 p-4">
                       <div className="md:w-1/2 w-full mr-4">
                         <AnyMeansTenureChoice />
                       </div>
@@ -110,12 +109,12 @@ export default function SurveyPage() {
 
                   <div className="flex flex-col">
                     <h3 className="text-xl font-medium">Attitudes towards development</h3>
-                    <div className="flex flex-row md:gap-8">
-                      <div className="flex flex-col w-1/2 h-480">
+                    <div className="flex flex-col md:flex-row w-full md:gap-8 p-4">
+                      <div className="flex flex-col md:w-1/2 w-full h-480">
                         <SupportDevelopment />
                         <SupportNewFairhold />
                       </div>
-                      <div className="flex flex-col md:flex-row w-1/ h-480">
+                      <div className="flex flex-col md:flex-row md:w-1/2 w-full h-480">
                         <SupportDevelopmentFactors />
                       </div>
                     </div>
@@ -128,5 +127,4 @@ export default function SurveyPage() {
         </SurveyContext.Provider>
         <Footer />
     </ErrorBoundary>
-  );
-}
+  )};
