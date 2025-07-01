@@ -3,7 +3,7 @@ import { ClipLoader } from "react-spinners";
 import { Suspense } from "react";
 import { Inter } from "next/font/google";
 import { Footer } from "./components/ui/Footer";
-import { Header } from "./shared";
+import { Header } from "./components/ui/Header";
 
 const inter = Inter({
   weight: ["500", "600", "700", "800"],
