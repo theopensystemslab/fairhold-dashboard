@@ -98,7 +98,7 @@ export default function SurveyPage() {
                       <HousingOutcomes />
                       <AffordFairhold />
                     </div>
-                    <div>
+                    <div className="flex flex-col md:flex-row">
                       <CurrentMeansTenureChoice />
                     </div>
                     <div className="flex flex-col md:flex-row">
@@ -115,11 +115,15 @@ export default function SurveyPage() {
 
                   <div className="flex flex-col">
                     <h3 className="text-xl font-medium">Attitudes towards development</h3>
-                    <div className="flex flex-col md:flex-row">
-                      <SupportDevelopment />
-                      <SupportNewFairhold />
+                    <div className="flex flex-row md:gap-8">
+                      <div className="flex flex-col w-1/2">
+                        <SupportDevelopment />
+                        <SupportNewFairhold />
+                      </div>
+                      <div className="flex flex-col md:flex-row w-1/2">
+                        <SupportDevelopmentFactors />
+                      </div>
                     </div>
-                    <SupportDevelopmentFactors />
                   </div>
               </div>
               )}
