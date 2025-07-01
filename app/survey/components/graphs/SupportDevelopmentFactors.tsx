@@ -28,10 +28,11 @@ export const SupportDevelopmentFactors = () => {
     
     return (
         <SurveyGraphCard title="Which of these factors would make you more likely to support new homes being created near where you live?">
-            <ResponsiveContainer>
+            <ResponsiveContainer height="100%" width="100%">
             <BarChart
                 data={supportDevelopmentFactors}
                 barSize={20}
+                height={480}
                 layout="vertical"
             >
                 <XAxis type="number" /> 
