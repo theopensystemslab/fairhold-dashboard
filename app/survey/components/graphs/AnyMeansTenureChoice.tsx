@@ -26,9 +26,8 @@ const RankLabel: React.FC<CustomLabelListContentProps> = ({ index, x, y }) => {
     );
 };
 
-const ColoredYAxisTick: React.FC<CustomYTickProps> = ({ x, y, payload }) => {
-    // payload.value is the label (answer)
-    const answerStr = Array.isArray(payload.value) ? payload.value[0] : payload.value;
+const ColoredYAxisTick: React.FC<CustomYTickProps> = ({ x, y, payload: { value: label }  }) => {
+    const answerStr = Array.isArray(label) ? label[0] : label;
     return (
         <text
             x={x}
