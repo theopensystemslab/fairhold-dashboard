@@ -83,31 +83,16 @@ const initializeSankeyResultsObject = (): SankeyResults => {
 
 const addBarOrPieResult = (results: BarOrPieResults, rawResult: RawResults) => {
 
-    const addResultItem = (arr: BarOrPieResult[], item: string, points: number = 1) => {
-        const existingResult = getExistingResult(arr, item);
-        existingResult
-            ? existingResult.value += points
-            : arr.push({ answer: item, value: points });
-    };
-
     Object.entries(rawResult).forEach(([key, value]) => {
         if (key === "id" || !(key in results)) return;
 
         const validKey = key as keyof BarOrPieResults;
 
-        // We handle anyMeansTenureChoice differently because it's ranked choice, and each rank has points
-        if (validKey === "anyMeansTenureChoice" && Array.isArray(value)) {
-            value.forEach((item, idx) => {
-                // Tidying the string
-                let shortAnswer = item.split("––")[0].trim();
-                shortAnswer = shortAnswer.replace("Freehold", "Market purchase")
-                // For now: 5 points for position 1, 4 for position 2, etc. 
-                const points = Math.max(5 - idx, 1);
-                addResultItem(results.anyMeansTenureChoice, shortAnswer, points);
-            });
+        // We handle anyMeansTenureChoice differently because it's ranked choice, and each rank has a points-based weight
+        if (validKey === "anyMeansTenureChoice") { 
+            handleAnyMeansTenureChoice(results, value);
             return;
         }
-
 
         if (validKey === "housingOutcomes") {
             handleHousingOutcomes(results, value, rawResult.currentTenure);
@@ -217,9 +202,22 @@ const handleHousingOutcomes = (
 const getExistingResult = (arr: BarOrPieResult[], answer: string) =>
     arr.find((result) => result.answer === answer);
 
-const addResultItem = (arr: BarOrPieResult[], item: string) => {
+const addResultItem = (arr: BarOrPieResult[], item: string, weight: number = 1) => {
     const existingResult = getExistingResult(arr, item);
     existingResult
-        ? existingResult.value++
+        ? existingResult.value += weight
         : arr.push({ answer: item, value: 1 });
+};
+
+const handleAnyMeansTenureChoice = (results: BarOrPieResults, value: unknown) => {
+    if (Array.isArray(value)) {
+        value.forEach((item, idx) => {
+            // Tidying the string
+            let shortAnswer = item.split("––")[0].trim();
+            shortAnswer = shortAnswer.replace("Freehold", "Market purchase");
+            // For now: 5 weight for position 1, 4 for position 2, etc.
+            const weight = Math.max(5 - idx, 1);
+            addResultItem(results.anyMeansTenureChoice, shortAnswer, weight);
+        });
+    }
 };
