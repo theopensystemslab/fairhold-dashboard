@@ -43,7 +43,7 @@ export type BarOrPieResults = {
 };
 
 export type BarOrPieResult = {
-    answer: string | string[] | undefined;
+    answer: string;
     value: number;
 }
 
