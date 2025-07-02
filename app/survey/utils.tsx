@@ -181,21 +181,15 @@ return chartMax;
 const mapTenureCategory = (tenure: string): string => {
     tenure = tenure.trim();
     
-    if (tenure === "I own it outright" || tenure === "I own it with a mortgage") {
+    switch (tenure) {
+    case "I own it outright":
         return "Market purchase";
-    }
-    if (tenure === "I rent it") {
+    case "I own it with a mortgage":
+        return "Market purchase";
+    case "I rent it":
         return "Private rent";
-    }
-    if (tenure === "Part own, part rent") {
+    case "Part own, part rent":
         return "Shared ownership";
     }
-    if (
-        tenure === "I live for free in a home" ||
-        tenure === "I do not have a stable home at the moment" ||
-        tenure === "Other"
-    ) {
-        return "Other";
-    }
-    return tenure || "Other";
+    return "Other";
 };
