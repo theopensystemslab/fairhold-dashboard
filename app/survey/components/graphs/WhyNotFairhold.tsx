@@ -32,7 +32,7 @@ export const WhyNotFairhold = () => {
   
   return (
       <SurveyGraphCard 
-        title="Why <em>not</em> Fairhold?"
+        title={<>Why <em>not</em> Fairhold?</>}
         subtitle="Top 5 responses from people who would not choose Fairhold">
           <ResponsiveContainer height={whyNotFairhold.length * 30}>
           <BarChart
