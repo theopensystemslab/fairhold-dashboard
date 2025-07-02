@@ -1,8 +1,8 @@
-export const AFFORD_FAIRHOLD_ORDER = [
-  "Yes",
-  "Yes, but Fairhold Land Rent only, because the deposit is lower",
-  "No, it's still too expensive",
-];
+export const AFFORD_FAIRHOLD = [
+  { label: "Yes", colour: "rgb(var(--fairhold-equity-color-rgb))" },
+  { label: "Yes, but Fairhold Land Rent only, because the deposit is lower", colour: "rgb(var(--fairhold-interest-color-rgb))" },
+  { label: "No, it's still too expensive", colour: "rgb(var(--social-rent-land-color-rgb))" },
+] as const;
 
 export const SUPPORT_DEVELOPMENT_ORDER = [
     "Strongly supportive of any development", 
