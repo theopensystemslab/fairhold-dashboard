@@ -93,8 +93,10 @@ const addBarOrPieResult = (results: BarOrPieResults, rawResult: RawResults) => {
     Object.entries(rawResult).forEach(([key, value]) => {
         if (key === "id" || !(key in results)) return;
 
+        const validKey = key as keyof BarOrPieResults;
+
         // We handle anyMeansTenureChoice differently because it's ranked choice, and each rank has points
-        if (key === "anyMeansTenureChoice" && Array.isArray(value)) {
+        if (validKey === "anyMeansTenureChoice" && Array.isArray(value)) {
             value.forEach((item, idx) => {
                 // Tidying the string
                 let shortAnswer = item.split("––")[0].trim();
@@ -106,19 +108,6 @@ const addBarOrPieResult = (results: BarOrPieResults, rawResult: RawResults) => {
             return;
         }
 
-        // We also handle housingOutcomes separately since we are separating output graphs by currentTenure
-        if (key === "housingOutcomes") {
-            const tenure = mapTenureCategory(rawResult.currentTenure || "Unknown");
-            if (!results.housingOutcomes[tenure]) {
-                results.housingOutcomes[tenure] = [];
-            }
-            if (Array.isArray(value)) {
-                value.forEach(item => addResultItem(results.housingOutcomes[tenure], item));
-            }
-            return;
-        }
-
-        const validKey = key as keyof BarOrPieResults;
 
         if (validKey === "housingOutcomes") {
             handleHousingOutcomes(results, value, rawResult.currentTenure);
