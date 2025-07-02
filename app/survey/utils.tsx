@@ -5,6 +5,7 @@ import {
   SUPPORT_DEVELOPMENT_ORDER,
   SUPPORT_FAIRHOLD_ORDER,
 } from "./constants";
+import { BarOrPieResult } from "./types";
 
 const SANKEY_MAPPINGS = [
   { fromKey: 'houseType', toKey: 'idealHouseType', newKey: 'idealHouseType', isArray: false },
@@ -149,3 +150,12 @@ const updateSankeyNodesAndLinks = (
         links.push({ source: sourceIndex, target: targetIndex, value: 1 });
     }
 };
+
+export const getTopFive = (data: BarOrPieResult[]) => data.slice(0,5);
+
+export const calculateChartMaximum = (data: BarOrPieResult[]) => {
+const maxValue = data[0]?.value ?? 0;
+const maxResponses = Math.ceil(maxValue / 10) * 10;
+const chartMax = maxResponses < 10 ? 10 : maxResponses;
+return chartMax;
+}

@@ -3,13 +3,12 @@ import { TickProps } from "@/app/survey/types";
 import SurveyGraphCard from "@/app/survey/components/SurveyGraphCard";
 import { Bar, BarChart, XAxis, YAxis, ResponsiveContainer } from "recharts";
 import { useSurveyContext } from "../../context";
+import { getTopFive, calculateChartMaximum } from "../../utils";
 
 export const WhyFairhold = () => {
-  let { whyFairhold } = useSurveyContext().barOrPie;
-  whyFairhold = whyFairhold.slice(0,5);
-  const maxValue = whyFairhold.length > 0 ? whyFairhold[0].value : 0;
-  const maxResponses = Math.ceil(maxValue / 10) * 10;
-  const xDomainMax = maxResponses < 10 ? 10 : maxResponses;
+  const { whyFairhold } = useSurveyContext().barOrPie;
+  const chartMax = calculateChartMaximum(whyFairhold);
+  const whyFairholdTopFive = getTopFive(whyFairhold);
 
   const Tick = (props: TickProps) => {
       const { x, y, payload } = props;
@@ -35,9 +34,9 @@ export const WhyFairhold = () => {
         title="Why would you choose Fairhold?" 
         subtitle="Top 5 responses from people who would choose Fairhold"
       >
-          <ResponsiveContainer height={whyFairhold.length * 30}>
+          <ResponsiveContainer height={whyFairholdTopFive.length * 30}>
           <BarChart
-              data={whyFairhold}
+              data={whyFairholdTopFive}
               barSize={20}
               barGap={0}
               layout="vertical"
@@ -47,7 +46,7 @@ export const WhyFairhold = () => {
                   height={20}
                   fontSize={10}
                   interval={10}
-                  domain={[0, xDomainMax]}
+                  domain={[0, chartMax]}
                   axisLine={false}
                   tickLine={false}
                   tick={true}
