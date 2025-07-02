@@ -83,34 +83,17 @@ const initializeSankeyResultsObject = (): SankeyResults => {
 };
 
 const addBarOrPieResult = (results: BarOrPieResults, rawResult: RawResults) => {
-    const getExistingResult = (arr: BarOrPieResult[], answer: string) =>
-        arr.find((result) => result.answer === answer);
-
-    const addResultItem = (arr: BarOrPieResult[], item: string) => {
-        const existingResult = getExistingResult(arr, item);
-        existingResult
-            ? existingResult.value++
-            : arr.push({ answer: item, value: 1 });
-    };
-
     Object.entries(rawResult).forEach(([key, value]) => {
         if (key === "id" || !(key in results)) return;
 
-        // We need to handle housingOutcomes separately since we are separating output graphs by currentTenure
-        if (key === "housingOutcomes") {
-            const tenure = mapTenureCategory(rawResult.currentTenure || "Unknown");
-            if (!results.housingOutcomes[tenure]) {
-                results.housingOutcomes[tenure] = [];
-            }
-            if (Array.isArray(value)) {
-                value.forEach(item => addResultItem(results.housingOutcomes[tenure], item));
-            }
+        const validKey = key as keyof BarOrPieResults;
+
+        if (validKey === "housingOutcomes") {
+            handleHousingOutcomes(results, value, rawResult.currentTenure);
             return;
         }
 
-        const validKey = key as keyof BarOrPieResults;
-        
-        if (validKey !== "housingOutcomes" && Array.isArray(results[validKey])) {
+        if (Array.isArray(results[validKey])) {
             const arr = results[validKey] as BarOrPieResult[];
             const isMultipleChoiceAnswer = Array.isArray(value);
             isMultipleChoiceAnswer
@@ -192,4 +175,30 @@ const mapTenureCategory = (tenure: string): string => {
         return "Shared ownership";
     }
     return "Other";
+};
+
+const handleHousingOutcomes = (
+    results: BarOrPieResults,
+    value: unknown,
+    currentTenure: string
+) => {
+    const tenure = mapTenureCategory(currentTenure || "Unknown");
+    if (!results.housingOutcomes[tenure]) {
+        results.housingOutcomes[tenure] = [];
+    }
+    if (Array.isArray(value)) {
+        value.forEach(item =>
+            addResultItem(results.housingOutcomes[tenure], item)
+        );
+    }
+};
+
+const getExistingResult = (arr: BarOrPieResult[], answer: string) =>
+    arr.find((result) => result.answer === answer);
+
+const addResultItem = (arr: BarOrPieResult[], item: string) => {
+    const existingResult = getExistingResult(arr, item);
+    existingResult
+        ? existingResult.value++
+        : arr.push({ answer: item, value: 1 });
 };
