@@ -5,6 +5,7 @@ import { Bar, BarChart, XAxis, YAxis, ResponsiveContainer } from "recharts";
 import { useSurveyContext } from "../../context";
 import TenureSelector from "../TenureSelector";
 import { TENURE_COLORS } from "../../constants";
+import { getTopFive } from "../../utils";
 
 export const HousingOutcomes = () => {
     const housingOutcomes = useSurveyContext().barOrPie.housingOutcomes;
@@ -15,6 +16,7 @@ export const HousingOutcomes = () => {
     const [selectedTenure, setSelectedTenure] = useState(
         tenureOptions.length > 0 ? tenureOptions[0] : ""
     );
+    const housingOutcomesTopFive = getTopFive(housingOutcomes[selectedTenure] || []);
     
     const color = TENURE_COLORS[selectedTenure] || "rgb(var(--text-default-rgb))";
 
@@ -53,7 +55,7 @@ export const HousingOutcomes = () => {
 
             <ResponsiveContainer width="100%" height="100%">
                 <BarChart
-                    data={housingOutcomes[selectedTenure].slice(0,5)}
+                    data={housingOutcomesTopFive}
                     barSize={20}
                     layout="vertical"
                 >
