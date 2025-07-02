@@ -138,8 +138,6 @@ export const CustomSankey: React.FC<SankeyProps> = ({ nodes, links }) => {
     return (
         <ResponsiveContainer width="100%" height="100%">
         <Sankey
-            // width={"100%"}
-            // height={350}
             data={{
                 nodes: nodes,
                 links: links
