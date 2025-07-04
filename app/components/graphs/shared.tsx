@@ -1,40 +1,42 @@
 import { formatValue } from "@/app/lib/format";
 
 export interface CustomLabelListContentProps {
-    x?: number | string | undefined;
-    y?: number | string | undefined;
-    value?: number | string;
-    index?: number;
-    color?: string | undefined;
-    width?: string | number | undefined;
-    height?: string | number | undefined;
+  x?: number | string | undefined;
+  y?: number | string | undefined;
+  value?: number | string;
+  index?: number;
+  color?: string | undefined;
+  width?: string | number | undefined;
+  height?: string | number | undefined;
 }
 
-export const BarLabelListTopLeft: React.FC<CustomLabelListContentProps> = ({ x, y, value, color }) => {
+export const BarLabelListTopLeft: React.FC<CustomLabelListContentProps> = ({
+  x,
+  y,
+  value,
+  color,
+}) => {
   if (x === undefined || y === undefined || value === undefined) return null;
   const xAdjust = 2;
   const yAdjust = 30;
   const xPos = typeof x === "number" ? x - xAdjust : Number(x) - xAdjust;
   const yPos = typeof y === "number" ? y - yAdjust : Number(y) - yAdjust;
-  const numValue = typeof value === "number" ? value : parseFloat(value as string);
+  const numValue =
+    typeof value === "number" ? value : parseFloat(value as string);
   const formattedValue = formatValue(numValue);
 
   return (
-    <foreignObject x={xPos} y={yPos} width={100} height={30}>
-      <div
-        style={{
-          position: "absolute",
-          left: 0,
-          top: 0,
-          color,
-          fontSize: "18px",
-          fontWeight: 600,
-          whiteSpace: "nowrap",
-        }}
-      >
-        {formattedValue}
-      </div>
-    </foreignObject>
+    <text
+      x={xPos}
+      y={yPos}
+      fill={color}
+      fontSize={18}
+      fontWeight={600}
+      textAnchor="start"
+      dominantBaseline="hanging"
+    >
+      {formattedValue}
+    </text>
   );
 };
 
@@ -60,7 +62,7 @@ export const CustomTick: React.FC<CustomTickProps> = ({
 
   return (
     <g transform={`translate(${x},${y})`}>
-      {label.split('\n').map((line: string, i: number) => (
+      {label.split("\n").map((line: string, i: number) => (
         <text
           key={i}
           x={0}
@@ -79,35 +81,35 @@ export const CustomTick: React.FC<CustomTickProps> = ({
 };
 
 export const getLabel = (value: string) => {
-    switch (value) {
-      case "Freehold":
-        return "Freehold";
-      case "Private Rent":
-        return "Private Rent";
-      case "Fairhold - Land Purchase":
-        return "Fairhold /\nLand Purchase";
-      case "Fairhold - Land Rent":
-        return "Fairhold /\nLand Rent";
-      case "Social Rent":
-        return "Social Rent";
-      default:
-        return value;
-    }
-  };
+  switch (value) {
+    case "Freehold":
+      return "Freehold";
+    case "Private Rent":
+      return "Private Rent";
+    case "Fairhold - Land Purchase":
+      return "Fairhold /\nLand Purchase";
+    case "Fairhold - Land Rent":
+      return "Fairhold /\nLand Rent";
+    case "Social Rent":
+      return "Social Rent";
+    default:
+      return value;
+  }
+};
 
 export const getColor = (value: string) => {
-    switch (value) {
-      case "Freehold":
-        return "rgb(var(--freehold-equity-color-rgb))";
-      case "Private Rent":
-        return "rgb(var(--private-rent-land-color-rgb))";
-      case "Fairhold - Land Purchase":
-        return "rgb(var(--fairhold-equity-color-rgb))";
-      case "Fairhold - Land Rent":
-        return "rgb(var(--fairhold-interest-color-rgb))";
-      case "Social Rent":
-        return "rgb(var(--social-rent-land-color-rgb))";
-      default:
-        return "rgb(var(--fairhold-equity-color-rgb))";
-    }
-  };
+  switch (value) {
+    case "Freehold":
+      return "rgb(var(--freehold-equity-color-rgb))";
+    case "Private Rent":
+      return "rgb(var(--private-rent-land-color-rgb))";
+    case "Fairhold - Land Purchase":
+      return "rgb(var(--fairhold-equity-color-rgb))";
+    case "Fairhold - Land Rent":
+      return "rgb(var(--fairhold-interest-color-rgb))";
+    case "Social Rent":
+      return "rgb(var(--social-rent-land-color-rgb))";
+    default:
+      return "rgb(var(--fairhold-equity-color-rgb))";
+  }
+};
