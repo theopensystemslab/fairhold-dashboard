@@ -1,6 +1,6 @@
 import { RawResults, BarOrPieResults, SankeyResults, SankeyResult } from "./types"
 import {
-  AFFORD_FAIRHOLD_ORDER,
+  AFFORD_FAIRHOLD,
   AGE_ORDER,
   SUPPORT_DEVELOPMENT_ORDER,
   SUPPORT_FAIRHOLD_ORDER,
@@ -14,7 +14,7 @@ const SANKEY_MAPPINGS = [
 ];
 
 const CUSTOM_ORDERS: Record<string, string[]> = {
-  affordFairhold: AFFORD_FAIRHOLD_ORDER,
+  affordFairhold: AFFORD_FAIRHOLD.map(item => item.label),
   ageGroup: AGE_ORDER,
   supportDevelopment: SUPPORT_DEVELOPMENT_ORDER,
   supportNewFairhold: SUPPORT_FAIRHOLD_ORDER,
