@@ -1,3 +1,12 @@
+export const AGE_ORDER = [
+  "0-18",
+  "19-24",
+  "25-34",
+  "35-44",
+  "45-54",
+  "65+"
+]
+
 export const AFFORD_FAIRHOLD = [
   { label: "Yes", colour: "rgb(var(--fairhold-equity-color-rgb))" },
   { label: "Yes, but Fairhold Land Rent only, because the deposit is lower", colour: "rgb(var(--fairhold-interest-color-rgb))" },
