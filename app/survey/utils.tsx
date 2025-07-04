@@ -1,17 +1,15 @@
-import { RawResults, BarOrPieResults, SankeyResults, SankeyResult } from "./types"
+import { RawResults, BarOrPieResults, BarOrPieResult, SankeyResults, SankeyResult } from "./types"
 import {
   AFFORD_FAIRHOLD_ORDER,
   AGE_ORDER,
   SUPPORT_DEVELOPMENT_ORDER,
   SUPPORT_FAIRHOLD_ORDER,
 } from "./constants";
-import { BarOrPieResult } from "./types";
 
 const SANKEY_MAPPINGS = [
   { fromKey: 'houseType', toKey: 'idealHouseType', newKey: 'idealHouseType', isArray: false },
   { fromKey: 'liveWith', toKey: 'idealLiveWith', newKey: 'idealLiveWith', isArray: false },
   { fromKey: 'currentTenure', toKey: 'currentMeansTenureChoice', newKey: 'currentMeansTenureChoice', isArray: false },
-  { fromKey: 'currentTenure', toKey: 'anyMeansTenureChoice', newKey: 'anyMeansTenureChoice', isArray: true }
 ];
 
 const CUSTOM_ORDERS: Record<string, string[]> = {
@@ -46,6 +44,11 @@ export const aggregateResults = (rawResults: RawResults[]) => {
             }
         }
     });
+
+    Object.values(barOrPie.housingOutcomes).forEach((arr) => {
+        arr.sort((a, b) => b.value - a.value);
+    });
+
     return { numberResponses, barOrPie, sankey };
 }
 
@@ -55,10 +58,11 @@ const initializeBarOrPieResultsObject = (): BarOrPieResults => {
         nonUk: [],
         postcode: [],
         ageGroup: [],
+        anyMeansTenureChoice: [],
         ownershipModel: [],
         rentalModel: [],
         secondHomes: [],
-        housingOutcomes: [],
+        housingOutcomes: {},
         fairholdCalculator: [],
         affordFairhold: [],
         whyFairhold: [],
@@ -74,31 +78,34 @@ const initializeSankeyResultsObject = (): SankeyResults => {
         idealHouseType: { nodes: [], links: [] },
         idealLiveWith: { nodes: [], links: [] },
         currentMeansTenureChoice: { nodes: [], links: [] },
-        anyMeansTenureChoice: { nodes: [], links: [] },
     } as SankeyResults;
 };
 
 const addBarOrPieResult = (results: BarOrPieResults, rawResult: RawResults) => {
-    const getExistingResult = (key: keyof BarOrPieResults, answer: string) => 
-        results[key].find(result => result.answer === answer);
-
-    const addResultItem = (key: keyof BarOrPieResults, item: string) => {
-        const existingResult = getExistingResult(key, item);
-        existingResult
-            ? existingResult.value++
-            : results[key].push({ answer: item, value: 1 });
-    };
 
     Object.entries(rawResult).forEach(([key, value]) => {
         if (key === "id" || !(key in results)) return;
 
         const validKey = key as keyof BarOrPieResults;
-        
-        const isMultipleChoiceAnswer = Array.isArray(value);
-        
-        isMultipleChoiceAnswer
-            ? value.forEach(item => addResultItem(validKey, item))
-            : addResultItem(validKey, value);
+
+        // We handle anyMeansTenureChoice differently because it's ranked choice, and each rank has a points-based weight
+        if (validKey === "anyMeansTenureChoice") { 
+            handleAnyMeansTenureChoice(results, value);
+            return;
+        }
+
+        if (validKey === "housingOutcomes") {
+            handleHousingOutcomes(results, value, rawResult.currentTenure);
+            return;
+        }
+
+        if (Array.isArray(results[validKey])) {
+            const arr = results[validKey] as BarOrPieResult[];
+            const isMultipleChoiceAnswer = Array.isArray(value);
+            isMultipleChoiceAnswer
+                ? value.forEach(item => addResultItem(arr, item))
+                : addResultItem(arr, value);
+        }
     });
 };
 
@@ -159,3 +166,58 @@ const maxResponses = Math.ceil(maxValue / 10) * 10;
 const chartMax = maxResponses < 10 ? 10 : maxResponses;
 return chartMax;
 }
+
+const mapTenureCategory = (tenure: string): string => {
+    tenure = tenure.trim();
+    
+    switch (tenure) {
+    case "I own it outright":
+        return "Market purchase";
+    case "I own it with a mortgage":
+        return "Market purchase";
+    case "I rent it":
+        return "Private rent";
+    case "Part own, part rent":
+        return "Shared ownership";
+    }
+    return "Other";
+};
+
+const handleHousingOutcomes = (
+    results: BarOrPieResults,
+    value: unknown,
+    currentTenure: string
+) => {
+    const tenure = mapTenureCategory(currentTenure || "Unknown");
+    if (!results.housingOutcomes[tenure]) {
+        results.housingOutcomes[tenure] = [];
+    }
+    if (Array.isArray(value)) {
+        value.forEach(item =>
+            addResultItem(results.housingOutcomes[tenure], item)
+        );
+    }
+};
+
+const getExistingResult = (arr: BarOrPieResult[], answer: string) =>
+    arr.find((result) => result.answer === answer);
+
+const addResultItem = (arr: BarOrPieResult[], item: string, weight: number = 1) => {
+    const existingResult = getExistingResult(arr, item);
+    existingResult
+        ? existingResult.value += weight
+        : arr.push({ answer: item, value: 1 });
+};
+
+const handleAnyMeansTenureChoice = (results: BarOrPieResults, value: unknown) => {
+    if (Array.isArray(value)) {
+        value.forEach((item, idx) => {
+            // Tidying the string
+            let shortAnswer = item.split("––")[0].trim();
+            shortAnswer = shortAnswer.replace("Freehold", "Market purchase");
+            // For now: 5 weight for position 1, 4 for position 2, etc.
+            const weight = Math.max(5 - idx, 1);
+            addResultItem(results.anyMeansTenureChoice, shortAnswer, weight);
+        });
+    }
+};
