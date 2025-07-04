@@ -32,8 +32,7 @@ type ExcludedRawResults =
     | "liveWith"
     | "idealLiveWith"
     | "currentTenure"
-    | "currentMeansTenureChoice"
-    | "anyMeansTenureChoice";
+    | "currentMeansTenureChoice";
 
 type ResultKeys = Exclude<keyof RawResults, ExcludedRawResults>;
 
@@ -44,15 +43,14 @@ export type BarOrPieResults = {
 };
 
 export type BarOrPieResult = {
-    answer: string | string[] | undefined;
+    answer: string;
     value: number;
 }
 
 export type SankeyResults = Record<Extract<keyof RawResults, 
     'idealHouseType' | 
     'idealLiveWith' | 
-    'currentMeansTenureChoice' | 
-    'anyMeansTenureChoice'
+    'currentMeansTenureChoice'
     >, 
     SankeyResult>
 
