@@ -1,5 +1,5 @@
 import React from "react"
-import { Sankey, Tooltip, Rectangle } from "recharts"; 
+import { Sankey, Tooltip, Rectangle, ResponsiveContainer } from "recharts"; 
 
 
 type CustomNodeProps = {
@@ -136,9 +136,8 @@ export const CustomSankey: React.FC<SankeyProps> = ({ nodes, links }) => {
     }; 
 
     return (
+        <ResponsiveContainer width="100%" height="100%">
         <Sankey
-            width={700}
-            height={350}
             data={{
                 nodes: nodes,
                 links: links
@@ -147,13 +146,14 @@ export const CustomSankey: React.FC<SankeyProps> = ({ nodes, links }) => {
             link={CustomLink}
             nodePadding={50}
             margin={{
-                left: 100,
-                right: 100,
+                left: 60,
+                right: 6e0,
                 top: 50,
                 bottom: 50,
             }}
         >
             <Tooltip />
         </Sankey>
+        </ResponsiveContainer> 
     )
 }
