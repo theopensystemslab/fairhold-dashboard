@@ -1,4 +1,10 @@
 import { RawResults, BarOrPieResults, SankeyResults, SankeyResult } from "./types"
+import {
+  AFFORD_FAIRHOLD,
+  AGE_ORDER,
+  SUPPORT_DEVELOPMENT_ORDER,
+  SUPPORT_FAIRHOLD_ORDER,
+} from "./constants";
 
 const SANKEY_MAPPINGS = [
   { fromKey: 'houseType', toKey: 'idealHouseType', newKey: 'idealHouseType', isArray: false },
@@ -7,16 +13,38 @@ const SANKEY_MAPPINGS = [
   { fromKey: 'currentTenure', toKey: 'anyMeansTenureChoice', newKey: 'anyMeansTenureChoice', isArray: true }
 ];
 
+const CUSTOM_ORDERS: Record<string, string[]> = {
+  affordFairhold: AFFORD_FAIRHOLD.map(item => item.label),
+  ageGroup: AGE_ORDER,
+  supportDevelopment: SUPPORT_DEVELOPMENT_ORDER,
+  supportNewFairhold: SUPPORT_FAIRHOLD_ORDER,
+};
+
 export const aggregateResults = (rawResults: RawResults[]) => {
     // There are two different data types we might need, both need to be initialised then handled separately
     const barOrPie = initializeBarOrPieResultsObject();
     const sankey = initializeSankeyResultsObject();
     const numberResponses = rawResults.length;
 
-        for (const rawResult of rawResults) {
-            addBarOrPieResult(barOrPie, rawResult);
-            addSankeyResult(sankey, rawResult);
+    for (const rawResult of rawResults) {
+        addBarOrPieResult(barOrPie, rawResult);
+        addSankeyResult(sankey, rawResult);
     }
+
+    Object.entries(barOrPie).forEach(([key, arr]) => {
+        if (Array.isArray(arr)) {
+            const customOrder = CUSTOM_ORDERS[key];
+            if (customOrder) {
+                arr.sort(
+                  (a, b) =>
+                    customOrder.indexOf((a.answer ?? "") as string) -
+                    customOrder.indexOf((b.answer ?? "") as string)
+                );
+            } else {
+                arr.sort((a, b) => b.value - a.value);
+            }
+        }
+    });
     return { numberResponses, barOrPie, sankey };
 }
 
