@@ -2,7 +2,7 @@ import React from "react"
 import { TickProps } from "@/app/survey/types";
 import SurveyGraphCard from "@/components/custom/survey/SurveyGraphCard";
 import { Bar, BarChart, XAxis, YAxis, ResponsiveContainer } from "recharts";
-import { useSurveyContext } from "../../context";
+import { useSurveyContext } from "@context/surveyContext";
 
 export const WhyFairhold = () => {
   const whyFairhold = useSurveyContext().barOrPie.whyFairhold;

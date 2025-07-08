@@ -1,7 +1,7 @@
 import React from "react";
 import SurveyGraphCard from "@/components/custom/survey/SurveyGraphCard";
 import { PieChart, Pie, Legend, ResponsiveContainer, Cell } from "recharts";
-import { useSurveyContext } from "../../context";
+import { useSurveyContext } from "@context/surveyContext";
 
   export const Country = () => {
     const { uk } = useSurveyContext().barOrPie;

@@ -18,7 +18,7 @@ import { SupportDevelopmentFactors } from '@components/custom/survey/graphs/Supp
 import { SupportNewFairhold } from '@components/custom/survey/graphs/SupportNewFairhold';
 import { WhyFairhold } from '@components/custom/survey/graphs/WhyFairhold';
 import { WhyNotFairhold } from '@components/custom/survey/graphs/WhyNotFairhold';
-import { SurveyContext } from './context';
+import { SurveyContext } from '@context/surveyContext';
 // list records https://api.airtable.com/v0/{baseId}/{tableIdOrName}
 // get record https://api.airtable.com/v0/{baseId}/{tableIdOrName}/{recordId}
 import { Header } from "@components/custom/ui/Header";
