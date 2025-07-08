@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Inter } from "next/font/google";
 import ErrorBoundary from '../../components/custom/ErrorBoundary';
-import { SurveyResults } from './types';
+import { SurveyResults } from '@lib/survey/types';
 import { Age } from '@components/custom/survey/graphs/Age';
 import { AffordFairhold } from '@components/custom/survey/graphs/AffordFairhold';
 import { AnyMeansTenureChoice } from '@components/custom/survey/graphs/AnyMeansTenureChoice';
@@ -21,8 +21,8 @@ import { WhyNotFairhold } from '@components/custom/survey/graphs/WhyNotFairhold'
 import { SurveyContext } from './context';
 // list records https://api.airtable.com/v0/{baseId}/{tableIdOrName}
 // get record https://api.airtable.com/v0/{baseId}/{tableIdOrName}/{recordId}
-import { Header } from "../components/ui/Header";
-import { Footer } from "../components/ui/Footer";
+import { Header } from "@components/custom/ui/Header";
+import { Footer } from "@components/custom/ui/Footer";
 
 const inter = Inter({
   weight: ["500", "600", "700", "800"],
