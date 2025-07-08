@@ -3,7 +3,7 @@ import HowMuchFHCostWrapper from "../graphs/HowMuchFHCostWrapper";
 import { Drawer } from "../../ui/Drawer";
 import { Household } from "@/models/Household";
 import ReactMarkdown from 'react-markdown';
-import explanationContent from '../Help/HowMuchFHCost.md';
+import explanationContent from '@components/custom/dashboard/help/HowMuchFHCost.md';
 
 interface DashboardProps {
   data: Household;
