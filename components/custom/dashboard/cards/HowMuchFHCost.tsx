@@ -1,7 +1,7 @@
 import GraphCard from "../../ui/GraphCard";
 import HowMuchFHCostWrapper from "../graphs/HowMuchFHCostWrapper";
 import { Drawer } from "../../ui/Drawer";
-import { Household } from "@/app/models/Household";
+import { Household } from "@/models/Household";
 import ReactMarkdown from 'react-markdown';
 import explanationContent from '../Help/HowMuchFHCost.md';
 

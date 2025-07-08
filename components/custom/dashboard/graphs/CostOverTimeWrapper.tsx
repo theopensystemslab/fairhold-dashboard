@@ -1,11 +1,11 @@
 "use client";
 import React from "react";
 import ErrorBoundary from "../../ErrorBoundary";
-import { Household } from "@/app/models/Household";
+import { Household } from "@/models/Household";
 import CostOverTimeStackedBarChart, { LifetimeBarData } from "./CostOverTimeStackedBarChart";
 import CostOverTimeStackedBarChartMobile from "./CostOverTimeStackedBarChartMobile";
-import { MaintenanceLevel } from "@/app/models/constants";
-import { useScreenSize } from "@/app/hooks/UseScreenSize";
+import { MaintenanceLevel } from "@/models/constants";
+import { useScreenSize } from "@/hooks/UseScreenSize";
 
 export type TenureType = 'marketPurchase' | 'fairholdLandPurchase' | 'fairholdLandRent' | 'marketRent' | 'socialRent';
 

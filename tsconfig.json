@@ -28,7 +28,13 @@
         "./*"
       ],
       "@components/*": ["components/*"],
-      "@lib/*": ["lib/*"]
+      "@data/*": ["data/*"],
+      "@hooks/*": ["hooks/*"],
+      "@lib/*": ["lib/*"],
+      "@models/*": ["models/*"],
+      "@schemas/*": ["schemas/*"],
+      "@services/*": ["services/*"]
+
     },
     "target": "ES2017"
   },

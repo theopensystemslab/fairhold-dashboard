@@ -1,5 +1,5 @@
 // __tests__/socialRentEarningsService.test.ts
-import { socialRentEarningsService } from "../services/socialRentEarningsService"; // Adjust the path according to your structure
+import { socialRentEarningsService } from "./socialRentEarningsService"; // Adjust the path according to your structure
 import { socialRentEarningsRepo } from "../data/socialRentEarningsRepo"; // Adjust the path according to your structure
 
 jest.mock("../data/socialRentEarningsRepo");

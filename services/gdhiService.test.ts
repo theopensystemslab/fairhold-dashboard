@@ -1,5 +1,5 @@
 // __tests__/gdhiService.test.ts
-import { gdhiService } from "../services/gdhiService"; // Adjust the path according to your structure
+import { gdhiService } from "./gdhiService"; // Adjust the path according to your structure
 import { gdhiRepo } from "../data/gdhiRepo"; // Adjust the path according to your structure
 
 jest.mock("../data/gdhiRepo");

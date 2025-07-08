@@ -1,4 +1,4 @@
-import { APIError } from "../../lib/calculator/exceptions";
+import { APIError } from "../lib/calculator/exceptions";
 import prisma from "./db";
 
 const MINIMUM_NUMBER_OF_POSTCODES = 30;

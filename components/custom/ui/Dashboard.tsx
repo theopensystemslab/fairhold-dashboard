@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
-import { Household } from "@/app/models/Household";
-import { FormFrontend } from "@/app/schemas/formSchema";
+import { Household } from "@/models/Household";
+import { FormFrontend } from "@/schemas/formSchema";
 import { WhatWouldYouChoose } from "../dashboard/cards/WhatWouldYouChoose";
 import { WhatDifference } from "../dashboard/cards/WhatDifference";
 import { HowMuchFHCost } from "../dashboard/cards/HowMuchFHCost";
