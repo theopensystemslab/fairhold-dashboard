@@ -11,7 +11,7 @@ import { rentService } from "./rentService";
 import { parse } from "postcode";
 import { z } from "zod";
 import { Calculation, maintenanceLevelSchema, PostcodeScales } from "../schemas/calculationSchema";
-import { APIError } from "../lib/exceptions";
+import { APIError } from "../../lib/calculator/exceptions";
 import { HouseType } from "../models/Property";
 import { MaintenanceLevel } from "../models/constants";
 

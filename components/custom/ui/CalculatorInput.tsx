@@ -27,7 +27,7 @@ import {
 import { Button } from "@/components/button";
 import { Input } from "@/components/input";
 import { Label } from "@/components/label";
-import { APIError } from "@/app/lib/exceptions";
+import { APIError } from "@/lib/calculator/exceptions";
 import { BackgroundAssumptions } from "./BackgroundAssumptions";
 import { MaintenanceExplainerDrawer } from "./MaintenanceExplainerDrawer";
 import InputDropdown from "./InputDropdown";

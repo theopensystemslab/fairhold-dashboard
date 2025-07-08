@@ -3,7 +3,7 @@
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Tooltip } from "recharts";
 import { Card, CardContent } from "@/components/card";
 import { StyledChartContainer } from "../ui/StyledChartContainer";
-import { formatValue } from "@/app/lib/format";
+import { formatValue } from "@/lib/calculator/format";
 import { LifetimeBarData } from "./CostOverTimeStackedBarChart";
 import { CostOverTimeTooltip } from "./CostOverTimeStackedBarChart";
 

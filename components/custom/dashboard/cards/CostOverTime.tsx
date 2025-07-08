@@ -5,7 +5,7 @@ import { Drawer } from "../../ui/Drawer";
 import TenureSelector from "../../ui/TenureSelector";
 import TenureSelectorMobile from "../../ui/TenureSelectorMobile";
 import { DashboardProps } from "../../ui/Dashboard";
-import { formatValue } from "@/app/lib/format";
+import { formatValue } from "@/lib/calculator/format";
 import ReactMarkdown from 'react-markdown';
 import explanationContent from '../Help/CostOverTime.md';
 import { DEFAULT_FORECAST_PARAMETERS } from "@/app/models/ForecastParameters";
