@@ -1,10 +1,10 @@
 "use client";
 import React from "react";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis, LabelList, ReferenceLine } from "recharts";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/card";
 import {
   ChartConfig,
-} from "@/components/ui/chart";
+} from "@/components/chart";
 import {
   StyledChartContainer,
 } from "../ui/StyledChartContainer";

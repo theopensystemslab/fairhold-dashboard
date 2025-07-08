@@ -4,7 +4,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet"
+} from "@/components/sheet"
 import { QuestionMarkCircledIcon } from "@radix-ui/react-icons";
 import React, { ReactNode } from "react";
 

@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import GraphCard from "../../ui/GraphCard";
-import HowMuchPerMonthWrapper from "../../graphs/HowMuchPerMonthWrapper";
+import HowMuchPerMonthWrapper from "../graphs/HowMuchPerMonthWrapper";
 import { Drawer } from "../../ui/Drawer";
 import { DashboardProps } from "../../ui/Dashboard";
 import ReactMarkdown from 'react-markdown';

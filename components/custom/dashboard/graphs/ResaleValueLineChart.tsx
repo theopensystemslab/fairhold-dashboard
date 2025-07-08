@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, TooltipProps, Tooltip, LabelList } from "recharts";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/card";
 import {
   ChartConfig,
-} from "@/components/ui/chart";
+} from "@/components/chart";
 import {
   StyledChartContainer,
 } from "../ui/StyledChartContainer";

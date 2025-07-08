@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import GraphCard from "../../ui/GraphCard";
-import ResaleValueWrapper from "../../graphs/ResaleValueWrapper";
+import ResaleValueWrapper from "../graphs/ResaleValueWrapper";
 import { Drawer } from "../../ui/Drawer";
 import { Household } from "@/app/models/Household";
 import TenureSelector from "../../ui/TenureSelector";

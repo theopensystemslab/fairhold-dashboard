@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import ErrorBoundary from "../ErrorBoundary";
+import ErrorBoundary from "../../ErrorBoundary";
 import { Household } from "@/app/models/Household";
 import HowMuchFHCostBarChart from "./HowMuchFHCostBarChart";
 import HowMuchFHCostNotViableBarChart from "./HowMuchFHCostNotViableBarChart";

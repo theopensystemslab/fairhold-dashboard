@@ -1,4 +1,4 @@
-import { ChartContainer } from "@/components/ui/chart";
+import { ChartContainer } from "@/components/chart";
 import { ComponentProps } from "react";
 
 type ChartContainerProps = ComponentProps<typeof ChartContainer>

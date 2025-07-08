@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/button"
 import { ReloadIcon } from "@radix-ui/react-icons"
 
 export const WhatWouldYouChoose: React.FC = () => {
