@@ -96,7 +96,14 @@ const config: Config = {
   ],
 
   // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
-  // moduleNameMapper: {},
+    moduleNameMapper: {
+    '^@components/(.*)$': '<rootDir>/components/$1',
+    '^@context/(.*)$': '<rootDir>/context/$1',
+    '^@models/(.*)$': '<rootDir>/models/$1',
+    '^@lib/(.*)$': '<rootDir>/lib/$1',
+    '^@schemas/(.*)$': '<rootDir>/schemas/$1',
+    '^@services/(.*)$': '<rootDir>/services/$1',
+  },
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
   // modulePathIgnorePatterns: [],
