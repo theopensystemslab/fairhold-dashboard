@@ -9,7 +9,7 @@ import { socialRentAdjustmentsService } from "./socialRentAdjustmentsService";
 import { socialRentEarningsService } from "./socialRentEarningsService";
 import { rentService } from "./rentService"
 
-import { Calculation } from "../schemas/calculationSchema";
+import { Calculation } from "@schemas/calculationSchema";
 import { APIError } from "../lib/calculator/exceptions";
 
 const prisma = new PrismaClient();
