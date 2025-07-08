@@ -1,6 +1,6 @@
 import React from "react";
 import { UseFormRegister, Path } from "react-hook-form";
-import { Calculation } from "@/app/schemas/calculationSchema";
+import { Calculation } from "@/schemas/calculationSchema";
 
 interface RadioButtonProps {
   id: string;

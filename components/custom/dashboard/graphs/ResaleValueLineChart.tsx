@@ -6,7 +6,7 @@ import {
 } from "@/components/chart";
 import {
   StyledChartContainer,
-} from "../ui/StyledChartContainer";
+} from "@components/custom/ui/StyledChartContainer";
 import { formatValue } from "@/lib/calculator/format";
 import { MaintenanceLevel } from "@/models/constants";
 import { CustomLabelListContentProps } from "./shared";

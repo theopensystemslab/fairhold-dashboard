@@ -7,7 +7,7 @@ import {
 } from "@/components/chart";
 import {
   StyledChartContainer,
-} from "../ui/StyledChartContainer";
+} from "@components/custom/ui/StyledChartContainer";
 import { BarLabelListTopLeft, CustomLabelListContentProps, CustomTick, getLabel } from "./shared"
 
 const chartConfig = {

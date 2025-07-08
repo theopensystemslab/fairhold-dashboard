@@ -1,9 +1,9 @@
-import { PostcodeScales } from "../app/schemas/calculationSchema";
+import { PostcodeScales } from "@schemas/calculationSchema";
 import { createForecastParameters } from "./ForecastParameters";
 import { Household } from "./Household";
 import { HouseType, Property } from "./Property";
 import { MaintenanceLevel, MONTHS_PER_YEAR } from "./constants";
-import { socialRentAdjustmentTypes } from "../data/socialRentAdjustmentsRepo";
+import { socialRentAdjustmentTypes } from "@data/socialRentAdjustmentsRepo";
 
 // TODO: Share type with backend
 export interface ResponseData {

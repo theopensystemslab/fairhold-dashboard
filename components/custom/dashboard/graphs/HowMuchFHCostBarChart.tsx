@@ -7,7 +7,7 @@ import {
 } from "@/components/chart";
 import {
   StyledChartContainer,
-} from "../ui/StyledChartContainer";
+} from "@components/custom/ui/StyledChartContainer";
 import { useState } from "react";
 import { BarLabelListTopLeft, CustomTick, getLabel, getColor } from "./shared"
 

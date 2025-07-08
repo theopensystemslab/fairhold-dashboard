@@ -1,4 +1,4 @@
-import "./../../webflow.css";
+import "@app/webflow.css";
 
 import Image from "next/image";
 
