@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import Dashboard from "@components/custom/ui/Dashboard";
 import { Header } from "@components/custom/ui/Header";
 import { Footer } from "@components/custom/ui/Footer";
@@ -13,7 +13,7 @@ import { Household } from "@models/Household";
 
 type View = "loading" | "dashboard";
 
-const ResultsPage = () => {
+const ResultsPageContent = () => {
     const [view, setView] = useState<View>("loading");
     const [data, setData] = useState<Household | null>(null);
 
@@ -55,8 +55,6 @@ const ResultsPage = () => {
     }, [params.toString()]); // re-run if params change
 
 return (
-    <>
-        <Header />
         <main>
             <div className="min-h-[70vh] flex items-center justify-center">
                 {view === "loading" && (
@@ -67,9 +65,17 @@ return (
                 )}
             </div>
         </main>
+    );
+};
+
+const ResultsPage = () => (
+    <>
+        <Header />
+        <Suspense fallback={<ClipLoader color="black" size={50} />}>
+            <ResultsPageContent />
+        </Suspense>
         <Footer />
     </>
-    );
-}
+);
 
 export default ResultsPage;
