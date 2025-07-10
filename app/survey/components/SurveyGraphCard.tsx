@@ -8,7 +8,7 @@ type Props = React.PropsWithChildren<{
 
 const SurveyGraphCard: React.FC<Props> = ({ title, subtitle, action, children }) => {
   return (
-    <div className="justify-center w-full bg-white m-4 p-4">
+    <div className="flex flex-1 flex-col justify-center h-full w-full bg-white m-4 p-4">
         <h3 className={`text-xl md:text-lg sm:text-md font-bold text-black`}>{title}</h3>
                 {(subtitle || action) && (
           <div className="flex items-center gap-4 mt-2">
@@ -16,7 +16,7 @@ const SurveyGraphCard: React.FC<Props> = ({ title, subtitle, action, children })
             {action}
           </div>
         )}      
-        {children && <div className="mt-4 h-[calc(60vh-16rem)]">{children}</div>}
+        {children && <div className="mt-4 flex-1">{children}</div>}
     </div>
   );
 };
