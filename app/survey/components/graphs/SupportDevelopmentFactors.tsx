@@ -35,14 +35,23 @@ export const SupportDevelopmentFactors = () => {
                 height={480}
                 layout="vertical"
             >
-                <XAxis type="number" /> 
+                <XAxis 
+                  type="number" 
+                  tick={false}
+                  tickLine={false}
+                  axisLine={false}                  
+                /> 
                 <YAxis 
                     type="category"    
                     dataKey="answer" 
                     width={350} 
                     fontSize={10}
                     interval={0}
-                    tick={Tick}/> 
+                    tick={Tick}
+                    axisLine={false}
+                    tickLine={false}
+                    /> 
+                    
                 <Bar dataKey="value" fill="rgb(var(--fairhold-equity-color-rgb))" /> 
             </BarChart>
             </ResponsiveContainer>
