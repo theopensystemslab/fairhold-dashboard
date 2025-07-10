@@ -43,7 +43,7 @@ export const SupportDevelopmentFactors = () => {
                     fontSize={10}
                     interval={0}
                     tick={Tick}/> 
-                <Bar dataKey="value" fill="rgb(var(--survey-placeholder))" /> 
+                <Bar dataKey="value" fill="rgb(var(--fairhold-equity-color-rgb))" /> 
             </BarChart>
             </ResponsiveContainer>
         </SurveyGraphCard>
