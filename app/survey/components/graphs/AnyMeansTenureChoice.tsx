@@ -27,16 +27,15 @@ const RankLabel: React.FC<CustomLabelListContentProps> = ({ index, x, y }) => {
 };
 
 const ColoredYAxisTick: React.FC<CustomYTickProps> = ({ x, y, payload: { value: label }  }) => {
-    const answerStr = Array.isArray(label) ? label[0] : label;
     return (
         <text
             x={x}
             y={y + 5}
-            fill={TENURE_COLORS[answerStr] || "rgb(var(--text-inaccessible-rgb))"}
+            fill={TENURE_COLORS[label] || "rgb(var(--text-inaccessible-rgb))"}
             fontSize={10}
             textAnchor="end"
         >
-            {answerStr}
+            {label}
         </text>
     );
 };
@@ -79,20 +78,14 @@ export const AnyMeansTenureChoice = () => {
                 )}
                   /> 
               <Bar dataKey="value">
-                {anyMeansTenureChoice.map((entry, index) => {
-                    let answerStr = "";
-                    if (Array.isArray(entry.answer)) {
-                        answerStr = entry.answer[0] ?? "";
-                    } else if (typeof entry.answer === "string") {
-                        answerStr = entry.answer;
-                    }
-                    return (
+                {
+                    anyMeansTenureChoice.map(({ answer }, index) => (
                         <Cell
                             key={`cell-${index}`}
-                            fill={TENURE_COLORS[answerStr] || "rgb(var(--text-inaccessible-rgb))"}
+                            fill={TENURE_COLORS[answer] || "rgb(var(--text-inaccessible-rgb))"}
                         />
-                    );
-                })}
+                    ))
+                }
                 <LabelList 
                     dataKey="value"
                     position="insideStart"

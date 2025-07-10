@@ -36,10 +36,13 @@ type ExcludedRawResults =
 
 type ResultKeys = Exclude<keyof RawResults, ExcludedRawResults>;
 
+export type ResultGroupedByTenure = Record<string, BarOrPieResult[]>
+
+// Mapped type to link input key without output shape
 export type BarOrPieResults = {
-    [K in ResultKeys]: K extends "housingOutcomes"
-        ? Record<string, BarOrPieResult[]>
-        : BarOrPieResult[];
+    [K in ResultKeys]:
+        K extends "housingOutcomes" ? ResultGroupedByTenure :
+        BarOrPieResult[];
 };
 
 export type BarOrPieResult = {

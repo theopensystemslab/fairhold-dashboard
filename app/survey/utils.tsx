@@ -90,7 +90,7 @@ const addBarOrPieResult = (results: BarOrPieResults, rawResult: RawResults) => {
 
         // We handle anyMeansTenureChoice differently because it's ranked choice, and each rank has a points-based weight
         if (validKey === "anyMeansTenureChoice") { 
-            handleAnyMeansTenureChoice(results, value);
+            handleAnyMeansTenureChoice(results, value as string[]);
             return;
         }
 
@@ -209,15 +209,13 @@ const addResultItem = (arr: BarOrPieResult[], item: string, weight: number = 1) 
         : arr.push({ answer: item, value: 1 });
 };
 
-const handleAnyMeansTenureChoice = (results: BarOrPieResults, value: unknown) => {
-    if (Array.isArray(value)) {
-        value.forEach((item, idx) => {
-            // Tidying the string
-            let shortAnswer = item.split("––")[0].trim();
-            shortAnswer = shortAnswer.replace("Freehold", "Market purchase");
-            // For now: 5 weight for position 1, 4 for position 2, etc.
-            const weight = Math.max(5 - idx, 1);
-            addResultItem(results.anyMeansTenureChoice, shortAnswer, weight);
-        });
-    }
+const handleAnyMeansTenureChoice = (results: BarOrPieResults, value: string[]) => {
+    value.forEach((item, idx) => {
+        // Tidying the string
+        let shortAnswer = item.split("––")[0].trim();
+        shortAnswer = shortAnswer.replace("Freehold", "Market purchase");
+        // For now: 5 weight for position 1, 4 for position 2, etc.
+        const weight = Math.max(5 - idx, 1);
+        addResultItem(results.anyMeansTenureChoice, shortAnswer, weight);
+    });
 };
