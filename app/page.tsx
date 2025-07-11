@@ -14,7 +14,7 @@ export default function Home() {
   return (
     <>
     <Header />
-    <main className={inter.className}>
+    <main className={`${inter.className} main-content`}>
       <Suspense fallback={<ClipLoader />}>
         <CalculatorInput />
       </Suspense>

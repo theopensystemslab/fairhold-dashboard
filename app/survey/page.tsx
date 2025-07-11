@@ -65,7 +65,7 @@ export default function SurveyPage() {
     <ErrorBoundary>
       <Header />
         <SurveyContext.Provider value={surveyResults}>
-          <main className={`${inter.className} min-h-screen w-full bg-[rgb(var(--background-end-rgb))]`}>
+          <main className={`${inter.className} main-content min-h-screen w-full bg-[rgb(var(--background-end-rgb))]`}>
             <div className="flex flex-row">
               <div className="hidden md:block w-1/4"></div>
 
