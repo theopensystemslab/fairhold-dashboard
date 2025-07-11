@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Inter } from "next/font/google";
 import ErrorBoundary from '@components/custom/ErrorBoundary';
 import { SurveyResults } from '@lib/survey/types';
 import { Age } from '@components/custom/survey/graphs/Age';
@@ -23,11 +22,6 @@ import { SurveyContext } from '@context/surveyContext';
 // get record https://api.airtable.com/v0/{baseId}/{tableIdOrName}/{recordId}
 import { Header } from "@components/custom/ui/Header";
 import { Footer } from "@components/custom/ui/Footer";
-
-const inter = Inter({
-  weight: ["500", "600", "700", "800"],
-  subsets: ["greek", "greek-ext", "latin", "latin-ext"],
-});
 
 export default function SurveyPage() {
   const [surveyResults, setSurveyResults] = useState<SurveyResults | null>(null);
@@ -65,7 +59,7 @@ export default function SurveyPage() {
     <ErrorBoundary>
       <Header />
         <SurveyContext.Provider value={surveyResults}>
-          <main className={`${inter.className} main-content min-h-screen w-full bg-[rgb(var(--background-end-rgb))]`}>
+          <main className={`main-content min-h-screen w-full ]`}>
             <div className="flex flex-row">
               <div className="hidden md:block w-1/4"></div>
 
