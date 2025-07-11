@@ -3,7 +3,7 @@ import "@app/webflow.css";
 import Image from "next/image";
 
 export const Footer: React.FC = () => (
-  <footer className="footer mt-5">
+  <footer className="footer">
     <div className="w-layout-blockcontainer container w-container">
       <div className="columns w-row">
         <div className="column-6 w-col w-col-3"><a href="#" className="footer-link-block w-inline-block">
