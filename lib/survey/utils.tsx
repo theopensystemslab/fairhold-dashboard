@@ -100,7 +100,7 @@ const addSankeyResult = (results: SankeyResults, rawResult: RawResults) => {
 
         // We want to show a more granular version of current tenure for this graph, so 'from' value should be either ownershipModel or rentalModel
         if (newKey === "currentMeansTenureChoice") {
-            fromValue = rawResult.ownershipModel ?? rawResult.rentalModel;
+           fromValue = rawResult.ownershipModel ?? rawResult.rentalModel ?? rawResult.currentTenure;
         } else {
             fromValue = rawResult[fromKey as keyof RawResults] as string;
         }
