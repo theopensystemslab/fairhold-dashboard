@@ -53,7 +53,7 @@ type CustomLinkPayload = {
 }
 
 type SankeyProps = {
-    nodes: Array<{name: string, color?: string}>;
+    nodes: Array<{name: string}>;
     links: Array<{source: number, target: number, value: number}>;
     leftLabel?: string;
     rightLabel?: string;
@@ -69,6 +69,7 @@ export const CustomSankey: React.FC<SankeyProps> = ({
     // Custom Node Component with Label 
     const CustomNode = (props: CustomNodeProps) => { 
         const isLeft = props.payload.depth === 0;
+        const adjustmentFactor = 80;
         return ( 
             <g> 
                 <Rectangle 
@@ -76,7 +77,7 @@ export const CustomSankey: React.FC<SankeyProps> = ({
                     fill={props.payload.color || "rgb(var(--survey-grey-mid))"} 
                 /> 
                 <text 
-                    x={isLeft ? props.x - 80 : props.x + props.width + 80}
+                    x={isLeft ? props.x - adjustmentFactor : props.x + props.width + adjustmentFactor}
                     y={props.y + props.height / 2} 
                     textAnchor={props.payload.depth === 0 ? "start" : "end"}
                     dominantBaseline="middle" 
@@ -104,10 +105,10 @@ export const CustomSankey: React.FC<SankeyProps> = ({
         const sourceColor = payload.source.color || "rgb(var(--survey-grey-mid))";
         const targetColor = payload.target.color || "rgb(var(--survey-grey-mid))";
 
-        const sanitize = (str: string) => str.replace(/[^a-zA-Z0-9-_]/g, "");
+        const sanitize = (str: string) => str.replace(/[^a-zA-Z0-9-_]/g, ""); // handle special characters (eg for tenure like "I don't know")
         const sourceLabel = sanitize(payload.source.name.replace(/\s+/g, "-"));
         const targetLabel = sanitize(payload.target.name.replace(/\s+/g, "-"));
-        const gradientId = `link-gradient-${sourceLabel}-to-${targetLabel}`;
+        const gradientId = `link-gradient-${sourceLabel}-to-${targetLabel}`; // we need a unique ID
 
         // Calculate a midpoint for the label 
         const midX = (sourceX + targetX) / 2; 
@@ -164,7 +165,6 @@ export const CustomSankey: React.FC<SankeyProps> = ({
                 <span>{leftLabel}</span>
                 <span>{rightLabel}</span>
             </div>
-            {/* Sankey chart below labels */}
             <div style={{ width: "100%", height: "calc(100% - 40px)", marginTop: 40 }}>
                 <ResponsiveContainer width="100%" height="100%">
                     <Sankey
