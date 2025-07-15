@@ -84,7 +84,7 @@ export default function SurveyPage() {
 
                     <div className="flex flex-col">
                       <h3 className="text-xl font-medium">Housing preferences</h3>
-                      <div className="flex flex-col md:flex-row w-full md:h-[30rem] p-4">
+                      <div className="flex flex-col md:flex-row md:h-[30rem] p-4">
                         <IdealHouseType />
                         <IdealLiveWith />
                       </div>

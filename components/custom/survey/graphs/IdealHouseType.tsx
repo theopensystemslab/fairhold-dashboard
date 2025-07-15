@@ -1,24 +1,21 @@
 import React from "react"
 import SurveyGraphCard from "@/components/custom/survey/SurveyGraphCard";
 import { CustomSankey } from "../CustomSankey";
-import { ResponsiveContainer } from "recharts";
 import { useSurveyContext } from "@context/surveyContext";
 
 
 export const IdealHouseType = () => {
-    const idealHouseType = useSurveyContext().sankey.idealHouseType;
+    const { idealHouseType } = useSurveyContext().sankey;
     
     return (
         <SurveyGraphCard title="What type of home do you want to live in?">
-            <ResponsiveContainer>
-                <CustomSankey
-                    nodes={idealHouseType.nodes}
-                    links={idealHouseType.links}       
-                    leftLabel="Current"
-                    rightLabel="Ideal"
-                    >
-                </CustomSankey>
-            </ResponsiveContainer>
+            <CustomSankey
+                nodes={idealHouseType.nodes}
+                links={idealHouseType.links}       
+                leftLabel="Current"
+                rightLabel="Ideal"
+                >
+            </CustomSankey>
         </SurveyGraphCard>
     )
 }
