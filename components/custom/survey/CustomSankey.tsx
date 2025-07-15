@@ -75,12 +75,20 @@ type CustomLinkPayload = {
 type SankeyProps = {
     nodes: Array<{name: string}>;
     links: Array<{source: number, target: number, value: number}>;
+    leftLabel?: string;
+    rightLabel?: string;
 };
 
-export const CustomSankey: React.FC<SankeyProps> = ({ nodes, links }) => {
+export const CustomSankey: React.FC<SankeyProps> = ({ 
+    nodes, 
+    links,
+    leftLabel,
+    rightLabel
+}) => {
 
     // Custom Node Component with Label 
     const CustomNode = (props: CustomNodeProps) => { 
+        const isLeft = props.payload.depth === 0;
         return ( 
             <g> 
                 <Rectangle 
@@ -88,9 +96,9 @@ export const CustomSankey: React.FC<SankeyProps> = ({ nodes, links }) => {
                     fill={"rgb(var(--fairhold-equity-color-rgb))"} 
                 /> 
                 <text 
-                    x={props.x + props.width / 2} 
+                    x={isLeft ? props.x - 80 : props.x + props.width + 80}
                     y={props.y + props.height / 2} 
-                    textAnchor="middle" 
+                    textAnchor={props.payload.depth === 0 ? "start" : "end"}
                     dominantBaseline="middle" 
                     fill="rgb(var(--text-default-rgb))" 
                     fontSize={12} 
@@ -136,24 +144,45 @@ export const CustomSankey: React.FC<SankeyProps> = ({ nodes, links }) => {
     }; 
 
     return (
-        <ResponsiveContainer width="100%" height="100%">
-        <Sankey
-            data={{
-                nodes: nodes,
-                links: links
-            }}
-            node={CustomNode}
-            link={CustomLink}
-            nodePadding={50}
-            margin={{
-                left: 60,
-                right: 6e0,
-                top: 50,
-                bottom: 50,
-            }}
-        >
-            <Tooltip />
-        </Sankey>
-        </ResponsiveContainer> 
+        <div style={{ width: "100%", height: "100%", position: "relative" }}>
+            <div style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                width: "100%",
+                padding: "0 2rem 0 2rem",
+                position: "absolute",
+                top: 0,
+                left: 0,
+                pointerEvents: "none",
+                zIndex: 1,
+                height: 40
+            }}>
+                <span>{leftLabel}</span>
+                <span>{rightLabel}</span>
+            </div>
+            {/* Sankey chart below labels */}
+            <div style={{ width: "100%", height: "calc(100% - 40px)", marginTop: 40 }}>
+                <ResponsiveContainer width="100%" height="100%">
+                    <Sankey
+                        data={{
+                            nodes: nodes,
+                            links: links
+                        }}
+                        node={CustomNode}
+                        link={CustomLink}
+                        nodePadding={50}
+                        margin={{
+                            left: 150,
+                            right: 100,
+                            top: 50,
+                            bottom: 50,
+                        }}
+                    >
+                        <Tooltip />
+                    </Sankey>
+                </ResponsiveContainer>
+            </div>
+        </div>
     )
 }
