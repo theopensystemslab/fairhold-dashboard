@@ -9,7 +9,7 @@ export const CurrentMeansTenureChoice = () => {
     
     const coloredNodes = applyNodeColors(currentMeansTenureChoice.nodes);
     return (
-        <SurveyGraphCard title="Could you afford a Fairhold home in your area?">
+        <SurveyGraphCard title="Which tenure would you choose?">
             <ResponsiveContainer width="100%" height="100%">
                 <CustomSankey
                     nodes={coloredNodes}
