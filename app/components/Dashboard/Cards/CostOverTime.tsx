@@ -75,7 +75,7 @@ export const CostOverTime: React.FC<DashboardProps> = ({ processedData }) => {
         </span>
       }
       >
-      <div className="flex flex-col h-full w-full md:w-3/4 justify-between">
+      <div className="flex flex-col h-full w-full justify-between">
         <div className="flex gap-2 mb-4">
             <div className="block md:hidden w-full">
               <TenureSelectorMobile
