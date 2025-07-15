@@ -5,14 +5,19 @@ import { ResponsiveContainer } from "recharts";
 import { useSurveyContext } from "@context/surveyContext";
 import { applyNodeColors } from "@lib/survey/utils";
 export const CurrentMeansTenureChoice = () => {
-    const currentMeansTenureChoice = useSurveyContext().sankey.currentMeansTenureChoice;
-    
-    const coloredNodes = applyNodeColors(currentMeansTenureChoice.nodes);
+    const { currentMeansTenureChoice } = useSurveyContext().sankey;
+    // We use suffixes to distinguish between current and ideal so we don't end up with circular links (eg for Freehold -> Freehold), so we need to remove the suffixes
+    let formattedNodes = currentMeansTenureChoice.nodes.map((node) => ({
+        ...node,
+        name: node.name.replace(/_(0|1)$/, ""),
+    }));
+    formattedNodes = applyNodeColors(formattedNodes);
+
     return (
         <SurveyGraphCard title="Which tenure would you choose?">
             <ResponsiveContainer width="100%" height="100%">
                 <CustomSankey
-                    nodes={coloredNodes}
+                    nodes={formattedNodes}
                     links={currentMeansTenureChoice.links}     
                     leftLabel="Current situation"
                     rightLabel="Ideal, with current means"   

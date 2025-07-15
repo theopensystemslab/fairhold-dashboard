@@ -111,10 +111,17 @@ const addSankeyResult = (results: SankeyResults, rawResult: RawResults) => {
 
         const sankeyResult = results[newKey as keyof SankeyResults];
 
-        if (isArray && Array.isArray(toValue) && toValue.length > 0) {
-            updateSankeyNodesAndLinks(sankeyResult, fromValue, toValue[0]);
+        // For currentMeansTenureChoice, distinguish left/right nodes
+        if (newKey === "currentMeansTenureChoice") {
+            const fromNode = fromValue + "_0";
+            const toNode = (toValue as string) + "_1";
+            updateSankeyNodesAndLinks(sankeyResult, fromNode, toNode);
         } else {
-            updateSankeyNodesAndLinks(sankeyResult, fromValue, toValue as string);
+            if (isArray && Array.isArray(toValue) && toValue.length > 0) {
+                updateSankeyNodesAndLinks(sankeyResult, fromValue, toValue[0]);
+            } else {
+                updateSankeyNodesAndLinks(sankeyResult, fromValue, toValue as string);
+            }
         }
     });
 };
@@ -298,10 +305,14 @@ const aggregateOther = (arr: BarOrPieResult[]): BarOrPieResult[] => {
 };
 
 export const applyNodeColors = (nodes: {name: string }[]) => {
-    return nodes.map(node => ({
-        ...node,
-        color: TENURE_CHOICE_COLOR_MAP[node.name] || "rgb(var(--survey-grey-mid))"
-    }))
+    return nodes.map(node => {
+        // Remove suffix for color lookup if present
+        const baseName = node.name.replace(/ \((current|ideal)\)$/i, "");
+        return {
+            ...node,
+            color: TENURE_CHOICE_COLOR_MAP[baseName] || "rgb(var(--survey-grey-mid))"
+        };
+    });
 }
 
 export const applyLinkColors = (
