@@ -13,7 +13,10 @@ export const IdealHouseType = () => {
             <ResponsiveContainer>
                 <CustomSankey
                     nodes={idealHouseType.nodes}
-                    links={idealHouseType.links}            >
+                    links={idealHouseType.links}       
+                    leftLabel="Current"
+                    rightLabel="Ideal"
+                    >
                 </CustomSankey>
             </ResponsiveContainer>
         </SurveyGraphCard>
