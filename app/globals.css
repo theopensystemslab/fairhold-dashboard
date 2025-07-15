@@ -22,13 +22,15 @@
   --fairhold-equity-color-rgb: 74 179 91;
   --fairhold-interest-color-rgb: 159 211 166;
   --fairhold-detail-color-rgb: 207 227 209;
-  --private-rent-land-color-rgb: 45 155 240;
+  --leasehold-color-rgb: 29, 112, 184, 0.8; /* some colours / tenures are only used in the survey results, not the calculator results--so we only have one version of them */
+  --private-rent-land-color-rgb: 45 155 240; 
   --private-rent-house-color-rgb: 119 188 242;
   --private-rent-detail-color-rgb: 203 225 242;
   --shared-ownership-color-rgb: 149, 151, 202;
   --social-rent-land-color-rgb: 255 97 118;
   --social-rent-house-color-rgb: 242 160 171;
   --social-rent-detail-color-rgb: 242 196 202;
+  --affordable-rent-color-rgb: 255, 97, 118, 0.8;
   --error-text-rgb: 181 31 20;
   --not-viable-light-color-rgb: 251 164 164;
   --not-viable-dark-color-rgb: 255 0 0;
