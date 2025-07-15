@@ -92,7 +92,7 @@ export default function SurveyPage() {
                         <HousingOutcomes />
                         <AffordFairhold />
                       </div>
-                      <div className="flex flex-col md:flex-row md:h-[30rem] p-4">
+                      <div className="flex flex-col md:flex-row md:h-[50rem] p-4">
                         <CurrentMeansTenureChoice />
                       </div>
                       <div className="flex flex-col md:flex-row md:h-[30rem] p-4">
