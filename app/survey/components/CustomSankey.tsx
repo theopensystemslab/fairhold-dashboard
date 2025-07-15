@@ -9,6 +9,7 @@ type CustomNodeProps = {
     height: number;
     index: number;
     payload: NodePayload;
+    color?: string;
 }
 
 type NodePayload = {
@@ -77,13 +78,15 @@ type SankeyProps = {
     links: Array<{source: number, target: number, value: number}>;
     leftLabel?: string;
     rightLabel?: string;
+    color?: string;
 };
 
 export const CustomSankey: React.FC<SankeyProps> = ({ 
     nodes, 
     links,
     leftLabel,
-    rightLabel
+    rightLabel,
+    color
 }) => {
 
     // Custom Node Component with Label 
@@ -93,7 +96,7 @@ export const CustomSankey: React.FC<SankeyProps> = ({
             <g> 
                 <Rectangle 
                     {...props} 
-                    fill={"rgb(var(--fairhold-equity-color-rgb))"} 
+                    fill={color || "rgb(var(--fairhold-equity-color-rgb))"} 
                 /> 
                 <text 
                     x={isLeft ? props.x - 80 : props.x + props.width + 80}
@@ -122,7 +125,7 @@ export const CustomSankey: React.FC<SankeyProps> = ({
                 <path 
                     d={`M${sourceX},${sourceY}C${sourceControlX},${sourceY} ${targetControlX},${targetY} ${targetX},${targetY}`} 
                     fill="none" 
-                    stroke={"rgb(var(--fairhold-equity-color-rgb))"} 
+                    stroke={color || "rgb(var(--fairhold-equity-color-rgb))"} 
                     strokeOpacity={0.5} 
                     strokeWidth={linkWidth} 
                 /> 
