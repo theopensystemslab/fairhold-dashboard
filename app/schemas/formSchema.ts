@@ -17,41 +17,22 @@ export const formSchema = z.object({
     .string()
     .transform((val) => (val === "" ? undefined : Number(val)))
     .optional()
-    .refine((value) => value === undefined || value > 0, {
+    .refine((value) => value === undefined || (!isNaN(value) && value > 0), {
       message: "Enter a positive house size.",
     }),
   houseAge: z
+    .number()
+    .min(1, { message: "Enter a valid estimated build year." })
+    .or(z.undefined())
+    .refine((value) => value !== undefined, {
+      message: "Enter an estimated build year."
+    }),
+  houseBedrooms: z.coerce
     .number({
-      required_error: "Enter an estimated build year.",
-      invalid_type_error: "Enter a valid estimated build year."
+      message: "Enter a valid number of bedrooms."
     })
-    .transform((val) => {
-      if (val === null || val === undefined) return undefined;
-      const parsed = Number(val);
-      return isNaN(parsed) ? undefined : parsed;
-    })
-    .pipe(
-      z.number({
-        invalid_type_error: "Enter a valid number for house age."
-      })
-      .nonnegative("Enter a positive number or 0.")
-    ),
-  houseBedrooms: z
-    .string({
-      required_error: "Enter the number of bedrooms.",
-      invalid_type_error: "Enter a valid number of bedrooms."
-    })
-    .transform((val) => {
-      if (!val) return undefined;
-      const parsed = Number(val);
-      return isNaN(parsed) ? undefined : parsed;
-    })
-    .pipe(
-      z.number({
-        invalid_type_error: "Enter a valid number of bedrooms."
-      })
-      .positive("Enter a positive number.")
-    ),
+    .positive("Enter a positive number.")
+    .or(z.literal("").transform(() => { throw new Error("Enter the number of bedrooms."); })),
   houseType: HouseTypeEnum.refine(
     (value) => HouseTypeEnum.options.includes(value),
     {
