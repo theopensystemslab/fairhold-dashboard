@@ -314,14 +314,3 @@ export const applyNodeColors = (nodes: {name: string }[]) => {
         };
     });
 }
-
-export const applyLinkColors = (
-  links: { source: number; target: number; value: number }[],
-  nodes: { name: string; color?: string }[]
-) => {
-  return links.map(link => ({
-    ...link,
-    sourceColor: nodes[link.source]?.color || "rgb(var(--survey-grey-mid))",
-    targetColor: nodes[link.target]?.color || "rgb(var(--survey-grey-mid))"
-  }));
-};
