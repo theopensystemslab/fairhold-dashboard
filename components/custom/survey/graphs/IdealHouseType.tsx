@@ -16,6 +16,7 @@ export const IdealHouseType = () => {
                     links={idealHouseType.links}       
                     leftLabel="Current"
                     rightLabel="Ideal"
+                    color="rgb(var(--survey-grey-mid))"
                     >
                 </CustomSankey>
             </ResponsiveContainer>
