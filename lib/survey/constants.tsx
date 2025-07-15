@@ -113,3 +113,16 @@ export const LABEL_MAP: Record<string, { labels: Record<string, string>, default
   whyNotFairhold: { labels: WHY_NOT_FAIRHOLD_LABELS },
   supportDevelopmentFactors: { labels: SUPPORT_DEVELOPMENT_LABELS }
 };
+
+
+export const TENURE_CHOICE_COLOR_MAP: Record<string, string> = {
+  "Freehold": "rgb(var(--freehold-equity-color-rgb))",
+  "Leasehold": "rgb(var(--leasehold-color-rgb)))",
+  "Shared ownership": "rgb(var(--shared-ownership-color-rgb))",
+  "Affordable ownership": "rgb(var(--affordable-rent-color-rgb))",
+  "Market rent": "rgb(var(--private-rent-land-color-rgb))",
+  "Affordable rent": "rgb(var(--affordable-rent-color-rgb))",
+  "Fairhold": "rgb(var(--fairhold-land-rent-color-rgb))",
+  "Social rent": "rgb(var(--social-rent-land-color-rgb))",
+  "I don't know": "rgb(var(--survey-grey-mid))"
+};

@@ -24,6 +24,7 @@ type NodePayload = {
     dx: number;
     y: number;
     dy: number;
+    color?: string;
 }
 
 type CustomLinkProps = {
@@ -41,52 +42,28 @@ type CustomLinkProps = {
 }
 
 type CustomLinkPayload = {
-    source: {
-        name: string;
-        sourceNodes: [];
-        sourceLinks: [];
-        targetLinks: [];
-        targetNodes: [];
-        value: number;
-        depth: number;
-        x: number;
-        dx: number;
-        y: number;
-        dy: number;
-    },
-    target: {
-        name: string;
-        sourceNodes: [];
-        sourceLinks: [];
-        targetLinks: [];
-        targetNodes: [];
-        value: number;
-        depth: number;
-        x: number;
-        dx: number;
-        y: number;
-        dy: number;
-    },
+    source: NodePayload & { color?: string };
+    target: NodePayload & { color?: string };
     value: number;
     dy: number;
     sy: number;
     ty: number;
+    sourceColor?: string;
+    targetColor?: string;
 }
 
 type SankeyProps = {
-    nodes: Array<{name: string}>;
+    nodes: Array<{name: string, color?: string}>;
     links: Array<{source: number, target: number, value: number}>;
     leftLabel?: string;
     rightLabel?: string;
-    color?: string;
 };
 
 export const CustomSankey: React.FC<SankeyProps> = ({ 
     nodes, 
     links,
     leftLabel,
-    rightLabel,
-    color
+    rightLabel
 }) => {
 
     // Custom Node Component with Label 
@@ -96,7 +73,7 @@ export const CustomSankey: React.FC<SankeyProps> = ({
             <g> 
                 <Rectangle 
                     {...props} 
-                    fill={color || "rgb(var(--fairhold-equity-color-rgb))"} 
+                    fill={props.payload.color || "rgb(var(--fairhold-equity-color-rgb))"} 
                 /> 
                 <text 
                     x={isLeft ? props.x - 80 : props.x + props.width + 80}
@@ -114,7 +91,22 @@ export const CustomSankey: React.FC<SankeyProps> = ({
 
     // Custom Link Component with Label 
     const CustomLink = (props: CustomLinkProps) => { 
-        const { sourceX, targetX, sourceY, targetY, sourceControlX, targetControlX, linkWidth, payload } = props; 
+        const { 
+            sourceX, 
+            targetX, 
+            sourceY, 
+            targetY, 
+            sourceControlX, 
+            targetControlX, 
+            linkWidth, 
+            payload 
+        } = props; 
+        const sourceColor = payload.source.color || "rgb(var(--survey-grey-mid))";
+        const targetColor = payload.target.color || "rgb(var(--survey-grey-mid))";
+
+        const sourceLabel = payload.source.name.replace(/\s+/g, "-");
+        const targetLabel = payload.target.name.replace(/\s+/g, "-");
+        const gradientId = `link-gradient-${sourceLabel}-to-${targetLabel}`;
 
         // Calculate a midpoint for the label 
         const midX = (sourceX + targetX) / 2; 
@@ -122,10 +114,17 @@ export const CustomSankey: React.FC<SankeyProps> = ({
 
         return ( 
             <g> 
+                <defs>
+                    <linearGradient id={gradientId} gradientUnits="userSpaceOnUse"
+                        x1={sourceX} y1={sourceY} x2={targetX} y2={targetY}>
+                        <stop offset="0%" stopColor={sourceColor} />
+                        <stop offset="100%" stopColor={targetColor} />
+                    </linearGradient>
+                </defs>
                 <path 
                     d={`M${sourceX},${sourceY}C${sourceControlX},${sourceY} ${targetControlX},${targetY} ${targetX},${targetY}`} 
                     fill="none" 
-                    stroke={color || "rgb(var(--fairhold-equity-color-rgb))"} 
+                    stroke={`url(#${gradientId})`}
                     strokeOpacity={0.5} 
                     strokeWidth={linkWidth} 
                 /> 

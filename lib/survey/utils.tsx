@@ -6,6 +6,7 @@ import {
     LABEL_MAP,
     SUPPORT_DEVELOPMENT_ORDER,
     SUPPORT_FAIRHOLD_ORDER,
+  TENURE_CHOICE_COLOR_MAP,
 } from "./constants";
 
 const SANKEY_MAPPINGS = [
@@ -95,8 +96,18 @@ const addBarOrPieResult = (results: BarOrPieResults, rawResult: RawResults) => {
 
 const addSankeyResult = (results: SankeyResults, rawResult: RawResults) => {
     SANKEY_MAPPINGS.forEach(({ fromKey, toKey, newKey, isArray }) => {
-        const fromValue = rawResult[fromKey as keyof RawResults] as string;
-        const toValue = rawResult[toKey as keyof RawResults] as string;
+        let fromValue: string | undefined;
+
+        // We want to show a more granular version of current tenure for this graph, so 'from' value should be either ownershipModel or rentalModel
+        if (newKey === "currentMeansTenureChoice") {
+            fromValue = rawResult.ownershipModel ?? rawResult.rentalModel;
+        } else {
+            fromValue = rawResult[fromKey as keyof RawResults] as string;
+        }
+
+        const toValue = rawResult[toKey as keyof RawResults];
+
+        if (!fromValue || Array.isArray(fromValue) || !toValue) return;
 
         const sankeyResult = results[newKey as keyof SankeyResults];
 
@@ -284,4 +295,22 @@ const aggregateOther = (arr: BarOrPieResult[]): BarOrPieResult[] => {
         notOthers.push({ answer: "Other", value: otherValue });
     }
     return notOthers;
+};
+
+export const applyNodeColors = (nodes: {name: string }[]) => {
+    return nodes.map(node => ({
+        ...node,
+        color: TENURE_CHOICE_COLOR_MAP[node.name] || "rgb(var(--survey-grey-mid))"
+    }))
+}
+
+export const applyLinkColors = (
+  links: { source: number; target: number; value: number }[],
+  nodes: { name: string; color?: string }[]
+) => {
+  return links.map(link => ({
+    ...link,
+    sourceColor: nodes[link.source]?.color || "rgb(var(--survey-grey-mid))",
+    targetColor: nodes[link.target]?.color || "rgb(var(--survey-grey-mid))"
+  }));
 };
