@@ -73,7 +73,7 @@ export const CustomSankey: React.FC<SankeyProps> = ({
             <g> 
                 <Rectangle 
                     {...props} 
-                    fill={props.payload.color || "rgb(var(--fairhold-equity-color-rgb))"} 
+                    fill={props.payload.color || "rgb(var(--survey-grey-mid))"} 
                 /> 
                 <text 
                     x={isLeft ? props.x - 80 : props.x + props.width + 80}
