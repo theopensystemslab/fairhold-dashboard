@@ -104,8 +104,9 @@ export const CustomSankey: React.FC<SankeyProps> = ({
         const sourceColor = payload.source.color || "rgb(var(--survey-grey-mid))";
         const targetColor = payload.target.color || "rgb(var(--survey-grey-mid))";
 
-        const sourceLabel = payload.source.name.replace(/\s+/g, "-");
-        const targetLabel = payload.target.name.replace(/\s+/g, "-");
+        const sanitize = (str: string) => str.replace(/[^a-zA-Z0-9-_]/g, "");
+        const sourceLabel = sanitize(payload.source.name.replace(/\s+/g, "-"));
+        const targetLabel = sanitize(payload.target.name.replace(/\s+/g, "-"));
         const gradientId = `link-gradient-${sourceLabel}-to-${targetLabel}`;
 
         // Calculate a midpoint for the label 
@@ -126,7 +127,7 @@ export const CustomSankey: React.FC<SankeyProps> = ({
                     fill="none" 
                     stroke={`url(#${gradientId})`}
                     strokeOpacity={0.5} 
-                    strokeWidth={linkWidth} 
+                    strokeWidth={linkWidth}
                 /> 
                 {linkWidth > 5 && ( // Only show labels if link is wide enough 
                     <text 
