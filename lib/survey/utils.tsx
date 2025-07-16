@@ -30,7 +30,7 @@ export const aggregateResults = (rawResults: RawResults[]) => {
         addSankeyResult(sankey, rawResult);
     }
 
-    Object.entries(barOrPie).forEach(([key, arr]) => {
+    Object.entries(barOrPie).forEach(([key, arr]) => { // TODO: extract sorting into own function
         if (Array.isArray(arr)) {
             const customOrder = CUSTOM_ORDERS[key];
             if (customOrder) {
@@ -95,26 +95,22 @@ const addBarOrPieResult = (results: BarOrPieResults, rawResult: RawResults) => {
         }
 
         if (validKey === "housingOutcomes") {
-            handleHousingOutcomes(results, value, rawResult.currentTenure);
+            handleHousingOutcomes(results, value as string[], rawResult.currentTenure);
             return;
         }
 
-        if (Array.isArray(results[validKey])) {
-            const arr = results[validKey] as BarOrPieResult[];
-            const isMultipleChoiceAnswer = Array.isArray(value);
-            isMultipleChoiceAnswer
-                ? value.forEach(item => addResultItem(arr, item))
-                : addResultItem(arr, value);
-        }
+        const arr = results[validKey] as BarOrPieResult[];
+        const isMultipleChoiceAnswer = Array.isArray(value);
+        isMultipleChoiceAnswer
+            ? value.forEach(item => addResultItem(arr, item))
+            : addResultItem(arr, value);
     });
 };
 
 const addSankeyResult = (results: SankeyResults, rawResult: RawResults) => {
     SANKEY_MAPPINGS.forEach(({ fromKey, toKey, newKey, isArray }) => {
-        const fromValue = rawResult[fromKey as keyof RawResults];
-        const toValue = rawResult[toKey as keyof RawResults];
-
-        if (!fromValue || Array.isArray(fromValue) || !toValue) return; // Skip if either value is missing
+        const fromValue = rawResult[fromKey as keyof RawResults] as string;
+        const toValue = rawResult[toKey as keyof RawResults] as string;
 
         const sankeyResult = results[newKey as keyof SankeyResults];
 
@@ -185,19 +181,17 @@ const mapTenureCategory = (tenure: string): string => {
 
 const handleHousingOutcomes = (
     results: BarOrPieResults,
-    value: unknown,
+    value: string[],
     currentTenure: string
 ) => {
-    const tenure = mapTenureCategory(currentTenure || "Unknown");
+    const tenure = mapTenureCategory(currentTenure);
     if (!results.housingOutcomes[tenure]) {
         results.housingOutcomes[tenure] = [];
     }
-    if (Array.isArray(value)) {
-        value.forEach(item =>
-            addResultItem(results.housingOutcomes[tenure], item)
-        );
-    }
-};
+    value.forEach(item =>
+        addResultItem(results.housingOutcomes[tenure], item)
+    );
+}
 
 const getExistingResult = (arr: BarOrPieResult[], answer: string) =>
     arr.find((result) => result.answer === answer);
