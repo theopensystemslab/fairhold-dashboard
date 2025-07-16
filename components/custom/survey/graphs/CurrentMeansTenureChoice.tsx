@@ -19,8 +19,8 @@ export const CurrentMeansTenureChoice = () => {
                 <CustomSankey
                     nodes={formattedNodes}
                     links={currentMeansTenureChoice.links}     
-                    leftLabel="Current situation"
-                    rightLabel="Ideal, with current means"   
+                    leftLabel="I live in"
+                    rightLabel="I want to live in"   
                    >
                 </CustomSankey>
             </ResponsiveContainer>
