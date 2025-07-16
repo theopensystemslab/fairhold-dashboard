@@ -30,26 +30,9 @@ export const aggregateResults = (rawResults: RawResults[]) => {
         addSankeyResult(sankey, rawResult);
     }
 
-    Object.entries(barOrPie).forEach(([key, arr]) => { // TODO: extract sorting into own function
-        if (Array.isArray(arr)) {
-            const customOrder = CUSTOM_ORDERS[key];
-            if (customOrder) {
-                arr.sort(
-                  (a, b) =>
-                    customOrder.indexOf((a.answer ?? "") as string) -
-                    customOrder.indexOf((b.answer ?? "") as string)
-                );
-            } else {
-                arr.sort((a, b) => b.value - a.value);
-            }
-        }
-    });
+    const sortedBarOrPie = sortBarOrPieResults(barOrPie);
 
-    Object.values(barOrPie.housingOutcomes).forEach((arr) => {
-        arr.sort((a, b) => b.value - a.value);
-    });
-
-    return { numberResponses, barOrPie, sankey };
+    return { numberResponses, barOrPie: sortedBarOrPie, sankey };
 }
 
 const initializeBarOrPieResultsObject = (): BarOrPieResults => {
@@ -213,3 +196,27 @@ const handleAnyMeansTenureChoice = (results: BarOrPieResults, value: string[]) =
         addResultItem(results.anyMeansTenureChoice, shortAnswer, weight);
     });
 };
+
+const sortBarOrPieResults = (results: BarOrPieResults) => {
+    Object.entries(results).forEach(([key, arr]) => {
+        if (Array.isArray(arr)) {
+            // Only sort if key is one of the four with a custom order
+            if (["affordFairhold", "ageGroup", "supportDevelopment", "supportNewFairhold"].includes(key)) {
+                const customOrder = CUSTOM_ORDERS[key];
+                if (customOrder) {
+                    arr.sort(
+                        (a, b) =>
+                            customOrder.indexOf((a.answer ?? "") as string) -
+                            customOrder.indexOf((b.answer ?? "") as string)
+                    );
+                }
+            }
+        }
+    });
+
+    Object.values(results.housingOutcomes).forEach((arr) => {
+        arr.sort((a, b) => b.value - a.value);
+    });
+
+    return results;
+}

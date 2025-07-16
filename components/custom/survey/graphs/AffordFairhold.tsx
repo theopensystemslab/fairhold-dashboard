@@ -2,19 +2,9 @@ import React from "react"
 import SurveyGraphCard from "@components/custom/survey/SurveyGraphCard";
 import { PieChart, Pie, Legend, ResponsiveContainer, Cell } from "recharts";
 import { useSurveyContext } from "@context/surveyContext";
-import { AFFORD_FAIRHOLD } from "@lib/survey/constants";
-import { BarOrPieResult } from "@/lib/survey/types";
 
 export const AffordFairhold = () => {
-    let { affordFairhold } = useSurveyContext().barOrPie as { affordFairhold: BarOrPieResult[] };
-
-    const orderedAnswers = AFFORD_FAIRHOLD.map(({ label }) => label)
-
-    affordFairhold = affordFairhold.sort(
-    (a, b) =>
-        orderedAnswers.indexOf(a.answer as typeof orderedAnswers[number]) -
-        orderedAnswers.indexOf(b.answer as typeof orderedAnswers[number])
-    );
+    const { affordFairhold } = useSurveyContext().barOrPie;
 
     const COLORS = [
       "rgb(var(--fairhold-equity-color-rgb))", "rgb(var(--fairhold-interest-color-rgb))", "rgb(var(--social-rent-land-color-rgb))" 
