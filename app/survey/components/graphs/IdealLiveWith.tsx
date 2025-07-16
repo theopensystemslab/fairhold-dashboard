@@ -13,8 +13,8 @@ export const IdealLiveWith = () => {
             <CustomSankey
                 nodes={coloredNodes}
                 links={idealLiveWith.links}     
-                leftLabel="Current"
-                rightLabel="Ideal" 
+                leftLabel="I live with"
+                rightLabel="I want to live with" 
                 >
             </CustomSankey>
         </SurveyGraphCard>
