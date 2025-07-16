@@ -12,8 +12,8 @@ export const IdealHouseType = () => {
             <CustomSankey
                 nodes={idealHouseType.nodes}
                 links={idealHouseType.links}       
-                leftLabel="Current"
-                rightLabel="Ideal"
+                leftLabel="I live in"
+                rightLabel="I want to live in"
                 >
             </CustomSankey>
         </SurveyGraphCard>
