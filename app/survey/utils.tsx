@@ -30,7 +30,7 @@ export const aggregateResults = (rawResults: RawResults[]) => {
         addSankeyResult(sankey, rawResult);
     }
 
-    const sortedBarOrPie = sortBarOrPieResults(barOrPie);
+    const sortedBarOrPie = sortResults(barOrPie);
     const slicedBarOrPie = getTopFive(sortedBarOrPie);
 
     return { numberResponses, barOrPie: slicedBarOrPie, sankey };
@@ -205,7 +205,7 @@ const handleAnyMeansTenureChoice = (results: BarOrPieResults, value: string[]) =
     });
 };
 
-const sortBarOrPieResults = (results: BarOrPieResults) => {
+const sortResults = (results: BarOrPieResults) => {
     Object.entries(results).forEach(([key, arr]) => {
         if (Array.isArray(arr)) {
             // Only sort if key is one of the four with a custom order
