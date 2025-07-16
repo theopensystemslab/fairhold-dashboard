@@ -207,17 +207,15 @@ const handleAnyMeansTenureChoice = (results: BarOrPieResults, value: string[]) =
 
 const sortResults = (results: BarOrPieResults) => {
     Object.entries(results).forEach(([key, arr]) => {
-        if (Array.isArray(arr)) {
-            // Only sort if key is one of the four with a custom order
-            if (["affordFairhold", "ageGroup", "supportDevelopment", "supportNewFairhold"].includes(key)) {
-                const customOrder = CUSTOM_ORDERS[key];
-                if (customOrder) {
-                    arr.sort(
-                        (a, b) =>
-                            customOrder.indexOf((a.answer ?? "") as string) -
-                            customOrder.indexOf((b.answer ?? "") as string)
-                    );
-                }
+        // Only sort if key is one of the four with a custom order
+        if (["affordFairhold", "ageGroup", "supportDevelopment", "supportNewFairhold"].includes(key)) {
+            const customOrder = CUSTOM_ORDERS[key];
+            if (customOrder) {
+                (arr as BarOrPieResult[]).sort(
+                    (a, b) =>
+                        customOrder.indexOf((a.answer ?? "") as string) -
+                        customOrder.indexOf((b.answer ?? "") as string)
+                );
             }
         }
     });
