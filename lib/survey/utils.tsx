@@ -31,8 +31,9 @@ export const aggregateResults = (rawResults: RawResults[]) => {
     }
 
     const sortedBarOrPie = sortBarOrPieResults(barOrPie);
+    const slicedBarOrPie = getTopFive(sortedBarOrPie);
 
-    return { numberResponses, barOrPie: sortedBarOrPie, sankey };
+    return { numberResponses, barOrPie: slicedBarOrPie, sankey };
 }
 
 const initializeBarOrPieResultsObject = (): BarOrPieResults => {
@@ -137,7 +138,14 @@ const updateSankeyNodesAndLinks = (
     }
 };
 
-export const getTopFive = (data: BarOrPieResult[]) => data.slice(0,5);
+const getTopFive = (barOrPieResults: BarOrPieResults) => {
+    for (const key in barOrPieResults) {
+        if (key === "whyFairhold" || key === "whyNotFairhold") {
+            barOrPieResults[key] = barOrPieResults[key].slice(0,5);
+        }
+    }
+    return barOrPieResults;
+}
 
 export const calculateChartMaximum = (data: BarOrPieResult[]) => {
     const maxValue = data[0]?.value ?? 0;

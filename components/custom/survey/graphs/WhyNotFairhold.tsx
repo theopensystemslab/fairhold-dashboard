@@ -3,11 +3,9 @@ import { TickProps, BarOrPieResult } from "@lib/survey/types";
 import SurveyGraphCard from "@components/custom/survey/SurveyGraphCard";
 import { Bar, BarChart, XAxis, YAxis, ResponsiveContainer } from "recharts";
 import { useSurveyContext } from "@context/surveyContext";
-import { getTopFive } from "@lib/survey/utils";
 
 export const WhyNotFairhold = () => {
-  const { whyNotFairhold } = useSurveyContext().barOrPie as { whyNotFairhold: BarOrPieResult[] };
-  const whyNotFairholdTopFive = getTopFive(whyNotFairhold);
+  const whyNotFairhold = useSurveyContext().barOrPie.whyNotFairhold;
 
   const Tick = (props: TickProps) => {
       const { x, y, payload } = props;
@@ -32,7 +30,7 @@ export const WhyNotFairhold = () => {
       <SurveyGraphCard title="Why wouldn't you choose Fairhold?">
           <ResponsiveContainer>
           <BarChart
-              data={whyNotFairholdTopFive}
+              data={whyNotFairhold}
               barSize={20}
               layout="vertical"
           >
