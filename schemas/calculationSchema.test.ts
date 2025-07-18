@@ -1,5 +1,5 @@
 import { calculationSchema, maintenanceLevelSchema } from "../schemas/calculationSchema";
-import { MAINTENANCE_LEVELS } from "../models/constants";
+import { MAINTENANCE_LEVELS } from "../../models/constants";
 
 describe("calculationSchema", () => {
   it("should validate valid input (whole postcode)", () => {

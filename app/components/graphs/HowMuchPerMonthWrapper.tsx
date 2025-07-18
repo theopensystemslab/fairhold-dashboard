@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import ErrorBoundary from "../ErrorBoundary";
-import { Household } from "@/app/models/Household";
+import { Household } from "@/models/Household";
 import HowMuchPerMonthBarChart from "./HowMuchPerMonthBarChart";
 
 interface HowMuchPerMonthWrapperProps {

@@ -8,7 +8,7 @@ import {
   StyledChartContainer,
 } from "../ui/StyledChartContainer";
 import { formatValue } from "@/app/lib/format";
-import { MaintenanceLevel } from "@/app/models/constants";
+import { MaintenanceLevel } from "@/models/constants";
 import { CustomLabelListContentProps } from "./shared";
 
 type CustomTooltipProps = TooltipProps<number, string> & {

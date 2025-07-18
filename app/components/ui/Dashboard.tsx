@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Household } from "@/app/models/Household";
+import { Household } from "@/models/Household";
 import { FormFrontend } from "@/app/schemas/formSchema";
 import { WhatWouldYouChoose } from "../Dashboard/Cards/WhatWouldYouChoose";
 import { WhatDifference } from "../Dashboard/Cards/WhatDifference";

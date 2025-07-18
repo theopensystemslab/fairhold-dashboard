@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Household } from "@/app/models/Household";
+import { Household } from "@/models/Household";
 import Dashboard from "./Dashboard";
 import { formSchema, FormFrontend } from "@/app/schemas/formSchema";
 import { useSearchParams } from "next/navigation";
@@ -11,8 +11,8 @@ import {
   DEFAULT_MORTGAGE_TERM,
   DEFAULT_INITIAL_DEPOSIT,
   MAINTENANCE_LEVELS,
-} from "../../models/constants";
-import { MaintenanceLevel } from "../../models/constants";
+} from "../../../models/constants";
+import { MaintenanceLevel } from "../../../models/constants";
 
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { ClipLoader } from "react-spinners";

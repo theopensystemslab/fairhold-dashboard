@@ -1,5 +1,5 @@
 // __tests__/hpiService.test.ts
-import { hpiService } from "../services/hpiService"; // Adjust the path according to your structure
+import { hpiService } from "./hpiService"; // Adjust the path according to your structure
 import { hpi1999Repo } from "../data/hpiRepo"; // Adjust the path according to your structure
 
 jest.mock("../data/hpiRepo");

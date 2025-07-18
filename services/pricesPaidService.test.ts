@@ -1,5 +1,5 @@
 // __tests__/pricesPaidService.test.ts
-import { pricesPaidService } from "../services/pricesPaidService"; // Adjust the path according to your structure
+import { pricesPaidService } from "./pricesPaidService"; // Adjust the path according to your structure
 import { pricesPaidRepo } from "../data/pricesPaidRepo"; // Adjust the path according to your structure
 
 jest.mock("../data/pricesPaidRepo");

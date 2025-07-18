@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { calculationSchema } from "../schemas/calculationSchema";
-import * as calculationService from "../services/calculationService";
-import calculateFairhold from "../models/calculateFairhold";
+import * as calculationService from "../../services/calculationService";
+import calculateFairhold from "../../models/calculateFairhold";
 import { APIError } from "../lib/exceptions";
 
 export async function POST(req: Request) {

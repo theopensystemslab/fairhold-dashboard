@@ -1,5 +1,5 @@
 // __tests__/itlService.test.ts
-import { itlService } from "../services/itlService"; // Adjust the path according to your structure
+import { itlService } from "./itlService"; // Adjust the path according to your structure
 import { itlRepo } from "../data/itlRepo"; // Adjust the path according to your structure
 
 jest.mock("../data/itlRepo");

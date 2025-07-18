@@ -1,10 +1,10 @@
-import { Household } from "@/app/models/Household";
+import { Household } from "@/models/Household";
 import { Drawer } from "../../ui/Drawer";
 import GraphCard from "../../ui/GraphCard"
-import { DEFAULT_INTEREST_RATE, DEFAULT_MORTGAGE_TERM, DEFAULT_INITIAL_DEPOSIT } from "@/app/models/constants";
+import { DEFAULT_INTEREST_RATE, DEFAULT_MORTGAGE_TERM, DEFAULT_INITIAL_DEPOSIT } from "@/models/constants";
 import ReactMarkdown from 'react-markdown';
 import explanationContent from '../Help/WhatDifference.md';
-import { DEFAULT_FORECAST_PARAMETERS } from "@/app/models/ForecastParameters";
+import { DEFAULT_FORECAST_PARAMETERS } from "@/models/ForecastParameters";
 
 type CardsProps = {
   household: Household;
