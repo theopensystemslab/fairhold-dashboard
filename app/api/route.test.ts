@@ -5,8 +5,8 @@ import { NextResponse } from "next/server";
 import { APIError } from "@lib/calculator/exceptions";
 
 // Mock dependencies
-jest.mock("../services/calculationService");
-jest.mock("../models/calculateFairhold", () => jest.fn()); // Mock calculateFairhold
+jest.mock("@services/calculationService");
+jest.mock("@models/calculateFairhold", () => jest.fn()); // Mock calculateFairhold
 jest.mock("next/server", () => ({
   NextResponse: {
     json: jest.fn((data) => ({ data })),
