@@ -2,27 +2,27 @@
 
 import { useState, useEffect } from 'react';
 import { Inter } from "next/font/google";
-import ErrorBoundary from '@components/custom-test/ErrorBoundary';
+import ErrorBoundary from '@/components/custom/ErrorBoundary';
 import { SurveyResults } from '@lib/survey/types';
-import { Age } from '@components/custom-test/survey-test/graphs/Age';
-import { AffordFairhold } from '@components/custom-test/survey-test/graphs/AffordFairhold';
-import { AnyMeansTenureChoice } from '@components/custom-test/survey-test/graphs/AnyMeansTenureChoice';
-import { Country } from '@components/custom-test/survey-test/graphs/Country';
-import { CurrentMeansTenureChoice } from '@components/custom-test/survey-test/graphs/CurrentMeansTenureChoice';
-import { IdealHouseType } from '@components/custom-test/survey-test/graphs/IdealHouseType';
-import { HousingOutcomes } from '@components/custom-test/survey-test/graphs/HousingOutcomes';
-import { IdealLiveWith } from '@components/custom-test/survey-test/graphs/IdealLiveWith';
+import { Age } from '@/components/custom/survey/graphs/Age';
+import { AffordFairhold } from '@/components/custom/survey/graphs/AffordFairhold';
+import { AnyMeansTenureChoice } from '@/components/custom/survey/graphs/AnyMeansTenureChoice';
+import { Country } from '@/components/custom/survey/graphs/Country';
+import { CurrentMeansTenureChoice } from '@/components/custom/survey/graphs/CurrentMeansTenureChoice';
+import { IdealHouseType } from '@/components/custom/survey/graphs/IdealHouseType';
+import { HousingOutcomes } from '@/components/custom/survey/graphs/HousingOutcomes';
+import { IdealLiveWith } from '@/components/custom/survey/graphs/IdealLiveWith';
 // import { Postcode } from './components/graphs/Postcode';
-import { SupportDevelopment } from '@components/custom-test/survey-test/graphs/SupportDevelopment';
-import { SupportDevelopmentFactors } from '@components/custom-test/survey-test/graphs/SupportDevelopmentFactors';
-import { SupportNewFairhold } from '@components/custom-test/survey-test/graphs/SupportNewFairhold';
-import { WhyFairhold } from '@components/custom-test/survey-test/graphs/WhyFairhold';
-import { WhyNotFairhold } from '@components/custom-test/survey-test/graphs/WhyNotFairhold';
+import { SupportDevelopment } from '@/components/custom/survey/graphs/SupportDevelopment';
+import { SupportDevelopmentFactors } from '@/components/custom/survey/graphs/SupportDevelopmentFactors';
+import { SupportNewFairhold } from '@/components/custom/survey/graphs/SupportNewFairhold';
+import { WhyFairhold } from '@/components/custom/survey/graphs/WhyFairhold';
+import { WhyNotFairhold } from '@/components/custom/survey/graphs/WhyNotFairhold';
 import { SurveyContext } from '@context/surveyContext';
 // list records https://api.airtable.com/v0/{baseId}/{tableIdOrName}
 // get record https://api.airtable.com/v0/{baseId}/{tableIdOrName}/{recordId}
-import { Header } from "@components/custom-test/ui-test/Header";
-import { Footer } from "@components/custom-test/ui-test/Footer";
+import { Header } from "@/components/custom/ui/Header";
+import { Footer } from "@/components/custom/ui/Footer";
 
 const inter = Inter({
   weight: ["500", "600", "700", "800"],
