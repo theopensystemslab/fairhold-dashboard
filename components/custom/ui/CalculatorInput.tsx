@@ -14,7 +14,7 @@ import {
 } from "@models/constants";
 import { MaintenanceLevel } from "@models/constants";
 
-import { RadioGroup, RadioGroupItem } from "@/components/radio-group";
+import { RadioGroup, RadioGroupItem } from "@components/radio-group";
 import { ClipLoader } from "react-spinners";
 import {
   Form,
@@ -23,16 +23,16 @@ import {
   FormLabel,
   FormControl,
   FormMessage,
-} from "@/components/form";
-import { Button } from "@/components/button";
-import { Input } from "@/components/input";
-import { Label } from "@/components/label";
-import { APIError } from "@/lib/calculator/exceptions";
+} from "@components/form";
+import { Button } from "@components/button";
+import { Input } from "@components/input";
+import { Label } from "@components/label";
+import { APIError } from "@lib/calculator/exceptions";
 import { BackgroundAssumptions } from "./BackgroundAssumptions";
 import { MaintenanceExplainerDrawer } from "./MaintenanceExplainerDrawer";
 import InputDropdown from "./InputDropdown";
 import InputField from "./InputField";
-import { Separator } from "@/components/separator"
+import { Separator } from "@components/separator"
 
 type View = "form" | "loading" | "dashboard";
 

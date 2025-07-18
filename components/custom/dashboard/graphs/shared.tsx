@@ -1,4 +1,4 @@
-import { formatValue } from "@/lib/calculator/format";
+import { formatValue } from "@lib/calculator/format";
 
 export interface CustomLabelListContentProps {
   x?: number | string | undefined;

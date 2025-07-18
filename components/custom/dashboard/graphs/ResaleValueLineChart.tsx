@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, TooltipProps, Tooltip, LabelList } from "recharts";
-import { Card, CardContent } from "@/components/card";
+import { Card, CardContent } from "@components/card";
 import {
   ChartConfig,
-} from "@/components/chart";
+} from "@components/chart";
 import {
   StyledChartContainer,
 } from "../../ui/StyledChartContainer";
-import { formatValue } from "@/lib/calculator/format";
-import { MaintenanceLevel } from "@/models/constants";
+import { formatValue } from "@lib/calculator/format";
+import { MaintenanceLevel } from "@models/constants";
 import { CustomLabelListContentProps } from "./shared";
 
 type CustomTooltipProps = TooltipProps<number, string> & {

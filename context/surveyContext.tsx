@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react';
-import { SurveyResults } from './types';
+import { SurveyResults } from '@lib/survey/types';
 
 export const SurveyContext = createContext<SurveyResults | null>(null);
 

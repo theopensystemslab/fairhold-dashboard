@@ -1,14 +1,14 @@
 "use client";
 
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Tooltip } from "recharts";
-import { Card, CardContent } from "@/components/card";
+import { Card, CardContent } from "@components/card";
 import {
   StyledChartContainer,
 } from "../../ui/StyledChartContainer";
 import { TooltipProps } from "recharts";
 import { ValueType } from "tailwindcss/types/config";
 import { NameType } from "recharts/types/component/DefaultTooltipContent";
-import { formatValue } from "@/lib/calculator/format";
+import { formatValue } from "@lib/calculator/format";
 
 export interface LifetimeBarData {
   landRent?: number;

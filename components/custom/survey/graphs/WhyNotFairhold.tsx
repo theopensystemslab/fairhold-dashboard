@@ -1,9 +1,9 @@
 import React from "react"
-import { TickProps } from "@/lib/survey/types";
-import SurveyGraphCard from "@/components/custom/survey/SurveyGraphCard";
+import { TickProps } from "@lib/survey/types";
+import SurveyGraphCard from "@components/custom/survey/SurveyGraphCard";
 import { Bar, BarChart, XAxis, YAxis, ResponsiveContainer } from "recharts";
 import { useSurveyContext } from "@context/surveyContext";
-import { getTopFive } from "@/lib/survey/utils";
+import { getTopFive } from "@lib/survey/utils";
 
 export const WhyNotFairhold = () => {
   const whyNotFairhold = useSurveyContext().barOrPie.whyNotFairhold;

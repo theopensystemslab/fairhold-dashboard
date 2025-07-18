@@ -1,6 +1,6 @@
 import React, { useState } from "react"
-import { TickProps } from "@/lib/survey/types";
-import SurveyGraphCard from "@/components/custom/survey/SurveyGraphCard";
+import { TickProps } from "@lib/survey/types";
+import SurveyGraphCard from "@components/custom/survey/SurveyGraphCard";
 import { Bar, BarChart, XAxis, YAxis, ResponsiveContainer } from "recharts";
 import { useSurveyContext } from "@context/surveyContext";
 import SurveyTenureSelector from "../SurveyTenureSelector";

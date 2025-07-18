@@ -1,8 +1,8 @@
 import React from "react"
-import { TickProps } from "@/lib/survey/types";
-import SurveyGraphCard from "@/components/custom/survey/SurveyGraphCard";
+import { TickProps } from "@lib/survey/types";
+import SurveyGraphCard from "@components/custom/survey/SurveyGraphCard";
 import { Bar, BarChart, XAxis, YAxis, ResponsiveContainer } from "recharts";
-import { useSurveyContext } from "@/app/survey/context";
+import { useSurveyContext } from "@context/surveyContext";
 
 export const SupportDevelopmentFactors = () => {
   const supportDevelopmentFactors = useSurveyContext().barOrPie.supportDevelopmentFactors;

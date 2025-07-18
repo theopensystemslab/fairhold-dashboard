@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn } from "@lib/utils";
 import { ArrowDownIcon, ArrowUpIcon, DotFilledIcon } from "@radix-ui/react-icons";
 import { IconProps } from "@radix-ui/react-icons/dist/types";
 import { ForwardRefExoticComponent, RefAttributes } from "react";
