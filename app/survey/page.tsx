@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Inter } from "next/font/google";
 import ErrorBoundary from '../../components/custom-test/ErrorBoundary';
-import { SurveyResults } from './types';
+import { SurveyResults } from '../../lib/survey/types';
 import { Age } from '../../components/custom-test/survey-test/graphs/Age';
 import { AffordFairhold } from '../../components/custom-test/survey-test/graphs/AffordFairhold';
 import { AnyMeansTenureChoice } from '../../components/custom-test/survey-test/graphs/AnyMeansTenureChoice';

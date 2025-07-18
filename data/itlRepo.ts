@@ -1,5 +1,5 @@
 import prisma from "./db";
-import { APIError } from "../lib/exceptions";
+import { APIError } from "../lib/calculator/exceptions";
 
 const getItl3ByPostcodeDistrict = async (
   postcodeDistrict: string

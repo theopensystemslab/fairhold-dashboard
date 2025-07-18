@@ -8,7 +8,7 @@ import {
 import { TooltipProps } from "recharts";
 import { ValueType } from "tailwindcss/types/config";
 import { NameType } from "recharts/types/component/DefaultTooltipContent";
-import { formatValue } from "@/app/lib/format";
+import { formatValue } from "@/lib/calculator/format";
 
 export interface LifetimeBarData {
   landRent?: number;

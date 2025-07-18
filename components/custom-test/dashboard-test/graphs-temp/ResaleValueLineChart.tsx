@@ -7,7 +7,7 @@ import {
 import {
   StyledChartContainer,
 } from "../../ui-test/StyledChartContainer";
-import { formatValue } from "@/app/lib/format";
+import { formatValue } from "@/lib/calculator/format";
 import { MaintenanceLevel } from "@/models/constants";
 import { CustomLabelListContentProps } from "./shared";
 
