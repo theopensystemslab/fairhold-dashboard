@@ -4,7 +4,7 @@ import HowMuchPerMonthWrapper from "../graphs/HowMuchPerMonthWrapper";
 import { Drawer } from "../../ui/Drawer";
 import { DashboardProps } from "../../ui/Dashboard";
 import ReactMarkdown from 'react-markdown';
-import explanationContent from '../Help/HowMuchPerMonth.md';
+import explanationContent from '../help/HowMuchPerMonth.md';
 import { DEFAULT_INITIAL_DEPOSIT, DEFAULT_INTEREST_RATE, DEFAULT_MORTGAGE_TERM } from "@/models/constants";
 import { remark } from "remark";
 import { visit } from 'unist-util-visit';

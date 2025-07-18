@@ -7,7 +7,7 @@ import TenureSelectorMobile from "../../ui/TenureSelectorMobile";
 import { DashboardProps } from "../../ui/Dashboard";
 import { formatValue } from "@lib/calculator/format";
 import ReactMarkdown from 'react-markdown';
-import explanationContent from '../Help/CostOverTime.md';
+import explanationContent from '../help/CostOverTime.md';
 import { DEFAULT_FORECAST_PARAMETERS } from "@models/ForecastParameters";
 import { SOCIAL_RENT_ADJUSTMENT_FORECAST } from "@models/constants";
 import { remark } from "remark";
