@@ -1,6 +1,6 @@
 import { WEEKS_PER_MONTH } from "../constants";
 import { BED_WEIGHTS_AND_CAPS, NATIONAL_AVERAGES } from "../constants";
-import { socialRentAdjustmentTypes } from "../../data/socialRentAdjustmentsRepo";
+import { socialRentAdjustmentTypes } from "@data/socialRentAdjustmentsRepo";
 
 interface SocialRentParams {
   numberOfBedrooms: number;

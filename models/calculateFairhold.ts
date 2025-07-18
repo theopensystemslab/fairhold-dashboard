@@ -1,4 +1,4 @@
-import { PostcodeScales } from "../app/schemas/calculationSchema";
+import { PostcodeScales } from "@schemas/calculationSchema";
 import { createForecastParameters } from "./ForecastParameters";
 import { Household } from "./Household";
 import { HouseType, Property } from "./Property";

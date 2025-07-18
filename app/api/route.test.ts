@@ -1,8 +1,8 @@
 import { POST } from "../api/route";
-import * as calculationService from "../../services/calculationService";
-import calculateFairhold from "../../models/calculateFairhold";
+import * as calculationService from "@services/calculationService";
+import calculateFairhold from "@models/calculateFairhold";
 import { NextResponse } from "next/server";
-import { APIError } from "../../lib/calculator/exceptions";
+import { APIError } from "@lib/calculator/exceptions";
 
 // Mock dependencies
 jest.mock("../services/calculationService");

@@ -2,7 +2,7 @@ import React from "react"
 import SurveyGraphCard from "@/components/custom-test/survey-test/SurveyGraphCard";
 import { PieChart, Pie, Legend, ResponsiveContainer, Cell } from "recharts";
 import { useSurveyContext } from "@context/surveyContext";
-import { SUPPORT_DEVELOPMENT_ORDER } from "../../../../lib/survey/constants";
+import { SUPPORT_DEVELOPMENT_ORDER } from "@lib/survey/constants";
 
 export const SupportDevelopment = () => {
     let { supportDevelopment } = useSurveyContext().barOrPie;

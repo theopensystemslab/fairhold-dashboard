@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { isValid as isValidPostcode, validOutcode as isValidOutcode } from "postcode";
-import { HOUSE_TYPES } from "../../models/Property";
+import { HOUSE_TYPES } from "@models/Property";
 import { maintenanceLevelSchema } from "../schemas/calculationSchema";
 
 const HouseTypeEnum = z.enum(HOUSE_TYPES);

@@ -2,7 +2,7 @@ import React from "react"
 import SurveyGraphCard from "@/components/custom-test/survey-test/SurveyGraphCard";
 import { PieChart, Pie, Legend, ResponsiveContainer, Cell } from "recharts";
 import { useSurveyContext } from "@context/surveyContext";
-import { AFFORD_FAIRHOLD } from "../../../../lib/survey/constants";
+import { AFFORD_FAIRHOLD } from "@lib/survey/constants";
 
 export const AffordFairhold = () => {
     let { affordFairhold } = useSurveyContext().barOrPie;

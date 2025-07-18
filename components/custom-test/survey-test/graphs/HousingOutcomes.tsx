@@ -4,8 +4,8 @@ import SurveyGraphCard from "@/components/custom-test/survey-test/SurveyGraphCar
 import { Bar, BarChart, XAxis, YAxis, ResponsiveContainer } from "recharts";
 import { useSurveyContext } from "@context/surveyContext";
 import SurveyTenureSelector from "../SurveyTenureSelector";
-import { TENURE_COLORS } from "../../../../lib/survey/constants";
-import { getTopFive } from "../../../../lib/survey/utils";
+import { TENURE_COLORS } from "@lib/survey/constants";
+import { getTopFive } from "@lib/survey/utils";
 
 export const HousingOutcomes = () => {
     const housingOutcomes = useSurveyContext().barOrPie.housingOutcomes;

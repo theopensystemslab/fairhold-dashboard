@@ -2,7 +2,7 @@ import React from "react"
 import SurveyGraphCard from "@/components/custom-test/survey-test/SurveyGraphCard";
 import { Bar, BarChart, XAxis, YAxis, ResponsiveContainer, Cell, LabelList } from "recharts";
 import { useSurveyContext } from "@context/surveyContext";
-import { TENURE_COLORS } from "../../../../lib/survey/constants"
+import { TENURE_COLORS } from "@lib/survey/constants"
 import { CustomLabelListContentProps } from "@/components/custom-test/dashboard-test/graphs-temp/shared";
 
 export interface CustomYTickProps {

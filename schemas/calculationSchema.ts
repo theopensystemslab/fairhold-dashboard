@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { parse as parsePostcode, isValid as isValidPostcode, validOutcode as isValidOutcode } from "postcode";
-import { HOUSE_TYPES } from "../../models/Property";
-import { MAINTENANCE_LEVELS } from "../../models/constants";
+import { HOUSE_TYPES } from "@models/Property";
+import { MAINTENANCE_LEVELS } from "@models/constants";
 
 // a common interface that can be used regardless if user enteres full or outward postcode
 export interface PostcodeScales {
