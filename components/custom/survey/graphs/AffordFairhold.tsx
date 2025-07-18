@@ -3,9 +3,10 @@ import SurveyGraphCard from "@components/custom/survey/SurveyGraphCard";
 import { PieChart, Pie, Legend, ResponsiveContainer, Cell } from "recharts";
 import { useSurveyContext } from "@context/surveyContext";
 import { AFFORD_FAIRHOLD } from "@lib/survey/constants";
+import { BarOrPieResult } from "@/lib/survey/types";
 
 export const AffordFairhold = () => {
-    let { affordFairhold } = useSurveyContext().barOrPie;
+    let { affordFairhold } = useSurveyContext().barOrPie as { affordFairhold: BarOrPieResult[] };
 
     const orderedAnswers = AFFORD_FAIRHOLD.map(({ label }) => label)
 

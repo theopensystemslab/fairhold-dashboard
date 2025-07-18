@@ -2,9 +2,10 @@ import React from "react";
 import SurveyGraphCard from "@/components/custom/survey/SurveyGraphCard";
 import { PieChart, Pie, Legend, ResponsiveContainer, Cell } from "recharts";
 import { useSurveyContext } from "@context/surveyContext";
+import { BarOrPieResult } from "@/lib/survey/types";
 
   export const Country = () => {
-    const { uk } = useSurveyContext().barOrPie;
+    const { uk } = useSurveyContext().barOrPie as { uk: BarOrPieResult[] };
     
    const COLORS = [
       "rgb(var(--survey-blue))", "rgb(var(--survey-blue-light))"

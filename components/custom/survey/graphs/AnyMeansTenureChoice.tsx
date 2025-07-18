@@ -4,6 +4,7 @@ import { Bar, BarChart, XAxis, YAxis, ResponsiveContainer, Cell, LabelList } fro
 import { useSurveyContext } from "@context/surveyContext";
 import { TENURE_COLORS } from "@lib/survey/constants"
 import { CustomLabelListContentProps } from "@/components/custom/dashboard/graphs/shared";
+import { BarOrPieResult } from "@/lib/survey/types";
 
 export interface CustomYTickProps {
   x: number;
@@ -41,7 +42,7 @@ const ColoredYAxisTick: React.FC<CustomYTickProps> = ({ x, y, payload: { value: 
 };
 
 export const AnyMeansTenureChoice = () => {
-    const { anyMeansTenureChoice } = useSurveyContext().barOrPie;
+    const { anyMeansTenureChoice } = useSurveyContext().barOrPie as { anyMeansTenureChoice: BarOrPieResult[] };
     return (
         <SurveyGraphCard 
             title="Rank the tenures by preference"

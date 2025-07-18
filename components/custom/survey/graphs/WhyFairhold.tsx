@@ -1,12 +1,12 @@
 import React from "react"
-import { TickProps } from "@lib/survey/types";
+import { TickProps, BarOrPieResult } from "@lib/survey/types";
 import SurveyGraphCard from "@components/custom/survey/SurveyGraphCard";
 import { Bar, BarChart, XAxis, YAxis, ResponsiveContainer } from "recharts";
 import { useSurveyContext } from "@context/surveyContext";
 import { getTopFive } from "@lib/survey/utils";
 
 export const WhyFairhold = () => {
-  const whyFairhold = useSurveyContext().barOrPie.whyFairhold;
+  const { whyFairhold } = useSurveyContext().barOrPie as { whyFairhold: BarOrPieResult[] };
   const whyFairholdTopFive = getTopFive(whyFairhold);
 
   const Tick = (props: TickProps) => {

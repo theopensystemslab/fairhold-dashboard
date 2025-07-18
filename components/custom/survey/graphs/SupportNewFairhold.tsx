@@ -3,10 +3,10 @@ import SurveyGraphCard from "@/components/custom/survey/SurveyGraphCard";
 import { PieChart, Pie, Legend, ResponsiveContainer, Cell } from "recharts";
 import { useSurveyContext } from "@context/surveyContext";
 import { SUPPORT_FAIRHOLD_ORDER } from "@lib/survey/constants";
-
+import { BarOrPieResult } from "@/lib/survey/types";
 
 export const SupportNewFairhold = () => {
-    let supportNewFairhold = useSurveyContext().barOrPie.supportNewFairhold;
+    let { supportNewFairhold } = useSurveyContext().barOrPie as { supportNewFairhold: BarOrPieResult[] };
 
     supportNewFairhold = supportNewFairhold.slice().sort(
         (a, b) =>
