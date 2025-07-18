@@ -48,7 +48,7 @@ const InputDropdown: React.FC<InputDropdownProps> = ({
             <SelectItem
               key={option.value}
               value={option.value.toString()}
-              className="text-xs hover:bg-gray-100 focus:bg-gray-200"
+              className="text-xs focus:bg-gray-200"
             >
               {option.label}
             </SelectItem>
