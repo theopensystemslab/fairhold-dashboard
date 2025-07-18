@@ -1,9 +1,7 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Household } from "@models/Household";
-import Dashboard from "./Dashboard";
 import { formSchema, FormFrontend } from "@schemas/formSchema";
 import { useSearchParams } from "next/navigation";
 import {
@@ -15,7 +13,6 @@ import {
 import { MaintenanceLevel } from "@models/constants";
 
 import { RadioGroup, RadioGroupItem } from "@components/radio-group";
-import { ClipLoader } from "react-spinners";
 import {
   Form,
   FormField,
@@ -27,18 +24,17 @@ import {
 import { Button } from "@components/button";
 import { Input } from "@components/input";
 import { Label } from "@components/label";
-import { APIError } from "@lib/calculator/exceptions";
 import { BackgroundAssumptions } from "./BackgroundAssumptions";
 import { MaintenanceExplainerDrawer } from "./MaintenanceExplainerDrawer";
 import InputDropdown from "./InputDropdown";
 import InputField from "./InputField";
 import { Separator } from "@components/separator"
 
-type View = "form" | "loading" | "dashboard";
-
-const CalculatorInput = () => {
-  const [view, setView] = useState<View>("form");
-  const [data, setData] = useState<Household | null>(null);
+type CalculatorInputProps = {
+  onSubmit: (data: FormFrontend) => void;
+  isLoading?: boolean;
+};
+const CalculatorInput: React.FC<CalculatorInputProps> = ({ onSubmit, isLoading }) => {
 
   const searchParams = useSearchParams();
   const urlPostcode = searchParams.get("postcode");
@@ -83,38 +79,6 @@ const CalculatorInput = () => {
     },
   });
 
-  const onSubmit = async (data: FormFrontend) => {
-    setView("loading");
-    const response = await fetch("/api", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
-    const processedData = await response.json();
-    if (!response.ok) return handleErrors(processedData.error);
-
-    setData(processedData);
-    setView("dashboard");
-  };
-
-  const handleErrors = (error: APIError) => {
-    switch (error.code) {
-      case "ITL3_NOT_FOUND":
-      case "INSUFFICIENT_PRICES_PAID_DATA":
-        form.setError("housePostcode", {
-          message:
-            "Insufficient data for this postcode. Please try again with a different postcode.",
-        });
-        break;
-      case "UNHANDLED_EXCEPTION":
-      default:
-        console.error(error);
-    }
-
-    setView("form");
-  };
-
-  if (view === "form") {
     return (
       <div className="flex flex-col justify-center w-full md:w-2/3 mx-auto px-10">
         <div className="h1-style text-lg md:text-xl lg:text-2xl">
@@ -408,6 +372,7 @@ const CalculatorInput = () => {
             <Button
               type="submit"
               className="calculate-button-style px-10 md:px-20"
+              disabled={isLoading}
             >
               Calculate
             </Button>
@@ -418,19 +383,5 @@ const CalculatorInput = () => {
       </div>
     );
   }
-
-  if (view === "loading") { // TODO: should this conditional logic actually live in page.tsx and CalculatorInput.tsx is just the form UI?
-    return (
-      <div className="flex items-center justify-center h-screen text-black mt-5">
-        <ClipLoader color="black" size={50} />
-      </div>
-    );
-  }
-
-  if (view === "dashboard" && data) {
-    const formValues = form.getValues();
-    return <Dashboard processedData={data} inputData={formValues} />;
-  }
-};
 
 export default CalculatorInput;
