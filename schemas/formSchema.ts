@@ -22,11 +22,7 @@ export const formSchema = z.object({
     }),
   houseAge: z
     .number()
-    .min(1, { message: "Enter a valid estimated build year." })
-    .or(z.undefined())
-    .refine((value) => value !== undefined, {
-      message: "Enter an estimated build year."
-    }),
+    .min(0, { message: "Enter a valid estimated build year." }),
   houseBedrooms: z.coerce
     .number({
       message: "Enter a valid number of bedrooms."
