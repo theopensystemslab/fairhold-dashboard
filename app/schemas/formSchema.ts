@@ -1,5 +1,8 @@
 import { z } from "zod";
-import { isValid as isValidPostcode, validOutcode as isValidOutcode } from "postcode";
+import {
+  isValid as isValidPostcode,
+  validOutcode as isValidOutcode,
+} from "postcode";
 import { HOUSE_TYPES } from "../models/Property";
 import { maintenanceLevelSchema } from "../schemas/calculationSchema";
 
@@ -10,7 +13,7 @@ export const formSchema = z.object({
     .string()
     .min(1, "Enter a postcode.")
     .refine(
-      (postcode) => isValidPostcode(postcode) || isValidOutcode(postcode), 
+      (postcode) => isValidPostcode(postcode) || isValidOutcode(postcode),
       "Enter a valid postcode (e.g. SW1 1AA) or outcode (e.g. SW1)"
     ),
   houseSize: z.coerce
@@ -22,17 +25,21 @@ export const formSchema = z.object({
     }),
   houseAge: z
     .number()
-    .min(1, { message: "Enter a valid estimated build year." })
+    .min(0, { message: "Enter a valid estimated build year." })
     .or(z.undefined())
     .refine((value) => value !== undefined, {
-      message: "Enter an estimated build year."
+      message: "Enter an estimated build year.",
     }),
   houseBedrooms: z.coerce
     .number({
-      message: "Enter a valid number of bedrooms."
+      message: "Enter a valid number of bedrooms.",
     })
     .positive("Enter a positive number.")
-    .or(z.literal("").transform(() => { throw new Error("Enter the number of bedrooms."); })),
+    .or(
+      z.literal("").transform(() => {
+        throw new Error("Enter the number of bedrooms.");
+      })
+    ),
   houseType: HouseTypeEnum.refine(
     (value) => HouseTypeEnum.options.includes(value),
     {
