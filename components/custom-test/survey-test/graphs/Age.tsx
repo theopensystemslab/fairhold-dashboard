@@ -1,7 +1,7 @@
 import React from "react"
 import SurveyGraphCard from "@/components/custom-test/survey-test/SurveyGraphCard";
 import { PieChart, Pie, Legend, ResponsiveContainer, Cell } from "recharts";
-import { useSurveyContext } from "../../../../app/survey/context";
+import { useSurveyContext } from "@context/surveyContext";
 
 export const Age = () => {
     const { ageGroup } = useSurveyContext().barOrPie;

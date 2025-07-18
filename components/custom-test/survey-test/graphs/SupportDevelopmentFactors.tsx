@@ -1,5 +1,5 @@
 import React from "react"
-import { TickProps } from "@/app/survey/types";
+import { TickProps } from "@/lib/survey/types";
 import SurveyGraphCard from "@/components/custom-test/survey-test/SurveyGraphCard";
 import { Bar, BarChart, XAxis, YAxis, ResponsiveContainer } from "recharts";
 import { useSurveyContext } from "@/app/survey/context";

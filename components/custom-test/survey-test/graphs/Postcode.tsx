@@ -1,5 +1,5 @@
 import React from "react"
-import { BarOrPieResults } from "@/app/survey/types";
+import { BarOrPieResults } from "@/lib/survey/types";
 import SurveyGraphCard from "@/components/custom-test/survey-test/SurveyGraphCard";
 
 export const Postcode: React.FC<BarOrPieResults> = ({ postcode }) => {

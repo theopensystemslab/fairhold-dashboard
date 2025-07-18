@@ -2,7 +2,7 @@ import React from "react"
 import SurveyGraphCard from "@/components/custom-test/survey-test/SurveyGraphCard";
 import { CustomSankey } from "../CustomSankey"
 import { ResponsiveContainer } from "recharts";
-import { useSurveyContext } from "../../../../app/survey/context";
+import { useSurveyContext } from "@context/surveyContext";
 
 export const IdealLiveWith = () => {
     const idealLiveWith = useSurveyContext().sankey.idealLiveWith;
