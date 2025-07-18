@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import Airtable from 'airtable';
-import { RawResults } from '@/app/survey/types';
-import { aggregateResults } from '@/app/survey/utils';
+import { RawResults } from '@lib/survey/types';
+import { aggregateResults } from '@lib/survey/utils';
 
 export async function GET() {
     const apiKey = process.env.AIRTABLE_PAT;

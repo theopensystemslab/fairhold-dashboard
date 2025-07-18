@@ -1,9 +1,9 @@
-import CalculatorInput from "./components/ui/CalculatorInput";
+import CalculatorInput from "../components/custom/ui/CalculatorInput";
 import { ClipLoader } from "react-spinners";
 import { Suspense } from "react";
 import { Inter } from "next/font/google";
-import { Footer } from "./components/ui/Footer";
-import { Header } from "./components/ui/Header";
+import { Footer } from "../components/custom/ui/Footer";
+import { Header } from "../components/custom/ui/Header";
 
 const inter = Inter({
   weight: ["500", "600", "700", "800"],
