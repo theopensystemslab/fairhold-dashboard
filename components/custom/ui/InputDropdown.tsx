@@ -31,7 +31,9 @@ const InputDropdown: React.FC<InputDropdownProps> = ({
 }) => {
   return (
     <div className={`relative ${error ? "pl-4" : ""}`}>
-      {error && <div className="absolute left-0 top-0 bottom-0 w-1 bg-red-500"></div>}
+      {error && (
+        <div className="absolute left-0 top-0 bottom-0 w-1 bg-red-500"></div>
+      )}
       <Select
         value={value?.toString() || ""}
         onValueChange={(val) => onValueChange(Number(val))}
@@ -46,7 +48,7 @@ const InputDropdown: React.FC<InputDropdownProps> = ({
             <SelectItem
               key={option.value}
               value={option.value.toString()}
-              className="text-xs"
+              className="text-xs hover:bg-gray-100 focus:bg-gray-200"
             >
               {option.label}
             </SelectItem>
