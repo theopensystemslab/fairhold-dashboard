@@ -2774,3 +2774,7 @@ blockquote {
     overflow: scroll;
   }
 }
+
+.ankle-heading {
+  color: #ffffffe6 !important;
+}
