@@ -218,8 +218,11 @@ const sortResults = (results: BarOrPieResults) => {
                 );
             }
         }
+        if (["whyFairhold", "whyNotFairhold", "supportDevelopmentFactors"].includes(key)) {
+            (arr as BarOrPieResult[]).sort((a, b) => b.value - a.value);
+        }
     });
-
+    // Descending sort for housing outcomes is separate because it's grouped by tenure and thus a nested object
     Object.values(results.housingOutcomes).forEach((arr) => {
         arr.sort((a, b) => b.value - a.value);
     });
