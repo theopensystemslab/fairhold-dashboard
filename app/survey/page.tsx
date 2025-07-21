@@ -24,6 +24,7 @@ import { Header } from "@components/custom/ui/Header";
 import { Footer } from "@components/custom/ui/Footer";
 import Highlight from "@components/custom/ui/Highlight";
 import { getMaxWhyFairholdValue } from '@/lib/survey/utils';
+import { Ankle } from '@components/custom/survey/Ankle';
 
 const SurveyLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <div className="min-h-screen w-full bg-gray-50">
@@ -139,6 +140,7 @@ export default function SurveyPage() {
           </section>
         </main>
       </SurveyContext.Provider>
+      <Ankle />
     </SurveyLayout>
   </ErrorBoundary>
 )};
