@@ -196,6 +196,10 @@ main {
   scrollbar-width: none;     /* Firefox */
 }
 
+.ankle-heading {
+  color: #ffffffe6;
+}
+
 .logo {
   color: #000;
   letter-spacing: -.03em;
