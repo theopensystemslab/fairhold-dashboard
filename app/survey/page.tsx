@@ -22,6 +22,7 @@ import { SurveyContext } from '@context/surveyContext';
 // get record https://api.airtable.com/v0/{baseId}/{tableIdOrName}/{recordId}
 import { Header } from "@components/custom/ui/Header";
 import { Footer } from "@components/custom/ui/Footer";
+import { Ankle } from '@components/custom/survey/Ankle';
 
 export default function SurveyPage() {
   const [surveyResults, setSurveyResults] = useState<SurveyResults | null>(null);
@@ -131,6 +132,7 @@ export default function SurveyPage() {
             </div>
           </main>
         </SurveyContext.Provider>
+      <Ankle />
       <Footer />
     </ErrorBoundary>
   );
