@@ -11,7 +11,7 @@ const SurveyTenureSelector: React.FC<SurveyTenureSelectorProps> = ({ options, va
   <div>
     <label>
       <Select value={value} onValueChange={onChange}>
-        <SelectTrigger className="w-[180px]" style={{ color, border: 'none' }}>
+        <SelectTrigger className="w-[180px]" style={{ color, border: `1px solid ${color}` }}>
           <SelectValue placeholder="Select tenure" />
         </SelectTrigger>
         <SelectContent>
