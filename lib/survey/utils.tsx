@@ -4,6 +4,10 @@ import {
   AGE_ORDER,
   SUPPORT_DEVELOPMENT_ORDER,
   SUPPORT_FAIRHOLD_ORDER,
+  HOUSING_OUTCOMES_LABELS,
+  WHY_FAIRHOLD_LABELS,
+  WHY_NOT_FAIRHOLD_LABELS,
+  SUPPORT_DEVELOPMENT_LABELS
 } from "./constants";
 
 const SANKEY_MAPPINGS = [
@@ -29,11 +33,12 @@ export const aggregateResults = (rawResults: RawResults[]) => {
         addBarOrPieResult(barOrPie, rawResult);
         addSankeyResult(sankey, rawResult);
     }
-
+    // const shortenedBarOrPie = shortenStrings(barOrPie);
     const sortedBarOrPie = sortResults(barOrPie);
     const slicedBarOrPie = getTopFive(sortedBarOrPie);
-
-    return { numberResponses, barOrPie: slicedBarOrPie, sankey };
+    const shortenedBarOrPie = shortenStrings(slicedBarOrPie);
+    
+    return { numberResponses, barOrPie: shortenedBarOrPie, sankey };
 }
 
 const initializeBarOrPieResultsObject = (): BarOrPieResults => {
@@ -218,7 +223,7 @@ const sortResults = (results: BarOrPieResults) => {
                 );
             }
         }
-        if (["whyFairhold", "whyNotFairhold", "supportDevelopmentFactors"].includes(key)) {
+        if (["anyMeansTenureChoice", "whyFairhold", "whyNotFairhold", "supportDevelopmentFactors"].includes(key)) {
             (arr as BarOrPieResult[]).sort((a, b) => b.value - a.value);
         }
     });
@@ -227,5 +232,52 @@ const sortResults = (results: BarOrPieResults) => {
         arr.sort((a, b) => b.value - a.value);
     });
 
+    return results;
+}
+
+const shortenStrings = (results: BarOrPieResults) => {
+    Object.entries(results).forEach(([key, arr]) => {
+        if (key === "whyFairhold") {
+            (arr as BarOrPieResult[]).forEach(item => {
+                const label = WHY_FAIRHOLD_LABELS[item.answer as keyof typeof WHY_FAIRHOLD_LABELS];
+                if (label) {
+                    item.answer = label;
+                } else {
+                    item.answer = "Other;"
+                }
+            });
+        }
+        else if (key === "whyNotFairhold") {
+            (arr as BarOrPieResult[]).forEach(item => {
+                const label = WHY_NOT_FAIRHOLD_LABELS[item.answer as keyof typeof WHY_NOT_FAIRHOLD_LABELS];
+                if (label) {
+                    item.answer = label;
+                } else {
+                    item.answer = "Other";
+                }
+            });
+        }
+        else if (key === "supportDevelopmentFactors") {
+            (arr as BarOrPieResult[]).forEach(item => {
+                const label = SUPPORT_DEVELOPMENT_LABELS[item.answer as keyof typeof SUPPORT_DEVELOPMENT_LABELS];
+                if (label) {
+                    item.answer = label;
+                } else {
+                    item.answer = "Other";
+                }
+            })
+        }
+        else if (key === "housingOutcomes") {
+    const outcomesRecord = arr as Record<string, BarOrPieResult[]>;
+    Object.values(outcomesRecord).forEach((outcomeArr) => {
+        outcomeArr.forEach((item) => {
+            const label = HOUSING_OUTCOMES_LABELS[item.answer as keyof typeof HOUSING_OUTCOMES_LABELS];
+            if (label) {
+                item.answer = label;
+            }
+        });
+    });
+}
+    })
     return results;
 }
