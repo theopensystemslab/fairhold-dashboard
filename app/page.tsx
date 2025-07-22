@@ -39,8 +39,12 @@ export default function Home() {
 
   return (
     <>
+    <div className="min-h-screen w-full bg-gray-50">
     <Header />
-    <main className="main-content">
+    <main className="flex justify-center main-content">
+      <section className="w-full max-w-[1280px] flex flex-row py-8">
+        <div className="w-1/4" />
+        <div className="w-full md:w-3/4 flex-1 flex justify-center">
             {error && (
         <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4 mx-4">
           {error}
@@ -49,8 +53,11 @@ export default function Home() {
       <Suspense fallback={<ClipLoader />}>
         <CalculatorInput onSubmit={handleSubmit} isLoading={isSubmitting} />
       </Suspense>
+      </div>
+      </section>
     </main>
     <Footer/>
+    </div>
     </>
   );
 }
