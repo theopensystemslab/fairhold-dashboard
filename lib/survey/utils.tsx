@@ -1,11 +1,11 @@
 import { RawResults, BarOrPieResults, BarOrPieResult, SankeyResults, SankeyResult } from "./types"
 import {
-  AFFORD_FAIRHOLD,
-  AGE_ORDER,
-  HOUSING_OUTCOMES_LABELS,
-  SUPPORT_DEVELOPMENT_ORDER,
-  SUPPORT_FAIRHOLD_ORDER,
-  LABEL_MAP
+    AFFORD_FAIRHOLD,
+    AGE_ORDER,
+    HOUSING_OUTCOMES_LABELS,
+    LABEL_MAP,
+    SUPPORT_DEVELOPMENT_ORDER,
+    SUPPORT_FAIRHOLD_ORDER,
 } from "./constants";
 
 const SANKEY_MAPPINGS = [
