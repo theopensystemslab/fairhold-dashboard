@@ -2,12 +2,10 @@ import { RawResults, BarOrPieResults, BarOrPieResult, SankeyResults, SankeyResul
 import {
   AFFORD_FAIRHOLD,
   AGE_ORDER,
+  HOUSING_OUTCOMES_LABELS,
   SUPPORT_DEVELOPMENT_ORDER,
   SUPPORT_FAIRHOLD_ORDER,
-  HOUSING_OUTCOMES_LABELS,
-  WHY_FAIRHOLD_LABELS,
-  WHY_NOT_FAIRHOLD_LABELS,
-  SUPPORT_DEVELOPMENT_LABELS
+  LABEL_MAP
 } from "./constants";
 
 const SANKEY_MAPPINGS = [
@@ -236,48 +234,26 @@ const sortResults = (results: BarOrPieResults) => {
 }
 
 const shortenStrings = (results: BarOrPieResults) => {
-    Object.entries(results).forEach(([key, arr]) => {
-        if (key === "whyFairhold") {
-            (arr as BarOrPieResult[]).forEach(item => {
-                const label = WHY_FAIRHOLD_LABELS[item.answer as keyof typeof WHY_FAIRHOLD_LABELS];
-                if (label) {
-                    item.answer = label;
-                } else {
-                    item.answer = "Other;"
-                }
-            });
-        }
-        else if (key === "whyNotFairhold") {
-            (arr as BarOrPieResult[]).forEach(item => {
-                const label = WHY_NOT_FAIRHOLD_LABELS[item.answer as keyof typeof WHY_NOT_FAIRHOLD_LABELS];
-                if (label) {
-                    item.answer = label;
-                } else {
-                    item.answer = "Other";
-                }
-            });
-        }
-        else if (key === "supportDevelopmentFactors") {
-            (arr as BarOrPieResult[]).forEach(item => {
-                const label = SUPPORT_DEVELOPMENT_LABELS[item.answer as keyof typeof SUPPORT_DEVELOPMENT_LABELS];
-                if (label) {
-                    item.answer = label;
-                } else {
-                    item.answer = "Other";
-                }
-            })
-        }
-        else if (key === "housingOutcomes") {
-    const outcomesRecord = arr as Record<string, BarOrPieResult[]>;
-    Object.values(outcomesRecord).forEach((outcomeArr) => {
-        outcomeArr.forEach((item) => {
-            const label = HOUSING_OUTCOMES_LABELS[item.answer as keyof typeof HOUSING_OUTCOMES_LABELS];
-            if (label) {
-                item.answer = label;
-            }
-        });
-    });
-}
-    })
-    return results;
-}
+  Object.entries(results).forEach(([key, arr]) => {
+    if (LABEL_MAP[key]) {
+      mapAnswersWithLabels(arr as BarOrPieResult[], LABEL_MAP[key].labels, LABEL_MAP[key].defaultLabel);
+    } else if (key === "housingOutcomes") {
+      const outcomesRecord = arr as Record<string, BarOrPieResult[]>;
+      Object.values(outcomesRecord).forEach((outcomeArr) => {
+        mapAnswersWithLabels(outcomeArr, HOUSING_OUTCOMES_LABELS);
+      });
+    }
+  });
+  return results;
+};
+
+const mapAnswersWithLabels = (
+  arr: BarOrPieResult[],
+  labels: Record<string, string>,
+  defaultLabel = "Other"
+) => {
+  arr.forEach(item => {
+    const label = labels[item.answer as keyof typeof labels];
+    item.answer = label || defaultLabel;
+  });
+};
