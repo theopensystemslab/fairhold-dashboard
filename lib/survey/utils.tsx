@@ -31,12 +31,11 @@ export const aggregateResults = (rawResults: RawResults[]) => {
         addBarOrPieResult(barOrPie, rawResult);
         addSankeyResult(sankey, rawResult);
     }
-    // const shortenedBarOrPie = shortenStrings(barOrPie);
-    const sortedBarOrPie = sortResults(barOrPie);
+    const shortenedBarOrPie = shortenStrings(barOrPie);
+    const sortedBarOrPie = sortResults(shortenedBarOrPie);
     const slicedBarOrPie = getTopFive(sortedBarOrPie);
-    const shortenedBarOrPie = shortenStrings(slicedBarOrPie);
     
-    return { numberResponses, barOrPie: shortenedBarOrPie, sankey };
+    return { numberResponses, barOrPie: slicedBarOrPie, sankey };
 }
 
 const initializeBarOrPieResultsObject = (): BarOrPieResults => {
@@ -229,9 +228,22 @@ const sortResults = (results: BarOrPieResults) => {
     Object.values(results.housingOutcomes).forEach((arr) => {
         arr.sort((a, b) => b.value - a.value);
     });
-
-    return results;
-}
+    // Group all "Other" answers at the end for each array in results
+    Object.entries(results).forEach(([key, arr]) => {
+            if (key === "housingOutcomes") {
+                // Aggregate "Other" at the end for each tenure array
+                Object.values(arr as Record<string, BarOrPieResult[]>).forEach((outcomeArr) => {
+                    const aggregated = aggregateOther(outcomeArr);
+                    outcomeArr.length = 0;
+                    outcomeArr.push(...aggregated);
+                });
+            } else if (Array.isArray(arr) && key !== "housingOutcomes") {
+                const aggregated = aggregateOther(arr);
+                results[key as Exclude<keyof BarOrPieResults, "housingOutcomes">] = aggregated;
+            }
+        });
+        return results;
+    }
 
 const shortenStrings = (results: BarOrPieResults) => {
   Object.entries(results).forEach(([key, arr]) => {
@@ -256,4 +268,20 @@ const mapAnswersWithLabels = (
     const label = labels[item.answer as keyof typeof labels];
     item.answer = label || defaultLabel;
   });
+};
+
+const aggregateOther = (arr: BarOrPieResult[]): BarOrPieResult[] => {
+    let otherValue = 0;
+    const notOthers: BarOrPieResult[] = [];
+    arr.forEach(item => {
+        if (item.answer === "Other") {
+            otherValue += item.value;
+        } else {
+            notOthers.push(item);
+        }
+    });
+    if (otherValue > 0) {
+        notOthers.push({ answer: "Other", value: otherValue });
+    }
+    return notOthers;
 };
