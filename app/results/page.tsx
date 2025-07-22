@@ -28,7 +28,6 @@ const ResultsPageContent = () => {
         maintenanceLevel: params.get("maintenanceLevel") as MaintenanceLevel,
         houseSize: params.get("houseSize") ? Number(params.get("houseSize")) : undefined,
         };
-    if (formObj.housePostcode === "") { router.push("/") }
 
     useEffect(() => {
         if (!formObj.housePostcode) {
