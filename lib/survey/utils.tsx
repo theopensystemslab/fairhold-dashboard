@@ -207,43 +207,43 @@ const handleAnyMeansTenureChoice = (results: BarOrPieResults, value: string[]) =
     });
 };
 
+const sortByCustomOrder = (arr: BarOrPieResult[], order: string[]) => {
+    arr.sort((a, b) =>
+        order.indexOf(a.answer ?? "") - order.indexOf(b.answer ?? "")
+    );
+};
+
+const sortByValueDesc = (arr: BarOrPieResult[]) => {
+    arr.sort((a, b) => b.value - a.value);
+};
+
 const sortResults = (results: BarOrPieResults) => {
-    Object.entries(results).forEach(([key, arr]) => {
-        // Only sort if key is one of the four with a custom order
-        if (["affordFairhold", "ageGroup", "supportDevelopment", "supportNewFairhold"].includes(key)) {
-            const customOrder = CUSTOM_ORDERS[key];
-            if (customOrder) {
-                (arr as BarOrPieResult[]).sort(
-                    (a, b) =>
-                        customOrder.indexOf((a.answer ?? "") as string) -
-                        customOrder.indexOf((b.answer ?? "") as string)
-                );
-            }
-        }
-        if (["anyMeansTenureChoice", "whyFairhold", "whyNotFairhold", "supportDevelopmentFactors"].includes(key)) {
-            (arr as BarOrPieResult[]).sort((a, b) => b.value - a.value);
-        }
-    });
-    // Descending sort for housing outcomes is separate because it's grouped by tenure and thus a nested object
+    // We handle housingOutcomes separately (because it's a nested object)
     Object.values(results.housingOutcomes).forEach((arr) => {
-        arr.sort((a, b) => b.value - a.value);
+        sortByValueDesc(arr);
+        const aggregated = aggregateOther(arr);
+        arr.length = 0;
+        arr.push(...aggregated);
     });
-    // Group all "Other" answers at the end for each array in results
+
+    // We have two different sorting methods too
+    const customOrderKeys = ["affordFairhold", "ageGroup", "supportDevelopment", "supportNewFairhold"];
+    const valueDescKeys = ["anyMeansTenureChoice", "whyFairhold", "whyNotFairhold", "supportDevelopmentFactors"];
+
     Object.entries(results).forEach(([key, arr]) => {
-            if (key === "housingOutcomes") {
-                // Aggregate "Other" at the end for each tenure array
-                Object.values(arr as Record<string, BarOrPieResult[]>).forEach((outcomeArr) => {
-                    const aggregated = aggregateOther(outcomeArr);
-                    outcomeArr.length = 0;
-                    outcomeArr.push(...aggregated);
-                });
-            } else if (Array.isArray(arr) && key !== "housingOutcomes") {
-                const aggregated = aggregateOther(arr);
-                results[key as Exclude<keyof BarOrPieResults, "housingOutcomes">] = aggregated;
-            }
-        });
-        return results;
-    }
+        if (key === "housingOutcomes" || !Array.isArray(arr)) return;
+
+        if (customOrderKeys.includes(key)) {
+            sortByCustomOrder(arr, CUSTOM_ORDERS[key]);
+        } else if (valueDescKeys.includes(key)) {
+            sortByValueDesc(arr);
+        }
+        // Always aggregate "Other" at the end
+        results[key as Exclude<keyof BarOrPieResults, "housingOutcomes">] = aggregateOther(arr);
+    });
+
+    return results;
+};
 
 const shortenStrings = (results: BarOrPieResults) => {
   Object.entries(results).forEach(([key, arr]) => {
