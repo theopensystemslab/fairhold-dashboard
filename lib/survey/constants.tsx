@@ -107,3 +107,9 @@ export const HOUSING_OUTCOMES_LABELS = {
   "Freedom from a bad relationship": "Freedom from bad relationship",
   "None of these. My current situation is fine.": "Nothing"
 }
+
+export const LABEL_MAP: Record<string, { labels: Record<string, string>, defaultLabel?: string }> = {
+  whyFairhold: { labels: WHY_FAIRHOLD_LABELS, defaultLabel: "Other;" },
+  whyNotFairhold: { labels: WHY_NOT_FAIRHOLD_LABELS },
+  supportDevelopmentFactors: { labels: SUPPORT_DEVELOPMENT_LABELS }
+};
