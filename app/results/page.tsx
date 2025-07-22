@@ -54,8 +54,10 @@ const ResultsPageContent = () => {
     }, [params.toString()]); // re-run if params change
 
 return (
-        <main>
-            <div className="min-h-[70vh] flex items-center justify-center">
+        <main className="flex justify-center main-content">
+      <section className="w-full max-w-[1280px] flex flex-row py-8">
+        <div className="w-1/4" />
+        <div className="w-full md:w-3/4 flex-1 flex justify-center">
                 {view === "loading" && (
                     <ClipLoader color="black" size={50} />
                 )}
@@ -63,17 +65,20 @@ return (
                     <Dashboard processedData={data} />
                 )}
             </div>
+            </section>
         </main>
     );
 };
 
 const ResultsPage = () => (
     <>
+    <div className="min-h-screen w-full bg-gray-50">
         <Header />
         <Suspense fallback={<ClipLoader color="black" size={50} />}>
             <ResultsPageContent />
         </Suspense>
         <Footer />
+    </div>
     </>
 );
 
