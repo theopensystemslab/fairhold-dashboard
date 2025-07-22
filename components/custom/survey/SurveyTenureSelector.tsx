@@ -16,7 +16,10 @@ const SurveyTenureSelector: React.FC<SurveyTenureSelectorProps> = ({ options, va
         </SelectTrigger>
         <SelectContent>
           {options.map(option => (
-            <SelectItem key={option} value={option}>
+            <SelectItem 
+              key={option} 
+              value={option}
+              className="text-xs focus:bg-gray-200"              >
               {option}
             </SelectItem>
           ))}
