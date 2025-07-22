@@ -30,26 +30,10 @@ export const aggregateResults = (rawResults: RawResults[]) => {
         addSankeyResult(sankey, rawResult);
     }
 
-    Object.entries(barOrPie).forEach(([key, arr]) => {
-        if (Array.isArray(arr)) {
-            const customOrder = CUSTOM_ORDERS[key];
-            if (customOrder) {
-                arr.sort(
-                  (a, b) =>
-                    customOrder.indexOf((a.answer ?? "") as string) -
-                    customOrder.indexOf((b.answer ?? "") as string)
-                );
-            } else {
-                arr.sort((a, b) => b.value - a.value);
-            }
-        }
-    });
+    const sortedBarOrPie = sortResults(barOrPie);
+    const slicedBarOrPie = getTopFive(sortedBarOrPie);
 
-    Object.values(barOrPie.housingOutcomes).forEach((arr) => {
-        arr.sort((a, b) => b.value - a.value);
-    });
-
-    return { numberResponses, barOrPie, sankey };
+    return { numberResponses, barOrPie: slicedBarOrPie, sankey };
 }
 
 const initializeBarOrPieResultsObject = (): BarOrPieResults => {
@@ -95,26 +79,22 @@ const addBarOrPieResult = (results: BarOrPieResults, rawResult: RawResults) => {
         }
 
         if (validKey === "housingOutcomes") {
-            handleHousingOutcomes(results, value, rawResult.currentTenure);
+            handleHousingOutcomes(results, value as string[], rawResult.currentTenure);
             return;
         }
 
-        if (Array.isArray(results[validKey])) {
-            const arr = results[validKey] as BarOrPieResult[];
-            const isMultipleChoiceAnswer = Array.isArray(value);
-            isMultipleChoiceAnswer
-                ? value.forEach(item => addResultItem(arr, item))
-                : addResultItem(arr, value);
-        }
+        const arr = results[validKey] as BarOrPieResult[];
+        const isMultipleChoiceAnswer = Array.isArray(value);
+        isMultipleChoiceAnswer
+            ? value.forEach(item => addResultItem(arr, item))
+            : addResultItem(arr, value);
     });
 };
 
 const addSankeyResult = (results: SankeyResults, rawResult: RawResults) => {
     SANKEY_MAPPINGS.forEach(({ fromKey, toKey, newKey, isArray }) => {
-        const fromValue = rawResult[fromKey as keyof RawResults];
-        const toValue = rawResult[toKey as keyof RawResults];
-
-        if (!fromValue || Array.isArray(fromValue) || !toValue) return; // Skip if either value is missing
+        const fromValue = rawResult[fromKey as keyof RawResults] as string;
+        const toValue = rawResult[toKey as keyof RawResults] as string;
 
         const sankeyResult = results[newKey as keyof SankeyResults];
 
@@ -158,7 +138,14 @@ const updateSankeyNodesAndLinks = (
     }
 };
 
-export const getTopFive = (data: BarOrPieResult[]) => data.slice(0,5);
+const getTopFive = (barOrPieResults: BarOrPieResults) => {
+    for (const key in barOrPieResults) {
+        if (key === "whyFairhold" || key === "whyNotFairhold") {
+            barOrPieResults[key] = barOrPieResults[key].slice(0,5);
+        }
+    }
+    return barOrPieResults;
+}
 
 export const calculateChartMaximum = (data: BarOrPieResult[]) => {
     const maxValue = data[0]?.value ?? 0;
@@ -185,19 +172,17 @@ const mapTenureCategory = (tenure: string): string => {
 
 const handleHousingOutcomes = (
     results: BarOrPieResults,
-    value: unknown,
+    value: string[],
     currentTenure: string
 ) => {
-    const tenure = mapTenureCategory(currentTenure || "Unknown");
+    const tenure = mapTenureCategory(currentTenure);
     if (!results.housingOutcomes[tenure]) {
         results.housingOutcomes[tenure] = [];
     }
-    if (Array.isArray(value)) {
-        value.forEach(item =>
-            addResultItem(results.housingOutcomes[tenure], item)
-        );
-    }
-};
+    value.forEach(item =>
+        addResultItem(results.housingOutcomes[tenure], item)
+    );
+}
 
 const getExistingResult = (arr: BarOrPieResult[], answer: string) =>
     arr.find((result) => result.answer === answer);
@@ -219,3 +204,28 @@ const handleAnyMeansTenureChoice = (results: BarOrPieResults, value: string[]) =
         addResultItem(results.anyMeansTenureChoice, shortAnswer, weight);
     });
 };
+
+const sortResults = (results: BarOrPieResults) => {
+    Object.entries(results).forEach(([key, arr]) => {
+        // Only sort if key is one of the four with a custom order
+        if (["affordFairhold", "ageGroup", "supportDevelopment", "supportNewFairhold"].includes(key)) {
+            const customOrder = CUSTOM_ORDERS[key];
+            if (customOrder) {
+                (arr as BarOrPieResult[]).sort(
+                    (a, b) =>
+                        customOrder.indexOf((a.answer ?? "") as string) -
+                        customOrder.indexOf((b.answer ?? "") as string)
+                );
+            }
+        }
+        if (["whyFairhold", "whyNotFairhold", "supportDevelopmentFactors"].includes(key)) {
+            (arr as BarOrPieResult[]).sort((a, b) => b.value - a.value);
+        }
+    });
+    // Descending sort for housing outcomes is separate because it's grouped by tenure and thus a nested object
+    Object.values(results.housingOutcomes).forEach((arr) => {
+        arr.sort((a, b) => b.value - a.value);
+    });
+
+    return results;
+}

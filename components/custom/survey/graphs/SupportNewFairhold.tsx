@@ -2,17 +2,10 @@ import React from "react"
 import SurveyGraphCard from "@/components/custom/survey/SurveyGraphCard";
 import { PieChart, Pie, Legend, ResponsiveContainer, Cell } from "recharts";
 import { useSurveyContext } from "@context/surveyContext";
-import { SUPPORT_FAIRHOLD_ORDER } from "@lib/survey/constants";
-import { BarOrPieResult } from "@/lib/survey/types";
+
 
 export const SupportNewFairhold = () => {
-    let { supportNewFairhold } = useSurveyContext().barOrPie as { supportNewFairhold: BarOrPieResult[] };
-
-    supportNewFairhold = supportNewFairhold.slice().sort(
-        (a, b) =>
-            SUPPORT_FAIRHOLD_ORDER.indexOf(a.answer as string) -
-            SUPPORT_FAIRHOLD_ORDER.indexOf(b.answer as string)
-        );
+    const supportNewFairhold = useSurveyContext().barOrPie.supportNewFairhold;
 
     const COLORS = [
       "rgb(var(--fairhold-equity-color-rgb))", "rgb(var(--fairhold-interest-color-rgb))", "rgb(var(--survey-orange))", "rgb(var(--survey-pink))", "rgb(var(--social-rent-land-color-rgb))", "rgb(var(--survey-grey-light))"
