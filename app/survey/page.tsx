@@ -62,7 +62,6 @@ export default function SurveyPage() {
           <main className={`main-content min-h-screen w-full ]`}>
             <div className="flex flex-row">
               <div className="hidden md:block w-1/4"></div>
-
               <div className="w-full md:w-3/4 flex-1 flex justify-center">
                 <div className="w-full max-w-1280 flex flex-col p-4">
                   <h1 className="h1-style text-2xl md:text-4xl">Fairhold survey results</h1>
@@ -71,10 +70,10 @@ export default function SurveyPage() {
                   <p>No survey responses found.</p>
                 ) : (
                   <div>
-                    <h2 className="text-xl md:text-2xl">So far, {surveyResults.numberResponses} people have responded</h2>
+                    <p className="text-lg md:text-xl">So far, {surveyResults.numberResponses} people have responded</p>
                     
                     <div className="flex flex-col py-4">
-                      <h3 className="text-xl font-medium">Who has responded?</h3>
+                      <h2 className="text-xl font-bold">Who has responded?</h2>
                       <div className="flex flex-col md:flex-row md:h-[30rem] p-4">
                         <Country />
                         <Age />
@@ -83,7 +82,7 @@ export default function SurveyPage() {
                     </div>
 
                     <div className="flex flex-col">
-                      <h3 className="text-xl font-medium">Housing preferences</h3>
+                      <h2 className="text-xl font-bold">Housing preferences</h2>
                       <div className="flex flex-col md:flex-row md:h-[30rem] p-4">
                         <IdealHouseType />
                         <IdealLiveWith />
@@ -108,7 +107,7 @@ export default function SurveyPage() {
                     </div>
 
                     <div className="flex flex-col">
-                      <h3 className="text-xl font-medium">Attitudes towards development</h3>
+                      <h2 className="text-xl font-bold">Attitudes towards development</h2>
                       <div className="flex flex-col md:flex-row w-full md:gap-8 p-4">
                         <div className="flex flex-col md:w-1/2 w-full md:h-[60rem]">
                           <div className="flex-1 flex flex-col"> 
