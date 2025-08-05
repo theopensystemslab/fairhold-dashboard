@@ -41,6 +41,7 @@ export default function Home() {
     <>
     <div className="min-h-screen w-full bg-gray-50">
     <Header />
+    <div className="hidden md:block top-spacer"/>
     <main className="flex justify-center main-content">
       <section className="w-full max-w-[960px] flex flex-row py-8">
         <div className="w-full flex-1 flex justify-center">

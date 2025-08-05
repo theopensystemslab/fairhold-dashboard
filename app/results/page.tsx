@@ -54,9 +54,16 @@ const ResultsPageContent = () => {
     }, [params.toString()]); // re-run if params change
 
 return (
+<<<<<<< HEAD
         <main className="flex justify-center main-content">
       <section className="w-full max-w-[960px] flex flex-row py-8">
         <div className="w-full flex-1 flex justify-center">
+=======
+    <main className="flex justify-center main-content">
+      <section className="w-full max-w-[1280px] flex flex-row py-8">
+        <div className="w-1/4" />
+        <div className="w-full md:w-3/4 flex-1 flex justify-center">
+>>>>>>> e30b071 (style: top spacer after header)
                 {view === "loading" && (
                     <ClipLoader color="black" size={50} />
                 )}
@@ -73,6 +80,7 @@ const ResultsPage = () => (
     <>
     <div className="min-h-screen w-full bg-gray-50">
         <Header />
+        <div className="hidden md:block top-spacer"/>
         <Suspense fallback={<ClipLoader color="black" size={50} />}>
             <ResultsPageContent />
         </Suspense>
