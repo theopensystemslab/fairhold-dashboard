@@ -100,9 +100,7 @@ export default function SurveyPage() {
                         <WhyNotFairhold />
                       </div>
                       <div className="flex flex-col md:flex-row  md:h-[30rem] p-4">
-                        <div className="md:w-1/2 w-full mr-4">
-                          <AnyMeansTenureChoice />
-                        </div>
+                        <AnyMeansTenureChoice />
                         <div className="md:w-1/2 md:mr-4 hidden"></div>
                       </div>
                     </div>
