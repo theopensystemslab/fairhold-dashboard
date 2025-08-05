@@ -84,7 +84,7 @@ export default function SurveyPage() {
 
                     <div className="flex flex-col">
                       <h3 className="text-xl font-medium">Housing preferences</h3>
-                      <div className="flex flex-col md:flex-row w-full md:h-[30rem] p-4">
+                      <div className="flex flex-col md:flex-row md:h-[30rem] p-4">
                         <IdealHouseType />
                         <IdealLiveWith />
                       </div>
@@ -92,7 +92,7 @@ export default function SurveyPage() {
                         <HousingOutcomes />
                         <AffordFairhold />
                       </div>
-                      <div className="flex flex-col md:flex-row md:h-[30rem] p-4">
+                      <div className="flex flex-col md:flex-row md:h-[50rem] p-4">
                         <CurrentMeansTenureChoice />
                       </div>
                       <div className="flex flex-col md:flex-row md:h-[30rem] p-4">
