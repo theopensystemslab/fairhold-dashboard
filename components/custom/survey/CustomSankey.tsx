@@ -79,7 +79,7 @@ export const CustomSankey: React.FC<SankeyProps> = ({
                 <text 
                     x={isLeft ? props.x - adjustmentFactor : props.x + props.width + adjustmentFactor}
                     y={props.y + props.height / 2} 
-                    textAnchor={props.payload.depth === 0 ? "start" : "end"}
+                    textAnchor={isLeft ? "start" : "end"}
                     dominantBaseline="middle" 
                     fill="rgb(var(--text-default-rgb))" 
                     fontSize={12} 
