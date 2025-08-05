@@ -25,6 +25,7 @@ type NodePayload = {
     y: number;
     dy: number;
     color?: string;
+    label?: string;
 }
 
 type CustomLinkProps = {
