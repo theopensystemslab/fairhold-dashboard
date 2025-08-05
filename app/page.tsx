@@ -40,6 +40,7 @@ export default function Home() {
   return (
   <div className="min-h-screen w-full">
     <Header />
+    <div className="hidden md:block top-spacer"/>
     <main className="flex justify-center main-content">
       <section className="w-full max-w-[960px] m-5 lg:m-0 flex flex-row py-8">
         <div className="w-full flex-1 flex justify-center">
