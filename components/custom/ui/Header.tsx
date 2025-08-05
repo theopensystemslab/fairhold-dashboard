@@ -1,8 +1,6 @@
 import { useState } from "react";
 
 export const Header = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
-
   return (
   <header className="fixed top-0 left-0 w-full bg-transparent flex items-center justify-center px-4 py-4 z-40 max-h-[60px]"
     style={{ background: "rgb(var(--background-start-rgb))" }}
@@ -13,16 +11,31 @@ export const Header = () => {
           <div className="logo">Fairhold</div>
         </a>
       </div>
-      {/* Desktop Nav */}
-      <div className="hidden md:block">
-        <nav className="flex flex-row justify-end items-center space-x-0 w-nav-menu">
-          <a href="#" className="nav-link w-nav-link">Home</a>
-          <a href="#" className="nav-link w-nav-link">Explore</a>
-          <a href="#" className="nav-link w-nav-link">Take the survey</a>
-          <a href="#" className="nav-link w-nav-link">Contact</a>
-        </nav>
-      </div>
-      {/* Mobile Hamburger */}
+      <DesktopHeader />
+      <MobileHeader />
+      </section>
+    </header>
+  );
+};
+
+const DesktopHeader = () => {
+  return (
+    <div className="hidden md:block">
+      <nav className="flex flex-row justify-end items-center space-x-0 w-nav-menu">
+        <a href="#" className="nav-link w-nav-link">Home</a>
+        <a href="#" className="nav-link w-nav-link">Explore</a>
+        <a href="#" className="nav-link w-nav-link">Take the survey</a>
+        <a href="#" className="nav-link w-nav-link">Contact</a>
+      </nav>
+    </div>
+  );
+};
+
+const MobileHeader = () => {
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  return (
+    <>
       <div className="flex justify-end items-center md:hidden">
         <button
           className="p-2"
@@ -35,8 +48,6 @@ export const Header = () => {
           </svg>
         </button>
       </div>
-    </section>
-      {/* Mobile Menu Overlay */}
       {menuOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex flex-col items-end md:hidden">
           <div className="bg-white w-2/3 h-full p-8">
@@ -54,6 +65,6 @@ export const Header = () => {
           </div>
         </div>
       )}
-    </header>
+    </>
   );
 };
