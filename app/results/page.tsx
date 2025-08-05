@@ -55,9 +55,8 @@ const ResultsPageContent = () => {
 
 return (
         <main className="flex justify-center main-content">
-      <section className="w-full max-w-[1280px] flex flex-row py-8">
-        <div className="w-1/4" />
-        <div className="w-full md:w-3/4 flex-1 flex justify-center">
+      <section className="w-full max-w-[960px] flex flex-row py-8">
+        <div className="w-full flex-1 flex justify-center">
                 {view === "loading" && (
                     <ClipLoader color="black" size={50} />
                 )}

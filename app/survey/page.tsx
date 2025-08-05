@@ -61,12 +61,9 @@ export default function SurveyPage() {
       <Header />
         <SurveyContext.Provider value={surveyResults}>
         <main className="flex justify-center main-content">
-          <section className="w-full max-w-[1280px] flex flex-row py-8">
-            <div className="w-1/4" />
-            <div className="w-full md:w-3/4 flex-1 flex justify-center">
+          <section className="w-full max-w-[960px] flex flex-row py-8">
             <div className="flex flex-row">
-              <div className="w-full md:w-3/4 flex-1 flex justify-center">
-                <div className="w-full max-w-1280 flex flex-col p-4">
+                <div className="w-full flex flex-col p-4">
                   <h1 className="h1-style text-2xl md:text-4xl">Fairhold survey results</h1>
                     <div className="flex flex-col gap-4 mt-6">
                     {surveyResults.numberResponses === 0 ? (
@@ -129,8 +126,6 @@ export default function SurveyPage() {
                 )}
                   </div>
                 </div>
-              </div>
-            </div>
             </div>
             </section>
           </main>
