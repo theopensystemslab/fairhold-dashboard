@@ -314,17 +314,12 @@ const aggregateOther = (arr: BarOrPieResult[]): BarOrPieResult[] => {
     return notOthers;
 };
 
-export const applyNodeColors = <T extends { name: string }>(nodes: T[]) => {return nodes.map(node => {
-    const hasLabel = (n: typeof node): n is typeof node & { label: string } =>
-        typeof (n as { label?: unknown }).label === "string" && !!(n as { label?: unknown }).label;
-
-    const baseName = hasLabel(node)
-        ? node.label
-        : node.name.replace(/ \((current|ideal)\)$/i, "");
-
+export const applyNodeColors = (nodes: { name: string; label?: string }[]) => {
+  return nodes.map(node => {
+    const baseName = node.label ?? node.name.replace(/ \((current|ideal)\)$/i, "");
     return {
-        ...node,
-        color: TENURE_CHOICE_COLOR_MAP[baseName] || "rgb(var(--survey-grey-mid))"
+      ...node,
+      color: TENURE_CHOICE_COLOR_MAP[baseName] || "rgb(var(--survey-grey-mid))"
     };
 });
 }
