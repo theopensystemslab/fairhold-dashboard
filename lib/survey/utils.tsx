@@ -314,15 +314,19 @@ const aggregateOther = (arr: BarOrPieResult[]): BarOrPieResult[] => {
     return notOthers;
 };
 
-export const applyNodeColors = (nodes: {name: string }[]) => {
-    return nodes.map(node => {
-        // Remove suffix for color lookup if present
-        const baseName = node.name.replace(/ \((current|ideal)\)$/i, "");
-        return {
-            ...node,
-            color: TENURE_CHOICE_COLOR_MAP[baseName] || "rgb(var(--survey-grey-mid))"
-        };
-    });
+export const applyNodeColors = <T extends { name: string }>(nodes: T[]) => {return nodes.map(node => {
+    const hasLabel = (n: typeof node): n is typeof node & { label: string } =>
+        typeof (n as { label?: unknown }).label === "string" && !!(n as { label?: unknown }).label;
+
+    const baseName = hasLabel(node)
+        ? node.label
+        : node.name.replace(/ \((current|ideal)\)$/i, "");
+
+    return {
+        ...node,
+        color: TENURE_CHOICE_COLOR_MAP[baseName] || "rgb(var(--survey-grey-mid))"
+    };
+});
 }
 
 const padAndSortHousingOutcomes = (housingOutcomes: Record<string, BarOrPieResult[]>) => {
