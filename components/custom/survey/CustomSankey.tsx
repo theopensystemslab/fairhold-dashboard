@@ -25,6 +25,7 @@ type NodePayload = {
     y: number;
     dy: number;
     color?: string;
+    label?: string;
 }
 
 type CustomLinkProps = {
@@ -84,7 +85,7 @@ export const CustomSankey: React.FC<SankeyProps> = ({
                     fill="rgb(var(--text-default-rgb))" 
                     fontSize={12} 
                 > 
-                    {props.payload.name} 
+                    {props.payload.label || props.payload.name} 
                 </text> 
             </g> 
         ); 
