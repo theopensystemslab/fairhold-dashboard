@@ -61,7 +61,7 @@ export const WHY_NOT_FAIRHOLD_LABELS = {
 
 export const SUPPORT_DEVELOPMENT_LABELS = {
   "Homes that are affordable to keyworkers": "Prioritise keyworkers",
-  "Homes that are affordable to low-income families": "Prioritise low-income families",
+  "Homes that are affordable to low-income families": "Prioritise low-income",
   "Homes that are affordable to me": "Affordable to me",
   "Priority given to local residents and their families (to allow downsizing, for example)": "Prioritise locals",
   "Community-led or self-build development (designed for people, not profit)": "Community-led or self-build",

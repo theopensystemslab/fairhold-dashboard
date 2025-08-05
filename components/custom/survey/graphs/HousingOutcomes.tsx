@@ -67,7 +67,7 @@ export const HousingOutcomes = () => {
                     <YAxis 
                         type="category"    
                         dataKey="answer" 
-                        width={350} 
+                        width={150} 
                         fontSize={10}
                         interval={0}
                         tick={Tick}
