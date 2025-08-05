@@ -12,7 +12,11 @@ const SurveyGraphCard: React.FC<Props> = ({ title, subtitle, action, children })
         <h3 className={`text-xl md:text-lg sm:text-md font-bold text-black`}>{title}</h3>
                 {(subtitle || action) && (
           <div className="flex items-center gap-4 mt-2">
-            {subtitle && <p className="text-md text-gray-600 font-normal">{subtitle}</p>}
+            {subtitle && (
+              <p className="text-md font-normal" style={{ color: "rgba(var(--survey-grey-mid))" }}>
+                {subtitle}
+              </p>
+            )}
             {action}
           </div>
         )}      
