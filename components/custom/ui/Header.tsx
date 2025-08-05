@@ -22,10 +22,7 @@ const DesktopHeader = () => {
   return (
     <div className="hidden md:block">
       <nav className="flex flex-row justify-end items-center space-x-0 w-nav-menu">
-        <a href="#" className="nav-link w-nav-link">Home</a>
-        <a href="#" className="nav-link w-nav-link">Explore</a>
-        <a href="#" className="nav-link w-nav-link">Take the survey</a>
-        <a href="#" className="nav-link w-nav-link">Contact</a>
+        <Links />
       </nav>
     </div>
   );
@@ -57,10 +54,7 @@ const MobileHeader = () => {
               </svg>
             </button>
             <nav className="flex flex-col space-y-6">
-              <a href="#" className="nav-link w-nav-link">Home</a>
-              <a href="#" className="nav-link w-nav-link">Explore</a>
-              <a href="#" className="nav-link w-nav-link">Take the survey</a>
-              <a href="#" className="nav-link w-nav-link">Contact</a>
+              <Links />
             </nav>
           </div>
         </div>
@@ -68,3 +62,14 @@ const MobileHeader = () => {
     </>
   );
 };
+
+const Links = () => {
+  return (
+    <>
+        <a href="#" className="nav-link w-nav-link">Home</a>
+        <a href="#" className="nav-link w-nav-link">Explore</a>
+        <a href="#" className="nav-link w-nav-link">Take the survey</a>
+        <a href="#" className="nav-link w-nav-link">Contact</a>
+    </>
+  )
+}
