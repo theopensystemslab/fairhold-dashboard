@@ -162,8 +162,8 @@ export const CustomSankey: React.FC<SankeyProps> = ({
                 zIndex: 1,
                 height: 40
             }}>
-                <span>{leftLabel}</span>
-                <span>{rightLabel}</span>
+                <span className="text-md font-medium">{leftLabel}</span>
+                <span className="text-md font-medium">{rightLabel}</span>
             </div>
             <div style={{ width: "100%", height: "calc(100% - 40px)", marginTop: 40 }}>
                 <ResponsiveContainer width="100%" height="100%">
