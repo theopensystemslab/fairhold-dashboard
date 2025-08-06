@@ -5,6 +5,7 @@ import { DEFAULT_INTEREST_RATE, DEFAULT_MORTGAGE_TERM, DEFAULT_INITIAL_DEPOSIT }
 import ReactMarkdown from 'react-markdown';
 import explanationContent from '../help/WhatDifference.md';
 import { DEFAULT_FORECAST_PARAMETERS } from "@/models/ForecastParameters";
+import Highlight from '../../ui/Highlight';
 
 type CardsProps = {
   household: Household;
@@ -33,10 +34,6 @@ const SubCard: React.FC<React.PropsWithChildren<CardProps>> = ({ figure, title, 
     <p className="text-xl text-[rgb(var(--fairhold-equity-color-rgb))] font-semibold">{title}</p>
     <div className="text-sm">{children}</div>
   </div>
-)
-
-const Highlight: React.FC<React.PropsWithChildren> = ({ children }) => (
-  <span className="text-[rgb(var(--fairhold-equity-color-rgb))] font-semibold">{children}</span>
 )
 
 const Cards: React.FC<CardsProps> = ({ household }) => {
