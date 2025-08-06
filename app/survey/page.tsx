@@ -22,6 +22,7 @@ import { SurveyContext } from '@context/surveyContext';
 // get record https://api.airtable.com/v0/{baseId}/{tableIdOrName}/{recordId}
 import { Header } from "@components/custom/ui/Header";
 import { Footer } from "@components/custom/ui/Footer";
+import Highlight from "@components/custom/ui/Highlight";
 
 export default function SurveyPage() {
   const [surveyResults, setSurveyResults] = useState<SurveyResults | null>(null);
@@ -70,7 +71,7 @@ export default function SurveyPage() {
                   <p>No survey responses found.</p>
                 ) : (
                   <div>
-                    <p className="text-lg md:text-xl">So far, {surveyResults.numberResponses} people have responded</p>
+                    <p className="text-lg md:text-xl">So far, <Highlight>{surveyResults.numberResponses}</Highlight> people have responded.</p>
                     
                     <div className="flex flex-col py-4">
                       <h2 className="text-xl font-bold">Who has responded?</h2>
