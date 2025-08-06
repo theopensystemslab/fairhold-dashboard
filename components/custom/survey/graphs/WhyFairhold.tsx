@@ -29,7 +29,7 @@ export const WhyFairhold = () => {
                   interval={0}
                   tickLine={false}
                   axisLine={false}
-                  tick={CustomTick}
+                  tick={props => CustomTick(props, "rgb(var(--fairhold-equity-color-rgb))")}                  
                   /> 
               <Bar dataKey="value" fill="rgb(var(--fairhold-equity-color-rgb))" /> 
           </BarChart>
