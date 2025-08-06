@@ -1,10 +1,10 @@
 import React, { useState } from "react"
-import { TickProps } from "@lib/survey/types";
 import SurveyGraphCard from "@components/custom/survey/SurveyGraphCard";
 import { Bar, BarChart, XAxis, YAxis, ResponsiveContainer } from "recharts";
 import { useSurveyContext } from "@context/surveyContext";
 import SurveyTenureSelector from "../SurveyTenureSelector";
 import { TENURE_COLORS } from "@lib/survey/constants";
+import CustomTick from "../CustomTick";
 
 export const HousingOutcomes = () => {
     const housingOutcomes = useSurveyContext().barOrPie.housingOutcomes;
@@ -17,25 +17,6 @@ export const HousingOutcomes = () => {
     );
 
     const color = TENURE_COLORS[selectedTenure] || "rgb(var(--text-default-rgb))";
-
-    const Tick = (props: TickProps) => {
-        const { x, y, payload } = props;
-        return (
-            <g transform={`translate(${x},${y})`}>
-            <text 
-                x={-10} 
-                y={0} 
-                dy={4} 
-                textAnchor="end" 
-                fill={color} 
-                fontSize={10}
-                width={240}
-            >
-                {payload.value}
-            </text>
-            </g>
-        );
-    }
 
     return (
         <SurveyGraphCard 
@@ -68,9 +49,8 @@ export const HousingOutcomes = () => {
                         type="category"    
                         dataKey="answer" 
                         width={150} 
-                        fontSize={10}
                         interval={0}
-                        tick={Tick}
+                        tick={CustomTick}
                         tickLine={false}
                         axisLine={false}
                         /> 

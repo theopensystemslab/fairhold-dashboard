@@ -1,30 +1,11 @@
 import React from "react"
-import { TickProps } from "@lib/survey/types";
 import SurveyGraphCard from "@components/custom/survey/SurveyGraphCard";
 import { Bar, BarChart, XAxis, YAxis, ResponsiveContainer } from "recharts";
 import { useSurveyContext } from "@context/surveyContext";
+import CustomTick from "../CustomTick";
 
 export const WhyFairhold = () => {
   const { whyFairhold } = useSurveyContext().barOrPie;
-
-  const Tick = (props: TickProps) => {
-      const { x, y, payload } = props;
-      return (
-        <g transform={`translate(${x},${y})`}>
-          <text 
-            x={-10} 
-            y={0} 
-            dy={4} 
-            textAnchor="end" 
-            fill="#333" 
-            fontSize={10}
-            width={240}
-          >
-            {payload.value}
-          </text>
-        </g>
-      );
-  }
   
   return (
       <SurveyGraphCard title="Why would you choose Fairhold?">
@@ -48,7 +29,8 @@ export const WhyFairhold = () => {
                   interval={0}
                   tickLine={false}
                   axisLine={false}
-                  tick={Tick}/> 
+                  tick={CustomTick}
+                  /> 
               <Bar dataKey="value" fill="rgb(var(--fairhold-equity-color-rgb))" /> 
           </BarChart>
           </ResponsiveContainer>
