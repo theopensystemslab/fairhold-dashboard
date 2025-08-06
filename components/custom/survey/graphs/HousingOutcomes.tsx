@@ -48,7 +48,7 @@ export const HousingOutcomes = () => {
                     <YAxis 
                         type="category"    
                         dataKey="answer" 
-                        width={150} 
+                        width={160} 
                         interval={0}
                         tick={CustomTick}
                         tickLine={false}

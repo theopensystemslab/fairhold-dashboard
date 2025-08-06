@@ -25,7 +25,7 @@ export const SupportDevelopmentFactors = () => {
                 <YAxis 
                     type="category"    
                     dataKey="answer" 
-                    width={150} 
+                    width={180} 
                     interval={0}
                     tick={CustomTick}
                     axisLine={false}
