@@ -28,7 +28,7 @@ export const WhyNotFairhold = () => {
   
   return (
       <SurveyGraphCard title="Why wouldn't you choose Fairhold?">
-          <ResponsiveContainer>
+          <ResponsiveContainer height={150}>
           <BarChart
               data={whyNotFairhold}
               barSize={20}
