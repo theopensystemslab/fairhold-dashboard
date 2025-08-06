@@ -34,7 +34,7 @@ export const aggregateResults = (rawResults: RawResults[]) => {
     }
     const shortenedBarOrPie = shortenStrings(barOrPie);
     const sortedBarOrPie = sortResults(shortenedBarOrPie);
-    const slicedBarOrPie = getTopFive(sortedBarOrPie);
+    const slicedBarOrPie = sliceResults(sortedBarOrPie);
     
     return { numberResponses, barOrPie: slicedBarOrPie, sankey };
 }
@@ -158,10 +158,13 @@ const updateSankeyNodesAndLinks = (
     }
 };
 
-const getTopFive = (barOrPieResults: BarOrPieResults) => {
+const sliceResults = (barOrPieResults: BarOrPieResults) => {
     for (const key in barOrPieResults) {
         if (key === "whyFairhold" || key === "whyNotFairhold") {
             barOrPieResults[key] = barOrPieResults[key].slice(0,5);
+        }
+        else if (key === "housingOutcomes") { // We have to slice this one per-tenure, but also pad out the number of answers if less than 10
+            padAndSortHousingOutcomes(barOrPieResults[key])
         }
     }
     return barOrPieResults;
@@ -314,3 +317,18 @@ export const applyNodeColors = (nodes: {name: string }[]) => {
         };
     });
 }
+
+const padAndSortHousingOutcomes = (housingOutcomes: Record<string, BarOrPieResult[]>) => {
+    Object.entries(housingOutcomes).forEach(([outcomeKey, outcomeArr]) => {
+        const allLabels = Object.values(HOUSING_OUTCOMES_LABELS);
+        const answerMap = new Map(outcomeArr.map(item => [item.answer, item.value]));
+        // We pad the array to make the number of answers per tenure consistent
+        const paddedArr = allLabels.map(label => ({
+            answer: label,
+            value: answerMap.get(label) ?? 0
+        }));
+        // And then sort descending + slice to 10
+        paddedArr.sort((a, b) => b.value - a.value);
+        const topTenOutcomes = paddedArr.slice(0, 10);
+        housingOutcomes[outcomeKey] = topTenOutcomes;
+    })};
