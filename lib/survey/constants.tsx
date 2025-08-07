@@ -22,11 +22,11 @@ export const AFFORD_FAIRHOLD = [
 ] as const;
 
 export const SUPPORT_DEVELOPMENT_ORDER = [
-    "Strongly supportive of any development", 
-    "Quite supportive of any development", 
+    "Strongly supportive", 
+    "Quite supportive", 
     "It depends", 
-    "Quite opposed to most development",
-    "Strongly opposed to any development",
+    "Quite opposed",
+    "Strongly opposed",
     "Don't know",
 ]
 
@@ -59,7 +59,7 @@ export const WHY_NOT_FAIRHOLD_LABELS = {
   "I don't know enough about it yet": "Not enough information"
 }
 
-export const SUPPORT_DEVELOPMENT_LABELS = {
+export const SUPPORT_DEVELOPMENT_FACTORS_LABELS = {
   "Homes that are affordable to keyworkers": "Prioritise keyworkers",
   "Homes that are affordable to low-income families": "Prioritise low-income",
   "Homes that are affordable to me": "Affordable to me",
@@ -108,10 +108,19 @@ export const HOUSING_OUTCOMES_LABELS = {
   "None of these. My current situation is fine.": "Nothing"
 }
 
+export const SUPPORT_DEVELOPMENT_LABELS = {
+  "Strongly supportive of any development": "Strongly supportive",
+  "Quite supportive of most development": "Quite supportive",
+  "It depends": "It depends",
+  "Quite opposed to most development": "Quite opposed",
+  "Strongly opposed to any development": "Strongly opposed"
+}
+
 export const LABEL_MAP: Record<string, { labels: Record<string, string>, defaultLabel?: string }> = {
   whyFairhold: { labels: WHY_FAIRHOLD_LABELS, defaultLabel: "Other;" },
   whyNotFairhold: { labels: WHY_NOT_FAIRHOLD_LABELS },
-  supportDevelopmentFactors: { labels: SUPPORT_DEVELOPMENT_LABELS }
+  supportDevelopment: { labels: SUPPORT_DEVELOPMENT_LABELS },
+  supportDevelopmentFactors: { labels: SUPPORT_DEVELOPMENT_FACTORS_LABELS }
 };
 
 
