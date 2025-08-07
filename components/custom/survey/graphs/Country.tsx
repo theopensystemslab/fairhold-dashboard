@@ -27,7 +27,11 @@ import { BarOrPieResult } from "@/lib/survey/types";
                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
               ))}
               </Pie>
-            <Legend align="center" verticalAlign="bottom" />
+            <Legend 
+              align="center" 
+              verticalAlign="bottom" 
+              wrapperStyle={{ fontSize: 18 }}
+            />
             </PieChart>
         </ResponsiveContainer>
       </SurveyGraphCard>

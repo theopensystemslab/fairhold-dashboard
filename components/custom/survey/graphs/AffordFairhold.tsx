@@ -26,7 +26,11 @@ export const AffordFairhold = () => {
                         <Cell key={`cell-${index}`} fill={COLORS[index]} />
                     ))}
                     </Pie>
-                    <Legend align="center" verticalAlign="bottom" />
+                    <Legend 
+                        align="center" 
+                        verticalAlign="bottom" 
+                        wrapperStyle={{ fontSize: 18 }}
+                        />
                 </PieChart>
             </ResponsiveContainer>
         </SurveyGraphCard>

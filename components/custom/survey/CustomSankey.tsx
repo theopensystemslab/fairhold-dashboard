@@ -81,8 +81,10 @@ export const CustomSankey: React.FC<SankeyProps> = ({
                     y={props.y + props.height / 2} 
                     textAnchor={isLeft ? "start" : "end"}
                     dominantBaseline="middle" 
-                    fill="rgb(var(--text-default-rgb))" 
-                    fontSize={12} 
+                    fill={props.payload.color} 
+                    fontSize={14}
+                    fontWeight={"bold"}
+                    fillOpacity={0.8}
                 > 
                     {props.payload.name} 
                 </text> 
@@ -137,7 +139,7 @@ export const CustomSankey: React.FC<SankeyProps> = ({
                         textAnchor="middle" 
                         dominantBaseline="middle" 
                         fill="#333" 
-                        fontSize={10} 
+                        fontSize={14} 
                         pointerEvents="none" 
                     > 
                         {payload.value} 
@@ -162,8 +164,8 @@ export const CustomSankey: React.FC<SankeyProps> = ({
                 zIndex: 1,
                 height: 40
             }}>
-                <span>{leftLabel}</span>
-                <span>{rightLabel}</span>
+                <span className="text-md font-medium">{leftLabel}</span>
+                <span className="text-md font-medium">{rightLabel}</span>
             </div>
             <div style={{ width: "100%", height: "calc(100% - 40px)", marginTop: 40 }}>
                 <ResponsiveContainer width="100%" height="100%">
