@@ -54,7 +54,7 @@ const ResultsPageContent = () => {
     }, [params.toString()]); // re-run if params change
 
 return (
-        <main className="flex justify-center main-content">
+    <main className="flex justify-center main-content">
       <section className="w-full max-w-[960px] flex flex-row py-8">
         <div className="w-full flex-1 flex justify-center">
                 {view === "loading" && (
@@ -64,13 +64,12 @@ return (
                     <Dashboard processedData={data} />
                 )}
             </div>
-            </section>
-        </main>
+        </section>
+    </main>
     );
 };
 
 const ResultsPage = () => (
-    <>
     <div className="min-h-screen w-full bg-gray-50">
         <Header />
         <Suspense fallback={<ClipLoader color="black" size={50} />}>
@@ -78,7 +77,6 @@ const ResultsPage = () => (
         </Suspense>
         <Footer />
     </div>
-    </>
 );
 
 export default ResultsPage;

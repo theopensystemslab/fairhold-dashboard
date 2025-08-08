@@ -38,8 +38,7 @@ export default function Home() {
   };
 
   return (
-    <>
-    <div className="min-h-screen w-full bg-gray-50">
+  <div className="min-h-screen w-full bg-gray-50">
     <Header />
     <main className="flex justify-center main-content">
       <section className="w-full max-w-[960px] flex flex-row py-8">
@@ -56,7 +55,6 @@ export default function Home() {
       </section>
     </main>
     <Footer/>
-    </div>
-    </>
+  </div>
   );
 }
