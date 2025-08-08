@@ -48,7 +48,7 @@ export const AnyMeansTenureChoice = () => {
             title="Rank the tenures by preference"
             subtitle="If you could afford (and were eligible for) any type of home, which would you prefer?"
             >
-          <ResponsiveContainer height={anyMeansTenureChoice.length * 30}>
+          <ResponsiveContainer height={150}>
           <BarChart
               data={anyMeansTenureChoice}
               barSize={20}
