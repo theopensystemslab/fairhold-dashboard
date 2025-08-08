@@ -38,10 +38,10 @@ export default function Home() {
   };
 
   return (
-  <div className="min-h-screen w-full bg-gray-50">
+  <div className="min-h-screen w-full">
     <Header />
     <main className="flex justify-center main-content">
-      <section className="w-full max-w-[960px] flex flex-row py-8">
+      <section className="w-full max-w-[960px] m-5 lg:m-0 flex flex-row py-8">
         <div className="w-full flex-1 flex justify-center">
             {error && (
         <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4 mx-4">
