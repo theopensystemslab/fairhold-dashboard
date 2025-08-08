@@ -28,7 +28,7 @@ export const WhyNotFairhold = () => {
                   interval={0}
                   tickLine={false}
                   axisLine={false}
-                  tick={CustomTick}
+                  tick={(props) => <CustomTick {...props} />}
                 /> 
               <Bar dataKey="value" fill="rgb(var(--survey-placeholder))" /> 
           </BarChart>

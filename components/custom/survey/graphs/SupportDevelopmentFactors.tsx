@@ -27,7 +27,7 @@ export const SupportDevelopmentFactors = () => {
                     dataKey="answer" 
                     width={180} 
                     interval={0}
-                    tick={CustomTick}
+                    tick={(props) => <CustomTick {...props} />}
                     axisLine={false}
                     tickLine={false}
                     /> 

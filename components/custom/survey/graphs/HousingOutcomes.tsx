@@ -50,7 +50,7 @@ export const HousingOutcomes = () => {
                         dataKey="answer" 
                         width={160} 
                         interval={0}
-                        tick={CustomTick}
+                        tick={(props) => <CustomTick {...props} />}
                         tickLine={false}
                         axisLine={false}
                         /> 
