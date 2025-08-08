@@ -160,11 +160,18 @@ const updateSankeyNodesAndLinks = (
 
 const sliceResults = (barOrPieResults: BarOrPieResults) => {
     for (const key in barOrPieResults) {
-        if (key === "whyFairhold" || key === "whyNotFairhold") {
-            barOrPieResults[key] = barOrPieResults[key].slice(0,5);
-        }
-        else if (key === "housingOutcomes") { // We have to slice this one per-tenure, but also pad out the number of answers if less than 10
-            padAndSortHousingOutcomes(barOrPieResults[key])
+        switch (key) {
+            case "whyFairhold":
+            case "whyNotFairhold":
+                barOrPieResults[key] = barOrPieResults[key].slice(0, 5);
+                break;
+            case "housingOutcomes":
+                // We have to slice this one per-tenure, but also pad out the number of answers if less than 10
+                padAndSortHousingOutcomes(barOrPieResults[key]);
+                break;
+            default:
+                // No action for other keys
+                break;
         }
     }
     return barOrPieResults;
