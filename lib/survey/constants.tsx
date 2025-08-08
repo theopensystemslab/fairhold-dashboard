@@ -45,7 +45,7 @@ export const WHY_FAIRHOLD_LABELS = {
   "To get a better home": "Quality home",
   "I want to build my own home": "Self-build",
   "To live in a better location": "Location",
-  "Environmental sustainability is important to me": "Environmental sustainability",
+  "Environmental sustainability is important to me": "Sustainability",
   "I want to see a fairer society": "Fairness"
 }
 
@@ -74,7 +74,7 @@ export const SUPPORT_DEVELOPMENT_FACTORS_LABELS = {
   "Small-scale development spread across the area": "Small-scale development",
   "Infill development on gap sites, increasing the density of existing neighbourhoods instead of developing greenfield land": "Infill development",
   "Only build new neighbourhoods on sites away from existing homes": "Away from existing homes",
-  "Environmentally sustainable, zero-carbon homes": "Environmentally sustainable",
+  "Environmentally sustainable, zero-carbon homes": "Sustainability",
   "Development that protects and enhances biodiversity": "Biodiversity gain",
   "Built by local companies, supporting local jobs": "Local jobs",
   "Includes a financial return for me and my family": "Financial return",
