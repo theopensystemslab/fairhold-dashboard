@@ -72,6 +72,7 @@ return (
 const ResultsPage = () => (
     <div className="min-h-screen w-full bg-gray-50">
         <Header />
+        <div className="hidden md:block top-spacer"/> 
         <Suspense fallback={<ClipLoader color="black" size={50} />}>
             <ResultsPageContent />
         </Suspense>
