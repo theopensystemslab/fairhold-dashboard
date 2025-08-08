@@ -2,9 +2,9 @@ import React, { useState } from "react"
 import SurveyGraphCard from "@components/custom/survey/SurveyGraphCard";
 import { Bar, BarChart, XAxis, YAxis, ResponsiveContainer } from "recharts";
 import { useSurveyContext } from "@context/surveyContext";
-import SurveyTenureSelector from "../SurveyTenureSelector";
+import SurveyTenureSelector from "@components/custom/survey/SurveyTenureSelector";
 import { TENURE_COLORS } from "@lib/survey/constants";
-import CustomTick from "../CustomTick";
+import CustomTick from "@components/custom/survey/CustomTick";
 
 export const HousingOutcomes = () => {
     const housingOutcomes = useSurveyContext().barOrPie.housingOutcomes;
