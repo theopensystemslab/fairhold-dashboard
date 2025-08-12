@@ -10,6 +10,10 @@ export const Age = () => {
     const COLORS = [
       "rgb(var(--survey-grey-lightest))", "rgb(var(--survey-grey-light))", "rgb(var(--survey-grey-mid))", "rgb(var(--survey-grey-dark))", "rgb(var(--survey-black))"  
     ];
+
+    const renderLegendText = (value: string) => (
+        <span style={{ color: "rgb(var(--survey-grey-mid))" }}>{value}</span>
+        );
   
     return (
         <SurveyGraphCard title="How old are you?">
@@ -30,7 +34,7 @@ export const Age = () => {
                     <Legend 
                         align="center" 
                         verticalAlign="bottom" 
-                        wrapperStyle={{ fontSize: 18 }}
+                        formatter={renderLegendText}
                     />
                 </PieChart>
         </ResponsiveContainer>
