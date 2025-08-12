@@ -32,9 +32,10 @@ export const Age = () => {
                         ))}
                     </Pie>
                     <Legend 
-                        align="center" 
+                        align="left" 
                         verticalAlign="bottom" 
                         formatter={renderLegendText}
+                        wrapperStyle={{ fontSize: 14 }}
                     />
                 </PieChart>
         </ResponsiveContainer>
