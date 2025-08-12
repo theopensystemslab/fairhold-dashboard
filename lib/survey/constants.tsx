@@ -17,8 +17,8 @@ export const AGE_ORDER = [
 
 export const AFFORD_FAIRHOLD = [
   { label: "Yes", colour: "rgb(var(--fairhold-equity-color-rgb))" },
-  { label: "Yes, but Fairhold Land Rent only, because the deposit is lower", colour: "rgb(var(--fairhold-interest-color-rgb))" },
-  { label: "No, it's still too expensive", colour: "rgb(var(--social-rent-land-color-rgb))" },
+  { label: "Yes (Fairhold Land Rent only)", colour: "rgb(var(--fairhold-interest-color-rgb))" },
+  { label: "No", colour: "rgb(var(--social-rent-land-color-rgb))" },
 ] as const;
 
 export const SUPPORT_DEVELOPMENT_ORDER = [
@@ -108,6 +108,12 @@ export const HOUSING_OUTCOMES_LABELS = {
   "None of these. My current situation is fine.": "Nothing"
 }
 
+export const AFFORD_FAIRHOLD_LABELS = {
+  "Yes": "Yes",
+  "Yes, but Fairhold Land Rent only, because the deposit is lower": "Yes (Fairhold Land Rent only)",
+  "No, it's still too expensive": "No"
+}
+
 export const SUPPORT_DEVELOPMENT_LABELS = {
   "Strongly supportive of any development": "Strongly supportive",
   "Quite supportive of most development": "Quite supportive",
@@ -117,6 +123,7 @@ export const SUPPORT_DEVELOPMENT_LABELS = {
 }
 
 export const LABEL_MAP: Record<string, { labels: Record<string, string>, defaultLabel?: string }> = {
+  affordFairhold: { labels: AFFORD_FAIRHOLD_LABELS},
   whyFairhold: { labels: WHY_FAIRHOLD_LABELS, defaultLabel: "Other;" },
   whyNotFairhold: { labels: WHY_NOT_FAIRHOLD_LABELS },
   supportDevelopment: { labels: SUPPORT_DEVELOPMENT_LABELS },
