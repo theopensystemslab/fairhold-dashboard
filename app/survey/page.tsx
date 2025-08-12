@@ -76,31 +76,31 @@ export default function SurveyPage() {
                     
                     <div className="flex flex-col py-4">
                       <h2 className="text-xl font-bold my-8">Who has responded?</h2>
-                      <div className="flex flex-col md:flex-row md:h-[30rem] p-4">
+                      <div className="flex flex-col gap-8 md:flex-row md:h-[30rem]">
                         <Country />
                         <Age />
                         {/* <Postcode {...results} /> */}
                       </div>
                     </div>
 
-                    <div className="flex flex-col">
+                    <div className="flex flex-col gap-8 ">
                       <h2 className="text-xl font-bold my-8">Housing preferences</h2>
-                      <div className="flex flex-col md:flex-row md:h-[30rem] p-4">
+                      <div className="flex flex-col gap-8 md:flex-row md:h-[30rem]">
                         <IdealHouseType />
                         <IdealLiveWith />
                       </div>
-                      <div className="flex flex-col md:flex-row md:h-[30rem] p-4">
+                      <div className="flex flex-col gap-8 md:flex-row md:h-[30rem]">
                         <HousingOutcomes />
                         <AffordFairhold />
                       </div>
-                      <div className="flex flex-col md:flex-row md:h-[50rem] p-4">
+                      <div className="flex flex-col md:flex-row md:h-[50rem]">
                         <CurrentMeansTenureChoice />
                       </div>
-                      <div className="flex flex-col md:flex-row md:h-[30rem] p-4">
+                      <div className="flex flex-col gap-8 md:flex-row md:h-[30rem]">
                         <WhyFairhold />
                         <WhyNotFairhold />
                       </div>
-                      <div className="flex flex-col md:flex-row  md:h-[30rem] p-4 mb-4">
+                      <div className="flex flex-col md:flex-row  md:h-[30rem] mb-4">
                         <div className="md:w-1/2 w-full mr-4">
                           <AnyMeansTenureChoice />
                         </div>
@@ -108,10 +108,10 @@ export default function SurveyPage() {
                       </div>
                     </div>
 
-                    <div className="flex flex-col">
+                    <div className="flex flex-col pb-8">
                       <h2 className="text-xl font-bold my-8">Attitudes towards development</h2>
-                      <div className="flex flex-col md:flex-row w-full md:gap-8 p-4">
-                        <div className="flex flex-col md:w-1/2 w-full md:h-[60rem]">
+                      <div className="flex flex-col md:flex-row w-full md:gap-8">
+                        <div className="flex flex-col md:w-1/2 w-full gap-8 md:h-[60rem]">
                           <div className="flex-1 flex flex-col"> 
                             <SupportDevelopment />
                           </div>
