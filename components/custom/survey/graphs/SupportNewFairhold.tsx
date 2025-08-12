@@ -13,7 +13,7 @@ export const SupportNewFairhold = () => {
     
     return (
         <SurveyGraphCard title="Would you support the creation of new Fairhold homes (or plots) in your area?">
-             <ResponsiveContainer width="100%" height="100%">
+             <ResponsiveContainer height={300}>
                 <PieChart>
                     <Pie 
                         data={supportNewFairhold} 
