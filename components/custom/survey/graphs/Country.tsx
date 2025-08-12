@@ -29,7 +29,6 @@ import { BarOrPieResult } from "@/lib/survey/types";
               </Pie>
             <Legend 
               align="left" 
-              // height={50}
               verticalAlign="bottom" 
               wrapperStyle={{ fontSize: 14 }}
             />
