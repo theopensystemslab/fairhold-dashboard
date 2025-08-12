@@ -75,7 +75,7 @@ export default function SurveyPage() {
                     <p className="text-lg md:text-xl">So far, <Highlight>{surveyResults.numberResponses}</Highlight> people have responded.</p>
                     
                     <div className="flex flex-col py-4">
-                      <h2 className="text-xl font-bold">Who has responded?</h2>
+                      <h2 className="text-xl font-bold my-8">Who has responded?</h2>
                       <div className="flex flex-col md:flex-row md:h-[30rem] p-4">
                         <Country />
                         <Age />
@@ -84,7 +84,7 @@ export default function SurveyPage() {
                     </div>
 
                     <div className="flex flex-col">
-                      <h2 className="text-xl font-bold">Housing preferences</h2>
+                      <h2 className="text-xl font-bold my-8">Housing preferences</h2>
                       <div className="flex flex-col md:flex-row md:h-[30rem] p-4">
                         <IdealHouseType />
                         <IdealLiveWith />
@@ -100,7 +100,7 @@ export default function SurveyPage() {
                         <WhyFairhold />
                         <WhyNotFairhold />
                       </div>
-                      <div className="flex flex-col md:flex-row  md:h-[30rem] p-4">
+                      <div className="flex flex-col md:flex-row  md:h-[30rem] p-4 mb-4">
                         <div className="md:w-1/2 w-full mr-4">
                           <AnyMeansTenureChoice />
                         </div>
@@ -109,7 +109,7 @@ export default function SurveyPage() {
                     </div>
 
                     <div className="flex flex-col">
-                      <h2 className="text-xl font-bold">Attitudes towards development</h2>
+                      <h2 className="text-xl font-bold my-8">Attitudes towards development</h2>
                       <div className="flex flex-col md:flex-row w-full md:gap-8 p-4">
                         <div className="flex flex-col md:w-1/2 w-full md:h-[60rem]">
                           <div className="flex-1 flex flex-col"> 
