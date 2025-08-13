@@ -180,7 +180,7 @@ export const CustomSankey: React.FC<SankeyProps> = ({
                         nodePadding={50}
                         margin={{
                             left: 150,
-                            right: 100,
+                            right: 150,
                             top: 50,
                             bottom: 50,
                         }}
