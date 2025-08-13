@@ -62,9 +62,7 @@ export default function SurveyPage() {
 
   return (
     <ErrorBoundary>
-      <div className="min-h-screen w-full bg-gray-50">
-      <Header />
-      <div className="hidden md:block top-spacer"/>
+      <SurveyLayout>
         <SurveyContext.Provider value={surveyResults}>
         <main className="flex justify-center main-content">
           <section className="w-full max-w-[960px] flex flex-row py-8">
@@ -135,17 +133,14 @@ export default function SurveyPage() {
             </section>
           </main>
         </SurveyContext.Provider>
-      <Footer />
-      </div>
+      </SurveyLayout>
     </ErrorBoundary>
   );
 }
 
 const SurveySkeleton: React.FC<React.PropsWithChildren> = () => (
   <ErrorBoundary>
-    <div role ="status" className="min-h-screen w-full bg-gray-50">
-      <Header />
-      <div className="hidden md:block top-spacer"/>
+        <SurveyLayout>
           <main className="flex justify-center main-content">
             <section className="w-full max-w-[960px] flex flex-row py-8">
               <div className="flex flex-row">
@@ -209,6 +204,15 @@ const SurveySkeleton: React.FC<React.PropsWithChildren> = () => (
                 </div>
           </section>
         </main>
-      </div>
+        </SurveyLayout>
     </ErrorBoundary>
   )
+
+const SurveyLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <div className="min-h-screen w-full bg-gray-50">
+    <Header />
+    <div className="hidden md:block top-spacer"/>
+    {children}
+    <Footer />
+  </div>
+);
