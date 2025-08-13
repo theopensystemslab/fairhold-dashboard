@@ -14,6 +14,7 @@ type CustomNodeProps = {
 
 type NodePayload = {
     name: string;
+    label?: string;
     sourceNodes: [];
     sourceLinks: [];
     targetLinks: [];
@@ -69,8 +70,8 @@ export const CustomSankey: React.FC<SankeyProps> = ({
     // Custom Node Component with Label 
     const CustomNode = (props: CustomNodeProps) => { 
         const isLeft = props.payload.depth === 0;
-        const adjustmentFactor = 80;
-        return ( 
+        const adjustmentFactor = 10;
+            return ( 
             <g> 
                 <Rectangle 
                     {...props} 
@@ -79,18 +80,18 @@ export const CustomSankey: React.FC<SankeyProps> = ({
                 <text 
                     x={isLeft ? props.x - adjustmentFactor : props.x + props.width + adjustmentFactor}
                     y={props.y + props.height / 2} 
-                    textAnchor={isLeft ? "start" : "end"}
+                    textAnchor={isLeft ? "end" : "start"}
                     dominantBaseline="middle" 
                     fill={props.payload.color} 
                     fontSize={14}
                     fontWeight={"bold"}
                     fillOpacity={0.8}
                 > 
-                    {props.payload.name} 
+                    {props.payload.label || props.payload.name} 
                 </text> 
             </g> 
         ); 
-    }; 
+    };
 
     // Custom Link Component with Label 
     const CustomLink = (props: CustomLinkProps) => { 
