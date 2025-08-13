@@ -1,4 +1,5 @@
 import React from "react";
+import { ClipLoader } from "react-spinners";
 
 type Props = React.PropsWithChildren<{
   title: string;
@@ -19,9 +20,17 @@ const SurveyGraphCard: React.FC<Props> = ({ title, subtitle, action, children })
             )}
             {action}
           </div>
-        )}      
-        {children && <div className="mt-4 flex-1">{children}</div>}
-    </div>
+        )}
+        <div className="mt-4 flex-1">
+          {children ? (
+            children
+          ) : (
+            <div className="flex items-center justify-center h-full w-full">
+              <ClipLoader />
+            </div>
+          )}
+        </div>
+      </div>
   );
 };
 
