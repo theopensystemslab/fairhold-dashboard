@@ -63,6 +63,13 @@ export default function SurveyPage() {
   return (
     <ErrorBoundary>
       <SurveyLayout>
+        {loading ? (
+          <SurveySkeleton />
+        ) : error ? (
+          <div>Error: {error}</div>
+        ) : !surveyResults ? (
+          <div>No survey data available.</div>
+        ) : (
         <SurveyContext.Provider value={surveyResults}>
         <main className="flex justify-center main-content">
           <section className="w-full max-w-[960px] flex flex-row py-8">
@@ -133,6 +140,7 @@ export default function SurveyPage() {
             </section>
           </main>
         </SurveyContext.Provider>
+        )}
       </SurveyLayout>
     </ErrorBoundary>
   );
@@ -140,71 +148,69 @@ export default function SurveyPage() {
 
 const SurveySkeleton: React.FC<React.PropsWithChildren> = () => (
   <ErrorBoundary>
-        <SurveyLayout>
-          <main className="flex justify-center main-content">
-            <section className="w-full max-w-[960px] flex flex-row py-8">
-              <div className="flex flex-row">
-                  <div className="w-full flex flex-col p-4">
-                    <h1 className="h1-style text-2xl md:text-4xl">Fairhold survey results</h1>
-                    <div className="flex flex-col gap-4 mt-6">
-                        <p className="text-lg md:text-xl">So far, <Highlight>...</Highlight> people have responded.</p>
+    <main className="flex justify-center main-content">
+      <section className="w-full max-w-[960px] flex flex-row py-8">
+        <div className="flex flex-row">
+            <div className="w-full flex flex-col p-4">
+              <h1 className="h1-style text-2xl md:text-4xl">Fairhold survey results</h1>
+              <div className="flex flex-col gap-4 mt-6">
+                  <p className="text-lg md:text-xl">So far, <Highlight>...</Highlight> people have responded.</p>
 
-                        <div className="flex flex-col py-4">
-                          <h2 className="text-xl font-bold my-8">Who has responded?</h2>
-                          <div className="flex flex-col gap-8 md:flex-row md:h-[30rem]">
-                            <SurveyGraphCard title="Where do you live?" />
-                            <SurveyGraphCard title="How old are you?" />
-                          </div>
-                        </div>
-
-                        <div className="flex flex-col gap-8">
-                          <h2 className="text-xl font-bold my-8">Housing preferences</h2>
-                          <div className="flex flex-col md:flex-row md:h-[30rem] gap-8">
-                            <SurveyGraphCard title="What type of home do you want to live in?" />
-                            <SurveyGraphCard title="Who do you want to live with?" />
-                          </div>
-                          <div className="flex flex-col md:flex-row md:h-[30rem] gap-8">
-                            <SurveyGraphCard title="What do you most want from housing that you don't currently get?" />
-                            <SurveyGraphCard title="Could you afford to buy a Fairhold home in your area?" />
-                          </div>
-                          <div className="flex flex-col md:flex-row md:h-[50rem]">
-                            <SurveyGraphCard title="Which tenure would you choose?" />
-                          </div>
-                          <div className="flex flex-col md:flex-row md:h-[30rem] gap-8">
-                            <SurveyGraphCard title="Why would you choose Fairhold?" />
-                            <SurveyGraphCard title="Why wouldn't you choose Fairhold?" />
-                          </div>
-                          <div className="flex flex-col md:flex-row  md:h-[30rem]">
-                            <div className="md:w-1/2 w-full mr-4">
-                              <SurveyGraphCard title="Rank the tenures by preference" />
-                            </div>
-                            <div className="md:w-1/2 md:mr-4 hidden"></div>
-                          </div>
-                        </div>
-
-                     <div className="flex flex-col pb-8">
-                       <h2 className="text-xl font-bold my-8">Attitudes towards development</h2>
-                       <div className="flex flex-col md:flex-row w-full md:gap-8">
-                         <div className="flex flex-col md:w-1/2 w-full gap-8 md:h-[60rem]">
-                           <div className="flex-1 flex flex-col"> 
-                                <SurveyGraphCard title="In general, do you support the development of new homes in your area?" />
-                           </div>
-                           <div className="flex-1 flex flex-col">
-                                <SurveyGraphCard title="Would you support the creation of new Fairhold homes (or plots) in your area?" />
-                           </div>
-                         </div>
-                         <div className="flex flex-col md:flex-row md:w-1/2 w-full md:h-[60rem]">
-                              <SurveyGraphCard title="Which of these factors would make you more likely to support new homes being created near where you live?" />
-                         </div>
-                       </div>
-
-                      </div>
+                  <div className="flex flex-col py-4">
+                    <h2 className="text-xl font-bold my-8">Who has responded?</h2>
+                    <div className="flex flex-col gap-8 md:flex-row md:h-[30rem]">
+                      <SurveyGraphCard title="Where do you live?" />
+                      <SurveyGraphCard title="How old are you?" />
                     </div>
                   </div>
+
+                  <div className="flex flex-col gap-8">
+                    <h2 className="text-xl font-bold my-8">Housing preferences</h2>
+                    <div className="flex flex-col md:flex-row md:h-[30rem] gap-8">
+                      <SurveyGraphCard title="What type of home do you want to live in?" />
+                      <SurveyGraphCard title="Who do you want to live with?" />
+                    </div>
+                    <div className="flex flex-col md:flex-row md:h-[30rem] gap-8">
+                      <SurveyGraphCard title="What do you most want from housing that you don't currently get?" />
+                      <SurveyGraphCard title="Could you afford to buy a Fairhold home in your area?" />
+                    </div>
+                    <div className="flex flex-col md:flex-row md:h-[50rem]">
+                      <SurveyGraphCard title="Which tenure would you choose?" />
+                    </div>
+                    <div className="flex flex-col md:flex-row md:h-[30rem] gap-8">
+                      <SurveyGraphCard title="Why would you choose Fairhold?" />
+                      <SurveyGraphCard title="Why wouldn't you choose Fairhold?" />
+                    </div>
+                    <div className="flex flex-col md:flex-row  md:h-[30rem]">
+                      <div className="md:w-1/2 w-full mr-4">
+                        <SurveyGraphCard title="Rank the tenures by preference" />
+                      </div>
+                      <div className="md:w-1/2 md:mr-4 hidden"></div>
+                    </div>
+                  </div>
+
+                <div className="flex flex-col pb-8">
+                  <h2 className="text-xl font-bold my-8">Attitudes towards development</h2>
+                  <div className="flex flex-col md:flex-row w-full md:gap-8">
+                    <div className="flex flex-col md:w-1/2 w-full gap-8 md:h-[60rem]">
+                      <div className="flex-1 flex flex-col"> 
+                          <SurveyGraphCard title="In general, do you support the development of new homes in your area?" />
+                      </div>
+                      <div className="flex-1 flex flex-col">
+                          <SurveyGraphCard title="Would you support the creation of new Fairhold homes (or plots) in your area?" />
+                      </div>
+                    </div>
+                    <div className="flex flex-col md:flex-row md:w-1/2 w-full md:h-[60rem]">
+                        <SurveyGraphCard title="Which of these factors would make you more likely to support new homes being created near where you live?" />
+                    </div>
+                  </div>
+
+                  </div>
                 </div>
-          </section>
-        </main>
-        </SurveyLayout>
+              </div>
+            </div>
+      </section>
+    </main>
     </ErrorBoundary>
   )
 
