@@ -80,7 +80,7 @@ const CalculatorInput: React.FC<CalculatorInputProps> = ({ onSubmit, isLoading }
   });
 
     return (
-      <div className="flex flex-col justify-center w-full mx-auto">
+      <div className="flex flex-col justify-center w-full mx-auto md:h-[60rem]">
         <div className="h1-style text-lg md:text-xl lg:text-2xl">
           Calculate how much a Fairhold home might cost you
         </div>

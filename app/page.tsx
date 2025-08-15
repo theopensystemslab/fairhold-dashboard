@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import CalculatorInput from "../components/custom/ui/CalculatorInput";
-import { ClipLoader } from "react-spinners";
+import { LoadingScreen } from "@/components/custom/LoadingScreen";
 import { Suspense } from "react";
 import { Footer } from "../components/custom/ui/Footer";
 import { Header } from "../components/custom/ui/Header";
@@ -49,7 +49,7 @@ export default function Home() {
           {error}
           </div>
       )}
-      <Suspense fallback={<ClipLoader />}>
+      <Suspense fallback={<LoadingScreen />}>
         <CalculatorInput onSubmit={handleSubmit} isLoading={isSubmitting} />
       </Suspense>
       </div>

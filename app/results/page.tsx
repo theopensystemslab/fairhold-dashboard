@@ -3,7 +3,8 @@ import React, { useEffect, useState, Suspense } from "react";
 import Dashboard from "@components/custom/ui/Dashboard";
 import { Header } from "@components/custom/ui/Header";
 import { Footer } from "@components/custom/ui/Footer";
-import ClipLoader from "react-spinners/ClipLoader"; 
+// import ClipLoader from "react-spinners/ClipLoader"; 
+import { LoadingScreen } from "@/components/custom/LoadingScreen";
 import { useSearchParams } from "next/navigation";
 import { FormFrontend } from "@schemas/formSchema";
 import { MaintenanceLevel } from "@models/constants";
@@ -58,7 +59,7 @@ return (
       <section className="w-full max-w-[960px] flex flex-row py-8">
         <div className="w-full flex-1 flex justify-center">
                 {view === "loading" && (
-                    <ClipLoader color="black" size={50} />
+                    <LoadingScreen />
                 )}
                 {view === "dashboard" && data && (
                     <Dashboard processedData={data} />
@@ -73,7 +74,7 @@ const ResultsPage = () => (
     <div className="min-h-screen w-full bg-gray-50">
         <Header />
         <div className="hidden md:block top-spacer"/> 
-        <Suspense fallback={<ClipLoader color="black" size={50} />}>
+        <Suspense fallback={<LoadingScreen />}>
             <ResultsPageContent />
         </Suspense>
         <Footer />
