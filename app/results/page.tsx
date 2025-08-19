@@ -3,7 +3,6 @@ import React, { useEffect, useState, Suspense } from "react";
 import Dashboard from "@components/custom/ui/Dashboard";
 import { Header } from "@components/custom/ui/Header";
 import { Footer } from "@components/custom/ui/Footer";
-// import ClipLoader from "react-spinners/ClipLoader"; 
 import { LoadingScreen } from "@/components/custom/LoadingScreen";
 import { useSearchParams } from "next/navigation";
 import { FormFrontend } from "@schemas/formSchema";
