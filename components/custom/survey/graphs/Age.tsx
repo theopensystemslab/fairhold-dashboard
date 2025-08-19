@@ -3,7 +3,6 @@ import SurveyGraphCard from "@/components/custom/survey/SurveyGraphCard";
 import { PieChart, Pie, Legend, ResponsiveContainer, Cell } from "recharts";
 import { useSurveyContext } from "@context/surveyContext";
 import { BarOrPieResult } from "@/lib/survey/types";
-import { useAnimateOnView } from "@hooks/UseAnimateOnView";
 
 export const Age = () => {
     const { ageGroup } = useSurveyContext().barOrPie as { ageGroup: BarOrPieResult[] };
@@ -15,13 +14,11 @@ export const Age = () => {
     const renderLegendText = (value: string) => (
         <span style={{ color: "rgb(var(--survey-grey-mid))" }}>{value}</span>
         );
-  
-  
-    const { ref, animate } = useAnimateOnView();
 
     return (
         <SurveyGraphCard title="How old are you?">
-            <div ref={ref} style={{ width: "100%", height: "100%" }}>
+        {(animate) => (
+            <div style={{ width: "100%", height: "100%" }}>
                 <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
                         <Pie 
@@ -41,11 +38,12 @@ export const Age = () => {
                             align="left" 
                             verticalAlign="bottom" 
                             formatter={renderLegendText}
-                        wrapperStyle={{ fontSize: 14 }}
+                            wrapperStyle={{ fontSize: 14 }}
                         />
                     </PieChart>
                 </ResponsiveContainer>
             </div>
+        )}
         </SurveyGraphCard>
     )
 }
