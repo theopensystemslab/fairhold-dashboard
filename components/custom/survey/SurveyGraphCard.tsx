@@ -7,7 +7,7 @@ type Props = {
   subtitle?: React.ReactNode;
   action?: React.ReactNode;
   loading?: boolean;
-  children?: (animate: boolean) => React.ReactNode;
+  children?: React.ReactNode | ((animate: boolean) => React.ReactNode);
 };
 
 const SurveyGraphCard: React.FC<Props> = ({ title, subtitle, action, children, loading }) => {
