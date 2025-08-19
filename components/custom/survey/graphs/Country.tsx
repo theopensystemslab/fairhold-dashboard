@@ -28,9 +28,9 @@ import { BarOrPieResult } from "@/lib/survey/types";
               ))}
               </Pie>
             <Legend 
-              align="center" 
+              align="left" 
               verticalAlign="bottom" 
-              wrapperStyle={{ fontSize: 18 }}
+              wrapperStyle={{ fontSize: 14 }}
             />
             </PieChart>
         </ResponsiveContainer>
