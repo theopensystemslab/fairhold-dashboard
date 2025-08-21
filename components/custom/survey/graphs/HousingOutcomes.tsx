@@ -8,7 +8,7 @@ import CustomTick from "@components/custom/survey/CustomTick";
 import { ResultGroupedByTenure } from "@/lib/survey/types";
 import { getMaxValue } from "@/lib/survey/utils";
 
-export const HousingOutcomes = () => {
+export const HousingOutcomes: React.FC<{ loading: boolean }> = ({ loading }) => {
     const housingOutcomes = useSurveyContext().barOrPie.housingOutcomes;
     const maxX = getMaxHousingOutcomeValue(housingOutcomes)
     
@@ -25,6 +25,7 @@ export const HousingOutcomes = () => {
         <SurveyGraphCard 
             title="What do you most want from housing that you don't currently get?" 
             subtitle="Showing top 10 responses for"
+            loading={loading}
             action={
             <SurveyTenureSelector
                 options={tenureOptions}
