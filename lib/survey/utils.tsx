@@ -314,15 +314,14 @@ const aggregateOther = (arr: BarOrPieResult[]): BarOrPieResult[] => {
     return notOthers;
 };
 
-export const applyNodeColors = (nodes: {name: string }[]) => {
-    return nodes.map(node => {
-        // Remove suffix for color lookup if present
-        const baseName = node.name.replace(/ \((current|ideal)\)$/i, "");
-        return {
-            ...node,
-            color: TENURE_CHOICE_COLOR_MAP[baseName] || "rgb(var(--survey-grey-mid))"
-        };
-    });
+export const applyNodeColors = (nodes: { name: string; label?: string }[]) => {
+  return nodes.map(node => {
+    const baseName = node.label ?? node.name.replace(/ \((current|ideal)\)$/i, ""); // we want to use the label if it exists, if it doesn't then we just use the name (but removing the suffixes created for unique node names)
+    return {
+      ...node,
+      color: TENURE_CHOICE_COLOR_MAP[baseName] || "rgb(var(--survey-grey-mid))"
+    };
+});
 }
 
 const padAndSortHousingOutcomes = (housingOutcomes: Record<string, BarOrPieResult[]>) => {
