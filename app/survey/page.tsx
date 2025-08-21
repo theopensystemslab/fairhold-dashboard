@@ -17,12 +17,21 @@ import { SupportDevelopmentFactors } from '@components/custom/survey/graphs/Supp
 import { SupportNewFairhold } from '@components/custom/survey/graphs/SupportNewFairhold';
 import { WhyFairhold } from '@components/custom/survey/graphs/WhyFairhold';
 import { WhyNotFairhold } from '@components/custom/survey/graphs/WhyNotFairhold';
-import { SurveyContext } from '@context/surveyContext';
+import { SurveyContext, defaultSurveyResults } from '@context/surveyContext';
 // list records https://api.airtable.com/v0/{baseId}/{tableIdOrName}
 // get record https://api.airtable.com/v0/{baseId}/{tableIdOrName}/{recordId}
 import { Header } from "@components/custom/ui/Header";
 import { Footer } from "@components/custom/ui/Footer";
 import Highlight from "@components/custom/ui/Highlight";
+
+const SurveyLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <div className="min-h-screen w-full bg-gray-50">
+    <Header />
+    <div className="hidden md:block top-spacer"/>
+    {children}
+    <Footer />
+  </div>
+);
 
 export default function SurveyPage() {
   const [surveyResults, setSurveyResults] = useState<SurveyResults | null>(null);
@@ -52,87 +61,81 @@ export default function SurveyPage() {
     fetchSurveyData();
   }, []);
 
-  if (loading) return <div>Loading survey data...</div>;
   if (error) return <div>Error: {error}</div>;
-  if (!surveyResults) return <div>No survey data available.</div>;
 
   return (
     <ErrorBoundary>
-      <div className="min-h-screen w-full bg-gray-50">
-      <Header />
-      <div className="hidden md:block top-spacer"/>
-        <SurveyContext.Provider value={surveyResults}>
-        <main className="flex justify-center main-content">
-          <section className="w-full max-w-[960px] flex flex-row py-8">
-            <div className="flex flex-row">
+      <SurveyLayout>
+          <SurveyContext.Provider value={surveyResults ?? defaultSurveyResults}>
+          <main className="flex justify-center main-content">
+            <section className="w-full max-w-[960px] flex flex-row py-8">
+              <div className="flex flex-row">
                 <div className="w-full flex flex-col p-4">
                   <h1 className="h1-style text-2xl md:text-4xl">Fairhold survey results</h1>
-                    <div className="flex flex-col gap-4 mt-6">
-                    {surveyResults.numberResponses === 0 ? (
-                  <p>No survey responses found.</p>
-                ) : (
-                  <div>
-                    <p className="text-lg md:text-xl">So far, <Highlight>{surveyResults.numberResponses}</Highlight> people have responded.</p>
-                    
-                    <div className="flex flex-col py-4">
-                      <h2 className="text-xl font-bold my-8">Who has responded?</h2>
-                      <div className="flex flex-col gap-8 md:flex-row h-[50rem] md:h-[30rem]">
-                        <Country />
-                        <Age />
-                        {/* <Postcode {...results} /> */}
-                      </div>
-                    </div>
+                  <div className="flex flex-col gap-4 mt-6">
+                    {surveyResults?.numberResponses === 0 ? (
+                      <p>No survey responses found.</p>
+                    ) : (
+                      <p className="text-lg md:text-xl">
+                        So far, <Highlight loading={loading}>{surveyResults?.numberResponses}</Highlight> people have responded.
+                      </p>
+                    )}
+                  </div>
 
-                    <div className="flex flex-col gap-8 ">
-                      <h2 className="text-xl font-bold my-8">Housing preferences</h2>
-                      <div className="flex flex-col gap-8 md:flex-row h-[50rem] md:h-[30rem]">
-                        <IdealHouseType />
-                        <IdealLiveWith />
-                      </div>
-                      <div className="flex flex-col gap-8 md:flex-row h-[50rem] md:h-[30rem]">
-                        <HousingOutcomes />
-                        <AffordFairhold />
-                      </div>
-                      <div className="flex flex-col md:flex-row h-[50rem]">
-                        <CurrentMeansTenureChoice />
-                      </div>
-                      <div className="flex flex-col gap-8 md:flex-row md:h-[20rem]">
-                        <WhyFairhold />
-                        <WhyNotFairhold />
-                      </div>
-                      <div className="flex flex-col md:flex-row md:h-[20rem] mb-4">
-                        <div className="w-full">
-                          <AnyMeansTenureChoice />
-                        </div>
-                      </div>
+                  <div className="flex flex-col py-4">
+                    <h2 className="text-xl font-bold my-8">Who has responded?</h2>
+                    <div className="flex flex-col gap-8 md:flex-row h-[50rem] md:h-[30rem]">
+                      <Country loading={loading} />
+                      <Age loading={loading} />
+                      {/* <Postcode {...results} /> */}
                     </div>
+                  </div>
 
-                    <div className="flex flex-col pb-8">
-                      <h2 className="text-xl font-bold my-8">Attitudes towards development</h2>
-                      <div className="flex flex-col md:flex-row w-full gap-8">
-                        <div className="flex flex-col md:w-1/2 w-full gap-8 md:h-[60rem]">
-                          <div className="flex-1 flex flex-col h-[50rem] md:h-[30rem]"> 
-                            <SupportDevelopment />
-                          </div>
-                          <div className="flex-1 flex flex-col l h-[50rem] md:h-[30rem]">
-                            <SupportNewFairhold />
-                          </div>
-                        </div>
-                        <div className="flex flex-col md:flex-row md:w-1/2 w-full md:h-[60rem]">
-                          <SupportDevelopmentFactors />
-                        </div>
+                  <div className="flex flex-col gap-8 ">
+                    <h2 className="text-xl font-bold my-8">Housing preferences</h2>
+                    <div className="flex flex-col gap-8 md:flex-row h-[50rem] md:h-[30rem]">
+                      <IdealHouseType loading={loading} />
+                      <IdealLiveWith loading={loading} />
+                    </div>
+                    <div className="flex flex-col gap-8 md:flex-row h-[50rem] md:h-[30rem]">
+                      <HousingOutcomes loading={loading} />
+                      <AffordFairhold loading={loading} />
+                    </div>
+                    <div className="flex flex-col md:flex-row h-[50rem]">
+                      <CurrentMeansTenureChoice loading={loading} />
+                    </div>
+                    <div className="flex flex-col gap-8 md:flex-row md:h-[20rem]">
+                      <WhyFairhold loading={loading} />
+                      <WhyNotFairhold loading={loading} />
+                    </div>
+                    <div className="flex flex-col md:flex-row md:h-[20rem] mb-4">
+                      <div className="w-full">
+                        <AnyMeansTenureChoice loading={loading} />
                       </div>
                     </div>
-                </div>
-                )}
+                  </div>
+
+                  <div className="flex flex-col pb-8">
+                    <h2 className="text-xl font-bold my-8">Attitudes towards development</h2>
+                    <div className="flex flex-col md:flex-row w-full gap-8">
+                      <div className="flex flex-col md:w-1/2 w-full gap-8 md:h-[60rem]">
+                        <div className="flex-1 flex flex-col h-[50rem] md:h-[30rem]"> 
+                          <SupportDevelopment loading={loading} />
+                        </div>
+                        <div className="flex-1 flex flex-col l h-[50rem] md:h-[30rem]">
+                          <SupportNewFairhold loading={loading} />
+                        </div>
+                      </div>
+                      <div className="flex flex-col md:flex-row md:w-1/2 w-full md:h-[60rem]">
+                        <SupportDevelopmentFactors loading={loading} />
+                      </div>
+                    </div>
                   </div>
                 </div>
-            </div>
-            </section>
-          </main>
-        </SurveyContext.Provider>
-      <Footer />
-      </div>
-    </ErrorBoundary>
-  );
-}
+              </div>
+          </section>
+        </main>
+      </SurveyContext.Provider>
+    </SurveyLayout>
+  </ErrorBoundary>
+)};

@@ -4,7 +4,7 @@ import { CustomSankey } from "../CustomSankey"
 import { ResponsiveContainer } from "recharts";
 import { useSurveyContext } from "@context/surveyContext";
 import { applyNodeColors } from "@lib/survey/utils";
-export const CurrentMeansTenureChoice = () => {
+export const CurrentMeansTenureChoice: React.FC<{ loading: boolean }> = ({ loading }) => {
     const { currentMeansTenureChoice } = useSurveyContext().sankey;
     // We use suffixes to distinguish between current and ideal so we don't end up with circular links (eg for Freehold -> Freehold), so we need to remove the suffixes
     let formattedNodes = currentMeansTenureChoice.nodes.map((node) => ({
@@ -14,7 +14,7 @@ export const CurrentMeansTenureChoice = () => {
     formattedNodes = applyNodeColors(formattedNodes);
 
     return (
-        <SurveyGraphCard title="Which tenure would you choose?">
+        <SurveyGraphCard title="Which tenure would you choose?" loading={loading}>
             <ResponsiveContainer width="100%" height="100%">
                 <CustomSankey
                     nodes={formattedNodes}

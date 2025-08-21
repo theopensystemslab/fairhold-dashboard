@@ -4,11 +4,11 @@ import { CustomSankey } from "../CustomSankey";
 import { useSurveyContext } from "@context/surveyContext";
 
 
-export const IdealHouseType = () => {
+export const IdealHouseType: React.FC<{ loading: boolean }> = ({ loading }) => {
     const { idealHouseType } = useSurveyContext().sankey;
     
     return (
-        <SurveyGraphCard title="What type of home do you want to live in?">
+        <SurveyGraphCard title="What type of home do you want to live in?" loading={loading}>
             <CustomSankey
                 nodes={idealHouseType.nodes}
                 links={idealHouseType.links}       

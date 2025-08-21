@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import SurveyGraphCard from "@components/custom/survey/SurveyGraphCard";
 import { Bar, BarChart, XAxis, YAxis, ResponsiveContainer } from "recharts";
 import { useSurveyContext } from "@context/surveyContext";
@@ -6,7 +6,7 @@ import SurveyTenureSelector from "@components/custom/survey/SurveyTenureSelector
 import { TENURE_COLORS } from "@lib/survey/constants";
 import CustomTick from "@components/custom/survey/CustomTick";
 
-export const HousingOutcomes = () => {
+export const HousingOutcomes: React.FC<{ loading: boolean }> = ({ loading }) => {
     const housingOutcomes = useSurveyContext().barOrPie.housingOutcomes;
     
     // Get available tenure keys (we might not have all of them, eg if no shared ownership residents fill out the survey)
@@ -16,12 +16,19 @@ export const HousingOutcomes = () => {
         tenureOptions.length > 0 ? tenureOptions[0] : ""
     );
 
+    useEffect(() => {
+        if (!loading && tenureOptions.length > 0) {
+            setSelectedTenure(tenureOptions[0]);
+        }
+    }, [loading, tenureOptions]);
+
     const color = TENURE_COLORS[selectedTenure] || "rgb(var(--text-default-rgb))";
 
     return (
         <SurveyGraphCard 
             title="What do you most want from housing that you don't currently get?" 
             subtitle="Showing top 10 responses for"
+            loading={loading}
             action={
             <SurveyTenureSelector
                 options={tenureOptions}

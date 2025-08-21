@@ -10,3 +10,39 @@ export function useSurveyContext(): SurveyResults {
     }
     return surveyContext;
 }
+
+export const defaultSurveyResults: SurveyResults = {
+    numberResponses: 0,
+    barOrPie: {
+        uk: [],
+        nonUk: [],
+        postcode: [],
+        ageGroup: [],
+        ownershipModel: [],
+        rentalModel: [],
+        secondHomes: [],
+        housingOutcomes: {},
+        fairholdCalculator: [],
+        affordFairhold: [],
+        whyFairhold: [],
+        whyNotFairhold: [],
+        anyMeansTenureChoice: [],
+        supportDevelopment: [],
+        supportDevelopmentFactors: [],
+        supportNewFairhold: [],
+    },
+    sankey: {
+        idealHouseType: {
+            nodes: [],
+            links: [],
+        },
+        idealLiveWith: {
+            nodes: [],
+            links: [],
+        },
+        currentMeansTenureChoice: {
+            nodes: [],
+            links: [],
+        },
+    },
+};
