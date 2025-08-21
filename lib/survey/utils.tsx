@@ -1,4 +1,4 @@
-import { RawResults, BarOrPieResults, BarOrPieResult, SankeyResults, SankeyResult } from "./types"
+import { RawResults, BarOrPieResults, BarOrPieResult, SankeyResults, SankeyResult, SurveyResults } from "./types"
 import {
     AFFORD_FAIRHOLD,
     AGE_ORDER,
@@ -340,6 +340,16 @@ const padAndSortHousingOutcomes = (housingOutcomes: Record<string, BarOrPieResul
         housingOutcomes[outcomeKey] = topTenOutcomes;
     })};
 
-    export function getMaxValue(results: BarOrPieResult[]): number {
+export const getMaxValue = (results: BarOrPieResult[]): number => {
     return results.reduce((max, item) => item.value > max ? item.value : max, 0);
+}
+
+export const getMaxWhyFairholdValue = (surveyResults: SurveyResults) => {
+  const whyFairholdResults = surveyResults.barOrPie.whyFairhold ?? [];
+  const whyNotFairholdResults = surveyResults.barOrPie.whyNotFairhold ?? [];
+  const maxWhyFairholdValue = Math.max(
+    getMaxValue(whyFairholdResults),
+    getMaxValue(whyNotFairholdResults)
+  );
+  return maxWhyFairholdValue;
 }
