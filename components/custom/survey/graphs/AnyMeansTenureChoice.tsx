@@ -47,55 +47,62 @@ export const AnyMeansTenureChoice = () => {
         <SurveyGraphCard 
             title="Rank the tenures by preference"
             subtitle="If you could afford (and were eligible for) any type of home, which would you prefer?"
-            >
-          <ResponsiveContainer height={150}>
-          <BarChart
-              data={anyMeansTenureChoice}
-              barSize={20}
-              barGap={0}
-              layout="vertical"
-          >
-              <XAxis 
-                  type="number"
-                  height={20}
-                  fontSize={10}
-                  interval={10}
-                  axisLine={false}
-                  tickLine={false}
-                  tick={false}
-                  /> 
-              <YAxis 
-                  type="category"    
-                  dataKey="answer" 
-                  width={150} 
-                  fontSize={10}
-                  interval={0}
-                  tickLine={false}
-                  axisLine={false}
-                  tick={(props) => (
-                    <ColoredYAxisTick 
-                    {...props}
-                    />
-                )}
-                  /> 
-              <Bar dataKey="value">
-                {
-                    anyMeansTenureChoice.map(({ answer }, index) => (
-                        <Cell
-                            key={`cell-${index}`}
-                            fill={TENURE_COLORS[answer] || "rgb(var(--text-inaccessible-rgb))"}
+        >
+            {(animate) => (
+                <div style={{ width: "100%", height: "100%" }}>
+                    <ResponsiveContainer height={150}>
+                        <BarChart
+                            data={anyMeansTenureChoice}
+                            barSize={20}
+                    barGap={0}
+                    layout="vertical"
+                >
+                    <XAxis 
+                        type="number"
+                        height={20}
+                        fontSize={10}
+                        interval={10}
+                        axisLine={false}
+                        tickLine={false}
+                        tick={false}
+                        /> 
+                    <YAxis 
+                        type="category"    
+                        dataKey="answer" 
+                        width={150} 
+                        fontSize={10}
+                        interval={0}
+                        tickLine={false}
+                        axisLine={false}
+                        tick={(props) => (
+                            <ColoredYAxisTick 
+                            {...props}
+                            />
+                        )}
+                        /> 
+                    <Bar 
+                        dataKey="value"
+                        isAnimationActive={animate}
+                    >
+                        {
+                            anyMeansTenureChoice.map(({ answer }, index) => (
+                                <Cell
+                                    key={`cell-${index}`}
+                                    fill={TENURE_COLORS[answer] || "rgb(var(--text-inaccessible-rgb))"}
+                                />
+                            ))
+                        }
+                        <LabelList 
+                            dataKey="value"
+                            position="insideStart"
+                            fill="white"    
+                            content={RankLabel}
                         />
-                    ))
-                }
-                <LabelList 
-                    dataKey="value"
-                    position="insideStart"
-                    fill="white"    
-                    content={RankLabel}
-                />
-                </Bar>  
-          </BarChart>
-          </ResponsiveContainer>
+                        </Bar>  
+                    </BarChart>
+                </ResponsiveContainer>
+            </div>
+            )}
         </SurveyGraphCard>
     )
 }

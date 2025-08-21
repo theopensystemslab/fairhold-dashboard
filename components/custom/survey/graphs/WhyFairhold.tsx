@@ -9,6 +9,7 @@ export const WhyFairhold = () => {
   
   return (
       <SurveyGraphCard title="Why would you choose Fairhold?">
+        {(animate) => (  
           <ResponsiveContainer height={150}>
           <BarChart
               data={whyFairhold}
@@ -36,9 +37,14 @@ export const WhyFairhold = () => {
                     />
                     }                        
                   /> 
-              <Bar dataKey="value" fill="rgb(var(--fairhold-equity-color-rgb))" /> 
+              <Bar 
+                dataKey="value" 
+                fill="rgb(var(--fairhold-equity-color-rgb))" 
+                isAnimationActive={animate}
+                /> 
           </BarChart>
           </ResponsiveContainer>
+        )}
       </SurveyGraphCard>
   )
 }
