@@ -6,7 +6,7 @@ import SurveyTenureSelector from "@components/custom/survey/SurveyTenureSelector
 import { TENURE_COLORS } from "@lib/survey/constants";
 import CustomTick from "@components/custom/survey/CustomTick";
 
-export const HousingOutcomes = () => {
+export const HousingOutcomes: React.FC<{ loading: boolean }> = ({ loading }) => {
     const housingOutcomes = useSurveyContext().barOrPie.housingOutcomes;
     
     // Get available tenure keys (we might not have all of them, eg if no shared ownership residents fill out the survey)
@@ -22,6 +22,7 @@ export const HousingOutcomes = () => {
         <SurveyGraphCard 
             title="What do you most want from housing that you don't currently get?" 
             subtitle="Showing top 10 responses for"
+            loading={loading}
             action={
             <SurveyTenureSelector
                 options={tenureOptions}
