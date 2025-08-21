@@ -339,3 +339,7 @@ const padAndSortHousingOutcomes = (housingOutcomes: Record<string, BarOrPieResul
         const topTenOutcomes = paddedArr.slice(0, 10);
         housingOutcomes[outcomeKey] = topTenOutcomes;
     })};
+
+    export function getMaxValue(results: BarOrPieResult[]): number {
+    return results.reduce((max, item) => item.value > max ? item.value : max, 0);
+}

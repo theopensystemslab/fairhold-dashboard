@@ -5,9 +5,12 @@ import { useSurveyContext } from "@context/surveyContext";
 import SurveyTenureSelector from "@components/custom/survey/SurveyTenureSelector";
 import { TENURE_COLORS } from "@lib/survey/constants";
 import CustomTick from "@components/custom/survey/CustomTick";
+import { ResultGroupedByTenure } from "@/lib/survey/types";
+import { getMaxValue } from "@/lib/survey/utils";
 
 export const HousingOutcomes = () => {
     const housingOutcomes = useSurveyContext().barOrPie.housingOutcomes;
+    const maxX = getMaxHousingOutcomeValue(housingOutcomes)
     
     // Get available tenure keys (we might not have all of them, eg if no shared ownership residents fill out the survey)
     const tenureOptions = Object.keys(housingOutcomes);
@@ -44,6 +47,7 @@ export const HousingOutcomes = () => {
                         axisLine={false}
                         tickCount={2}
                         tickFormatter={(value: number) => Math.round(value).toString()}
+                        domain={[0, maxX]}
                         /> 
                     <YAxis 
                         type="category"    
@@ -59,4 +63,9 @@ export const HousingOutcomes = () => {
             </ResponsiveContainer>
         </SurveyGraphCard>
     )
+}
+
+function getMaxHousingOutcomeValue(housingOutcomes: ResultGroupedByTenure): number {
+  const allResults = Object.values(housingOutcomes).flat();
+  return getMaxValue(allResults);
 }
