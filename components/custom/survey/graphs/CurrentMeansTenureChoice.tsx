@@ -4,11 +4,11 @@ import { CustomSankey } from "../CustomSankey"
 import { ResponsiveContainer } from "recharts";
 import { useSurveyContext } from "@context/surveyContext";
 
-export const CurrentMeansTenureChoice = () => {
+export const CurrentMeansTenureChoice: React.FC<{ loading: boolean }> = ({ loading }) => {
     const { currentMeansTenureChoice } = useSurveyContext().sankey;
 
     return (
-        <SurveyGraphCard title="Which tenure would you choose?">
+        <SurveyGraphCard title="Which tenure would you choose?" loading={loading}>
             <ResponsiveContainer width="100%" height="100%">
                 <CustomSankey
                     nodes={currentMeansTenureChoice.nodes}

@@ -4,11 +4,11 @@ import { Bar, BarChart, XAxis, YAxis, ResponsiveContainer } from "recharts";
 import { useSurveyContext } from "@context/surveyContext";
 import CustomTick from "@components/custom/survey/CustomTick";
 
-export const WhyNotFairhold = ({ maxX }: { maxX: number }) => {
+export const WhyNotFairhold: React.FC<{ loading: boolean, maxX: number }> = ({ loading, maxX }) => {
   const whyNotFairhold = useSurveyContext().barOrPie.whyNotFairhold;
   
   return (
-      <SurveyGraphCard title="Why wouldn't you choose Fairhold?">
+      <SurveyGraphCard title="Why wouldn't you choose Fairhold?" loading={loading}>
           <ResponsiveContainer height={150}>
           <BarChart
               data={whyNotFairhold}
