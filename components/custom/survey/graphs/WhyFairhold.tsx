@@ -10,6 +10,7 @@ export const WhyFairhold: React.FC<{ maxX: number }> = ({ maxX }) => {
   
   return (
       <SurveyGraphCard title="Why would you choose Fairhold?" loading={loading} >
+        {(animate) => (  
           <ResponsiveContainer height={150}>
           <BarChart
               data={whyFairhold}
@@ -38,9 +39,14 @@ export const WhyFairhold: React.FC<{ maxX: number }> = ({ maxX }) => {
                     />
                     }                        
                   /> 
-              <Bar dataKey="value" fill="rgb(var(--fairhold-equity-color-rgb))" /> 
+              <Bar 
+                dataKey="value" 
+                fill="rgb(var(--fairhold-equity-color-rgb))" 
+                isAnimationActive={animate}
+                /> 
           </BarChart>
           </ResponsiveContainer>
+        )}
       </SurveyGraphCard>
   )
 }
