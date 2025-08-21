@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import SurveyGraphCard from "@components/custom/survey/SurveyGraphCard";
 import { Bar, BarChart, XAxis, YAxis, ResponsiveContainer } from "recharts";
 import { useSurveyContext } from "@context/surveyContext";
@@ -18,6 +18,12 @@ export const HousingOutcomes: React.FC<{ loading: boolean }> = ({ loading }) => 
     const [selectedTenure, setSelectedTenure] = useState(
         tenureOptions.length > 0 ? tenureOptions[0] : ""
     );
+
+    useEffect(() => {
+        if (!loading && tenureOptions.length > 0) {
+            setSelectedTenure(tenureOptions[0]);
+        }
+    }, [loading, tenureOptions]);
 
     const color = TENURE_COLORS[selectedTenure] || "rgb(var(--text-default-rgb))";
 
