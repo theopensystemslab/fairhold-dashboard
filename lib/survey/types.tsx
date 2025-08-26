@@ -59,8 +59,9 @@ export type SankeyResults = Record<Extract<keyof RawResults,
 
 export type SankeyResult = {
     nodes: {
-        name: string
-        label: string
+        name: string;
+        label: string;
+        color: string;
     }[]
     links: {
         source: number;
