@@ -194,3 +194,30 @@ main {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;     /* Firefox */
 }
+
+.logo {
+  color: #000;
+  letter-spacing: -.03em;
+  cursor: pointer;
+  font-size: 32px;
+  font-weight: 700;
+  text-decoration-color: #000;
+}
+
+.nav-link {
+  opacity: 100;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.w-nav-link {
+  vertical-align: top;
+  color: #222;
+  text-align: left;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 20px;
+  text-decoration: none;
+  display: inline-block;
+  position: relative;
+}
