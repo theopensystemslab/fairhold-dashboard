@@ -60,6 +60,7 @@ export type SankeyResults = Record<Extract<keyof RawResults,
 export type SankeyResult = {
     nodes: {
         name: string
+        label?: string
     }[]
     links: {
         source: number;
