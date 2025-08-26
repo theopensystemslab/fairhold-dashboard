@@ -222,25 +222,3 @@ main {
   display: inline-block;
   position: relative;
 }
-
-.w-layout-blockcontainer {
-  max-width: 940px;
-  margin-left: auto;
-  margin-right: auto;
-  display: block;
-}
-
-.container {
-  max-width: 1280px;
-  padding-left: 10px;
-  padding-right: 10px;
-}
-
-.body-s {
-  font-size: 15px;
-  line-height: 21px;
-}
-
-.top-spacer {
-  height: 60px;
-}
