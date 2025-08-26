@@ -1,79 +1,64 @@
-import "@app/webflow.css";
-
 import Image from "next/image";
 
 export const Footer: React.FC = () => (
-  <footer className="footer md:h-100">
-    <div className="w-layout-blockcontainer container w-container">
-      <div className="columns w-row">
-        <div className="column-6 w-col w-col-3"><a href="#" className="footer-link-block w-inline-block">
-          <div className="body-s">Terms of
-            use</div>
-        </a><a href="#" className="footer-link-block w-inline-block">
-            <div className="body-s">Privacy</div>
-          </a><a href="#" className="footer-link-block w-inline-block">
-            <div className="body-s">Accessibility</div>
-          </a><a href="#" className="footer-link-block w-inline-block">
-            <div className="body-s">Contact
-              us</div>
-          </a>
-          <div className="spacer"></div>
+  <footer className="bg-[rgb(var(--footer-background-rgb))] text-white py-8 md:h-100">
+    <div className="max-w-[940px] mx-auto px-4">
+      
+      <div className="flex flex-wrap gap-8 mb-20">
+        <div className="flex flex-col flex-1 min-w-[180px]">
+          <a href="#" className="mb-1 text-sm hover:underline opacity-90">Terms of use</a>
+          <a href="#" className="mb-1 text-sm hover:underline opacity-90">Privacy</a>
+          <a href="#" className="mb-1 text-sm hover:underline opacity-90">Accessibility</a>
+          <a href="#" className="mb-1 text-sm hover:underline opacity-90">Contact us</a>
         </div>
-        <div className="column-4 w-col w-col-6"></div>
-        <div className="column-5 w-col w-col-3">
-          <div className="social-links">
-            <a href="https://twitter.com/WikiHouse" target="_blank"
-            className="social-media-link w-inline-block">
-              <Image width="30" height="30" sizes="(max-width: 479px) 17vw, 30px"
-              alt="Twitter logo"
+
+        <div className="flex gap-3">
+          <a href="https://twitter.com/WikiHouse" target="_blank" rel="noopener noreferrer" className="hover:opacity-60">
+            <Image width={30} height={30} alt="Twitter logo"
               src="https://cdn.prod.website-files.com/665dd5e4ad0dc9aad281585c/6754843fdf51f215bb4ad40c_twitter%20white2023.png"
-              loading="lazy"
-              className="image-5"/>
-            </a>
-              <a href="https://github.com/wikihouseproject/Skylark" target="_blank"
-                className="github-link w-inline-block">
-                  <Image width="30" height="30" loading="lazy" alt="Github logo"
-                  src="https://cdn.prod.website-files.com/665dd5e4ad0dc9aad281585c/6754843fdf51f215bb4ad406_Github2023.png"/>
-                  </a>
-                  <a
-                    href="https://www.youtube.com/channel/UCdaCCzZijlUBU6ntv_Xrd8w" target="_blank"
-                    className="social-media-link w-inline-block">
-                    <Image width="30" height="30" loading="lazy" alt="Youtube logo"
-                      src="https://cdn.prod.website-files.com/665dd5e4ad0dc9aad281585c/6754843fdf51f215bb4ad404_youtube%20white-01.png"
-                      className="image-5"/>
-                        </a></div>
+              className="min-h-[30px]" />
+          </a>
+          <a href="https://github.com/wikihouseproject/Skylark" target="_blank" rel="noopener noreferrer" className="hover:opacity-60">
+            <Image width={30} height={30} alt="Github logo"
+              src="https://cdn.prod.website-files.com/665dd5e4ad0dc9aad281585c/6754843fdf51f215bb4ad406_Github2023.png" />
+          </a>
+          <a href="https://www.youtube.com/channel/UCdaCCzZijlUBU6ntv_Xrd8w" target="_blank" rel="noopener noreferrer" className="hover:opacity-60">
+            <Image width={30} height={30} alt="Youtube logo"
+              src="https://cdn.prod.website-files.com/665dd5e4ad0dc9aad281585c/6754843fdf51f215bb4ad404_youtube%20white-01.png"
+              className="min-h-[30px]" />
+          </a>
         </div>
       </div>
-      <div className="columns w-row">
-        <div className="column-6 w-col w-col-3">
-          <div className="body-s white">Developed by</div>
-          <div className="spacer _20"></div><a href="#" className="osl-logo w-inline-block">
-            <Image
-              src="https://cdn.prod.website-files.com/665dd5e4ad0dc9aad281585c/6754893e21b56d4557aa3597_OSL_icon_white.svg"
-              loading="lazy" width="40" height="40" alt="OSL-logo"/>
-            <div className="spacer _10"></div>
-            <div className="osl-text _20">Open<br/>Systems<br/>Lab</div>
+      
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-8 items-start">
+        <div className="flex flex-col items-start min-w-[140px]">
+          <span className="text-sm mb-8">Developed by</span>
+          <a href="#" className="flex items-center gap-2 hover:opacity-60">
+            <Image src="https://cdn.prod.website-files.com/665dd5e4ad0dc9aad281585c/6754893e21b56d4557aa3597_OSL_icon_white.svg"
+              width={40} height={40} alt="OSL-logo" />
+            <span className="text-white text-base leading-5">Open<br />Systems<br />Lab</span>
           </a>
-          <div className="spacer"></div>
         </div>
-        <div className="column-4 w-col w-col-6">
-          <div className="body-s white">Funded by</div>
-          <div className="spacer _20"></div>
-          <div className="funders-logos-wrapper"><a href="#" className="logo-link w-inline-block">
-            <Image
-            src="https://cdn.prod.website-files.com/665dd5e4ad0dc9aad281585c/6754910ec9989275efe70268_TNCLFlogo.svg"
-            loading="lazy" height="60" width="179" alt="The National Lottery Community Fund Logo"/></a>
-            <div className="spacer _30"></div><a href="#" className="logo-link w-inline-block">
-              <Image
-              src="https://cdn.prod.website-files.com/665dd5e4ad0dc9aad281585c/6754907fcfae984354b4cf6c_JRFlogo2024.svg"
-                loading="lazy" height="62" alt="JRF logo" width="62"/></a>
+        <div className="flex flex-col items-start min-w-[140px]">
+          <span className="text-sm mb-8">Funded by</span>
+          <div className="flex gap-6">
+            <a href="#" className="hover:opacity-60">
+              <Image src="https://cdn.prod.website-files.com/665dd5e4ad0dc9aad281585c/6754910ec9989275efe70268_TNCLFlogo.svg"
+                width={179} height={60} alt="The National Lottery Community Fund Logo" />
+            </a>
+            <a href="#" className="hover:opacity-60">
+              <Image src="https://cdn.prod.website-files.com/665dd5e4ad0dc9aad281585c/6754907fcfae984354b4cf6c_JRFlogo2024.svg"
+                width={62} height={62} alt="JRF logo" />
+            </a>
           </div>
         </div>
-        <div className="column-5 w-col w-col-3">
-          <div className="body-s white">© Open Systems
-            Lab 2025 <br/><br/>Open Systems Lab / OSL is a non-profit company 9152368<br/>
+        <div />
+        <div className="flex flex-col items-start">
+          <span className="text-sm mb-2">© Open Systems Lab 2025</span>
+          <span className="text-sm">
+            Open Systems Lab / OSL is a non-profit company 9152368<br />
             registered in England &amp; Wales
-          </div>
+          </span>
         </div>
       </div>
     </div>
