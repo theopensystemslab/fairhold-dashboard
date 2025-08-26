@@ -14,6 +14,7 @@
   --background-input-field-rgb: 255 255 255;
   --text-inaccessible-rgb: 171 164 164;
   --button-background-rgb: 227 227 225;
+  --footer-background-rgb: 22, 22, 22;
 
   --freehold-equity-color-rgb: 77 100 210;
   --freehold-interest-color-rgb: 131 164 255;
@@ -220,4 +221,26 @@ main {
   text-decoration: none;
   display: inline-block;
   position: relative;
+}
+
+.w-layout-blockcontainer {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
+.container {
+  max-width: 1280px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.body-s {
+  font-size: 15px;
+  line-height: 21px;
+}
+
+.top-spacer {
+  height: 60px;
 }
