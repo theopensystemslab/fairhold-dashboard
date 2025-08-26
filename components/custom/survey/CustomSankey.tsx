@@ -74,14 +74,18 @@ export const CustomSankey: React.FC<SankeyProps> = ({
 
     const [fontSize, setFontSize] = useState(14);
 
+    const [padding, setPadding] = useState(50);
+
     useEffect(() => {
         const handleResize = () => {
             if (window.innerWidth < 600) {
                 setMargin({ left: 90, right: 90, top: 40, bottom: 40 });
                 setFontSize(11);
+                setPadding(20);
             } else {
                 setMargin({ left: 150, right: 150, top: 50, bottom: 50 });
                 setFontSize(14);
+                setPadding(50);
             }
         };
         handleResize();
@@ -162,7 +166,7 @@ export const CustomSankey: React.FC<SankeyProps> = ({
                         textAnchor="middle" 
                         dominantBaseline="middle" 
                         fill="#333" 
-                        fontSize={14} 
+                        fontSize={fontSize} 
                         pointerEvents="none" 
                     > 
                         {payload.value} 
@@ -199,7 +203,7 @@ export const CustomSankey: React.FC<SankeyProps> = ({
                         }}
                         node={CustomNode}
                         link={CustomLink}
-                        nodePadding={20}
+                        nodePadding={padding}
                         margin={margin}
                     >
                         <Tooltip />
