@@ -1,6 +1,5 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { Sankey, Tooltip, Rectangle, ResponsiveContainer } from "recharts"; 
-
 
 type CustomNodeProps = {
     x: number;
@@ -66,6 +65,29 @@ export const CustomSankey: React.FC<SankeyProps> = ({
     leftLabel,
     rightLabel
 }) => {
+    const [margin, setMargin] = useState({
+        left: 150,
+        right: 150,
+        top: 50,
+        bottom: 50,
+    });
+
+    const [fontSize, setFontSize] = useState(14);
+
+    useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth < 600) {
+                setMargin({ left: 90, right: 90, top: 40, bottom: 40 });
+                setFontSize(11);
+            } else {
+                setMargin({ left: 150, right: 150, top: 50, bottom: 50 });
+                setFontSize(14);
+            }
+        };
+        handleResize();
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
 
     // Custom Node Component with Label 
     const CustomNode = (props: CustomNodeProps) => { 
@@ -83,7 +105,7 @@ export const CustomSankey: React.FC<SankeyProps> = ({
                     textAnchor={isLeft ? "end" : "start"}
                     dominantBaseline="middle" 
                     fill={props.payload.color} 
-                    fontSize={14}
+                    fontSize={fontSize}
                     fontWeight={"bold"}
                     fillOpacity={0.8}
                 > 
@@ -177,13 +199,8 @@ export const CustomSankey: React.FC<SankeyProps> = ({
                         }}
                         node={CustomNode}
                         link={CustomLink}
-                        nodePadding={50}
-                        margin={{
-                            left: 150,
-                            right: 150,
-                            top: 50,
-                            bottom: 50,
-                        }}
+                        nodePadding={20}
+                        margin={margin}
                     >
                         <Tooltip />
                     </Sankey>
