@@ -2,11 +2,14 @@ import { RawResults, BarOrPieResults, BarOrPieResult, SankeyResults, SankeyResul
 import {
     AFFORD_FAIRHOLD,
     AGE_ORDER,
+    CURRENT_MEANS_TENURE_LABELS,
     HOUSING_OUTCOMES_LABELS,
+    IDEAL_HOUSE_TYPE_LABELS,
+    IDEAL_LIVE_WITH_LABELS,
     LABEL_MAP,
     SUPPORT_DEVELOPMENT_ORDER,
     SUPPORT_FAIRHOLD_ORDER,
-  TENURE_CHOICE_COLOR_MAP,
+    TENURE_CHOICE_COLOR_MAP,
 } from "./constants";
 
 const SANKEY_MAPPINGS = [
@@ -36,7 +39,8 @@ export const aggregateResults = (rawResults: RawResults[]) => {
     const sortedBarOrPie = sortResults(shortenedBarOrPie);
     const slicedBarOrPie = sliceResults(sortedBarOrPie);
     
-    return { numberResponses, barOrPie: slicedBarOrPie, sankey };
+    const labelledSankey = applySankeyNodeLabels(sankey);
+    return { numberResponses, barOrPie: slicedBarOrPie, sankey: labelledSankey };
 }
 
 const initializeBarOrPieResultsObject = (): BarOrPieResults => {
@@ -245,7 +249,7 @@ const sortByValueDesc = (arr: BarOrPieResult[]) => {
     arr.sort((a, b) => b.value - a.value);
 };
 
-const sortResults = (results: BarOrPieResults) => {
+const sortResults = (results: BarOrPieResults): BarOrPieResults => {
     // We handle housingOutcomes separately (because it's a nested object)
     Object.values(results.housingOutcomes).forEach((arr) => {
         sortByValueDesc(arr);
@@ -351,4 +355,18 @@ export const getMaxWhyFairholdValue = (surveyResults: SurveyResults) => {
     getMaxValue(whyNotFairholdResults)
   );
   return maxWhyFairholdValue;
+}
+
+const applySankeyNodeLabels = (sankeyResults: SankeyResults) => {
+  sankeyResults.currentMeansTenureChoice.nodes.forEach(node => {
+    const baseName = node.name.replace(/_(0|1)$/, "");
+    node.label = CURRENT_MEANS_TENURE_LABELS[baseName] || baseName;
+  });
+  sankeyResults.idealHouseType.nodes.forEach(node => {
+    node.label = IDEAL_HOUSE_TYPE_LABELS[node.name] || node.name;
+  });
+  sankeyResults.idealLiveWith.nodes.forEach(node => {
+    node.label = IDEAL_LIVE_WITH_LABELS[node.name] || node.name;
+  });
+  return sankeyResults;
 }
