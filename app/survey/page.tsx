@@ -71,37 +71,30 @@ export default function SurveyPage() {
   return (
     <ErrorBoundary>
       <SurveyLayout>
-        {error ? (
-            <div>Error: {error}</div>
-          ) : (
-            <SurveyContext.Provider value={surveyResults ?? defaultSurveyResults}>
-            <main className="flex justify-center main-content">
-              <section className="w-full max-w-[960px] flex flex-row py-8">
-                <div className="flex flex-row">
-                  <div className="w-full flex flex-col p-4">
-                    <h1 className="h1-style text-2xl md:text-4xl">Fairhold survey results</h1>
-                    <div className="flex flex-col gap-4 mt-6">
-                      {loading ? (
-                        <p className="text-lg md:text-xl">
-                          So far, <span className="inline-block w-9 h-4 bg-gray-200 animate-pulse rounded" /> people have responded.
-                        </p>
-                      ) : surveyResults?.numberResponses === 0 ? (
-                        <p>No survey responses found.</p>
-                      ) : (
-                        <p className="text-lg md:text-xl">
-                          So far, <Highlight>{surveyResults?.numberResponses}</Highlight> people have responded.
-                        </p>
-                      )}
-                    </div>
+          <SurveyContext.Provider value={surveyResults ?? defaultSurveyResults}>
+          <main className="flex justify-center main-content">
+            <section className="w-full max-w-[960px] flex flex-row py-8">
+              <div className="flex flex-row">
+                <div className="w-full flex flex-col p-4">
+                  <h1 className="h1-style text-2xl md:text-4xl">Fairhold survey results</h1>
+                  <div className="flex flex-col gap-4 mt-6">
+                    {surveyResults?.numberResponses === 0 ? (
+                      <p>No survey responses found.</p>
+                    ) : (
+                      <p className="text-lg md:text-xl">
+                        So far, <Highlight loading={loading}>{surveyResults?.numberResponses}</Highlight> people have responded.
+                      </p>
+                    )}
+                  </div>
 
-                    <div className="flex flex-col py-4">
-                      <h2 className="text-xl font-bold my-8">Who has responded?</h2>
-                      <div className="flex flex-col gap-8 md:flex-row h-[50rem] md:h-[30rem]">
-                        <Country loading={loading} />
-                        <Age loading={loading} />
-                        {/* <Postcode {...results} /> */}
-                      </div>
+                  <div className="flex flex-col py-4">
+                    <h2 className="text-xl font-bold my-8">Who has responded?</h2>
+                    <div className="flex flex-col gap-8 md:flex-row h-[50rem] md:h-[30rem]">
+                      <Country loading={loading} />
+                      <Age loading={loading} />
+                      {/* <Postcode {...results} /> */}
                     </div>
+                  </div>
 
                     <div className="flex flex-col gap-8 ">
                       <h2 className="text-xl font-bold my-8">Housing preferences</h2>
@@ -127,28 +120,27 @@ export default function SurveyPage() {
                       </div>
                     </div>
 
-                    <div className="flex flex-col pb-8">
-                      <h2 className="text-xl font-bold my-8">Attitudes towards development</h2>
-                      <div className="flex flex-col md:flex-row w-full gap-8">
-                        <div className="flex flex-col md:w-1/2 w-full gap-8 md:h-[60rem]">
-                          <div className="flex-1 flex flex-col h-[50rem] md:h-[30rem]"> 
-                            <SupportDevelopment loading={loading} />
-                          </div>
-                          <div className="flex-1 flex flex-col l h-[50rem] md:h-[30rem]">
-                            <SupportNewFairhold loading={loading} />
-                          </div>
+                  <div className="flex flex-col pb-8">
+                    <h2 className="text-xl font-bold my-8">Attitudes towards development</h2>
+                    <div className="flex flex-col md:flex-row w-full gap-8">
+                      <div className="flex flex-col md:w-1/2 w-full gap-8 md:h-[60rem]">
+                        <div className="flex-1 flex flex-col h-[50rem] md:h-[30rem]"> 
+                          <SupportDevelopment loading={loading} />
                         </div>
-                        <div className="flex flex-col md:flex-row md:w-1/2 w-full md:h-[60rem]">
-                          <SupportDevelopmentFactors loading={loading} />
+                        <div className="flex-1 flex flex-col l h-[50rem] md:h-[30rem]">
+                          <SupportNewFairhold loading={loading} />
                         </div>
+                      </div>
+                      <div className="flex flex-col md:flex-row md:w-1/2 w-full md:h-[60rem]">
+                        <SupportDevelopmentFactors loading={loading} />
                       </div>
                     </div>
                   </div>
                 </div>
-            </section>
-          </main>
-        </SurveyContext.Provider>
-      )}
+              </div>
+          </section>
+        </main>
+      </SurveyContext.Provider>
     </SurveyLayout>
   </ErrorBoundary>
 )};

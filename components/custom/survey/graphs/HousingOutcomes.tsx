@@ -20,10 +20,12 @@ export const HousingOutcomes: React.FC<{ loading: boolean }> = ({ loading }) => 
     );
 
     useEffect(() => {
-        if (!loading && tenureOptions.length > 0) {
-            setSelectedTenure(tenureOptions[0]);
+        if (tenureOptions.length > 0) {
+            setSelectedTenure(prev =>
+                tenureOptions.includes(prev) ? prev : tenureOptions[0]
+            );
         }
-    }, [loading, tenureOptions]);
+    }, [tenureOptions]);
 
     const color = TENURE_COLORS[selectedTenure] || "rgb(var(--text-default-rgb))";
 
