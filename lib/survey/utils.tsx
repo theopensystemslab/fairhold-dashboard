@@ -141,14 +141,14 @@ const updateSankeyNodesAndLinks = (
     let sourceIndex = nodes.findIndex((node) => node.name === fromValue);
     if (sourceIndex === -1) {
         sourceIndex = nodes.length;
-        nodes.push({ name: fromValue });
+        nodes.push({ name: fromValue, label: "" });
     }
 
     // Find or add the target node
     let targetIndex = nodes.findIndex((node) => node.name === toValue);
     if (targetIndex === -1) {
         targetIndex = nodes.length;
-        nodes.push({ name: toValue });
+        nodes.push({ name: toValue, label: "" });
     }
 
     // Find or add the link
@@ -318,7 +318,7 @@ const aggregateOther = (arr: BarOrPieResult[]): BarOrPieResult[] => {
     return notOthers;
 };
 
-export const applyNodeColors = (nodes: { name: string; label?: string }[]) => {
+export const applyNodeColors = (nodes: { name: string; label: string }[]) => {
   return nodes.map(node => {
     const baseName = node.label ?? node.name.replace(/ \((current|ideal)\)$/i, ""); // we want to use the label if it exists, if it doesn't then we just use the name (but removing the suffixes created for unique node names)
     return {

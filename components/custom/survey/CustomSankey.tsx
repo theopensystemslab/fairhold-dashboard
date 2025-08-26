@@ -13,7 +13,7 @@ type CustomNodeProps = {
 
 type NodePayload = {
     name: string;
-    label?: string;
+    label: string;
     sourceNodes: [];
     sourceLinks: [];
     targetLinks: [];
@@ -53,7 +53,7 @@ type CustomLinkPayload = {
 }
 
 type SankeyProps = {
-    nodes: Array<{name: string, label?: string}>;
+    nodes: Array<{name: string, label: string}>;
     links: Array<{source: number, target: number, value: number}>;
     leftLabel?: string;
     rightLabel?: string;
