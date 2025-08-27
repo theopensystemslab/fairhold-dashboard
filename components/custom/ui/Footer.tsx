@@ -1,18 +1,23 @@
 import Image from "next/image";
 
 export const Footer: React.FC = () => (
-  <footer className="bg-[rgb(var(--footer-background-rgb))] text-white py-8 md:h-100">
-    <div className="max-w-[940px] mx-auto px-4">
-      
-      <div className="flex flex-wrap gap-8 mb-20">
-        <div className="flex flex-col flex-1 min-w-[180px]">
+  <footer className="bg-[rgb(var(--footer-background-rgb))] text-white py-8 ">
+    <div className="max-w-[1280px] mx-auto px-4">
+      {/* ROW 1 */}
+      <div className="flex flex-col md:flex-row gap-8">
+        {/* COL 1 */}
+        <div className="flex flex-col md:w-1/4">
           <a href="#" className="mb-1 text-sm hover:underline opacity-90">Terms of use</a>
           <a href="#" className="mb-1 text-sm hover:underline opacity-90">Privacy</a>
           <a href="#" className="mb-1 text-sm hover:underline opacity-90">Accessibility</a>
           <a href="#" className="mb-1 text-sm hover:underline opacity-90">Contact us</a>
         </div>
-
-        <div className="flex gap-3">
+        {/* COL 2 */}
+        <div className="hidden md:w-1/4 md:block" />
+        {/* COL 3 */}
+        <div className="hidden md:w-1/4 md:block" />
+        {/* COL 4 */}
+        <div className="flex flex-row gap-3 md:w-1/4">
           <a href="https://twitter.com/WikiHouse" target="_blank" rel="noopener noreferrer" className="hover:opacity-60">
             <Image width={30} height={30} alt="Twitter logo"
               src="https://cdn.prod.website-files.com/665dd5e4ad0dc9aad281585c/6754843fdf51f215bb4ad40c_twitter%20white2023.png"
@@ -29,9 +34,13 @@ export const Footer: React.FC = () => (
           </a>
         </div>
       </div>
-      
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-8 items-start">
-        <div className="flex flex-col items-start min-w-[140px]">
+
+      <div className="h-20  "/>
+
+      {/* ROW 2 */}
+      <div className="flex flex-col md:flex-row gap-8">
+        {/* COL 1 */}
+        <div className="flex flex-col items-start md:w-1/4">
           <span className="text-sm mb-8">Developed by</span>
           <a href="#" className="flex items-center gap-2 hover:opacity-60">
             <Image src="https://cdn.prod.website-files.com/665dd5e4ad0dc9aad281585c/6754893e21b56d4557aa3597_OSL_icon_white.svg"
@@ -39,7 +48,9 @@ export const Footer: React.FC = () => (
             <span className="text-white text-base leading-5">Open<br />Systems<br />Lab</span>
           </a>
         </div>
-        <div className="flex flex-col items-start min-w-[140px]">
+
+        {/* COL 2 */}
+        <div className="flex flex-col items-start md:w-1/4">
           <span className="text-sm mb-8">Funded by</span>
           <div className="flex gap-6">
             <a href="#" className="hover:opacity-60">
@@ -52,14 +63,19 @@ export const Footer: React.FC = () => (
             </a>
           </div>
         </div>
-        <div />
-        <div className="flex flex-col items-start">
+
+        {/* COL 3 */}
+        <div className="md:w-1/4"/>
+
+        {/* COL 4 */}
+        <div className="flex flex-col items-start md:w-1/4">
           <span className="text-sm mb-2">© Open Systems Lab 2025</span>
           <span className="text-sm">
             Open Systems Lab / OSL is a non-profit company 9152368<br />
             registered in England &amp; Wales
           </span>
         </div>
+
       </div>
     </div>
   </footer>
