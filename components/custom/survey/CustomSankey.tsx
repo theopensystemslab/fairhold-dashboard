@@ -59,6 +59,22 @@ type SankeyProps = {
     rightLabel?: string;
 };
 
+const splitLabel = (label: string, maxChars: number) => {
+    const words = label.split(" ");
+    const lines: string[] = [];
+    let currentLine = "";
+    for (const word of words) {
+        if ((currentLine + word).length > maxChars) {
+            lines.push(currentLine.trim());
+            currentLine = word + " ";
+        } else {
+            currentLine += word + " ";
+        }
+    }
+    if (currentLine) lines.push(currentLine.trim());
+    return lines;
+}
+
 export const CustomSankey: React.FC<SankeyProps> = ({ 
     nodes, 
     links,
@@ -76,16 +92,20 @@ export const CustomSankey: React.FC<SankeyProps> = ({
 
     const [padding, setPadding] = useState(50);
 
+    const [maxChars, setMaxChars] = useState(16);
+
     useEffect(() => {
         const handleResize = () => {
             if (window.innerWidth < 600) {
                 setMargin({ left: 90, right: 90, top: 40, bottom: 40 });
                 setFontSize(11);
                 setPadding(20);
+                setMaxChars(12);
             } else {
                 setMargin({ left: 150, right: 150, top: 50, bottom: 50 });
                 setFontSize(14);
                 setPadding(50);
+                setMaxChars(16);
             }
         };
         handleResize();
@@ -93,33 +113,41 @@ export const CustomSankey: React.FC<SankeyProps> = ({
         return () => window.removeEventListener("resize", handleResize);
     }, []);
 
-    // Custom Node Component with Label 
     const CustomNode = (props: CustomNodeProps) => { 
         const isLeft = props.payload.depth === 0;
         const adjustmentFactor = 10;
+        const lines = splitLabel(props.payload.label, maxChars);
+
             return ( 
-            <g> 
-                <Rectangle 
-                    {...props} 
-                    fill={props.payload.color || "rgb(var(--survey-grey-mid))"} 
-                /> 
-                <text 
-                    x={isLeft ? props.x - adjustmentFactor : props.x + props.width + adjustmentFactor}
-                    y={props.y + props.height / 2} 
-                    textAnchor={isLeft ? "end" : "start"}
-                    dominantBaseline="middle" 
-                    fill={props.payload.color} 
-                    fontSize={fontSize}
-                    fontWeight={"bold"}
-                    fillOpacity={0.8}
-                > 
-                    {props.payload.label} 
-                </text> 
-            </g> 
-        ); 
+        <g> 
+            <Rectangle 
+                {...props} 
+                fill={props.payload.color || "rgb(var(--survey-grey-mid))"} 
+            /> 
+            <text 
+                x={isLeft ? props.x - adjustmentFactor : props.x + props.width + adjustmentFactor}
+                y={props.y + props.height / 2 - ((lines.length - 1) * fontSize) / 2} // center multi-line
+                textAnchor={isLeft ? "end" : "start"}
+                dominantBaseline="middle" 
+                fill={props.payload.color} 
+                fontSize={fontSize}
+                fontWeight={"bold"}
+                fillOpacity={0.8}
+            > 
+                {lines.map((line, i) => (
+                    <tspan
+                        key={i}
+                        x={isLeft ? props.x - adjustmentFactor : props.x + props.width + adjustmentFactor}
+                        dy={i === 0 ? 0 : fontSize}
+                    >
+                        {line}
+                    </tspan>
+                ))}
+            </text> 
+        </g> 
+    ); 
     };
 
-    // Custom Link Component with Label 
     const CustomLink = (props: CustomLinkProps) => { 
         const { 
             sourceX, 
