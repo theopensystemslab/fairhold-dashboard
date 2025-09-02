@@ -24,6 +24,7 @@ import { Header } from "@components/custom/ui/Header";
 import { Footer } from "@components/custom/ui/Footer";
 import Highlight from "@components/custom/ui/Highlight";
 import { getMaxWhyFairholdValue } from '@/lib/survey/utils';
+import { Ankle } from '@components/custom/survey/Ankle';
 
 export default function SurveyPage() {
   const [surveyResults, setSurveyResults] = useState<SurveyResults | null>(null);
@@ -134,6 +135,7 @@ export default function SurveyPage() {
             </section>
           </main>
         </SurveyContext.Provider>
+      <Ankle />
       <Footer />
       </div>
     </ErrorBoundary>

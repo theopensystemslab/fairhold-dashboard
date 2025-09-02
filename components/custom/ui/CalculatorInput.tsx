@@ -108,7 +108,7 @@ const CalculatorInput: React.FC<CalculatorInputProps> = ({ onSubmit, isLoading }
                         <RadioGroupItem
                           value="F"
                           id="radio-option-F"
-                          className="radio-button-style"
+                          className="border-none bg-white"
                         />
                         <Label
                           htmlFor="radio-option-F"
@@ -122,7 +122,7 @@ const CalculatorInput: React.FC<CalculatorInputProps> = ({ onSubmit, isLoading }
                         <RadioGroupItem
                           value="T"
                           id="radio-option-T"
-                          className="radio-button-style"
+                          className="border-none bg-white"
                         />
                         <Label
                           htmlFor="radio-option-T"
@@ -136,7 +136,7 @@ const CalculatorInput: React.FC<CalculatorInputProps> = ({ onSubmit, isLoading }
                         <RadioGroupItem
                           value="S"
                           id="radio-option-S"
-                          className="radio-button-style"
+                          className="border-none bg-white"
                         />
                         <Label
                           htmlFor="radio-option-S"
@@ -150,7 +150,7 @@ const CalculatorInput: React.FC<CalculatorInputProps> = ({ onSubmit, isLoading }
                         <RadioGroupItem
                           value="D"
                           id="radio-option-D"
-                          className="radio-button-style"
+                          className="border-none bg-white"
                         />
                         <Label
                           htmlFor="radio-option-D"
@@ -289,7 +289,7 @@ const CalculatorInput: React.FC<CalculatorInputProps> = ({ onSubmit, isLoading }
                         <RadioGroupItem
                           value="none"
                           id="radio-option-none"
-                          className="radio-button-style"
+                          className="border-none bg-white"
                         />
                         <div className="flex flex-col">
                         <Label
@@ -309,7 +309,7 @@ const CalculatorInput: React.FC<CalculatorInputProps> = ({ onSubmit, isLoading }
                         <RadioGroupItem
                           value="low"
                           id="radio-option-low"
-                          className="radio-button-style"
+                          className="border-none bg-white"
                         />
                         <div className="flex flex-col">
                         <Label
@@ -328,7 +328,7 @@ const CalculatorInput: React.FC<CalculatorInputProps> = ({ onSubmit, isLoading }
                         <RadioGroupItem
                           value="medium"
                           id="radio-option-medium"
-                          className="radio-button-style"
+                          className="border-none bg-white"
                         />
                         <div className="flex flex-col">
                         <Label
@@ -347,7 +347,7 @@ const CalculatorInput: React.FC<CalculatorInputProps> = ({ onSubmit, isLoading }
                         <RadioGroupItem
                           value="high"
                           id="radio-option-high"
-                          className="radio-button-style"
+                          className="border-none bg-white"
                         />
                         <div className="flex flex-col">
                         <Label
