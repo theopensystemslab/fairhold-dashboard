@@ -4,7 +4,7 @@ import { Bar, BarChart, XAxis, YAxis, ResponsiveContainer } from "recharts";
 import { useSurveyContext } from "@context/surveyContext";
 import CustomTick from "../CustomTick";
 
-export const WhyFairhold = () => {
+export const WhyFairhold = ({ maxX }: { maxX: number }) => {
   const { whyFairhold } = useSurveyContext().barOrPie;
   
   return (
@@ -20,6 +20,7 @@ export const WhyFairhold = () => {
                   tickLine={false}
                   axisLine={false}
                   tickCount={2}
+                  domain={[0, maxX]}
                   /> 
               <YAxis 
                   type="category"    

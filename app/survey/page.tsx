@@ -23,6 +23,7 @@ import { SurveyContext } from '@context/surveyContext';
 import { Header } from "@components/custom/ui/Header";
 import { Footer } from "@components/custom/ui/Footer";
 import Highlight from "@components/custom/ui/Highlight";
+import { getMaxWhyFairholdValue } from '@/lib/survey/utils';
 
 export default function SurveyPage() {
   const [surveyResults, setSurveyResults] = useState<SurveyResults | null>(null);
@@ -55,6 +56,8 @@ export default function SurveyPage() {
   if (loading) return <div>Loading survey data...</div>;
   if (error) return <div>Error: {error}</div>;
   if (!surveyResults) return <div>No survey data available.</div>;
+
+  const whyFairholdMaxX = getMaxWhyFairholdValue(surveyResults)
 
   return (
     <ErrorBoundary>
@@ -97,8 +100,8 @@ export default function SurveyPage() {
                         <CurrentMeansTenureChoice />
                       </div>
                       <div className="flex flex-col gap-8 md:flex-row md:h-[20rem]">
-                        <WhyFairhold />
-                        <WhyNotFairhold />
+                        <WhyFairhold maxX={whyFairholdMaxX} />
+                        <WhyNotFairhold maxX={whyFairholdMaxX} />
                       </div>
                       <div className="flex flex-col md:flex-row md:h-[20rem] mb-4">
                         <div className="w-full">
