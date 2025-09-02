@@ -1,6 +1,5 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { Sankey, Tooltip, Rectangle, ResponsiveContainer } from "recharts"; 
-
 
 type CustomNodeProps = {
     x: number;
@@ -66,6 +65,33 @@ export const CustomSankey: React.FC<SankeyProps> = ({
     leftLabel,
     rightLabel
 }) => {
+    const [margin, setMargin] = useState({
+        left: 150,
+        right: 150,
+        top: 50,
+        bottom: 50,
+    });
+
+    const [fontSize, setFontSize] = useState(14);
+
+    const [padding, setPadding] = useState(50);
+
+    useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth < 600) {
+                setMargin({ left: 90, right: 90, top: 40, bottom: 40 });
+                setFontSize(11);
+                setPadding(20);
+            } else {
+                setMargin({ left: 150, right: 150, top: 50, bottom: 50 });
+                setFontSize(14);
+                setPadding(50);
+            }
+        };
+        handleResize();
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
 
     // Custom Node Component with Label 
     const CustomNode = (props: CustomNodeProps) => { 
@@ -83,7 +109,7 @@ export const CustomSankey: React.FC<SankeyProps> = ({
                     textAnchor={isLeft ? "end" : "start"}
                     dominantBaseline="middle" 
                     fill={props.payload.color} 
-                    fontSize={14}
+                    fontSize={fontSize}
                     fontWeight={"bold"}
                     fillOpacity={0.8}
                 > 
@@ -140,7 +166,7 @@ export const CustomSankey: React.FC<SankeyProps> = ({
                         textAnchor="middle" 
                         dominantBaseline="middle" 
                         fill="#333" 
-                        fontSize={14} 
+                        fontSize={fontSize} 
                         pointerEvents="none" 
                     > 
                         {payload.value} 
@@ -177,13 +203,8 @@ export const CustomSankey: React.FC<SankeyProps> = ({
                         }}
                         node={CustomNode}
                         link={CustomLink}
-                        nodePadding={50}
-                        margin={{
-                            left: 150,
-                            right: 150,
-                            top: 50,
-                            bottom: 50,
-                        }}
+                        nodePadding={padding}
+                        margin={margin}
                     >
                         <Tooltip />
                     </Sankey>
