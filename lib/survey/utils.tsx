@@ -3,7 +3,6 @@ import {
     AFFORD_FAIRHOLD,
     AGE_ORDER,
     CURRENT_MEANS_TENURE_LABELS,
-    CURRENT_MEANS_TENURE_LABELS,
     HOUSING_OUTCOMES_LABELS,
     IDEAL_HOUSE_TYPE_LABELS,
     IDEAL_LIVE_WITH_LABELS,
@@ -351,20 +350,6 @@ const padAndSortHousingOutcomes = (housingOutcomes: Record<string, BarOrPieResul
         const topTenOutcomes = paddedArr.slice(0, 10);
         housingOutcomes[outcomeKey] = topTenOutcomes;
     })};
-
-const applySankeyNodeLabels = (sankeyResults: SankeyResults) => {
-  sankeyResults.currentMeansTenureChoice.nodes.forEach(node => {
-    const baseName = node.name.replace(/_(0|1)$/, "");
-    node.label = CURRENT_MEANS_TENURE_LABELS[baseName] || baseName;
-  });
-  sankeyResults.idealHouseType.nodes.forEach(node => {
-    node.label = IDEAL_HOUSE_TYPE_LABELS[node.name] || node.name;
-  });
-  sankeyResults.idealLiveWith.nodes.forEach(node => {
-    node.label = IDEAL_LIVE_WITH_LABELS[node.name] || node.name;
-  });
-  return sankeyResults;
-}
 
 export const getMaxValue = (results: BarOrPieResult[]): number => {
     return results.reduce((max, item) => item.value > max ? item.value : max, 0);
