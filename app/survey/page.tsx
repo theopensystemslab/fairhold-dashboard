@@ -62,11 +62,9 @@ export default function SurveyPage() {
     fetchSurveyData();
   }, []);
 
-  if (loading) return <SurveySkeleton />;
   if (error) return <div>Error: {error}</div>;
-  if (!surveyResults) return <div>No survey data available.</div>;
 
-  const whyFairholdMaxX = getMaxWhyFairholdValue(surveyResults)
+  const whyFairholdMaxX = getMaxWhyFairholdValue(surveyResults ?? defaultSurveyResults)
 
   return (
     <ErrorBoundary>
