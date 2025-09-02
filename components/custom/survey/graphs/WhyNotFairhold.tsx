@@ -9,31 +9,37 @@ export const WhyNotFairhold = ({ maxX }: { maxX: number }) => {
   
   return (
       <SurveyGraphCard title="Why wouldn't you choose Fairhold?">
-          <ResponsiveContainer height={150}>
-          <BarChart
-              data={whyNotFairhold}
-              barSize={20}
-              layout="vertical"
-          >
-              <XAxis 
-                  type="number" 
-                  tickLine={false}
-                  axisLine={false}
-                  tickCount={2}
-                  domain={[0, maxX]}
+          {(animate) => (
+            <ResponsiveContainer height={150}>
+            <BarChart
+                data={whyNotFairhold}
+                barSize={20}
+                layout="vertical"
+            >
+                <XAxis 
+                    type="number" 
+                    tickLine={false}
+                    axisLine={false}
+                    tickCount={2}
+                    domain={[0, maxX]}
                   /> 
-              <YAxis 
-                  type="category"    
-                  dataKey="answer" 
-                  width={150} 
-                  interval={0}
-                  tickLine={false}
-                  axisLine={false}
-                  tick={(props) => <CustomTick {...props} />}
-                /> 
-              <Bar dataKey="value" fill="rgb(var(--survey-placeholder))" /> 
-          </BarChart>
-          </ResponsiveContainer>
+                <YAxis 
+                    type="category"    
+                    dataKey="answer" 
+                    width={150} 
+                    interval={0}
+                    tickLine={false}
+                    axisLine={false}
+                    tick={(props) => <CustomTick {...props} />}
+                    /> 
+                <Bar 
+                    dataKey="value" 
+                    fill="rgb(var(--survey-placeholder))"
+                    isAnimationActive={animate}
+                    /> 
+            </BarChart>
+            </ResponsiveContainer>
+          )}
       </SurveyGraphCard>
   )
 }
