@@ -8,7 +8,7 @@ type CustomNodeProps = {
     height: number;
     index: number;
     payload: NodePayload;
-    color?: string;
+    color: string;
 }
 
 type NodePayload = {
@@ -24,7 +24,7 @@ type NodePayload = {
     dx: number;
     y: number;
     dy: number;
-    color?: string;
+    color: string;
 }
 
 type CustomLinkProps = {
@@ -53,7 +53,7 @@ type CustomLinkPayload = {
 }
 
 type SankeyProps = {
-    nodes: Array<{name: string, label: string}>;
+    nodes: Array<{name: string, label: string, color: string}>;
     links: Array<{source: number, target: number, value: number}>;
     leftLabel?: string;
     rightLabel?: string;
