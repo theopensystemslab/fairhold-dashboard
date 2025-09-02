@@ -4,7 +4,7 @@ import { PieChart, Pie, Legend, ResponsiveContainer, Cell } from "recharts";
 import { useSurveyContext } from "@context/surveyContext";
 
 
-export const SupportNewFairhold = () => {
+export const SupportNewFairhold: React.FC<{ loading: boolean }> = ({ loading }) => {
     const supportNewFairhold = useSurveyContext().barOrPie.supportNewFairhold;
 
     const COLORS = [
@@ -12,7 +12,7 @@ export const SupportNewFairhold = () => {
     ];
     
     return (
-        <SurveyGraphCard title="Would you support the creation of new Fairhold homes (or plots) in your area?">
+        <SurveyGraphCard title="Would you support the creation of new Fairhold homes (or plots) in your area?" loading={loading}>
              <ResponsiveContainer height={300}>
                 <PieChart>
                     <Pie 

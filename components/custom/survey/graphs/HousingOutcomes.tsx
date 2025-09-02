@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import SurveyGraphCard from "@components/custom/survey/SurveyGraphCard";
 import { Bar, BarChart, XAxis, YAxis, ResponsiveContainer } from "recharts";
 import { useSurveyContext } from "@context/surveyContext";
@@ -8,7 +8,7 @@ import CustomTick from "@components/custom/survey/CustomTick";
 import { ResultGroupedByTenure } from "@/lib/survey/types";
 import { getMaxValue } from "@/lib/survey/utils";
 
-export const HousingOutcomes = () => {
+export const HousingOutcomes: React.FC<{ loading: boolean }> = ({ loading }) => {
     const housingOutcomes = useSurveyContext().barOrPie.housingOutcomes;
     const maxX = getMaxHousingOutcomeValue(housingOutcomes)
     
@@ -19,12 +19,21 @@ export const HousingOutcomes = () => {
         tenureOptions.length > 0 ? tenureOptions[0] : ""
     );
 
+    useEffect(() => {
+        if (tenureOptions.length > 0) {
+            setSelectedTenure(prev =>
+                tenureOptions.includes(prev) ? prev : tenureOptions[0]
+            );
+        }
+    }, [tenureOptions]);
+
     const color = TENURE_COLORS[selectedTenure] || "rgb(var(--text-default-rgb))";
 
     return (
         <SurveyGraphCard 
             title="What do you most want from housing that you don't currently get?" 
             subtitle="Showing top 10 responses for"
+            loading={loading}
             action={
             <SurveyTenureSelector
                 options={tenureOptions}
