@@ -7,7 +7,7 @@ export const IdealLiveWith = () => {
     const { idealLiveWith } = useSurveyContext().sankey;
     const color = "rgb(var(--fairhold-equity-color-rgb))";
     const coloredNodes = idealLiveWith.nodes.map((node) => ({...node, color}));
-    
+
     return (
         <SurveyGraphCard title="Who do you want to live with?">
             <CustomSankey
