@@ -57,7 +57,7 @@ const CalculatorInput: React.FC<CalculatorInputProps> = ({ onSubmit, isLoading }
     { label: "Pre-1900", value: 130 },
   ] as const;
 
-  const form = useForm<FormFrontend>({
+  const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       houseType:
