@@ -40,7 +40,9 @@ export const aggregateResults = (rawResults: RawResults[]) => {
     const slicedBarOrPie = sliceResults(sortedBarOrPie);
     
     const labelledSankey = applySankeyNodeLabels(sankey);
-    return { numberResponses, barOrPie: slicedBarOrPie, sankey: labelledSankey };
+    const coloredSankey = applySankeyNodeColors(labelledSankey);
+    
+    return { numberResponses, barOrPie: slicedBarOrPie, sankey: coloredSankey };
 }
 
 const initializeBarOrPieResultsObject = (): BarOrPieResults => {
@@ -141,14 +143,14 @@ const updateSankeyNodesAndLinks = (
     let sourceIndex = nodes.findIndex((node) => node.name === fromValue);
     if (sourceIndex === -1) {
         sourceIndex = nodes.length;
-        nodes.push({ name: fromValue, label: "" });
+        nodes.push({ name: fromValue, label: "", color: "" });
     }
 
     // Find or add the target node
     let targetIndex = nodes.findIndex((node) => node.name === toValue);
     if (targetIndex === -1) {
         targetIndex = nodes.length;
-        nodes.push({ name: toValue, label: "" });
+        nodes.push({ name: toValue, label: "", color: "" });
     }
 
     // Find or add the link
@@ -318,14 +320,20 @@ const aggregateOther = (arr: BarOrPieResult[]): BarOrPieResult[] => {
     return notOthers;
 };
 
-export const applyNodeColors = (nodes: { name: string; label: string }[]) => {
-  return nodes.map(node => {
-    const baseName = node.label ?? node.name.replace(/ \((current|ideal)\)$/i, ""); // we want to use the label if it exists, if it doesn't then we just use the name (but removing the suffixes created for unique node names)
-    return {
-      ...node,
-      color: TENURE_CHOICE_COLOR_MAP[baseName] || "rgb(var(--survey-grey-mid))"
-    };
-});
+/** Uses node labels as a key so should be run after applySankeyNodeLabels() */
+const applySankeyNodeColors = (sankeyResults: SankeyResults) => {
+  sankeyResults.currentMeansTenureChoice.nodes.forEach(node => {  // only currentMeansTenureChoice has individual node colours
+    const baseName = node.label;
+    node.color = TENURE_CHOICE_COLOR_MAP[baseName] || "rgb(var(--survey-grey-mid))";
+  });
+
+  sankeyResults.idealHouseType.nodes.forEach(node => {
+    node.color = "rgb(var(--survey-grey-mid))";
+  });
+  sankeyResults.idealLiveWith.nodes.forEach(node => {
+    node.color = "rgb(var(--fairhold-equity-color-rgb))";
+  });
+  return sankeyResults;
 }
 
 const padAndSortHousingOutcomes = (housingOutcomes: Record<string, BarOrPieResult[]>) => {
