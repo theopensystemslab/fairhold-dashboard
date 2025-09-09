@@ -3,7 +3,6 @@ import SurveyGraphCard from "@/components/custom/survey/SurveyGraphCard";
 import { CustomSankey } from "../CustomSankey";
 import { useSurveyContext } from "@context/surveyContext";
 
-
 export const IdealHouseType = () => {
     const { idealHouseType } = useSurveyContext().sankey;
     

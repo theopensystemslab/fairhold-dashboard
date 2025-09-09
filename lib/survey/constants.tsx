@@ -142,3 +142,26 @@ export const TENURE_CHOICE_COLOR_MAP: Record<string, string> = {
   "Social rent": "rgb(var(--social-rent-land-color-rgb))",
   "I don't know": "rgb(var(--survey-grey-mid))"
 };
+
+export const CURRENT_MEANS_TENURE_LABELS: Record<string, string> = {
+  "Part own, part rent": "Shared ownership",
+  "I live for free in a home": "Free housing",
+  "I do not have a stable home at the moment": "No stable home"
+}
+
+export const IDEAL_HOUSE_TYPE_LABELS: Record<string, string> = {
+  "A flat": "Flat",
+  "A house": "House",
+  "A studio": "Studio"
+}
+
+export const IDEAL_LIVE_WITH_LABELS: Record<string, string> = {
+    "I live with my parents":"Parents / extended family",
+    "I live alone": "Alone",
+    "I live with my parents or extended family": "Parents / extended family",
+    "With my parents or extended family": "Parents / extended family",
+    "I live with housemates": "With friends",
+    "Friends / housemates": "With friends",
+    "I live with my partner / family": "Partner / family",
+    "With partner / family": "Partner / family"
+};

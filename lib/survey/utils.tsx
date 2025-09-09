@@ -2,11 +2,14 @@ import { RawResults, BarOrPieResults, BarOrPieResult, SankeyResults, SankeyResul
 import {
     AFFORD_FAIRHOLD,
     AGE_ORDER,
+    CURRENT_MEANS_TENURE_LABELS,
     HOUSING_OUTCOMES_LABELS,
+    IDEAL_HOUSE_TYPE_LABELS,
+    IDEAL_LIVE_WITH_LABELS,
     LABEL_MAP,
     SUPPORT_DEVELOPMENT_ORDER,
     SUPPORT_FAIRHOLD_ORDER,
-  TENURE_CHOICE_COLOR_MAP,
+    TENURE_CHOICE_COLOR_MAP,
 } from "./constants";
 
 const SANKEY_MAPPINGS = [
@@ -36,7 +39,10 @@ export const aggregateResults = (rawResults: RawResults[]) => {
     const sortedBarOrPie = sortResults(shortenedBarOrPie);
     const slicedBarOrPie = sliceResults(sortedBarOrPie);
     
-    return { numberResponses, barOrPie: slicedBarOrPie, sankey };
+    const labelledSankey = applySankeyNodeLabels(sankey);
+    const coloredSankey = applySankeyNodeColors(labelledSankey);
+    
+    return { numberResponses, barOrPie: slicedBarOrPie, sankey: coloredSankey };
 }
 
 const initializeBarOrPieResultsObject = (): BarOrPieResults => {
@@ -137,14 +143,14 @@ const updateSankeyNodesAndLinks = (
     let sourceIndex = nodes.findIndex((node) => node.name === fromValue);
     if (sourceIndex === -1) {
         sourceIndex = nodes.length;
-        nodes.push({ name: fromValue });
+        nodes.push({ name: fromValue, label: "", color: "" });
     }
 
     // Find or add the target node
     let targetIndex = nodes.findIndex((node) => node.name === toValue);
     if (targetIndex === -1) {
         targetIndex = nodes.length;
-        nodes.push({ name: toValue });
+        nodes.push({ name: toValue, label: "", color: "" });
     }
 
     // Find or add the link
@@ -245,7 +251,7 @@ const sortByValueDesc = (arr: BarOrPieResult[]) => {
     arr.sort((a, b) => b.value - a.value);
 };
 
-const sortResults = (results: BarOrPieResults) => {
+const sortResults = (results: BarOrPieResults): BarOrPieResults => {
     // We handle housingOutcomes separately (because it's a nested object)
     Object.values(results.housingOutcomes).forEach((arr) => {
         sortByValueDesc(arr);
@@ -314,15 +320,20 @@ const aggregateOther = (arr: BarOrPieResult[]): BarOrPieResult[] => {
     return notOthers;
 };
 
-export const applyNodeColors = (nodes: {name: string }[]) => {
-    return nodes.map(node => {
-        // Remove suffix for color lookup if present
-        const baseName = node.name.replace(/ \((current|ideal)\)$/i, "");
-        return {
-            ...node,
-            color: TENURE_CHOICE_COLOR_MAP[baseName] || "rgb(var(--survey-grey-mid))"
-        };
-    });
+/** Uses node labels as a key so should be run after applySankeyNodeLabels() */
+const applySankeyNodeColors = (sankeyResults: SankeyResults) => {
+  sankeyResults.currentMeansTenureChoice.nodes.forEach(node => {  // only currentMeansTenureChoice has individual node colours
+    const baseName = node.label;
+    node.color = TENURE_CHOICE_COLOR_MAP[baseName] || "rgb(var(--survey-grey-mid))";
+  });
+
+  sankeyResults.idealHouseType.nodes.forEach(node => {
+    node.color = "rgb(var(--survey-grey-mid))";
+  });
+  sankeyResults.idealLiveWith.nodes.forEach(node => {
+    node.color = "rgb(var(--fairhold-equity-color-rgb))";
+  });
+  return sankeyResults;
 }
 
 const padAndSortHousingOutcomes = (housingOutcomes: Record<string, BarOrPieResult[]>) => {
@@ -352,4 +363,18 @@ export const getMaxWhyFairholdValue = (surveyResults: SurveyResults) => {
     getMaxValue(whyNotFairholdResults)
   );
   return maxWhyFairholdValue;
+}
+
+const applySankeyNodeLabels = (sankeyResults: SankeyResults) => {
+  sankeyResults.currentMeansTenureChoice.nodes.forEach(node => {
+    const baseName = node.name.replace(/_(0|1)$/, "");
+    node.label = CURRENT_MEANS_TENURE_LABELS[baseName] || baseName;
+  });
+  sankeyResults.idealHouseType.nodes.forEach(node => {
+    node.label = IDEAL_HOUSE_TYPE_LABELS[node.name] || node.name;
+  });
+  sankeyResults.idealLiveWith.nodes.forEach(node => {
+    node.label = IDEAL_LIVE_WITH_LABELS[node.name] || node.name;
+  });
+  return sankeyResults;
 }
