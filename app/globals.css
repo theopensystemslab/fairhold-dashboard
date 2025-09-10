@@ -14,6 +14,7 @@
   --background-input-field-rgb: 255 255 255;
   --text-inaccessible-rgb: 171 164 164;
   --button-background-rgb: 227 227 225;
+  --footer-background-rgb: 22, 22, 22;
 
   --freehold-equity-color-rgb: 77 100 210;
   --freehold-interest-color-rgb: 131 164 255;
@@ -71,6 +72,12 @@ body {
   margin-bottom: 10px;
   font-weight: 700;
   letter-spacing: -0.03em;
+}
+
+.h2-style {
+  margin-top: 15px;
+  margin-bottom: 10px;
+  font-weight: 600;
 }
 
 .h3-style {
@@ -193,4 +200,31 @@ main {
 .scrollbar-hide {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;     /* Firefox */
+}
+
+.logo {
+  color: #000;
+  letter-spacing: -.03em;
+  cursor: pointer;
+  font-size: 32px;
+  font-weight: 700;
+  text-decoration-color: #000;
+}
+
+.nav-link {
+  opacity: 100;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.w-nav-link {
+  vertical-align: top;
+  color: #222;
+  text-align: left;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 20px;
+  text-decoration: none;
+  display: inline-block;
+  position: relative;
 }
