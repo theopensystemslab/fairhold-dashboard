@@ -41,12 +41,15 @@ const ColoredYAxisTick: React.FC<CustomYTickProps> = ({ x, y, payload: { value: 
     );
 };
 
-export const AnyMeansTenureChoice = () => {
-    const { anyMeansTenureChoice } = useSurveyContext().barOrPie as { anyMeansTenureChoice: BarOrPieResult[] };
+export const AnyMeansTenureChoice: React.FC = () => {
+    const { anyMeansTenureChoice } = useSurveyContext().surveyResults.barOrPie as { anyMeansTenureChoice: BarOrPieResult[] };
+    const { loading } = useSurveyContext();
+    
     return (
         <SurveyGraphCard 
             title="Rank the tenures by preference"
             subtitle="If you could afford (and were eligible for) any type of home, which would you prefer?"
+            loading={loading}
             >
           <ResponsiveContainer height={150}>
           <BarChart

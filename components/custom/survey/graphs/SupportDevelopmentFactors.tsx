@@ -4,12 +4,13 @@ import { Bar, BarChart, XAxis, YAxis, ResponsiveContainer } from "recharts";
 import { useSurveyContext } from "@context/surveyContext";
 import CustomTick from "@components/custom/survey/CustomTick";
 
-export const SupportDevelopmentFactors = () => {
-  const supportDevelopmentFactors = useSurveyContext().barOrPie.supportDevelopmentFactors;
-    
-    return (
-        <SurveyGraphCard title="Which of these factors would make you more likely to support new homes being created near where you live?">
-            <ResponsiveContainer height={480} width="100%">
+export const SupportDevelopmentFactors: React.FC = () => {
+  const { supportDevelopmentFactors } = useSurveyContext().surveyResults.barOrPie;
+  const { loading } = useSurveyContext();
+
+  return (
+    <SurveyGraphCard title="Which of these factors would make you more likely to support new homes being created near where you live?" loading={loading}>
+      <ResponsiveContainer height={480} width="100%">
             <BarChart
                 data={supportDevelopmentFactors}
                 barSize={20}

@@ -3,15 +3,16 @@ import SurveyGraphCard from "@/components/custom/survey/SurveyGraphCard";
 import { PieChart, Pie, Legend, ResponsiveContainer, Cell } from "recharts";
 import { useSurveyContext } from "@context/surveyContext";
 
-export const SupportDevelopment = () => {
-    const { supportDevelopment } = useSurveyContext().barOrPie;
+export const SupportDevelopment: React.FC = () => {
+    const { supportDevelopment } = useSurveyContext().surveyResults.barOrPie;
+    const { loading } = useSurveyContext();
 
     const COLORS = [
       "rgb(var(--fairhold-equity-color-rgb))", "rgb(var(--fairhold-interest-color-rgb))", "rgb(var(--survey-orange))", "rgb(var(--survey-pink))", "rgb(var(--social-rent-land-color-rgb))", "rgb(var(--survey-grey-light))"
     ];
 
     return (
-        <SurveyGraphCard title="In general, do you support the development of new homes in your area?">
+        <SurveyGraphCard title="In general, do you support the development of new homes in your area?" loading={loading}>
              <ResponsiveContainer height={300}>
                 <PieChart>
                     <Pie 
