@@ -2,7 +2,6 @@ import React from "react"
 import SurveyGraphCard from "@components/custom/survey/SurveyGraphCard";
 import { PieChart, Pie, Legend, ResponsiveContainer, Cell } from "recharts";
 import { useSurveyContext } from "@context/surveyContext";
-
 export const AffordFairhold: React.FC = () => {
     const { affordFairhold } = useSurveyContext().surveyResults.barOrPie;
     const { loading } = useSurveyContext(); 
@@ -13,28 +12,33 @@ export const AffordFairhold: React.FC = () => {
 
     return (
         <SurveyGraphCard title="Could you afford to buy a Fairhold home in your area?" loading={loading}>
-            <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                    <Pie 
-                        data={affordFairhold} 
-                        dataKey="value" 
-                        nameKey="answer" 
-                        fill="rgb(var(--survey-placeholder))" 
-                        innerRadius="60%"
-                        outerRadius="80%"
-                        >
-                    {affordFairhold.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index]} />
-                    ))}
-                    </Pie>
-                    <Legend 
-                        align="left" 
-                        height={50}
-                        verticalAlign="bottom" 
-                        wrapperStyle={{ fontSize: 14 }}
-                        />
-                </PieChart>
-            </ResponsiveContainer>
+            {(animate) => (
+                <div style={{ width: "100%", height: "100%" }}>
+                    <ResponsiveContainer width="100%" height="100%">
+                        <PieChart>
+                            <Pie 
+                                data={affordFairhold} 
+                                dataKey="value" 
+                                nameKey="answer" 
+                                fill="rgb(var(--survey-placeholder))" 
+                                innerRadius="60%"
+                                outerRadius="80%"
+                                isAnimationActive={animate}
+                                >
+                            {affordFairhold.map((entry, index) => (
+                                <Cell key={`cell-${index}`} fill={COLORS[index]} />
+                            ))}
+                            </Pie>
+                            <Legend 
+                                align="left" 
+                                height={50}
+                                verticalAlign="bottom" 
+                                wrapperStyle={{ fontSize: 14 }}
+                            />
+                        </PieChart>
+                    </ResponsiveContainer>
+                </div>
+            )}
         </SurveyGraphCard>
     )
 }

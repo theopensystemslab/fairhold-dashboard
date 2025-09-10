@@ -44,33 +44,38 @@ export const HousingOutcomes: React.FC = () => {
             />
             }  
             >
-
-            <ResponsiveContainer width="100%" height="100%">
-                <BarChart
-                    data={housingOutcomes[selectedTenure]}
-                    barSize={20}
-                    layout="vertical"
-                >
-                    <XAxis 
-                        type="number"
-                        tickLine={false}
-                        axisLine={false}
-                        tickCount={2}
-                        tickFormatter={(value: number) => Math.round(value).toString()}
-                        domain={[0, maxX]}
+                {(animate) => (
+                    <ResponsiveContainer width="100%" height="100%">
+                        <BarChart
+                            data={housingOutcomes[selectedTenure]}
+                            barSize={20}
+                            layout="vertical"
+                        >
+                            <XAxis 
+                                type="number"
+                                tickLine={false}
+                                axisLine={false}
+                                tickCount={2}
+                                tickFormatter={(value: number) => Math.round(value).toString()}
+                                domain={[0, maxX]}
                         /> 
-                    <YAxis 
-                        type="category"    
-                        dataKey="answer" 
-                        width={160} 
-                        interval={0}
-                        tick={(props) => <CustomTick {...props} />}
-                        tickLine={false}
-                        axisLine={false}
-                        /> 
-                    <Bar dataKey="value" fill={color} /> 
-                </BarChart>
-            </ResponsiveContainer>
+                            <YAxis 
+                                type="category"    
+                                dataKey="answer" 
+                                width={160} 
+                                interval={0}
+                                tick={(props) => <CustomTick {...props} />}
+                                tickLine={false}
+                                axisLine={false}
+                                /> 
+                            <Bar 
+                                dataKey="value" 
+                                fill={color} 
+                                isAnimationActive={animate}
+                            /> 
+                        </BarChart>
+                    </ResponsiveContainer>
+                )}
         </SurveyGraphCard>
     )
 }

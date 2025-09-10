@@ -14,27 +14,32 @@ export const Country: React.FC = () => {
   
   return (
     <SurveyGraphCard title="Where do you live?" loading={loading}>
-      <ResponsiveContainer width="100%" height="100%">
-          <PieChart>
-          <Pie 
-            data={uk} 
-            dataKey="value" 
-            nameKey="answer" 
-            fill="rgb(var(--survey-placeholder))" 
-            innerRadius="60%"
-            outerRadius="80%"
-            >
-            {uk.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-            ))}
-            </Pie>
-          <Legend 
-            align="left" 
-            verticalAlign="bottom" 
-            wrapperStyle={{ fontSize: 14 }}
-          />
-          </PieChart>
-      </ResponsiveContainer>
+      {(animate) => (
+        <div style={{ width: "100%", height: "100%" }}>
+          <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie 
+                  data={uk} 
+                  dataKey="value" 
+                  nameKey="answer" 
+                  fill="rgb(var(--survey-placeholder))" 
+                  innerRadius="60%"
+                  outerRadius="80%"
+                  isAnimationActive={animate}
+                  >
+                  {uk.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  ))}
+                  </Pie>
+                <Legend 
+                  align="left" 
+                  verticalAlign="bottom" 
+                  wrapperStyle={{ fontSize: 14 }}
+                />
+              </PieChart>
+          </ResponsiveContainer>
+        </div>
+      )}
     </SurveyGraphCard>
   );
   };

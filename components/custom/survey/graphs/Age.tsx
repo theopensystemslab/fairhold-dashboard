@@ -15,31 +15,36 @@ export const Age: React.FC = () => {
     const renderLegendText = (value: string) => (
         <span style={{ color: "rgb(var(--survey-grey-mid))" }}>{value}</span>
         );
-  
+
     return (
         <SurveyGraphCard title="How old are you?" loading={loading}>
-            <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                    <Pie 
-                        data={ageGroup} 
-                        dataKey="value" 
-                        nameKey="answer" 
-                        fill="rgb(var(--survey-placeholder))" 
-                        innerRadius="60%"
-                        outerRadius="80%"
-                        >
-                        {ageGroup.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                        ))}
-                    </Pie>
-                    <Legend 
-                        align="left" 
-                        verticalAlign="bottom" 
-                        formatter={renderLegendText}
-                        wrapperStyle={{ fontSize: 14 }}
-                    />
-                </PieChart>
-        </ResponsiveContainer>
+        {(animate) => (
+            <div style={{ width: "100%", height: "100%" }}>
+                <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                        <Pie 
+                            data={ageGroup} 
+                            dataKey="value" 
+                            nameKey="answer" 
+                            fill="rgb(var(--survey-placeholder))" 
+                            innerRadius="60%"
+                            outerRadius="80%"
+                            isAnimationActive={animate}
+                            >
+                            {ageGroup.map((entry, index) => (
+                                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                            ))}
+                        </Pie>
+                        <Legend 
+                            align="left" 
+                            verticalAlign="bottom" 
+                            formatter={renderLegendText}
+                            wrapperStyle={{ fontSize: 14 }}
+                        />
+                    </PieChart>
+                </ResponsiveContainer>
+            </div>
+        )}
         </SurveyGraphCard>
     )
 }
