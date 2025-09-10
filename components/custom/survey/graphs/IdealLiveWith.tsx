@@ -3,8 +3,9 @@ import SurveyGraphCard from "@/components/custom/survey/SurveyGraphCard";
 import { CustomSankey } from "../CustomSankey"
 import { useSurveyContext } from "@context/surveyContext";
 
-export const IdealLiveWith: React.FC<{ loading: boolean }> = ({ loading }) => {
-    const { idealLiveWith } = useSurveyContext().sankey;
+export const IdealLiveWith: React.FC = () => {
+    const { idealLiveWith } = useSurveyContext().surveyResults.sankey;
+    const { loading } = useSurveyContext();
 
     return (
         <SurveyGraphCard title="Who do you want to live with?" loading={loading}>

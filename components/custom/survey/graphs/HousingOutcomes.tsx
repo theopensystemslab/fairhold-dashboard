@@ -8,8 +8,9 @@ import CustomTick from "@components/custom/survey/CustomTick";
 import { ResultGroupedByTenure } from "@/lib/survey/types";
 import { getMaxValue } from "@/lib/survey/utils";
 
-export const HousingOutcomes: React.FC<{ loading: boolean }> = ({ loading }) => {
-    const housingOutcomes = useSurveyContext().barOrPie.housingOutcomes;
+export const HousingOutcomes: React.FC = () => {
+    const { housingOutcomes } = useSurveyContext().surveyResults.barOrPie;
+    const { loading } = useSurveyContext();
     const maxX = getMaxHousingOutcomeValue(housingOutcomes)
     
     // Get available tenure keys (we might not have all of them, eg if no shared ownership residents fill out the survey)

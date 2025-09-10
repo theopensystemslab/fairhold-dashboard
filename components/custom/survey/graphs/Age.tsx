@@ -4,8 +4,9 @@ import { PieChart, Pie, Legend, ResponsiveContainer, Cell } from "recharts";
 import { useSurveyContext } from "@context/surveyContext";
 import { BarOrPieResult } from "@/lib/survey/types";
 
-export const Age: React.FC<{ loading: boolean }> = ({ loading }) => {
-    const { ageGroup } = useSurveyContext().barOrPie as { ageGroup: BarOrPieResult[] };
+export const Age: React.FC = () => {
+    const { ageGroup } = useSurveyContext().surveyResults.barOrPie as { ageGroup: BarOrPieResult[] };
+    const { loading } = useSurveyContext();
     
     const COLORS = [
       "rgb(var(--survey-grey-lightest))", "rgb(var(--survey-grey-light))", "rgb(var(--survey-grey-mid))", "rgb(var(--survey-grey-dark))", "rgb(var(--survey-black))"  

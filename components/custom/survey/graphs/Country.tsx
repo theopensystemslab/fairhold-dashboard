@@ -4,9 +4,10 @@ import { PieChart, Pie, Legend, ResponsiveContainer, Cell } from "recharts";
 import { useSurveyContext } from "@context/surveyContext";
 import { BarOrPieResult } from "@/lib/survey/types";
 
-export const Country: React.FC<{ loading: boolean }> = ({ loading }) => {
-  const { uk } = useSurveyContext().barOrPie as { uk: BarOrPieResult[] };
-    
+export const Country: React.FC = () => {
+  const { uk } = useSurveyContext().surveyResults.barOrPie as { uk: BarOrPieResult[] };
+  const { loading } = useSurveyContext();
+
   const COLORS = [
     "rgb(var(--survey-blue))", "rgb(var(--survey-blue-light))"
   ];

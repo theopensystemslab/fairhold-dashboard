@@ -69,7 +69,7 @@ export default function SurveyPage() {
   return (
     <ErrorBoundary>
       <SurveyLayout>
-          <SurveyContext.Provider value={surveyResults ?? defaultSurveyResults}>
+          <SurveyContext.Provider value={{ surveyResults: surveyResults ?? defaultSurveyResults, loading }}>
           <main className="flex justify-center main-content">
             <section className="w-full max-w-[960px] flex flex-row py-8">
               <div className="flex flex-row">
@@ -88,8 +88,8 @@ export default function SurveyPage() {
                   <div className="flex flex-col py-4">
                     <h2 className="text-xl font-bold my-8">Who has responded?</h2>
                     <div className="flex flex-col gap-8 md:flex-row h-[50rem] md:h-[30rem]">
-                      <Country loading={loading} />
-                      <Age loading={loading} />
+                      <Country  />
+                      <Age  />
                       {/* <Postcode {...results} /> */}
                     </div>
                   </div>
@@ -97,23 +97,23 @@ export default function SurveyPage() {
                     <div className="flex flex-col gap-8 ">
                       <h2 className="text-xl font-bold my-8">Housing preferences</h2>
                       <div className="flex flex-col gap-8 md:flex-row h-[50rem] md:h-[30rem]">
-                        <IdealHouseType loading={loading} />
-                        <IdealLiveWith loading={loading} />
+                        <IdealHouseType  />
+                        <IdealLiveWith  />
                       </div>
                       <div className="flex flex-col gap-8 md:flex-row h-[50rem] md:h-[30rem]">
-                        <HousingOutcomes loading={loading} />
-                        <AffordFairhold loading={loading} />
+                        <HousingOutcomes  />
+                        <AffordFairhold  />
                       </div>
                       <div className="flex flex-col md:flex-row h-[50rem]">
-                        <CurrentMeansTenureChoice loading={loading} />
+                        <CurrentMeansTenureChoice  />
                       </div>
                       <div className="flex flex-col gap-8 md:flex-row md:h-[20rem]">
-                        <WhyFairhold maxX={whyFairholdMaxX} loading={loading} />
-                        <WhyNotFairhold maxX={whyFairholdMaxX} loading={loading} />
+                        <WhyFairhold maxX={whyFairholdMaxX}  />
+                        <WhyNotFairhold maxX={whyFairholdMaxX}  />
                       </div>
                       <div className="flex flex-col md:flex-row md:h-[20rem] mb-4">
                         <div className="w-full">
-                          <AnyMeansTenureChoice loading={loading} />
+                          <AnyMeansTenureChoice  />
                         </div>
                       </div>
                     </div>
@@ -123,14 +123,14 @@ export default function SurveyPage() {
                     <div className="flex flex-col md:flex-row w-full gap-8">
                       <div className="flex flex-col md:w-1/2 w-full gap-8 md:h-[60rem]">
                         <div className="flex-1 flex flex-col h-[50rem] md:h-[30rem]"> 
-                          <SupportDevelopment loading={loading} />
+                          <SupportDevelopment  />
                         </div>
                         <div className="flex-1 flex flex-col l h-[50rem] md:h-[30rem]">
-                          <SupportNewFairhold loading={loading} />
+                          <SupportNewFairhold  />
                         </div>
                       </div>
                       <div className="flex flex-col md:flex-row md:w-1/2 w-full md:h-[60rem]">
-                        <SupportDevelopmentFactors loading={loading} />
+                        <SupportDevelopmentFactors  />
                       </div>
                     </div>
                   </div>

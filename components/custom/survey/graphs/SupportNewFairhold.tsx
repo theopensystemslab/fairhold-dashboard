@@ -4,8 +4,9 @@ import { PieChart, Pie, Legend, ResponsiveContainer, Cell } from "recharts";
 import { useSurveyContext } from "@context/surveyContext";
 
 
-export const SupportNewFairhold: React.FC<{ loading: boolean }> = ({ loading }) => {
-    const supportNewFairhold = useSurveyContext().barOrPie.supportNewFairhold;
+export const SupportNewFairhold: React.FC = () => {
+    const { supportNewFairhold } = useSurveyContext().surveyResults.barOrPie;
+    const { loading } = useSurveyContext();
 
     const COLORS = [
       "rgb(var(--fairhold-equity-color-rgb))", "rgb(var(--fairhold-interest-color-rgb))", "rgb(var(--survey-orange))", "rgb(var(--survey-pink))", "rgb(var(--social-rent-land-color-rgb))", "rgb(var(--survey-grey-light))"

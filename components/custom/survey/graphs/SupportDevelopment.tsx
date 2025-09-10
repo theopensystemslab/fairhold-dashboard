@@ -3,8 +3,9 @@ import SurveyGraphCard from "@/components/custom/survey/SurveyGraphCard";
 import { PieChart, Pie, Legend, ResponsiveContainer, Cell } from "recharts";
 import { useSurveyContext } from "@context/surveyContext";
 
-export const SupportDevelopment: React.FC<{ loading: boolean }> = ({ loading }) => {
-    const { supportDevelopment } = useSurveyContext().barOrPie;
+export const SupportDevelopment: React.FC = () => {
+    const { supportDevelopment } = useSurveyContext().surveyResults.barOrPie;
+    const { loading } = useSurveyContext();
 
     const COLORS = [
       "rgb(var(--fairhold-equity-color-rgb))", "rgb(var(--fairhold-interest-color-rgb))", "rgb(var(--survey-orange))", "rgb(var(--survey-pink))", "rgb(var(--social-rent-land-color-rgb))", "rgb(var(--survey-grey-light))"
