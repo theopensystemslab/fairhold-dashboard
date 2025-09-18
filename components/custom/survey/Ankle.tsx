@@ -1,7 +1,7 @@
 import Image from "next/image";
 
 export const Ankle: React.FC = () => (
-  <div className="footer p-8 bg-[rgb(var(--survey-black))]">
+  <div className="footer p-8 bg-[rgb(var(--footer-background-rgb))]">
     <div className="w-[80rem] flex flex-col mx-auto gap-8">
       <h2 className="text-white h2-style text-xl">Share this survey</h2>
       <div className="flex-1 text-white">
@@ -13,13 +13,13 @@ export const Ankle: React.FC = () => (
           <div className="flex flex-row items-center gap-3">
               <a href="https://tally.so/r/3E67QN" target="_blank"
               className="social-media-link w-inline-block">
-                  <Image width="30" height="30" sizes="(max-width: 479px) 17vw, 30px"
+                  <Image width={35} height={35} 
                   alt="Link icon"
-                  src="https://cdn.prod.website-files.com/665dd5e4ad0dc9aad281585c/6754843fdf51f215bb4ad40c_twitter%20white2023.png"
+                  src="/icons/link-circle-fill-svgrepo-com.svg"
                   loading="lazy"
-                  className="image-5"/>
+                  className="min-h-[30px] invert brightness-0 w-[35px] h-[35px]" />
               </a>
-              <div className="body-s  text-white">Copy link</div>
+              <p className="body-s text-white"><a href="https://tally.so/r/3E67QN" target="_blank">Copy link</a></p>
           </div>
         </div>
         {/* COL 2 */}
@@ -32,37 +32,40 @@ export const Ankle: React.FC = () => (
               Share via social media
           </div>
           <div className="flex flex-row gap-3">
-            <a href="https://twitter.com/WikiHouse" target="_blank" rel="noopener noreferrer" className="hover:opacity-60">
-              <Image width={30} height={30} alt="Twitter logo"
-                src="https://cdn.prod.website-files.com/665dd5e4ad0dc9aad281585c/6754843fdf51f215bb4ad40c_twitter%20white2023.png"
-                className="min-h-[30px]" />
+            <a href="#" target="_blank" rel="noopener noreferrer" className="hover:opacity-60">
+              <Image width={30} height={30} alt="LinkedIn logo"
+                src="/icons/InBug-White.png"
+                className="min-h-[30px] invert brightness-0" />
             </a>
-            <a href="https://github.com/wikihouseproject/Skylark" target="_blank" rel="noopener noreferrer" className="hover:opacity-60">
-              <Image width={30} height={30} alt="Github logo"
-                src="https://cdn.prod.website-files.com/665dd5e4ad0dc9aad281585c/6754843fdf51f215bb4ad406_Github2023.png" />
+            <a href="#" target="_blank" rel="noopener noreferrer" className="hover:opacity-60">
+              <Image width={30} height={30} alt="Facebook logo"
+                src="/icons/facebook.svg" 
+                className="min-h-[30px] invert brightness-0" />
             </a>
-            <a href="https://www.youtube.com/channel/UCdaCCzZijlUBU6ntv_Xrd8w" target="_blank" rel="noopener noreferrer" className="hover:opacity-60">
-              <Image width={30} height={30} alt="Youtube logo"
-                src="https://cdn.prod.website-files.com/665dd5e4ad0dc9aad281585c/6754843fdf51f215bb4ad404_youtube%20white-01.png"
-                className="min-h-[30px]" />
+            <a href="#" target="_blank" rel="noopener noreferrer" className="hover:opacity-60">
+              <Image width={30} height={30} alt="Whatsapp logo"
+                src="/icons/whatsapp.svg"
+                className="min-h-[30px] invert brightness-0" />
             </a>
-                        <a href="https://twitter.com/WikiHouse" target="_blank" rel="noopener noreferrer" className="hover:opacity-60">
-              <Image width={30} height={30} alt="Twitter logo"
-                src="https://cdn.prod.website-files.com/665dd5e4ad0dc9aad281585c/6754843fdf51f215bb4ad40c_twitter%20white2023.png"
-                className="min-h-[30px]" />
+            <a href="#" target="_blank" rel="noopener noreferrer" className="hover:opacity-60">
+              <Image width={30} height={30} alt="Mastodon logo"
+                src="/icons/mastodon.svg"
+                className="min-h-[30px] invert brightness-0" />
             </a>
-            <a href="https://github.com/wikihouseproject/Skylark" target="_blank" rel="noopener noreferrer" className="hover:opacity-60">
-              <Image width={30} height={30} alt="Github logo"
-                src="https://cdn.prod.website-files.com/665dd5e4ad0dc9aad281585c/6754843fdf51f215bb4ad406_Github2023.png" />
+            <a href="#" target="_blank" rel="noopener noreferrer" className="hover:opacity-60">
+              <Image width={30} height={30} alt="Bluesky logo"
+                src="/icons/bluesky.svg"
+                className="min-h-[30px] invert brightness-0" />
             </a>
-            <a href="https://www.youtube.com/channel/UCdaCCzZijlUBU6ntv_Xrd8w" target="_blank" rel="noopener noreferrer" className="hover:opacity-60">
-              <Image width={30} height={30} alt="Youtube logo"
-                src="https://cdn.prod.website-files.com/665dd5e4ad0dc9aad281585c/6754843fdf51f215bb4ad404_youtube%20white-01.png"
-                className="min-h-[30px]" />
+            <a href="#" target="_blank" rel="noopener noreferrer" className="hover:opacity-60">
+              <Image width={30} height={30} alt="X logo"
+                src="/icons/x.svg"
+                className="min-h-[30px] invert brightness-0" />
             </a>
           </div>
         </div>
     </div>
+    <hr className="h-px my-4 bg-white border-0"></hr>
     </div>
   </div>
 )
