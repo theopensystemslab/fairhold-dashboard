@@ -18,20 +18,6 @@ export const Footer: React.FC = () => (
         <div className="hidden md:w-1/4 md:block" />
         {/* COL 4 */}
         <div className="flex flex-row gap-3 md:w-1/4">
-          <a href="https://twitter.com/WikiHouse" target="_blank" rel="noopener noreferrer" className="hover:opacity-60">
-            <Image width={30} height={30} alt="Twitter logo"
-              src="https://cdn.prod.website-files.com/665dd5e4ad0dc9aad281585c/6754843fdf51f215bb4ad40c_twitter%20white2023.png"
-              className="min-h-[30px]" />
-          </a>
-          <a href="https://github.com/wikihouseproject/Skylark" target="_blank" rel="noopener noreferrer" className="hover:opacity-60">
-            <Image width={30} height={30} alt="Github logo"
-              src="https://cdn.prod.website-files.com/665dd5e4ad0dc9aad281585c/6754843fdf51f215bb4ad406_Github2023.png" />
-          </a>
-          <a href="https://www.youtube.com/channel/UCdaCCzZijlUBU6ntv_Xrd8w" target="_blank" rel="noopener noreferrer" className="hover:opacity-60">
-            <Image width={30} height={30} alt="Youtube logo"
-              src="https://cdn.prod.website-files.com/665dd5e4ad0dc9aad281585c/6754843fdf51f215bb4ad404_youtube%20white-01.png"
-              className="min-h-[30px]" />
-          </a>
         </div>
       </div>
 
