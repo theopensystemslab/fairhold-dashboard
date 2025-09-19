@@ -24,10 +24,10 @@ export const formSchema = z.object({
       message: "Enter a positive house size.",
     }),
 houseAge: z.coerce
-  .number({
+  .number<number>({
       message: "Enter an estimated build year."
     }),
-  houseBedrooms: z.coerce
+  houseBedrooms: z.coerce 
     .number({
       message: "Enter a valid number of bedrooms.",
     })
