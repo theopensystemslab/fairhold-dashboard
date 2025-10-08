@@ -1,13 +1,13 @@
 import Image from "next/image";
 
 export const Ankle: React.FC = () => (
-  <div className="footer p-8 bg-[rgb(var(--footer-background-rgb))]">
-    <div className="w-[80rem] flex flex-col mx-auto gap-8">
+  <div className="footer py-8 bg-[rgb(var(--footer-background-rgb))]">
+    <div className="max-w-[1280px] md:w-4/5 px-4 flex flex-col md:px-0 mx-auto gap-8">
       <h2 className="text-white h2-style text-xl">Share this survey</h2>
       <div className="flex-1 text-white">
           Invite others to take this survey so we can hear from the widest possible range of voices, and take this message to planners and politicians.
       </div>
-      <div className="flex flex-row gap-8">
+      <div className="flex flex-col md:flex-row gap-8">
         {/* COL 1 */}
         <div className="flex flex-col md:w-1/4">
           <div className="flex flex-row items-center gap-3">
@@ -35,7 +35,7 @@ export const Ankle: React.FC = () => (
             <a href="#" target="_blank" rel="noopener noreferrer" className="hover:opacity-60">
               <Image width={30} height={30} alt="LinkedIn logo"
                 src="/icons/InBug-White.png"
-                className="min-h-[30px] invert brightness-0" />
+                className="h-[2rem] invert brightness-0" />
             </a>
             <a href="#" target="_blank" rel="noopener noreferrer" className="hover:opacity-60">
               <Image width={30} height={30} alt="Facebook logo"
