@@ -1,8 +1,8 @@
 import Image from "next/image";
 
 export const Footer: React.FC = () => (
-  <footer className="bg-[rgb(var(--footer-background-rgb))] text-white py-8 h-[375px]">
-    <div className="max-w-[1280px] mx-auto">
+  <footer className="bg-[rgb(var(--footer-background-rgb))] text-white py-8 md:min-h-[375px]">
+    <div className="max-w-[1280px] md:w-4/5 mx-auto px-4 md:px-0">
       {/* ROW 1 */}
       <div className="flex flex-col md:flex-row gap-8">
         {/* COL 1 */}
