@@ -45,7 +45,7 @@
     "dotenv-cli": "^10.0.0",
     "lucide-react": "^0.556.0",
     "mathjs": "^14.8.2",
-    "next": "15.5.8",
+    "next": "15.5.9",
     "postcode": "^5.1.0",
     "react": "^18",
     "react-dom": "^18",
