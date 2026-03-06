@@ -72,12 +72,19 @@ model PricesPaidSummary {
 }
 
 model Rent {
-  id              Int     @id @default(autoincrement())
-  itl3            String @db.VarChar(250)
-  ladCode         String @map("lad_code") @db.VarChar(250)
-  region          String @db.VarChar(250)
-  monthlyMeanRent Float  @map("monthly_mean_rent")
-  bedrooms        Float 
+  id                Int     @id @default(autoincrement())
+  ladCode           String  @map("lad_code") @db.VarChar(250)
+  areaName          String  @map("area_name") @db.VarChar(250)
+  averageRent       Float   @map("average_rent")
+  rent1br           Float   @map("rent_1br")
+  rent2br           Float   @map("rent_2br")
+  rent3br           Float   @map("rent_3br")
+  rent4plusbr        Float   @map("rent_4plusbr")
+  rentDetached      Float   @map("rent_detached")
+  rentSemidetached  Float   @map("rent_semidetached")
+  rentTerraced      Float   @map("rent_terraced")
+  rentFlatMaisonette Float  @map("rent_flat_maisonette")
+  itl3              String  @db.VarChar(250)
 
   @@map("rent")
 }
