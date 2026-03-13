@@ -38,27 +38,29 @@ export const getHouseholdData = async (input: Calculation) => {
     }
     
     const itl1 = itl3.substring(0,3)
+    const houseType = input.houseType
     const gdhi = await gdhiService.getByITL1(itl1);
     const kwhCostPence = await gasPriceService.getByITL3(itl3);
     const hpi = await hpiService.getByITL3(itl3);
-    const buildPrice = await buildPriceService.getBuildPriceByHouseType(input.houseType);
+    const buildPrice = await buildPriceService.getBuildPriceByHouseType(houseType);
     
     const { averagePrice, numberOfTransactions, granularityPostcode } =
       await pricesPaidService.getPricesPaidByPostcodeAndHouseType(
         postcodeDistrict,
         postcodeArea,
         postcodeSector,
-        input.houseType
+        houseType
       );
 
-    const averageRentMonthly = await rentService.getByITL3AndBedrooms(itl3, bedrooms); 
+    const { averageRent, bedroomRent, houseTypeRent} = await rentService.getByITL3BedroomsAndType(itl3, houseType, bedrooms); 
+    const averageRentMonthly = Number(Math.round(averageRent * (houseTypeRent / averageRent) * (bedroomRent / averageRent)))
 
     const socialRentAdjustments = await socialRentAdjustmentsService.getAdjustments();
     const socialRentAverageEarning = await socialRentEarningsService.getByITL3(itl3)
 
     return {
       postcode: input.housePostcode,
-      houseType: input.houseType,
+      houseType: houseType,
       houseAge: input.houseAge,
       houseBedrooms: input.houseBedrooms,
       maintenanceLevel: input.maintenanceLevel,
