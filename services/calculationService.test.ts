@@ -77,7 +77,7 @@ describe("getHouseholdData", () => {
       numberOfTransactions: 50,
       granularityPostcode: "SE17",
     };
-    const mockAverageRentMonthly = 1500;
+    const mockAverageRentMonthly = 1493;
     const mockSocialRentAdjustments = [
       { year: "2022", inflation: 2, additional: 3, total: 5 },
     ];
@@ -97,9 +97,11 @@ describe("getHouseholdData", () => {
     (
       pricesPaidService.getPricesPaidByPostcodeAndHouseType as jest.Mock
     ).mockResolvedValueOnce(mockPricesPaidSummary);
-    (rentService.getByITL3AndBedrooms as jest.Mock).mockResolvedValueOnce(
-      mockAverageRentMonthly
-    );
+    (rentService.getByITL3BedroomsAndType as jest.Mock).mockResolvedValueOnce({
+      averageRent: 1500,
+      bedroomRent: 1600,
+      houseTypeRent: 1400,
+    });  
     (
       socialRentAdjustmentsService.getAdjustments as jest.Mock
     ).mockResolvedValueOnce(mockSocialRentAdjustments);
@@ -152,7 +154,11 @@ describe("getHouseholdData", () => {
       numberOfTransactions: 50,
       granularityPostcode: "SE17",
     });
-    (rentService.getByITL3AndBedrooms as jest.Mock).mockResolvedValueOnce(1500);
+    (rentService.getByITL3BedroomsAndType as jest.Mock).mockResolvedValueOnce({
+      averageRent: 1500,
+      bedroomRent: 1600,
+      houseTypeRent: 1400,
+    });    
     (socialRentAdjustmentsService.getAdjustments as jest.Mock).mockResolvedValueOnce([
       { year: "2022", inflation: 2, additional: 3, total: 5 },
     ]);
@@ -161,7 +167,7 @@ describe("getHouseholdData", () => {
     await getHouseholdData(mockInput as Calculation);
 
     // Check that rentService was called with 4 bedrooms, not 6
-    expect(rentService.getByITL3AndBedrooms).toHaveBeenCalledWith("TLI44", 4);
+    expect(rentService.getByITL3BedroomsAndType).toHaveBeenCalledWith("TLI44", "D", 4);
   });
 
   it("should throw an error when service fails", async () => {
@@ -243,7 +249,7 @@ describe("getHouseholdData", () => {
       numberOfTransactions: 50,
       granularityPostcode: outcode,
     };
-    const mockAverageRentMonthly = 1500;
+    const mockAverageRentMonthly = 1493;
     const mockSocialRentAdjustments = [
       { year: "2022", inflation: 2, additional: 3, total: 5 },
     ];
@@ -263,9 +269,11 @@ describe("getHouseholdData", () => {
     (
       pricesPaidService.getPricesPaidByPostcodeAndHouseType as jest.Mock
     ).mockResolvedValueOnce(mockPricesPaidSummary);
-    (rentService.getByITL3AndBedrooms as jest.Mock).mockResolvedValueOnce(
-      mockAverageRentMonthly
-    );
+    (rentService.getByITL3BedroomsAndType as jest.Mock).mockResolvedValueOnce({
+      averageRent: 1500,
+      bedroomRent: 1600,
+      houseTypeRent: 1400,
+    });  
     (
       socialRentAdjustmentsService.getAdjustments as jest.Mock
     ).mockResolvedValueOnce(mockSocialRentAdjustments);

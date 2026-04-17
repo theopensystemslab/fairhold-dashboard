@@ -1,5 +1,5 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["strictUndefinedChecks"]
 }
 
@@ -10,7 +10,7 @@ datasource db {
 }
 
 model BuildPrices {
-  id                   Int     @id @default(autoincrement())
+  id                   Int    @id @default(autoincrement())
   houseTypeDescription String @map("house_type_description") @db.VarChar(250)
   houseType            String @map("house_type") @db.VarChar(1)
   priceRange           String @map("price_range") @db.VarChar(50)
@@ -20,16 +20,16 @@ model BuildPrices {
 }
 
 model GDHI {
-  id       Int     @id @default(autoincrement())
-  itl1     String  @db.VarChar(250)
-  region   String  @db.VarChar(250)
-  gdhi Float 
+  id     Int    @id @default(autoincrement())
+  region String @db.VarChar(250)
+  gdhi   Float
+  itl1   String @db.VarChar(250)
 
   @@map("gdhi")
 }
 
 model HPI {
-  id      Int     @id @default(autoincrement())
+  id      Int    @id @default(autoincrement())
   region  String @db.VarChar(250)
   itl3    String @db.VarChar(250)
   hpi1999 Float  @map("hpi_1999")
@@ -39,45 +39,51 @@ model HPI {
 
 model ItlLookup {
   postcode String
-  region String
+  region   String
   areacode String
   itl3     String
-  id       Int     @id @default(autoincrement())
+  id       Int    @id @default(autoincrement())
 
   @@map("itl_lookup")
 }
 
 model PricesPaid {
-  id                    Int     @id @default(autoincrement())
-  price                 Float
-  postcode              String @db.VarChar(250)
-  propertyType          String @map("property_type") @db.VarChar(250)
-  newBuild              String @map("newbuild") @db.VarChar(250)
+  id           Int    @id @default(autoincrement())
+  price        Float
+  postcode     String @db.VarChar(250)
+  propertyType String @map("property_type") @db.VarChar(250)
+  newBuild     String @map("newbuild") @db.VarChar(250)
 
   @@map("prices_paid")
 }
 
 model PricesPaidSummary {
-  id               Int   @id @default(autoincrement())
+  id               Int    @id @default(autoincrement())
   postcode         String
   propertyType     String @map("property_type") @db.VarChar(250)
   granularityLevel String @map("granularity_level") @db.VarChar(250)
-  averagePrice     Float @map("average_price")
-  transactionCount Int @map("transaction_count")
+  averagePrice     Float  @map("average_price")
+  transactionCount Int    @map("transaction_count")
 
   @@unique([postcode, propertyType, granularityLevel])
   @@index([postcode, propertyType])
-
   @@map("prices_paid_summary")
 }
 
 model Rent {
-  id              Int     @id @default(autoincrement())
-  itl3            String @db.VarChar(250)
-  ladCode         String @map("lad_code") @db.VarChar(250)
-  region          String @db.VarChar(250)
-  monthlyMeanRent Float  @map("monthly_mean_rent")
-  bedrooms        Float 
+  id                 Int    @id @default(autoincrement())
+  itl3               String @db.VarChar(250)
+  ladCode            String @map("lad_code") @db.VarChar(250)
+  areaName           String @map("area_name") @db.VarChar(250)
+  averageRent        Float  @map("average_rent")
+  rent1br            Float  @map("rent_1br")
+  rent2br            Float  @map("rent_2br")
+  rent3br            Float  @map("rent_3br")
+  rent4plusbr        Float  @map("rent_4plusbr")
+  rentDetached       Float  @map("rent_detached")
+  rentSemidetached   Float  @map("rent_semidetached")
+  rentTerraced       Float  @map("rent_terraced")
+  rentFlatMaisonette Float  @map("rent_flat_maisonette")
 
   @@map("rent")
 }
@@ -87,13 +93,13 @@ model SocialRentAdjustments {
   inflation  Float
   additional Float
   total      Float
-  id         Int     @id @default(autoincrement())
+  id         Int    @id @default(autoincrement())
 
   @@map("social_rent_adjustments")
 }
 
 model SocialRentEarnings {
-  id              Int     @id @default(autoincrement())
+  id              Int    @id @default(autoincrement())
   county          String @db.VarChar(250)
   itl3            String @db.VarChar(250)
   earningsPerWeek Float  @map("earnings_per_week")
@@ -102,10 +108,10 @@ model SocialRentEarnings {
 }
 
 model GasPrice {
-  id     Int    @id
-  region String @map("region") @db.VarChar
-  itl1    String @db.VarChar
-  kwhCostPence   Float @map("kwh_cost_pence")
+  id           Int    @id
+  region       String @map("region") @db.VarChar
+  itl1         String @db.VarChar
+  kwhCostPence Float  @map("kwh_cost_pence")
 
   @@map("gas_price")
 }
@@ -120,6 +126,5 @@ model PricesPaidSummaryFiltered {
 
   @@unique([postcode, propertyType, granularityLevel])
   @@index([postcode, propertyType])
-
   @@map("prices_paid_summary_filtered")
 }

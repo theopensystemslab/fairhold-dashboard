@@ -1,9 +1,10 @@
 import { rentRepo } from "../data/rentRepo";
+import { HouseType } from "../models/Property";
 
-const getByITL3AndBedrooms = async (itl3: string, bedrooms: number) => {
-  return await rentRepo.getRentByITL3AndBedrooms(itl3, bedrooms);
+const getByITL3BedroomsAndType = async (itl3: string, houseType: HouseType, bedrooms: number) => {
+  return await rentRepo.getRentByITL3BedroomsAndType(itl3, houseType, bedrooms, );
 };
 
 export const rentService = {
-  getByITL3AndBedrooms,
+  getByITL3BedroomsAndType,
 };
